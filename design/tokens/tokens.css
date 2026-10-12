@@ -1,0 +1,289 @@
+/*
+ * SIX OS — Design tokens ("Soft Matter" design language)
+ * Source of truth for CSS-based shells, web apps and prototypes.
+ * tokens.json mirrors these values for native toolkits (Qt/QML, GTK, Flutter…).
+ *
+ * Theme switching:
+ *   - default follows the OS preference (prefers-color-scheme)
+ *   - [data-theme="light" | "dark"] on <html> forces a theme
+ *   - [data-transparency="reduced"], [data-motion="reduced"], [data-contrast="more"],
+ *     [data-density="touch"] are user accessibility modes (see guide/11-accessibility.md)
+ */
+
+:root {
+  /* ── Typography ───────────────────────────────────────── */
+  --font-ui: "Inter", "Noto Sans", "Noto Sans Bengali", "Noto Sans Arabic", "Noto Sans Devanagari",
+    "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Inter", "Noto Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Noto Sans Mono", ui-monospace, monospace;
+
+  /* size / line-height pairs — desktop base is 14px (scaled by the user's Text size setting) */
+  --text-overline: 600 11px/16px var(--font-ui);
+  --text-caption: 500 12px/16px var(--font-ui);
+  --text-body-sm: 400 13px/18px var(--font-ui);
+  --text-body: 400 14px/20px var(--font-ui);
+  --text-body-lg: 400 16px/24px var(--font-ui);
+  --text-label: 600 13px/16px var(--font-ui);
+  --text-title-sm: 600 16px/22px var(--font-ui);
+  --text-title: 600 20px/28px var(--font-ui);
+  --text-title-lg: 650 24px/32px var(--font-display);
+  --text-headline: 700 32px/40px var(--font-display);
+  --text-display: 700 48px/56px var(--font-display);
+  --text-hero: 600 88px/88px var(--font-display); /* lock-screen clock only */
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-caps: 0.08em;
+
+  /* ── Spacing (4px grid) ───────────────────────────────── */
+  --space-0: 0;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 48px;
+  --space-11: 64px;
+
+  /* ── Radii ─────────────────────────────────────────────── */
+  --radius-xs: 6px;   /* chips, checkboxes */
+  --radius-sm: 8px;   /* inputs, list rows */
+  --radius-md: 12px;  /* buttons, menus, popovers */
+  --radius-lg: 16px;  /* windows, cards */
+  --radius-xl: 22px;  /* clay tiles, quick-settings tiles */
+  --radius-2xl: 28px; /* shelf, large sheets */
+  --radius-full: 999px;
+  --radius-icon: 24%; /* app-icon squircle, relative to icon size */
+
+  /* ── Sizes ─────────────────────────────────────────────── */
+  --control-sm: 28px;
+  --control-md: 36px;
+  --control-lg: 44px;
+  --target-min: 32px;     /* pointer mode (WCAG 2.2 AA requires 24) */
+  --titlebar-h: 44px;
+  --shelf-h: 60px;
+  --shelf-gap: 8px;       /* shelf floats 8px above the screen edge */
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --appicon-shelf: 40px;
+  --appicon-grid: 56px;
+  --measure: 68ch;        /* max line length for reading */
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --dur-instant: 80ms;    /* press feedback */
+  --dur-fast: 140ms;      /* hover, toggles */
+  --dur-base: 220ms;      /* popovers, menus */
+  --dur-slow: 360ms;      /* windows open/close, overview */
+  --dur-ambient: 9s;      /* wallpaper / orb idle loops */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%,
+    1.067, 1.089 25.3%, 1.085 28.3%, 1.024 37.2%, 1.002 43.4%, 0.996 51.1%, 1);
+
+  /* ── Color: light ─────────────────────────────────────── */
+  color-scheme: light;
+  --c-bg: #eceaf2;            /* "Porcelain" — app background, desktop fallback */
+  --c-surface: #faf9fc;       /* windows, cards */
+  --c-surface-2: #e2dfeb;     /* sunken wells, sidebars, inputs */
+  --c-surface-3: #d6d2e2;     /* hovered rows, pressed wells */
+  --c-line: #cfcbdc;          /* hairlines, dividers */
+  --c-line-strong: #8f8ba3;   /* input borders (3:1 non-text contrast) */
+  --c-text: #1a1923;
+  --c-text-2: #474556;
+  --c-text-3: #5f5c70;
+  --c-text-on-accent: #ffffff;
+
+  --c-accent: #5340d9;        /* "Iris" — the one brand hue */
+  --c-accent-hover: #4733c9;
+  --c-accent-soft: #e3dfff;
+  --c-focus: #5340d9;
+
+  --c-info: #066a75;          /* Tide */
+  --c-success: #1a6d47;       /* Moss */
+  --c-warning: #85540e;       /* Sun */
+  --c-danger: #b13a2a;        /* Ember */
+  --c-info-soft: #cdeef1;
+  --c-success-soft: #cfeedd;
+  --c-warning-soft: #fbeac6;
+  --c-danger-soft: #fbdcd5;
+
+  /* clay tile pastels (app icons, quick tiles, illustrations) — always with --c-text on top */
+  --clay-lilac: #d9d2ff;
+  --clay-mint: #c4eedb;
+  --clay-peach: #ffd8c9;
+  --clay-sky: #c7e6f7;
+  --clay-butter: #ffebb3;
+  --clay-rose: #ffd1e3;
+
+  /* plasma wallpaper moods */
+  --plasma-1: #7b6cff;
+  --plasma-2: #39c6d4;
+  --plasma-3: #ff8a6b;
+  --plasma-4: #f6c9ff;
+
+  /* ── Materials ────────────────────────────────────────── */
+  /* Clay: things you touch */
+  --clay-highlight: rgba(255, 255, 255, 0.75);
+  --clay-shade: rgba(40, 30, 90, 0.16);
+  --clay-drop: rgba(60, 45, 140, 0.22);
+  --clay-1: 0 2px 4px -1px var(--clay-drop), inset 0 1px 0 var(--clay-highlight),
+    inset 0 -2px 3px var(--clay-shade);
+  --clay-2: 0 8px 16px -6px var(--clay-drop), inset 2px 3px 4px var(--clay-highlight),
+    inset -3px -4px 8px var(--clay-shade);
+  --clay-3: 0 16px 28px -10px var(--clay-drop), inset 3px 4px 6px var(--clay-highlight),
+    inset -5px -6px 12px var(--clay-shade);
+  --clay-pressed: inset 2px 3px 6px var(--clay-shade), inset -1px -1px 2px var(--clay-highlight);
+
+  /* Plasma glass: things that float over content */
+  --glass-fill: rgba(250, 249, 252, 0.78);
+  --glass-fill-strong: rgba(250, 249, 252, 0.9);
+  --glass-blur: 28px;
+  --glass-saturate: 1.6;
+  --glass-rim: rgba(255, 255, 255, 0.7);
+  --glass-edge: rgba(30, 25, 70, 0.12);
+
+  /* Elevation shadows for flat surfaces (windows, cards) */
+  --shadow-1: 0 1px 2px rgba(25, 20, 60, 0.08), 0 1px 1px rgba(25, 20, 60, 0.04);
+  --shadow-2: 0 4px 12px -2px rgba(25, 20, 60, 0.12), 0 2px 4px rgba(25, 20, 60, 0.06);
+  --shadow-3: 0 18px 40px -12px rgba(25, 20, 60, 0.28), 0 4px 10px rgba(25, 20, 60, 0.08);
+  --shadow-4: 0 32px 64px -16px rgba(25, 20, 60, 0.38), 0 8px 18px rgba(25, 20, 60, 0.12);
+
+  --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--c-focus);
+  --scrim: rgba(17, 16, 23, 0.4);
+}
+
+/* ── Color: dark (system preference, unless forced light) ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --c-bg: #111017;
+    --c-surface: #1b1a23;
+    --c-surface-2: #262431;
+    --c-surface-3: #312f3e;
+    --c-line: #34323f;
+    --c-line-strong: #6e6a83;
+    --c-text: #f2f1f8;
+    --c-text-2: #bcb9cc;
+    --c-text-3: #9693a9;
+    --c-text-on-accent: #111017;
+    --c-accent: #9c8fff;
+    --c-accent-hover: #b0a6ff;
+    --c-accent-soft: #2e2a55;
+    --c-focus: #b0a6ff;
+    --c-info: #4fd1dc;
+    --c-success: #5fd49a;
+    --c-warning: #f2b95a;
+    --c-danger: #ff8a78;
+    --c-info-soft: #113a3f;
+    --c-success-soft: #123a28;
+    --c-warning-soft: #3d2c0f;
+    --c-danger-soft: #45201b;
+    --clay-lilac: #3b3470;
+    --clay-mint: #1e4a3a;
+    --clay-peach: #5a3227;
+    --clay-sky: #1f4256;
+    --clay-butter: #54451b;
+    --clay-rose: #5a2840;
+    --clay-highlight: rgba(255, 255, 255, 0.14);
+    --clay-shade: rgba(0, 0, 0, 0.35);
+    --clay-drop: rgba(0, 0, 0, 0.5);
+    --glass-fill: rgba(27, 26, 35, 0.72);
+    --glass-fill-strong: rgba(27, 26, 35, 0.88);
+    --glass-rim: rgba(255, 255, 255, 0.12);
+    --glass-edge: rgba(0, 0, 0, 0.4);
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+    --shadow-3: 0 18px 40px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --c-bg: #111017;
+  --c-surface: #1b1a23;
+  --c-surface-2: #262431;
+  --c-surface-3: #312f3e;
+  --c-line: #34323f;
+  --c-line-strong: #6e6a83;
+  --c-text: #f2f1f8;
+  --c-text-2: #bcb9cc;
+  --c-text-3: #9693a9;
+  --c-text-on-accent: #111017;
+  --c-accent: #9c8fff;
+  --c-accent-hover: #b0a6ff;
+  --c-accent-soft: #2e2a55;
+  --c-focus: #b0a6ff;
+  --c-info: #4fd1dc;
+  --c-success: #5fd49a;
+  --c-warning: #f2b95a;
+  --c-danger: #ff8a78;
+  --c-info-soft: #113a3f;
+  --c-success-soft: #123a28;
+  --c-warning-soft: #3d2c0f;
+  --c-danger-soft: #45201b;
+  --clay-lilac: #3b3470;
+  --clay-mint: #1e4a3a;
+  --clay-peach: #5a3227;
+  --clay-sky: #1f4256;
+  --clay-butter: #54451b;
+  --clay-rose: #5a2840;
+  --clay-highlight: rgba(255, 255, 255, 0.14);
+  --clay-shade: rgba(0, 0, 0, 0.35);
+  --clay-drop: rgba(0, 0, 0, 0.5);
+  --glass-fill: rgba(27, 26, 35, 0.72);
+  --glass-fill-strong: rgba(27, 26, 35, 0.88);
+  --glass-rim: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(0, 0, 0, 0.4);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 18px 40px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* ── Accessibility modes (user settings, not decoration) ── */
+:root[data-transparency="reduced"] {
+  --glass-fill: var(--c-surface);
+  --glass-fill-strong: var(--c-surface);
+  --glass-blur: 0px;
+  --glass-saturate: 1;
+}
+
+:root[data-contrast="more"] {
+  --c-text-2: var(--c-text);
+  --c-text-3: var(--c-text-2);
+  --c-line: var(--c-line-strong);
+  --glass-fill: var(--c-surface);
+  --glass-blur: 0px;
+}
+
+:root[data-motion="reduced"] {
+  --dur-fast: 0ms;
+  --dur-base: 120ms; /* cross-fades only, no movement */
+  --dur-slow: 160ms;
+  --ease-spring: var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) {
+    --dur-fast: 0ms;
+    --dur-base: 120ms;
+    --dur-slow: 160ms;
+    --ease-spring: var(--ease-standard);
+  }
+}
+
+:root[data-density="touch"] {
+  --target-min: 44px;
+  --control-sm: 36px;
+  --control-md: 44px;
+  --control-lg: 52px;
+  --titlebar-h: 52px;
+  --shelf-h: 68px;
+}
