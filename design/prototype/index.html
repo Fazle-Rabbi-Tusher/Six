@@ -2198,7 +2198,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
         const p = document.createElement('button');
         p.type = 'button'; p.className = 'peek'; p.dataset.depth = d; p._top = top; p._card = c;
         p.style.zIndex = 20 - d;
-        p.setAttribute('aria-label', `${cardName(c)}, in this stack. Click to open the stack, or drag it out.`);
+        p.setAttribute('aria-label', `${cardName(c)}, in this stack. Click to bring it to the top, or drag it out.`);
         p.innerHTML = `<b>${cardName(c)}</b><span class="peek-line">${peekLine(c)}</span>` + (d === shown && more > 0 ? `<span class="peek-more">+${more} more</span>` : '');
         $('#widgets').append(p);
       }
@@ -2295,7 +2295,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   });
   $('#widgets').addEventListener('click', e => {
     const p = e.target.closest('.peek');
-    if (p) { openStack(stackOf(p._card)); return; }
+    if (p) { bringToFront(p._card); return; }   // a preview's card comes to the top; Show all opens the stack
     const b = e.target.closest('.stack-btn'); if (!b) return;
     const st = stackOf(b.closest('.widget')); if (!st) return;
     if (b.dataset.act === 'toggle') openStack(st); else unstack(st);
@@ -2323,7 +2323,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     };
     const up = () => {
       removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
-      if (!started) { if (!fromPeek && el.classList.contains('stack-top')) openStack(stackOf(el)); return; }   // click a stack to pop it up
+      if (!started) return;   // a click is not a drag: the stack stays as it is
       el.classList.remove('drag'); dragging = null;
       if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
       const H = desk.clientHeight - dockSpace() - 8;
