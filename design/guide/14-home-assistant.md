@@ -5,7 +5,7 @@ a composer to type or talk into, and a few plasma clay cards with what matters r
 menu bar, dock, Six Menu and windows work exactly as before (see [12 · Coming from Windows](12-windows-migration.md)),
 so the assistant adds a way of working without taking the familiar one away.
 
-![Home screen, dark theme, Tidal mood](../screens/home-dark.png)
+![Home screen, dark theme, matte background](../screens/home-dark.png)
 
 Pip's character (personality, tone of voice and the full globe, tower and cube state sheet) is
 designed on the [SIX assistant character canvas](https://claude.ai/artifact/BsUEj7UkGWeqPuPLwRTF6F).
@@ -32,16 +32,31 @@ This chapter covers how Pip works inside the OS.
 
 | Part | Spec |
 |---|---|
-| **Pip** | 240 px globe centred above the greeting; shrinks to 132 px once a conversation starts so the thread gets the room. State label in mono caps below it ("PIP · LISTENING") |
+| **Pip** | 260 px realistic orb centred above the greeting; shrinks to 168 px once a conversation starts. State label in mono caps below it ("PIP · LISTENING") |
 | **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."); a one-line hint under it until the first message |
-| **Thread** | Plasma clay, max 44 % of the screen height, scrolls. Your messages: accent clay bubbles on the right. Pip's: plain text on the surface, labelled PIP, with action chips |
+| **Conversation** | Compact by default: only the latest question and answer, max 190 px. **History · N messages** expands the full thread (max 44 % of the screen); × hides it, and "Show conversation (N)" in the hint line brings it back. Your messages: accent clay bubbles on the right. Pip's: plain text, labelled PIP, with action chips |
 | **Composer** | Plasma clay, 64 px, `--radius-2xl`. Text field, Send (becomes Stop while Pip answers), and the voice button: a 48 px accent clay circle, the one primary action on home |
 | **Suggestions** | Up to four clay chips with real things Pip can do now. Hidden once a conversation starts |
-| **Cards** | 284 px plasma clay cards in two columns: *Pick up where you left off*, *Today*, *Current task*, *This device*. Cards in a column touch, so they fuse. Draggable; drop snaps to the 24 px grid |
+| **Cards** | 284 px plasma clay cards in two columns: *Pick up where you left off*, *Today*, *Current task*, *This device*. Cards in a column sit 12 px apart, so they fuse. Draggable; drop snaps to the 24 px grid; double-click a moved card to send it back. Drop one card on another to stack them (below) |
 | **Below 1100 px** | Everything stacks in one scrolling column: Pip, conversation, suggestions, then cards in a grid |
 
 **Typing anywhere on home goes to Pip.** With no window focused, the first key you press lands in
 the composer. Clicking Pip's orb in the menu bar or the dock shows home from anywhere.
+
+## Stacking cards
+
+Like notification stacks on a phone: drag one card onto another and they become a stack.
+
+| Moment | What the person sees |
+|---|---|
+| Dragging over a card | The target gets a dashed accent outline and a "Release to stack" label |
+| Dropped | The dragged card lands on top with a small pop; one or two plates peek out underneath; the top card gains a bar: ⧉ *2 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
+| Show all | The stack fans out into a column (cards fuse as liquid); **Collapse** folds it back |
+| Pull one out | Drag the top card (or any card of an open stack) away; it leaves the stack and stays where dropped |
+| Put things back | **Unstack** sends every card in the stack back to its original place; double-click any moved card to return it alone |
+
+Other cards flow around stacks and moved cards, so nothing overlaps. The keyboard path is the
+same as for moving: focus a card, `Alt + arrows`; the stack bar's buttons are normal buttons.
 
 ## Conversation
 
@@ -82,23 +97,27 @@ Rules:
 
 ## Pip's states
 
-The home globe and every small orb share one state at a time.
+Pip is one design at every size: a sphere of points of light (see the small orb in
+[09](09-shell.md#pips-small-orb)). On home it is rendered realistically: about 1,100 points with
+perspective, depth of field (back points soft and blurred, front points sharp), a glass edge that
+catches light, a faint core glow, a specular highlight and a soft floor shadow. Dark mode draws
+light points on matte black; light mode draws graphite points on white. The home orb and every
+small orb share one state at a time.
 
-| State | Globe | When |
+| State | Orb | When |
 |---|---|---|
-| Ready | Twelve points turn slowly inside six rings | Idle, waiting |
-| Listening | Rings lie flat and ripple outward | Mic is on |
-| Thinking | Spin speeds up; signals race along the circuit lines | Working out an answer |
-| Speaking | The core pulses with each word | Streaming or reading a reply |
-| Searching | A scan ring sweeps up and down | Looking through files |
-| Working | Steady fast turns | A long task runs (also shown in the task card) |
-| Complete | Rings lock into one; a check appears; the core flares | Just finished |
-| Asking | Leans in; a Sun badge appears | Needs a yes |
+| Ready | Slowly turning sphere, lit from the top left | Idle, waiting |
+| Listening | Rings of light ripple out from the centre | Mic is on |
+| Thinking | Dims; one bright point wanders | Working out an answer |
+| Speaking | Front points swell with the voice | Streaming or reading a reply |
+| Searching | A bright patch sweeps the surface | Looking through files |
+| Working | Spins on a wobbling gyro axis; the sphere fills with light as the task progresses, with a thin progress ring | A long task runs |
+| Complete | Glows green once | Just finished |
+| Asking | A lighthouse beam turns | Needs a yes |
 | Resting | Dim and still | Focus mode, battery saver, or the screen is idle |
 
-The character canvas also defines the tower (thinking, speaking, asking) and cube (working,
-resting) forms; the OS uses the globe for all states at small sizes and may morph to the other
-forms on the home screen when performance allows.
+Pip's personality and voice still come from the character canvas; its earlier globe-of-rings
+look is replaced by the dotted orb in the OS.
 
 ## The small orb
 

@@ -19,6 +19,7 @@ ship as plain SVG paths, so the shell embeds only the ones it uses.
 - Every icon-only button has a tooltip (500 ms delay, instant between neighbours) and an
   accessible name.
 - Icons inherit `currentColor`; they are never multi-coloured.
+- App shortcuts inside cards and lists use the app's own squircle icon at 26 px.
 - One meaning, one icon: Night light is a moon, Focus is a crossed-out bell, More contrast a
   half-filled circle.
 
@@ -35,11 +36,17 @@ ship as plain SVG paths, so the shell embeds only the ones it uses.
   consistent.
 
 ## Status glyphs in the menu bar
-Battery, network and volume glyphs show their level in the shape itself (bars, fill) **and** in
-an accessible label ("Battery 64 %, charging"). Hover shows the exact value.
+- Menu bar glyphs use Phosphor *Bold* at 16 px, so they hold up at small size like macOS menu bar
+  symbols.
+- The battery is drawn, not an icon: an outline whose fill matches the charge, followed by the
+  percentage in tabular figures.
+- Control Center is a two-toggle glyph; Pip is the small orb, with a progress ring while a task
+  runs.
+- Every status item has an accessible label ("Battery 64 %, charging"); hover shows the exact value.
 
 ## Desktop and file icons
-- File types use a "paper" sheet with a coloured corner tab showing the type family:
-  documents (Tide), images (Rose), audio (Butter), video (Peach), archives (Lilac), code (Mint).
+- Files use a paper-sheet icon with a folded corner and a coloured band naming the type:
+  **XLS / ODS** green, **PDF** red, **JPG / PNG** violet, **MP3** orange, **MD** slate, anything
+  else blue **DOC**. The label is in the icon, so type reads without colour.
 - Thumbnails replace the generic icon whenever available (images, PDFs, videos).
 - Selected desktop icons get an `--c-accent-soft` pill behind icon and label.

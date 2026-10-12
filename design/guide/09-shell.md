@@ -31,8 +31,8 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **Six logo** (left) | Opens the system menu: About SIX, System Settings, Six Search, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
 | **App name** | Bold name of the focused app ("Home" when none). App menus (File, Edit, View…) follow it |
 | **Search** | Opens Six Search (`Ctrl + K`, `Six + Space`) |
-| **Control Center** | Wi-Fi, battery and a toggles glyph; opens Control Center (Quick Settings) under the bar |
-| **Pip** | The small dotted orb; shows Pip's state; click → home and Pip's composer |
+| **Control Center** | Wi-Fi, a battery that shows its level and percentage, and a two-toggle glyph; opens Control Center (Quick Settings) under the bar |
+| **Pip** | The small dotted orb; shows Pip's state and a progress ring while a task runs; click → home and Pip's composer |
 | **Clock** | "Mon 12 Oct 10:42" in tabular figures; click → calendar and notifications |
 
 **Dock** (glass, 68 px tall, centred, 8 px above the bottom edge, 24 px radius)
@@ -162,6 +162,11 @@ SIX or Pip works on something for more than 2 s without a known percentage.
 | Speaking | Front dots swell with the voice | Reading a reply aloud |
 | Background tasks | Fewer, larger dots twinkle | Work running in the background (task cards) |
 | Complete | Dots turn green once | Finished; a toast says what finished |
+
+**Progress.** While a task runs, the menu bar and dock orbs draw a thin ring around the sphere
+that fills clockwise with the task's progress (like a dock progress bar on macOS); the tooltip and
+accessible name say it in words ("Pip · Slides from my notes, 64 %"). The ring disappears when
+the task finishes or is stopped.
 
 Motion carries the state, so it reads at 18 px and in grayscale; the tooltip names the state in
 words; the listening state can never be hidden; under Reduce motion the orb is drawn still and

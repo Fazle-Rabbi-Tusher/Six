@@ -131,6 +131,7 @@
   --plasma-4: #f6c9ff;
 
   /* plasma clay moods: deep, mid, vein, glint (dark theme values; light theme mixes toward white) */
+  --mood-matte-1: #060607; --mood-matte-2: #151517; --mood-matte-3: #d4d4d9; --mood-matte-4: #2a2a2e; /* default; light: #d4d4d8 → #f7f7f8 */
   --mood-tidal-1: #05262c; --mood-tidal-2: #0e4c55; --mood-tidal-3: #5fd8cb; --mood-tidal-4: #7b6cff;
   --mood-aurora-1: #17123f; --mood-aurora-2: #3a2f8f; --mood-aurora-3: #9ef0ff; --mood-aurora-4: #ff8a6b;
   --mood-ember-1: #240c18; --mood-ember-2: #6b2236; --mood-ember-3: #ffb86b; --mood-ember-4: #ff6b4a;

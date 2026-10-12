@@ -12,7 +12,7 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Drag home cards together to fuse them. Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -59,6 +59,10 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 | Voice | Phone width | Design guide app |
 |---|---|---|
 | ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/guide-pip.png) |
+
+| Dragging a card onto another | Two cards stacked |
+|---|---|
+| ![](screens/stack-drop.png) | ![](screens/stack.png) |
 
 | Pip's small orb, every state |
 |---|

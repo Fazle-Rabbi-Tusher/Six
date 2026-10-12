@@ -83,7 +83,9 @@ Windows, documents, settings pages, lists. Opaque, flat, quiet.
 - Separated with whitespace first, hairlines (`--c-line`) second, shadows never inside a window.
 - Text lives here. Long reading uses `text-body-lg` and the 68ch measure.
 
-## 4. Plasma wallpaper: ambient only
+## 4. Wallpaper: matte by default
+
+The default wallpaper is matte (black / white-gray). The plasma moods below are optional.
 
 A slow field of blurred colour blobs (the plasma moods) that drift over ~60 s loops. It is GPU
 cheap (one fragment shader at reduced resolution, paused when fully covered by maximized windows
@@ -111,7 +113,7 @@ plasma clay surface together:
 | Frost | The refracted wallpaper is taken from a smoother (fewer-octave) version of itself, which reads as blur at no extra cost | 0.55 |
 | Fill | The surface colour is laid over the refracted image | 78 % light / 72 % dark, 100 % with Reduce transparency or More contrast |
 | Clay light | A normal from the distance field's slope gives the bevel; lit from the top left with a soft highlight, darker bottom right | bevel 24 px |
-| Rim | An iridescent 2 px edge plus a faint inner glow; hue follows the edge angle and drifts slowly. Options: Iridescent, Accent, Off | Iridescent |
+| Rim | A 2 px edge plus a faint inner glow, brightest where the light hits. Options: Soft (neutral highlight), Iridescent (hue follows the edge angle), Accent, Off | Soft |
 | Shadow + glow | A soft offset shadow under the body and a faint coloured glow on the wallpaper around it | on |
 
 **Groups.** Surfaces only fuse within their group: *cards* fuse with cards, *conversation*
@@ -129,8 +131,11 @@ surfaces reach for each other (blend distance):
 
 Dropped cards settle on the 24 px grid.
 
-**Moods** recolour the wallpaper and rims: **Tidal** (default; deep teal with light veins, matches
-the reference), **Aurora** (violet and cyan) and **Ember** (warm reds). Users pick mood, viscosity,
+**Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark
+mode and white fading to soft gray in light mode, with a faint grain and no colour, so content and
+Pip carry the colour. **Tidal** (teal veins), **Aurora** (violet and cyan) and **Ember** (warm
+reds) are optional, livelier moods. The default rim is **Soft**, a neutral highlight; the
+iridescent rim is an option. Users pick mood, viscosity,
 frost, refraction and rim in Quick Settings › Plasma clay.
 
 **Rules**

@@ -61,13 +61,14 @@ pastel is always `--c-text` (8:1 or better in both themes).
 | `--clay-butter` | `#FFEBB3` | `#54451B` |
 | `--clay-rose` | `#FFD1E3` | `#5A2840` |
 
-## Plasma moods (wallpaper)
+## Wallpaper moods
 
-The default wallpaper is a slow, blurred field of four colour blobs. Moods ship as presets:
+The default wallpaper is **Matte**: no colour, so the interface and Pip stay the focus.
 
 | Mood | Colours | Feel |
 |---|---|---|
-| **Aurora** (default) | `#7B6CFF` `#39C6D4` `#FF8A6B` `#F6C9FF` | Calm, friendly |
+| **Matte** (default) | Dark: `#060607` edges → `#151517` centre. Light: `#D4D4D8` edges → `#F7F7F8` centre. Fine grain | Calm, neutral |
+| **Aurora** | `#7B6CFF` `#39C6D4` `#FF8A6B` `#F6C9FF` | Calm, friendly |
 | **Tidal** | `#2F6BFF` `#39C6D4` `#9EF0E0` `#1B2A6B` | Cool, focused |
 | **Ember** | `#FF6B4A` `#FFB86B` `#C2477F` `#3A1C3F` | Warm, evening |
 
