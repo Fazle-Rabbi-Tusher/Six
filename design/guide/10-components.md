@@ -72,7 +72,7 @@ touch density.
 - Only for decisions that block. Everything else is a toast with **Undo**.
 
 ## Toasts
-- Glass strong, bottom-centre above the shelf, 6 s, one action max ("Undo", "Open").
+- Glass strong, bottom-centre above the dock, 6 s, one action max ("Undo", "Open").
 - Message in past tense: "Moved 3 files to Bin", not "Files will be moved".
 
 ## Progress

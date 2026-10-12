@@ -37,7 +37,7 @@ Quick Settings.
 | `--radius-md` | 12 | Buttons, menus, popovers, tooltips |
 | `--radius-lg` | 16 | Windows, cards, dialogs |
 | `--radius-xl` | 22 | Clay tiles |
-| `--radius-2xl` | 28 | Shelf, Six Search, sheets |
+| `--radius-2xl` | 28 | Dock, Six Search, sheets |
 | `--radius-icon` | 24 % | App icon squircle |
 
 **Nested radius rule:** inner radius = outer radius − padding. A 16 px card with 8 px padding holds
@@ -76,15 +76,17 @@ Apps respond to **window width**, not screen width:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│  Plasma wallpaper · desktop icons (left column, 96px grid)           │
+│ ⁘ Home                                   ⌕ wifi ▮▮▯ ◐  ⁘  Mon 10:42  │ menu bar, 32px
+│  home cards                       Pip                    home cards  │
+│                          windows / conversation                      │
 │                                                                      │
-│                 windows                         widgets (right)      │
-│                                                                      │
-│ ╭────────────────────────────────────────────────────────────────╮   │
-│ │ ◉ Six  [Search…]   ▣ ▣ ▣ ▣ ▣ (running apps)   ⌃  📶 🔊 🔋 ● 10:42 │ 60px shelf, floats 8px
-│ ╰────────────────────────────────────────────────────────────────╯   │
+│            ╭───────────────────────────────────────────╮             │
+│            │ ⁘  ▣  ▣  ▣  ▣  ▣  ▣  ▣  │  ◍  🗑 │             │ dock, 68px, floats 8px
+│            ╰───────────────────────────────────────────╯             │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-The shelf spans the screen width minus 8 px each side. Maximized windows stop above the shelf
-(the shelf can be set to auto-hide). Hit areas still extend to the very screen edge.
+The dock is centred and sized to its icons (48 px icons on a 56 px pitch, up to 1.5× under the
+pointer). Maximized windows fill the space between the menu bar and the dock (the dock can be
+set to auto-hide). Hit areas still extend to the very screen edge. The Taskbar layout option
+uses a full-width 60 px bar instead (see [09](09-shell.md#menu-bar-and-dock-macos-style-layout)).

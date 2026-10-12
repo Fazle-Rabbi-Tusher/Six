@@ -25,15 +25,20 @@ window controls top-right in the order minimize, maximize, close, right-click me
 the same keyboard shortcuts. Everything new (Six Search, Pip on the home screen, Overview) is added on top of that
 map and never replaces it. See [12 · Coming from Windows](12-windows-migration.md).
 
+*Update:* by product direction, the default bottom bar is now a macOS-style dock with a menu
+bar. To keep this finding's benefit, Windows shortcuts, right-click and window controls are
+unchanged, and the Windows-style **Taskbar layout** is one setting away and is the default after
+importing from Windows.
+
 ### 2. Fitts's law: edges and corners are the easiest targets
 - Screen edges stop the pointer, so targets touching an edge are effectively infinitely deep and
   fast to hit. Corners are the fastest of all (NN/g; Smashing Magazine).
 - The same speed makes destructive actions in corners risky.
 
 **Decisions:**
-- The Six button's hit area extends to the **bottom-left pixel** even though the shelf floats.
+- The Six logo in the menu bar reaches the **top-left pixel**; menu bar items reach the top edge.
 - A maximized window's close button extends to the **top-right pixel**.
-- The shelf's last pixel at the bottom-right corner is "Show desktop" (Windows behaviour).
+- The dock's hit areas extend to the bottom edge even though the dock floats 8 px above it.
 - Hot corners exist but are **off by default** and can never be set to a destructive action.
 
 ### 3. Seeing windows side by side reduces memory load
@@ -46,7 +51,7 @@ map and never replaces it. See [12 · Coming from Windows](12-windows-migration.
 
 **Decision:** Snap Layouts (hover the maximize button, or drag to an edge) are core, not hidden.
 "Auto-arrange" (dynamic tiling) is an optional mode per desktop. Window groups can be named and
-restored from the shelf. See [09 · Shell](09-shell.md).
+restored from the dock. See [09 · Shell](09-shell.md).
 
 ### 4. Translucency hurts legibility when it sits behind text
 - Reviews of Apple's Liquid Glass (iOS 26) consistently report low contrast, text fading into busy
@@ -54,7 +59,7 @@ restored from the shelf. See [09 · Shell](09-shell.md).
   opacity and point people to *Reduce Transparency* and *Increase Contrast*.
 - Critics argue those settings are patches instead of foundations.
 
-**Decision:** Plasma glass is allowed **only on system chrome that floats** (shelf, menus,
+**Decision:** Plasma glass is allowed **only on system chrome that floats** (menu bar, dock, menus,
 popovers, notifications). Glass fill never drops below 78 % (light) / 72 % (dark) opacity, text on
 glass must still pass 4.5:1 against the worst-case wallpaper, and *Reduce transparency* is a
 first-class mode tested in every review, not an afterthought.
@@ -83,19 +88,19 @@ than its siblings. Secondary actions stay quiet.
 - **2.4.13 Focus Appearance (AAA):** visible, high-contrast focus indicators.
 
 **Decision:** Minimum pointer target 32 px, touch mode 44 px; the 2 px + 2 px focus ring is never
-removed; the shelf and popovers never cover the focused element. See
+removed; the dock and popovers never cover the focused element. See
 [11 · Accessibility](11-accessibility.md).
 
 ### 8. Nielsen's 10 heuristics, applied to an OS shell
 
 | Heuristic | Where it shows up in SIX |
 |---|---|
-| Visibility of system status | Pip's states, progress in shelf icons, clear battery/network glyphs |
+| Visibility of system status | Pip's states, progress in dock icons, clear battery/network glyphs |
 | Match with the real world | Plain names: "Files", "Settings", "Bin" (not "Nautilus", "Trash" vs "Recycle Bin" confusion) |
 | User control & freedom | Undo toasts for delete/move, "Restore" for closed windows, Esc always backs out |
 | Consistency & standards | One menu component, one dialog pattern, Windows shortcuts |
 | Error prevention | Confirm only irreversible actions; everything else is undoable |
-| Recognition over recall | Labels on shelf icons (optional), search that shows shortcuts next to results |
+| Recognition over recall | Labels above dock icons on hover, search that shows shortcuts next to results |
 | Flexibility & efficiency | Six Search actions, keyboard-first everything, snap layouts |
 | Aesthetic & minimalist | Three materials with strict roles, one accent hue |
 | Help users recover from errors | Errors say what happened and the fix, with a button for the fix |
@@ -133,4 +138,6 @@ removed; the shelf and popovers never cover the focused element. See
 - Thinking Orbs (Product Hunt launch coverage): https://aitoolly.com/ai-news/article/2026-10-05-thinking-orbs-launches-on-product-hunt-enhancing-visual-feedback-and-user-experience-in-modern-ai-in
 - thinking-orbs npm package: https://www.jsdelivr.com/package/npm/thinking-orbs
 - 21st.dev: https://21st.dev
-- Inter typeface: https://rsms.me/inter/
+- Geist and Geist Mono typefaces: https://vercel.com/font
+- Instrument Serif typeface: https://fonts.google.com/specimen/Instrument+Serif
+- Phosphor icons: https://phosphoricons.com

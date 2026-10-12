@@ -5,7 +5,7 @@ Pick by **role**, never by taste.
 
 ```
            ┌──────────────── Plasma glass ────────────────┐   floats above, temporary
-           │  shelf · menus · popovers · Six Search       │
+           │  menu bar · dock · menus · Six Search        │
            └──────────────────────────────────────────────┘
    ┌───────────── Paper (window) ─────────────┐               where work happens
    │  text, lists, documents, forms           │
@@ -37,7 +37,7 @@ A filled, rounded object that looks soft and slightly inflated. Built from three
 |---|---|---|
 | clay-1 | `--clay-1` | Buttons, segmented controls, toggles' thumb, chips |
 | clay-2 | `--clay-2` | Quick-setting tiles, cards that are clickable, app-grid icons |
-| clay-3 | `--clay-3` | Shelf app icons on hover, onboarding hero objects, the voice button |
+| clay-3 | `--clay-3` | Six Menu tiles, onboarding hero objects, the voice button |
 | pressed | `--clay-pressed` | Pressed / toggled-on state (the object pushes *in*) |
 
 **Rules**
@@ -68,11 +68,11 @@ a hint of what is behind it so the user keeps context (which window the menu bel
   against the worst case (white and black wallpapers). If a renderer can't blur, it uses
   `--glass-fill-strong`.
 - Glass never stacks on glass more than once (menu → submenu is fine; nothing deeper).
-- The **iridescent rim** (a 1 px gradient border in the plasma colours) is reserved for the shelf
-  and Six Search, the two "home" surfaces. Everything else uses the plain rim.
+- The **iridescent rim** (a 1 px gradient border in the plasma colours) is reserved for Six
+  Search and plasma clay. Everything else uses the plain rim.
 - **Reduce transparency** replaces glass with `--c-surface`. Layout and shadows stay the same.
 - Performance: blur is the most expensive effect in the shell. Budget **at most 3 live blurred
-  surfaces** on screen; the shelf caches its blur when no window moves behind it. Without GPU
+  surfaces** on screen; the dock and menu bar cache their blur when no window moves behind them. Without GPU
   compositing, glass falls back to the solid fill (same approach as plasma-ui's CSS fallback).
 
 ## 3. Paper: where work happens
@@ -115,7 +115,7 @@ plasma clay surface together:
 | Shadow + glow | A soft offset shadow under the body and a faint coloured glow on the wallpaper around it | on |
 
 **Groups.** Surfaces only fuse within their group: *cards* fuse with cards, *conversation*
-(thread + composer) with itself. Chrome (shelf, menus) is never plasma clay.
+(thread + composer) with itself. Chrome (menu bar, dock, menus) is never plasma clay.
 
 **Viscosity** sets how a dragged card follows the hand (spring stiffness / damping) and how far
 surfaces reach for each other (blend distance):
@@ -149,7 +149,7 @@ frost, refraction and rim in Quick Settings › Plasma clay.
 | 1 | Home cards, Pip's conversation, desktop widgets | Plasma clay | drawn by the shader |
 | 2 | Inactive windows | Paper | `--shadow-2` |
 | 3 | Active window | Paper | `--shadow-3` |
-| 4 | Shelf | Glass + iridescent rim | `--shadow-3` |
+| 4 | Menu bar, dock | Glass | `--shadow-3` |
 | 5 | Menus, popovers, Six Menu, Quick Settings | Glass | `--shadow-3` |
 | 6 | Notifications / toasts | Glass (strong) | `--shadow-3` |
 | 7 | Dialogs (modal) | Paper over `--scrim` | `--shadow-4` |

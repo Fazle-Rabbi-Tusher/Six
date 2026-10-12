@@ -25,8 +25,9 @@ plasma surfaces.
 
 | Moment | Motion |
 |---|---|
-| Open app | Window scales 0.94 → 1 and fades in from the shelf icon's position (gentle spring) |
-| Minimize | Window shrinks toward its shelf icon; the icon does a small 2 px bounce |
+| Open app | Window scales 0.94 → 1 and fades in from its dock icon's position; the icon bounces once (gentle spring) |
+| Minimize | Window shrinks toward its dock icon |
+| Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff, 110 ms); off under Reduce motion |
 | Maximize / snap | Window frame springs to its target (snappy); content re-lays out once at the end |
 | Menu / popover | Fades in + moves 4 px from its anchor (`dur-base`, ease-out) |
 | Close | Fade + scale to 0.97 (`dur-fast`); no bounce |

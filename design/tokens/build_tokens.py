@@ -34,9 +34,9 @@ tokens = {
     "Generated from tokens.css by build_tokens.py: edit the CSS, then regenerate.",
     "font": {
         "family": {
-            "ui": {"$type": "fontFamily", "$value": ["Inter", "Noto Sans", "Noto Sans Bengali", "system-ui", "sans-serif"]},
-            "display": {"$type": "fontFamily", "$value": ["Bricolage Grotesque", "Inter", "Noto Sans", "sans-serif"]},
-            "mono": {"$type": "fontFamily", "$value": ["JetBrains Mono", "Noto Sans Mono", "monospace"]},
+            "ui": {"$type": "fontFamily", "$value": ["Geist", "Noto Sans", "Noto Sans Bengali", "system-ui", "sans-serif"]},
+            "display": {"$type": "fontFamily", "$value": ["Instrument Serif", "Noto Serif", "Georgia", "serif"]},
+            "mono": {"$type": "fontFamily", "$value": ["Geist Mono", "Noto Sans Mono", "monospace"]},
         },
         "style": {k: {"$type": "typography", "$value": v.strip()} for k, v in re.findall(r"--text-([a-z-]+):\s*([^;]+);", root)},
     },
@@ -44,7 +44,7 @@ tokens = {
     "radius": vals("radius", "dimension"),
     "size": {
         k: {"$type": "dimension", "$value": v.strip()}
-        for k, v in re.findall(r"--((?:control|target|titlebar|shelf|icon|appicon)-[a-z-]*|measure):\s*([^;]+);", root)
+        for k, v in re.findall(r"--((?:control|target|titlebar|menubar|dock|icon|appicon)-[a-z-]*|measure):\s*([^;]+);", root)
     },
     "liquid": {k: {"$type": "number" if "px" not in v else "dimension", "$value": v.split("/*")[0].strip()} for k, v in re.findall(r"--liquid-([a-z-]+):\s*([^;]+);", root)},
     "duration": vals("dur", "duration"),

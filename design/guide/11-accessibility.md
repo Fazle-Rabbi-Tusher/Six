@@ -28,7 +28,7 @@ and from the first-run setup (`Ctrl + Alt + A`).
 
 **Operable**
 - [ ] Everything works with keyboard only; logical tab order; no keyboard traps.
-- [ ] Focus ring visible (2 px surface gap + 2 px accent) and never hidden behind the shelf,
+- [ ] Focus ring visible (2 px surface gap + 2 px accent) and never hidden behind the dock or menu bar,
       a sticky header or a toast (WCAG 2.4.11).
 - [ ] Pointer targets ≥ 32 px (24 px is the WCAG floor; we exceed it), 44 px in touch mode.
 - [ ] Drag actions have a non-drag alternative (WCAG 2.5.7), e.g. snap via the maximize flyout
@@ -45,14 +45,14 @@ and from the first-run setup (`Ctrl + Alt + A`).
 **Robust**
 - [ ] Every control exposes role, name, state and value to AT-SPI (Linux) / the shell's
       accessibility tree; tested with the built-in screen reader.
-- [ ] Custom-drawn shell surfaces (shelf, Pip, home cards, Overview) publish an accessibility tree, not a
+- [ ] Custom-drawn shell surfaces (menu bar, dock, Pip, home cards, Overview) publish an accessibility tree, not a
       bitmap.
 
 ## Screen reader and magnifier
 - The built-in screen reader announces Pip's state changes politely ("Backup finished") and
   never interrupts typing.
 - Magnifier follows keyboard focus and the text caret, not only the pointer.
-- Shelf items announce as "Files, running, 2 windows".
+- Dock items announce as "Files, running, 2 windows".
 
 ## Language
 - Every UI string is translatable; layouts allow +40 % text length (German) and right-to-left

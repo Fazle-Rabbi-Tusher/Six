@@ -6,8 +6,9 @@ materials, each with one job, arranged on a layout people already know.
 ## The five principles
 
 ### 1. Familiar map, fresh materials
-People switching from Windows keep their muscle memory: where things are, what shortcuts do,
-how windows behave. We change how things *feel*, never where they *are*.
+People keep their muscle memory: what shortcuts do, how windows behave, where right-click
+leads. SIX's default layout is macOS-style (menu bar + dock); the Windows-style Taskbar layout
+is one setting away, so switchers can keep things where they *are*.
 *Test:* could a Windows user find Start, close a window, and copy a file in the first minute
 without help?
 
@@ -17,7 +18,7 @@ Every pixel belongs to one of four materials:
 | Material | Role | Examples |
 |---|---|---|
 | **Clay** | things you press | buttons, toggles, quick-setting tiles, app icons |
-| **Plasma glass** | things that float above content for a moment | shelf, menus, popovers, notifications, Six Search |
+| **Plasma glass** | things that float above content for a moment | menu bar, dock, menus, popovers, notifications, Six Search |
 | **Paper** (flat) | things you read and work in | window content, documents, lists, settings pages |
 | **Plasma clay** | the living surfaces of home | home cards, Pip's conversation and composer, desktop widgets |
 
@@ -28,7 +29,7 @@ Each screen has one primary action, and it looks like it: accent fill, clay elev
 Everything else is quieter. If two things are shouting, one of them is wrong.
 
 ### 4. Calm by default, alive on purpose
-Motion and colour explain what happened (a window came *from* its shelf icon, Pip is
+Motion and colour explain what happened (a window came *from* its dock icon, Pip is
 *thinking*). Ambient effects (plasma wallpaper, Pip's slowly turning globe) are slow and can be
 turned off. Nothing blinks for attention unless the user must act.
 

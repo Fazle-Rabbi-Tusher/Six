@@ -1,46 +1,66 @@
 # 09 · The SIX shell
 
-The shell is everything outside app content: shelf, Six Menu, Six Search, windows, Quick
-Settings, notifications, Pip in the shelf, Overview, the lock screen and the first-run setup.
+The shell is everything outside app content: the menu bar, the dock, Six Menu, Six Search,
+windows, Control Center, notifications, Pip's small orb, Overview, the lock screen and the
+first-run setup.
 The home screen itself, where Pip lives, has its own chapter: [14 · Home](14-home-assistant.md).
 
-## Shelf (taskbar)
+## Menu bar and dock (macOS-style layout)
 
-A floating glass bar, 60 px tall, 8 px above the bottom edge, full width minus 8 px gutters,
-`--radius-2xl`, iridescent rim.
+SIX's default layout follows macOS: a thin **menu bar** across the top for status, and a
+floating **dock** at the bottom for apps. The Windows-style **Taskbar layout** (launcher
+bottom-left, one bar with apps, tray and clock) stays available in Settings › Desktop and is the
+default when someone imports their data from Windows (see [12](12-windows-migration.md)).
 
 ```
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ ◉  [⌕ Search apps, files, settings]  │ ▣ ▣• ▣• ▣ ▣ │      ⌃  ⇅ 🔊 ▮▮▯  ●  10:42 │▏
-╰──────────────────────────────────────────────────────────────────────────────╯
-  ↑ Six button     ↑ search field        ↑ pinned & running     ↑ tray   ↑ Pip ↑ clock  ↑ show desktop
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ⁘  Files                                      ⌕  wifi ▮▮▯ ◐   ⁘   Mon 12 Oct 10:42 │  menu bar, 32 px
+│                                                                              │
+│                                 windows / home                               │
+│                                                                              │
+│              ╭────────────────────────────────────────────────╮              │
+│              │ ⁘  ▣  ▣  ▣  ▣  ▣  ▣  ▣  │  ◍  🗑 │              │  dock, 68 px
+│              ╰──•──────•───────────────────────•───────────╯              │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-| Zone | Behaviour |
+**Menu bar** (glass, 32 px, full width; 40 px in touch mode)
+
+| Item | Behaviour |
 |---|---|
-| **Six button** | Opens the Six Menu. Hit area includes the bottom-left screen corner. The Six key does the same |
-| **Search field** | Click or start typing after pressing Six → opens Six Search. Can be collapsed to an icon |
-| **Apps** | Pinned and running apps in one row. Running = a 3 px pill under the icon; active window = a 16 px wide accent pill; attention = Sun-coloured pill + one gentle bounce (no repeated flashing) |
-| **Labels** | Setting: *Never* / *When space allows* / *Always* (Windows "combine taskbar buttons"). Default *When space allows* for Windows switchers |
-| **Window previews** | Hover an icon → live thumbnails of its windows above the shelf, with close buttons |
-| **Progress** | Downloads/copies show a thin progress arc around the app icon |
-| **Tray** | Overflow (⌃), network, volume, battery; one click opens Quick Settings |
-| **Pip** | Mini globe for the assistant and background work. Click → home and Pip's composer (see below) |
-| **Clock** | Time + date (tabular figures). Click → calendar and notifications |
-| **Show desktop** | Last 8 px at the right edge, extends to the bottom-right corner |
+| **Six logo** (left) | Opens the system menu: About SIX, System Settings, Six Search, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
+| **App name** | Bold name of the focused app ("Home" when none). App menus (File, Edit, View…) follow it |
+| **Search** | Opens Six Search (`Ctrl + K`, `Six + Space`) |
+| **Control Center** | Wi-Fi, battery and a toggles glyph; opens Control Center (Quick Settings) under the bar |
+| **Pip** | The small dotted orb; shows Pip's state; click → home and Pip's composer |
+| **Clock** | "Mon 12 Oct 10:42" in tabular figures; click → calendar and notifications |
 
-Alignment option: **Familiar** (apps left-aligned after search, default for Windows switchers) or
-**Centred** (apps centred, Six button stays left). Position: bottom (default), left, right, top.
+**Dock** (glass, 68 px tall, centred, 8 px above the bottom edge, 24 px radius)
+
+| Part | Behaviour |
+|---|---|
+| **Six Menu** | First icon (iris squircle with the six-dot mark); opens the Six Menu above the dock |
+| **Apps** | Pinned and running apps. Running = a 4 px dot under the icon |
+| **Separator** | Thin line before Pip and the Bin |
+| **Pip** | Pip's dotted orb on a dark tile; click → home |
+| **Bin** | Deleted files; shows a count |
+| **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius). Off under Reduce motion, on touch, and on narrow screens |
+| **Launch bounce** | An opening app's icon bounces once; never repeatedly for attention (a badge does that) |
+| **Labels** | A small glass label above the hovered icon |
+
+Maximized windows fill the space between menu bar and dock; the dock can be set to auto-hide.
+Fitts's law still applies: the menu bar items reach the top edge, and the dock's bottom edge
+extends to the screen edge.
 
 ## Six Menu (Start)
 
-Opens above the Six button, 640 × 720 px max, glass.
+Opens above the dock from the Six Menu icon (the Six key does the same), 600 × 720 px max, glass.
 
 ```
 ╭──────────────────────────────────────────────╮
 │ [⌕ Type to search…]                          │
 │ PINNED                              All apps ›│
-│  ▢ Files   ▢ Browser  ▢ Mail   ▢ Settings     │  clay app tiles, 56px, 4–6 per row
+│  ▢ Files   ▢ Browser  ▢ Mail   ▢ Settings     │  app icons, 52px, 4–6 per row
 │  ▢ Music   ▢ Terminal ▢ Store  ▢ Photos       │
 │ RECENT                                  More ›│
 │  📄 Quarterly report.xlsx       Yesterday     │
@@ -85,7 +105,7 @@ See [06 · Layout](06-layout.md#window-anatomy) for anatomy.
   "drop preview" shows the target before release.
 - After snapping one window, the remaining zones offer the other open windows (Snap Assist).
 - `Six + ←/→/↑/↓` snaps by keyboard.
-- **Window groups:** a snapped set appears as one group in the shelf hover preview and can be
+- **Window groups:** a snapped set appears as one group in the dock's window preview and can be
   restored together.
 - **Auto-arrange** (optional per desktop): dynamic tiling that places new windows automatically.
 
@@ -93,9 +113,9 @@ See [06 · Layout](06-layout.md#window-anatomy) for anatomy.
 - Apps may put tabs or a search field in the title bar but must leave ≥ 48 px of empty drag area.
 - Close always asks to save unsaved work with three buttons: **Save**, **Don't save**, **Cancel**.
 
-## Quick Settings
+## Control Center (Quick Settings)
 
-Opens from the tray. Glass, 360 px wide.
+Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 
 ```
 ╭────────────────────────────────╮
@@ -123,25 +143,29 @@ Opens from the tray. Glass, 360 px wide.
 - Each notification has: app icon, title (`text-title-sm`), one-line body, up to 2 actions,
   and a ⋯ menu with "Turn off notifications from this app" (one step to stop spam).
 
-## Pip in the shelf
+## Pip's small orb
 
-Pip, the assistant, lives on the home screen (see [14 · Home](14-home-assistant.md)). In the tray
-it shrinks to a 30 px mini globe: three rings around a glowing core. It stands in for generic
-spinners whenever SIX or Pip works on something for more than 2 s without a known percentage.
+Pip, the assistant, lives on the home screen as the big globe (see [14 · Home](14-home-assistant.md)).
+Everywhere else (menu bar, dock, task cards, message labels) Pip is a **dotted sphere**: points on
+a slowly turning globe whose light moves differently in each state, after the
+[thinking orbs](https://www.thinkingorbs.com/) style. It stands in for generic spinners whenever
+SIX or Pip works on something for more than 2 s without a known percentage.
 
-| State | Mini globe | Meaning |
+| State | Small orb | Meaning |
 |---|---|---|
-| Ready | Rings turn slowly | Nothing running |
-| Listening | Rings lie flat and ripple; the mic glyph shows in the tray too | Mic is on |
-| Thinking / working | Rings spin fast | Working out an answer, or a long task (install, backup, index) |
-| Speaking | Core pulses | Reading a reply aloud |
-| Complete | Core turns green once, then back to ready | Finished; a toast says what finished |
-| Asking | Sun-coloured badge | Waiting for your yes |
+| Ready | Turning sphere lit from the top left | Nothing running |
+| Working · Gyro | Spins fast on a wobbling axis | A long task (install, backup, index) |
+| Reasoning | Dim sphere, one bright dot wanders | Working out an answer |
+| Searching | A bright patch sweeps the surface | Looking through files or the web |
+| Waiting for you · Lighthouse | A bright meridian beam turns | Needs a yes |
+| Listening | Rings of light ripple out from the centre | Mic is on |
+| Speaking | Front dots swell with the voice | Reading a reply aloud |
+| Background tasks | Fewer, larger dots twinkle | Work running in the background (task cards) |
+| Complete | Dots turn green once | Finished; a toast says what finished |
 
-Clicking the mini globe shows home (all windows minimize) with the cursor in Pip's composer.
-Shape and motion change for every state, so it reads in grayscale; the tooltip names the state in
-words; the listening state can never be hidden; under Reduce motion the rings stop and states
-switch with a crossfade.
+Motion carries the state, so it reads at 18 px and in grayscale; the tooltip names the state in
+words; the listening state can never be hidden; under Reduce motion the orb is drawn still and
+only redraws when its state changes.
 
 ## Overview and desktops
 
@@ -161,8 +185,8 @@ Type to filter windows by title.
 
 1. Language & keyboard (detected; Bangla and English shown first in Bangladesh).
 2. Network.
-3. **"How do you like your desktop?"** Familiar (Windows-like, default) or Focus (centred shelf,
-   labels hidden), shown as two live clay preview cards.
+3. **"How do you like your desktop?"** Dock (macOS-style menu bar + dock, default) or Taskbar
+   (Windows-style, default after importing from Windows), shown as two live previews.
 4. Import from Windows: browser bookmarks, Wi-Fi networks, documents and wallpaper from a backup
    or a network share.
 5. Accessibility shortcut: available on every step (`Ctrl + Alt + A` or the ♿ button).

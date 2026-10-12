@@ -7,14 +7,14 @@
 <meta name="description" content="Interactive prototype of the SIX OS home screen (Pip, chat and voice, plasma clay) and desktop.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+Bengali:wght@400;600&display=swap">
 <style>
-/* Layout concept: a real desktop — plasma wallpaper, paper windows, clay controls, glass shelf.
+/* Layout concept: a real desktop — plasma wallpaper, paper windows, clay controls, glass menu bar and dock.
    Tokens mirror design/tokens/tokens.css (inlined so the page is self-contained). */
 :root {
-  --font-ui: "Inter", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+  --font-ui: "Geist", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-mono: "Geist Mono", ui-monospace, "Cascadia Mono", monospace;
   --text-overline: 600 11px/16px var(--font-ui);
   --text-caption: 500 12px/16px var(--font-ui);
   --text-body-sm: 400 13px/18px var(--font-ui);
@@ -23,14 +23,14 @@
   --text-label: 600 13px/16px var(--font-ui);
   --text-title-sm: 600 16px/22px var(--font-ui);
   --text-title: 600 20px/28px var(--font-ui);
-  --text-title-lg: 650 24px/32px var(--font-display);
-  --text-headline: 700 32px/40px var(--font-display);
-  --text-display: 700 48px/56px var(--font-display);
+  --text-title-lg: 400 28px/34px var(--font-display);
+  --text-headline: 400 40px/46px var(--font-display);
+  --text-display: 400 56px/60px var(--font-display);
 
   --radius-xs: 6px; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
   --radius-xl: 22px; --radius-2xl: 28px;
   --control-sm: 28px; --control-md: 36px; --control-lg: 44px; --target-min: 32px;
-  --titlebar-h: 44px; --shelf-h: 60px;
+  --titlebar-h: 44px; --menubar-h: 32px; --dock-h: 68px;
 
   --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 220ms; --dur-slow: 360ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -117,7 +117,7 @@
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-motion="full"]) { --dur-fast: 0ms; --dur-base: 120ms; --dur-slow: 160ms; --ease-spring: var(--ease-standard); }
 }
-:root[data-density="touch"] { --target-min: 44px; --control-sm: 36px; --control-md: 44px; --control-lg: 52px; --titlebar-h: 52px; --shelf-h: 68px; }
+:root[data-density="touch"] { --target-min: 44px; --control-sm: 36px; --control-md: 44px; --control-lg: 52px; --titlebar-h: 52px; --menubar-h: 40px; --dock-h: 76px; }
 
 html, body { height: 100%; }
 body {
@@ -129,8 +129,8 @@ body {
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
-svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
-svg.i.sm { width: 16px; height: 16px; stroke-width: 1.6; }
+svg.i { width: 20px; height: 20px; fill: currentColor; flex: none; }
+svg.i.sm { width: 16px; height: 16px; }
 .tnum { font-variant-numeric: tabular-nums; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -183,7 +183,8 @@ svg.i.sm { width: 16px; height: 16px; stroke-width: 1.6; }
 }
 .titlebar .title { font: var(--text-label); color: var(--c-text-3); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .win.active .titlebar .title { color: var(--c-text); }
-.titlebar .appglyph { width: 22px; height: 22px; border-radius: 6px; box-shadow: var(--clay-1); }
+.titlebar .appicon { --ic: 22px; border-radius: 6px; }
+.titlebar .appicon svg.i { width: 64%; height: 64%; }
 .capbtns { display: flex; align-self: stretch; }
 .cap {
   width: 46px; border: 0; background: transparent; color: var(--c-text-2); display: grid; place-items: center;
@@ -215,66 +216,101 @@ svg.i.sm { width: 16px; height: 16px; stroke-width: 1.6; }
 .lay.quads { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
 .fly-cap { grid-column: 1 / -1; font: var(--text-caption); color: var(--c-text-2); }
 
-/* ── Shelf ─────────────────────────────────────────────── */
-#shelf {
-  position: absolute; left: 8px; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); height: var(--shelf-h);
-  border-radius: var(--radius-2xl); display: flex; align-items: center; gap: 6px; padding: 0 6px 0 8px; z-index: 950;
+/* ── Menu bar (top) + Dock (bottom), macOS-style ───────── */
+#menubar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 950; height: calc(var(--menubar-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 8px 0; display: flex; align-items: center; gap: 2px;
+  border-width: 0 0 1px; border-radius: 0; box-shadow: none; font: 500 13px/1 var(--font-ui);
 }
-.six-btn {
-  position: relative; width: 44px; height: 44px; border-radius: 50%; border: 0; flex: none;
-  background: var(--c-accent); color: var(--c-text-on-accent); display: grid; place-items: center; box-shadow: var(--clay-2);
-  transition: transform var(--dur-instant) var(--ease-standard), box-shadow var(--dur-fast);
+.mb-btn {
+  height: 24px; min-width: 28px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px; color: var(--c-text); font: inherit; white-space: nowrap;
 }
-.six-btn::after { content: ""; position: absolute; left: -20px; bottom: -20px; width: 70px; height: 70px; }
-.six-btn svg.i { width: 24px; height: 24px; }
-.six-btn:hover { background: var(--c-accent-hover); }
-.six-btn:active, .six-btn[aria-expanded="true"] { box-shadow: var(--clay-pressed); transform: translateY(1px) scale(0.97); }
-.search-pill {
-  display: flex; align-items: center; gap: 8px; height: 40px; width: 200px; flex: none; padding: 0 12px;
-  border-radius: 999px; border: 1px solid var(--c-line); background: var(--c-surface-2); color: var(--c-text-3);
-  box-shadow: var(--clay-pressed); text-align: left;
+.mb-btn:hover, .mb-btn[aria-expanded="true"] { background: color-mix(in srgb, var(--c-text) 13%, transparent); }
+.mb-btn svg.i { width: 16px; height: 16px; }
+.mb-logo svg.i { width: 17px; height: 17px; }
+.mb-app { font-weight: 700; }
+.mb-right { margin-left: auto; display: flex; align-items: center; gap: 2px; }
+.mb-clock { font-variant-numeric: tabular-nums; }
+.dotorb { display: block; width: 18px; height: 18px; color: var(--c-text); }
+#pipBtn .dotorb { width: 21px; height: 21px; }
+
+#dock {
+  position: absolute; left: 50%; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 950;
+  height: var(--dock-h); padding: 0 6px; border-radius: 24px; display: flex; align-items: flex-end; max-width: calc(100% - 16px);
 }
-.search-pill span { flex: 1; min-width: 0; font: var(--text-body-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dock-apps { display: flex; align-items: flex-end; height: 100%; }
+.dk {
+  --s: 1; position: relative; width: calc(56px * var(--s)); height: 100%; border: 0; background: transparent; padding: 0 0 10px;
+  display: flex; align-items: flex-end; justify-content: center; flex: none; transition: width 110ms var(--ease-out);
+}
+.dk .appicon { --ic: calc(48px * var(--s)); transition: width 110ms var(--ease-out), height 110ms var(--ease-out); }
+.dk .dot { position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--c-text); opacity: 0; transition: opacity var(--dur-fast); }
+.dk.running .dot { opacity: 0.7; }
+.dk .tip {
+  position: absolute; left: 50%; bottom: calc(48px * var(--s) + 22px); transform: translateX(-50%); padding: 5px 10px; border-radius: 7px;
+  background: var(--glass-fill-strong); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-2); color: var(--c-text);
+  font: 500 13px/16px var(--font-ui); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity var(--dur-fast);
+}
+.dk:hover .tip, .dk:focus-visible .tip { opacity: 1; }
+.dk:focus-visible { outline: none; }
+.dk:focus-visible .appicon { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+.dk:active .appicon { filter: brightness(0.82); }
+.dk.bounce .appicon { animation: dock-bounce 0.9s var(--ease-out) 1; }
+@keyframes dock-bounce { 0%, 100% { translate: 0 0; } 22% { translate: 0 -20px; } 48% { translate: 0 0; } 68% { translate: 0 -8px; } }
+.dock-sep { width: 1px; align-self: stretch; margin: 12px 6px 14px; background: color-mix(in srgb, var(--c-text) 22%, transparent); flex: none; }
+
+/* app icons: macOS-style squircles with clay depth */
+.appicon {
+  --ic: 48px; position: relative; width: var(--ic); height: var(--ic); border-radius: 23%; display: grid; place-items: center; flex: none;
+  color: #fff; overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.2), 0 6px 12px -4px rgba(0, 0, 0, 0.42), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.appicon::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%); pointer-events: none; }
+.appicon svg.i { width: 58%; height: 58%; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25)); }
+.ai-launch { background: linear-gradient(160deg, #9d8cff, #4b32d4); }
+.ai-files { background: linear-gradient(180deg, #4fb3ff, #1663d6); }
+.ai-browser { background: linear-gradient(180deg, #3fd3cf, #0a6fc4); }
+.ai-mail { background: linear-gradient(180deg, #6ab8ff, #1f55d9); }
+.ai-music { background: linear-gradient(180deg, #ff7f99, #d81b47); }
+.ai-terminal { background: linear-gradient(180deg, #3b3b46, #111116); color: #8affc1; }
+.ai-guide { background: linear-gradient(180deg, #c99bff, #7234e0); }
+.ai-settings { background: linear-gradient(180deg, #dcdee5, #858997); color: #2b2d35; }
+.ai-pip { background: radial-gradient(circle at 50% 38%, #262631, #050507 75%); }
+.ai-pip .dotorb { width: 84%; height: 84%; color: #fff; position: relative; z-index: 1; }
+.ai-bin { background: linear-gradient(180deg, color-mix(in srgb, var(--c-surface) 85%, transparent), color-mix(in srgb, var(--c-surface-3) 70%, transparent)); color: var(--c-text-2); }
+
+/* system menu (top-left logo) */
+#sysMenu { left: 6px; width: 260px; padding: 6px; }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; height: 30px; padding: 0 10px; border: 0; background: transparent; border-radius: 6px; font: var(--text-body); color: var(--c-text); text-align: left; }
+.mrow kbd { background: transparent; border: 0; color: var(--c-text-3); padding: 0; }
+.mrow:hover, .mrow:focus-visible { background: var(--c-accent); color: var(--c-text-on-accent); outline: none; }
+.mrow:hover kbd, .mrow:focus-visible kbd { color: var(--c-text-on-accent); }
+.msep { height: 1px; background: var(--c-line); margin: 5px 8px; }
+
+/* small orb gallery in the guide */
+.orb-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.orb-tile { display: grid; gap: 0; border: 1px solid var(--c-line); border-radius: var(--radius-lg); overflow: hidden; background: #141418; color: #f2f1f8; }
+.orb-tile > div { height: 120px; display: grid; place-items: center; }
+.orb-tile .dotorb { width: 76px; height: 76px; color: #fff; }
+.orb-tile span { background: #0b0b0e; padding: 10px; text-align: center; font: 500 13px/16px var(--font-ui); }
+.orb-tile span small { color: #a3a0b5; font: inherit; }
+
 kbd { font: 600 11px/1 var(--font-ui); padding: 3px 6px; border-radius: 6px; background: var(--c-surface); color: var(--c-text-2); border: 1px solid var(--c-line); }
-.apps { display: flex; gap: 4px; align-items: center; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; padding: 0 4px; }
-.appbtn {
-  position: relative; width: 52px; height: 52px; border: 0; background: transparent; border-radius: var(--radius-md);
-  display: grid; place-items: center; flex: none;
-}
-.appbtn .tile { width: 40px; height: 40px; transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-fast); }
-.appbtn:hover .tile { transform: translateY(-3px); box-shadow: var(--clay-3); }
-.appbtn:active .tile { transform: translateY(0) scale(0.95); box-shadow: var(--clay-pressed); }
-.appbtn .pip { position: absolute; bottom: 1px; left: 50%; width: 4px; height: 3px; border-radius: 3px; background: var(--c-text-3); transform: translateX(-50%); opacity: 0; transition: width var(--dur-base) var(--ease-spring), opacity var(--dur-fast), background var(--dur-fast); }
-.appbtn.running .pip { opacity: 1; }
-.appbtn.focused .pip { width: 16px; background: var(--c-accent); }
-.appbtn .tip {
-  position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(4px);
-  font: var(--text-caption); white-space: nowrap; padding: 6px 10px; border-radius: 8px; pointer-events: none;
-  opacity: 0; transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease-out);
-}
-.appbtn:hover .tip, .appbtn:focus-visible .tip { opacity: 1; transform: translateX(-50%); }
-.tray { display: flex; align-items: center; gap: 2px; flex: none; }
-.traybtn {
-  height: 44px; min-width: var(--target-min); padding: 0 10px; border: 0; background: transparent; border-radius: var(--radius-md);
-  display: flex; align-items: center; gap: 8px; color: var(--c-text);
-}
-.traybtn:hover, .traybtn[aria-expanded="true"] { background: color-mix(in srgb, var(--c-surface-3) 70%, transparent); }
-.clock { display: grid; text-align: right; font: var(--text-caption); line-height: 16px; }
-.clock b { font: 600 13px/16px var(--font-ui); }
-.show-desk { width: 10px; align-self: stretch; margin: 12px 0 12px 2px; border: 0; border-left: 1px solid var(--c-line-strong); background: transparent; border-radius: 0; }
-.show-desk::after { content: ""; position: absolute; right: -8px; bottom: -8px; width: 26px; height: 26px; }
 
 /* ── Popovers ─────────────────────────────────────────── */
 .pop {
-  position: absolute; z-index: 960; bottom: calc(var(--shelf-h) + 18px + env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-xl);
+  position: absolute; z-index: 960; bottom: calc(var(--dock-h) + 20px + env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-xl);
   opacity: 0; visibility: hidden; transform: translateY(6px) scale(0.985); transform-origin: bottom left;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
-  max-height: calc(100% - var(--shelf-h) - 40px); overflow: auto;
+  max-height: calc(100% - var(--dock-h) - var(--menubar-h) - 44px); overflow: auto;
 }
+#qs, #sysMenu { top: calc(var(--menubar-h) + 6px + env(safe-area-inset-top, 0px)); bottom: auto; }
+#qs:not(.open), #sysMenu:not(.open) { transform: translateY(-6px) scale(0.985); }
 .pop.open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
 .overline { font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-3); }
 
-#sixMenu { left: 8px; width: min(600px, calc(100% - 16px)); padding: 20px; display: grid; gap: 16px; }
+#sixMenu { left: max(8px, calc(50% - 300px)); width: min(600px, calc(100% - 16px)); padding: 20px; display: grid; gap: 16px; transform-origin: bottom center; }
 .menu-search { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border-radius: 999px; background: var(--c-surface-2); border: 1px solid var(--c-line-strong); color: var(--c-text-3); }
 .menu-search input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; color: var(--c-text); font: var(--text-body); }
 .menu-search:focus-within { border-color: var(--c-accent); outline: 2px solid var(--c-focus); outline-offset: 2px; }
@@ -291,11 +327,12 @@ kbd { font: 600 11px/1 var(--font-ui); padding: 3px 6px; border-radius: 6px; bac
 .row-btn .meta { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); }
 .menu-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--c-line); }
 .user { display: flex; align-items: center; gap: 10px; font: var(--text-label); }
-.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--clay-peach); box-shadow: var(--clay-1); display: grid; place-items: center; font: 700 13px/1 var(--font-display); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--clay-peach); box-shadow: var(--clay-1); display: grid; place-items: center; font: 600 13px/1 var(--font-ui); }
 .iconbtn { width: var(--control-md); height: var(--control-md); border: 0; border-radius: var(--radius-md); background: transparent; display: grid; place-items: center; color: var(--c-text); }
 .iconbtn:hover { background: color-mix(in srgb, var(--c-surface-3) 70%, transparent); }
 
-#qs { right: 8px; width: min(380px, calc(100% - 16px)); padding: 16px; display: grid; gap: 14px; transform-origin: bottom right; }
+#qs { right: 8px; width: min(380px, calc(100% - 16px)); padding: 16px; display: grid; gap: 14px; transform-origin: top right; }
+#sysMenu { transform-origin: top left; }
 .qs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .qtile {
   border: 0; border-radius: var(--radius-xl); background: var(--c-surface-2); color: var(--c-text);
@@ -337,7 +374,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 /* ── Home: assistant + voice ─────────────────────────── */
 #home { position: absolute; inset: 0; z-index: 1; }
 .center {
-  position: absolute; left: 50%; top: 20px; bottom: calc(var(--shelf-h) + 30px); transform: translateX(-50%);
+  position: absolute; left: 50%; top: calc(var(--menubar-h) + 20px); bottom: calc(var(--dock-h) + 30px); transform: translateX(-50%);
   width: min(640px, calc(100% - 2 * (var(--side-w) + 72px))); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 14px;
 }
 #home { --side-w: 284px; }
@@ -345,7 +382,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 /* text never sits on raw wallpaper: a soft scrim keeps the greeting legible over bright veins */
 .stage::before { content: ""; position: absolute; z-index: -1; left: -90px; right: -90px; top: 38%; bottom: -24px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--c-bg) 82%, transparent), color-mix(in srgb, var(--c-bg) 50%, transparent) 60%, transparent); pointer-events: none; }
 .pip-state { font: 600 12px/16px var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--pip-line); }
-.greet { margin: 0; font: var(--text-headline); letter-spacing: -0.02em; text-wrap: balance; }
+.greet { margin: 0; font: var(--text-headline); letter-spacing: -0.01em; text-wrap: balance; }
 .greet-sub { margin: 0; color: var(--c-text-2); font: var(--text-body-lg); }
 .center[data-chat="on"] .greet { font: var(--text-title-lg); }
 .center[data-chat="on"] .greet-sub { display: none; }
@@ -410,7 +447,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .task-head span { font: var(--text-body-sm); color: var(--c-text-2); }
 .stat { display: flex; justify-content: space-between; font: var(--text-body-sm); padding: 8px 12px; }
 .stat span:last-child { font-variant-numeric: tabular-nums; color: var(--c-text-2); }
-#home.stack { position: relative; inset: auto; height: 100%; overflow-y: auto; padding: 24px 24px calc(var(--shelf-h) + 40px); }
+#home.stack { position: relative; inset: auto; height: 100%; overflow-y: auto; padding: calc(var(--menubar-h) + 24px) 24px calc(var(--dock-h) + 40px); }
 #home.stack .center { position: static; transform: none; width: min(640px, 100%); margin: 0 auto; }
 #home.stack .widgets { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; width: min(640px, 100%); margin: 24px auto 0; }
 #home.stack .widget { position: static; width: auto; cursor: default; }
@@ -473,20 +510,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 @keyframes p-rip { 0%, 100% { opacity: 0.2; } 30% { opacity: 1; } }
 @keyframes p-gscan { 0% { transform: translateY(-74px) rotateX(90deg) scale(0.55); opacity: 0; } 12% { opacity: 0.9; } 50% { transform: translateY(0) rotateX(90deg) scale(1); opacity: 0.9; } 88% { opacity: 0.9; } 100% { transform: translateY(74px) rotateX(90deg) scale(0.55); opacity: 0; } }
 
-/* mini Pip for the shelf (from the canvas's dock) */
-.pipmini { position: relative; width: 30px; height: 30px; perspective: 300px; flex: none; }
-.pipmini .ms { position: absolute; inset: 0; transform-style: preserve-3d; animation: p-spin 26s linear infinite; }
-.pipmini .ms i { position: absolute; inset: 0; border-radius: 50%; border: 1.2px solid var(--pip-line); transform: rotateY(calc(var(--i) * 60deg)); transition: transform 0.6s var(--ease-out); }
-.pipmini b { position: absolute; inset: 0; margin: auto; width: 9px; height: 9px; background: #d8fcff; box-shadow: 0 0 8px var(--pip-glow), 0 0 16px var(--pip-deep); }
-.pipmini .badge { position: absolute; right: -2px; top: -2px; width: 9px; height: 9px; border-radius: 50%; background: var(--c-warning); box-shadow: 0 0 0 2px var(--c-surface); opacity: 0; }
-.pipmini[data-state="listening"] .ms i { transform: rotateX(90deg) scale(calc(0.5 + var(--i) * 0.25)); animation: p-rip 1.2s ease-out infinite; animation-delay: calc(var(--i) * 0.2s); }
-.pipmini[data-state="thinking"] .ms, .pipmini[data-state="working"] .ms { animation-duration: 3s; }
-.pipmini[data-state="speaking"] b { transform: scale(calc(1 + var(--amp, 0) * 0.8)); }
-.pipmini[data-state="complete"] b { background: var(--c-success); box-shadow: 0 0 10px var(--c-success); }
-.pipmini[data-state="asking"] .badge { opacity: 1; }
 
-:root[data-motion="reduced"] .pip *, :root[data-motion="reduced"] .pip *::before, :root[data-motion="reduced"] .pipmini * { animation: none !important; }
-@media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .pip *, :root:not([data-motion="full"]) .pip *::before, :root:not([data-motion="full"]) .pipmini * { animation: none !important; } }
+:root[data-motion="reduced"] .pip *, :root[data-motion="reduced"] .pip *::before { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .pip *, :root:not([data-motion="full"]) .pip *::before { animation: none !important; } }
 
 /* guide: Pip state cards */
 .pips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
@@ -526,7 +552,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
 /* ── Toast ───────────────────────────────────────────── */
 #toast {
-  position: absolute; z-index: 975; left: 50%; bottom: calc(var(--shelf-h) + 24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(10px);
+  position: absolute; z-index: 975; left: 50%; bottom: calc(var(--dock-h) + 24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(10px);
   display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 16px; border-radius: var(--radius-md); max-width: calc(100% - 32px);
   background: var(--glass-fill-strong); opacity: 0; visibility: hidden;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
@@ -642,11 +668,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .term .g { color: var(--c-success); }
 .term .d { color: var(--c-text-3); }
 
-/* ── Narrow screens: windows stack, shelf condenses ─ */
+/* ── Narrow screens: windows stack, dock scrolls ─ */
 @media (max-width: 720px) {
   body { overflow: hidden; }
-  #wall, #gl, #shelf, .pop, #toast, #search, #searchScrim, #night, #dim { position: fixed; }
-  #desktop { overflow-y: auto; padding: 12px 16px calc(var(--shelf-h) + 32px); display: flex; flex-direction: column; gap: 16px; }
+  #wall, #gl, #menubar, #dock, .pop, #toast, #search, #searchScrim, #night, #dim { position: fixed; }
+  #dock { left: 8px; right: 8px; transform: none; overflow-x: auto; scrollbar-width: none; }
+  .mb-app, .mb-hide { display: none; }
+  #desktop { overflow-y: auto; padding: calc(var(--menubar-h) + 12px) 16px calc(var(--dock-h) + 32px); display: flex; flex-direction: column; gap: 16px; }
   .win { order: -1; }
   #home.stack { height: auto; overflow: visible; padding: 4px 0 16px; }
   .greet { font: var(--text-title-lg); }
@@ -654,8 +682,6 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   .win { position: relative !important; left: auto !important; top: auto !important; width: auto !important; height: 560px !important; min-width: 0; flex: none; }
   .win.edge { border-radius: var(--radius-lg); }
   .grip, .cap.max { display: none; }
-  .search-pill { width: 44px; padding: 0; justify-content: center; }
-  .search-pill span, .search-pill kbd { display: none; }
   .side { width: 64px; padding: 8px 6px; }
   .navbtn span { display: none; }
   .navbtn { justify-content: center; padding: 0; }
@@ -663,7 +689,6 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   .type-row { grid-template-columns: 1fr; gap: 4px; }
   .fhead, .frow { grid-template-columns: 1fr 80px; }
   .fhead :nth-child(2), .frow :nth-child(2) { display: none; }
-  .tray .hide-narrow, .show-desk { display: none; }
   .qs-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
@@ -672,46 +697,66 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <symbol id="i-six" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2.1"/><circle cx="18.06" cy="8.5" r="2.1"/><circle cx="18.06" cy="15.5" r="2.1"/><circle cx="12" cy="19" r="2.1"/><circle cx="5.94" cy="15.5" r="2.1"/><circle cx="5.94" cy="8.5" r="2.1"/></g></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
-    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
-    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.5-.8 1.5-1.5 0-.9-.7-1.2-.7-2 0-.8.6-1.5 1.5-1.5H17a4 4 0 0 0 4-4c0-5-4-9-9-9z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></symbol>
-    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
-    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
-    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
-    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r=".9" fill="currentColor"/></symbol>
-    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
-    <symbol id="i-battery" viewBox="0 0 24 24"><rect x="2.5" y="7" width="17" height="10" rx="2.5"/><path d="M21.5 10.5v3"/><rect x="5" y="9.5" width="8" height="5" rx="1" fill="currentColor" stroke="none"/></symbol>
-    <symbol id="i-bt" viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
-    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M6.3 6.3a8 8 0 1 0 11.4 0"/></symbol>
-    <symbol id="i-min" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
-    <symbol id="i-max" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
-    <symbol id="i-restore" viewBox="0 0 24 24"><rect x="5" y="8" width="11" height="11" rx="2"/><path d="M9 5h8a2 2 0 0 1 2 2v8"/></symbol>
-    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
-    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></symbol>
-    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
-    <symbol id="i-access" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="1.5"/><path d="m5 8 7 1.5L19 8M12 9.5V14l-3 6M12 14l3 6"/></symbol>
-    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
-    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
-    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0v2m0-1a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4 15a1.5 1.5 0 0 1 2.5-1.6L9 16"/></symbol>
-    <symbol id="i-type" viewBox="0 0 24 24"><path d="M5 7V5h14v2M12 5v14M9 19h6"/></symbol>
-    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
-    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
-    <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
-    <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
-    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
-    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></symbol>
-    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+    <symbol id="i-search" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 256 256"><path d="M216,72H130.67L102.93,51.2a16.12,16.12,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V200a16,16,0,0,0,16,16H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72Zm0,128H40V64H93.33L123.2,86.4A8,8,0,0,0,128,88h88Z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 256 256"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 256 256"><path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89Zm13,93.71A15.89,15.89,0,0,1,198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147.6ZM140,76a12,12,0,1,1-12-12A12,12,0,0,1,140,76ZM96,100A12,12,0,1,1,84,88,12,12,0,0,1,96,100Zm0,56a12,12,0,1,1-12-12A12,12,0,0,1,96,156Zm88-56a12,12,0,1,1-12-12A12,12,0,0,1,184,100Z"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 256 256"><path d="M128,128a8,8,0,0,1-3,6.25l-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32A8,8,0,0,1,128,128Zm48,24H136a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm56-96V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Z"/></symbol>
+    <symbol id="i-music" viewBox="0 0 256 256"><path d="M212.92,17.69a8,8,0,0,0-6.86-1.45l-128,32A8,8,0,0,0,72,56V166.08A36,36,0,1,0,88,196V110.25l112-28v51.83A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.69ZM52,216a20,20,0,1,1,20-20A20,20,0,0,1,52,216ZM88,93.75V62.25l112-28v31.5ZM180,184a20,20,0,1,1,20-20A20,20,0,0,1,180,184Z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 256 256"><path d="M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 256 256"><path d="M140,204a12,12,0,1,1-12-12A12,12,0,0,1,140,204ZM237.08,87A172,172,0,0,0,18.92,87,8,8,0,0,0,29.08,99.37a156,156,0,0,1,197.84,0A8,8,0,0,0,237.08,87ZM205,122.77a124,124,0,0,0-153.94,0A8,8,0,0,0,61,135.31a108,108,0,0,1,134.06,0,8,8,0,0,0,11.24-1.3A8,8,0,0,0,205,122.77Zm-32.26,35.76a76.05,76.05,0,0,0-89.42,0,8,8,0,0,0,9.42,12.94,60,60,0,0,1,70.58,0,8,8,0,1,0,9.42-12.94Z"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 256 256"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 256 256"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM144,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm-40,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM64,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm192,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></symbol>
+    <symbol id="i-bt" viewBox="0 0 256 256"><path d="M196.8,169.6,141.33,128,196.8,86.4a8,8,0,0,0,0-12.8l-64-48A8,8,0,0,0,120,32v80L68.8,73.6a8,8,0,0,0-9.6,12.8L114.67,128,59.2,169.6a8,8,0,1,0,9.6,12.8L120,144v80a8,8,0,0,0,12.8,6.4l64-48a8,8,0,0,0,0-12.8ZM136,48l42.67,32L136,112Zm0,160V144l42.67,32Z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></symbol>
+    <symbol id="i-power" viewBox="0 0 256 256"><path d="M120,128V48a8,8,0,0,1,16,0v80a8,8,0,0,1-16,0Zm60.37-78.7a8,8,0,0,0-8.74,13.4C194.74,77.77,208,101.57,208,128a80,80,0,0,1-160,0c0-26.43,13.26-50.23,36.37-65.3a8,8,0,0,0-8.74-13.4C47.9,67.38,32,96.06,32,128a96,96,0,0,0,192,0C224,96.06,208.1,67.38,180.37,49.3Z"/></symbol>
+    <symbol id="i-min" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"/></symbol>
+    <symbol id="i-max" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Z"/></symbol>
+    <symbol id="i-restore" viewBox="0 0 256 256"><path d="M184,64H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H184a8,8,0,0,0,8-8V72A8,8,0,0,0,184,64Zm-8,144H48V80H176ZM224,40V184a8,8,0,0,1-16,0V48H72a8,8,0,0,1,0-16H216A8,8,0,0,1,224,40Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 256 256"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 256 256"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V64a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8Zm-48,48a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,224Z"/></symbol>
+    <symbol id="i-access" viewBox="0 0 256 256"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 256 256"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 256 256"><path d="M56,76a60,60,0,0,1,120,0,8,8,0,0,1-16,0,44,44,0,0,0-88,0,8,8,0,1,1-16,0Zm140,44a27.9,27.9,0,0,0-13.36,3.39A28,28,0,0,0,144,106.7V76a28,28,0,0,0-56,0v80l-3.82-6.13a28,28,0,0,0-48.41,28.17l29.32,50A8,8,0,1,0,78.89,220L49.6,170a12,12,0,1,1,20.78-12l.14.23,18.68,30A8,8,0,0,0,104,184V76a12,12,0,0,1,24,0v68a8,8,0,1,0,16,0V132a12,12,0,0,1,24,0v20a8,8,0,0,0,16,0v-4a12,12,0,0,1,24,0v36c0,21.61-7.1,36.3-7.16,36.42a8,8,0,0,0,3.58,10.73A7.9,7.9,0,0,0,208,232a8,8,0,0,0,7.16-4.42c.37-.73,8.85-18,8.85-43.58V148A28,28,0,0,0,196,120Z"/></symbol>
+    <symbol id="i-type" viewBox="0 0 256 256"><path d="M87.24,52.59a8,8,0,0,0-14.48,0l-64,136a8,8,0,1,0,14.48,6.81L39.9,160h80.2l16.66,35.4a8,8,0,1,0,14.48-6.81ZM47.43,144,80,74.79,112.57,144ZM200,96c-12.76,0-22.73,3.47-29.63,10.32a8,8,0,0,0,11.26,11.36c3.8-3.77,10-5.68,18.37-5.68,13.23,0,24,9,24,20v3.22A42.76,42.76,0,0,0,200,128c-22.06,0-40,16.15-40,36s17.94,36,40,36a42.73,42.73,0,0,0,24-7.25,8,8,0,0,0,16-.75V132C240,112.15,222.06,96,200,96Zm0,88c-13.23,0-24-9-24-20s10.77-20,24-20,24,9,24,20S213.23,184,200,184Z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 256 256"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 256 256"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></symbol>
+    <symbol id="i-x-circle" viewBox="0 0 256 256"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 256 256"><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 256 256"><path d="M205.66,117.66a8,8,0,0,1-11.32,0L136,59.31V216a8,8,0,0,1-16,0V59.31L61.66,117.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,117.66Z"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 256 256"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V240a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 256 256"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"/></symbol>
+    <symbol id="i-control" viewBox="0 0 256 256"><path d="M176,56H80a72,72,0,0,0,0,144h96a72,72,0,0,0,0-144Zm0,128H80A56,56,0,0,1,80,72h96a56,56,0,0,1,0,112Zm0-96a40,40,0,1,0,40,40A40,40,0,0,0,176,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,176,152Z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 256 256"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 256 256"><path d="M168,224a8,8,0,0,1-8,8H96a8,8,0,1,1,0-16h64A8,8,0,0,1,168,224Zm53.85-32A15.8,15.8,0,0,1,208,200H48a16,16,0,0,1-13.8-24.06C39.75,166.38,48,139.34,48,104a80,80,0,1,1,160,0c0,35.33,8.26,62.38,13.81,71.94A15.89,15.89,0,0,1,221.84,192ZM208,184c-7.73-13.27-16-43.95-16-80a64,64,0,1,0-128,0c0,36.06-8.28,66.74-16,80Z"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z"/></symbol>
+    <symbol id="i-f-folder" viewBox="0 0 256 256"><path d="M232,88V200.89A15.13,15.13,0,0,1,216.89,216H40a16,16,0,0,1-16-16V64A16,16,0,0,1,40,48H93.33a16.12,16.12,0,0,1,9.6,3.2L130.67,72H216A16,16,0,0,1,232,88Z"/></symbol>
+    <symbol id="i-f-compass" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm51.58,57.79-32,64a4.08,4.08,0,0,1-1.79,1.79l-64,32a4,4,0,0,1-5.37-5.37l32-64a4.08,4.08,0,0,1,1.79-1.79l64-32A4,4,0,0,1,179.58,81.79Z"/></symbol>
+    <symbol id="i-f-mail" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-8,144H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol>
+    <symbol id="i-f-music" viewBox="0 0 256 256"><path d="M212.92,17.71a7.89,7.89,0,0,0-6.86-1.46l-128,32A8,8,0,0,0,72,56V166.1A36,36,0,1,0,88,196V102.25l112-28V134.1A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.71Z"/></symbol>
+    <symbol id="i-f-terminal" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm-91,94.25-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32a8,8,0,0,1,0,12.5ZM176,168H136a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Z"/></symbol>
+    <symbol id="i-f-palette" viewBox="0 0 256 256"><path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89ZM84,168a12,12,0,1,1,12-12A12,12,0,0,1,84,168Zm0-56a12,12,0,1,1,12-12A12,12,0,0,1,84,112Zm44-24a12,12,0,1,1,12-12A12,12,0,0,1,128,88Zm44,24a12,12,0,1,1,12-12A12,12,0,0,1,172,112Z"/></symbol>
+    <symbol id="i-f-gear" viewBox="0 0 256 256"><path d="M237.94,107.21a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A111.92,111.92,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.63a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z"/></symbol>
+    <symbol id="i-f-trash" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM112,168a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm0-120H96V40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8Z"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 256 256"><path d="M216,56V200a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40H200A16,16,0,0,1,216,56Z"/></symbol>
+    <symbol id="i-f-calendar" viewBox="0 0 256 256"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,48H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z"/></symbol>
+    <symbol id="i-f-image" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM156,88a12,12,0,1,1-12,12A12,12,0,0,1,156,88Zm60,112H40V160.69l46.34-46.35a8,8,0,0,1,11.32,0h0L165,181.66a8,8,0,0,0,11.32-11.32l-17.66-17.65L173,138.34a8,8,0,0,1,11.31,0L216,170.07V200Z"/></symbol>
+    <symbol id="i-f-file" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,176H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm-8-56V44l44,44Z"/></symbol>
+    <symbol id="i-six" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="5" r="2.1"/><circle cx="18.06" cy="8.5" r="2.1"/><circle cx="18.06" cy="15.5" r="2.1"/><circle cx="12" cy="19" r="2.1"/><circle cx="5.94" cy="15.5" r="2.1"/><circle cx="5.94" cy="8.5" r="2.1"/></g></symbol>
+    <symbol id="i-focus" viewBox="0 0 256 256"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L58.82,63.8A79.59,79.59,0,0,0,48,104c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.8a40,40,0,0,0,78.4,0h15.44l19.44,21.38a8,8,0,1,0,11.84-10.76ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a63.65,63.65,0,0,1,6.26-27.62L168.09,184Zm166-4.73a8.13,8.13,0,0,1-2.93.55,8,8,0,0,1-7.44-5.08C196.35,156.19,192,129.75,192,104A64,64,0,0,0,96.43,48.31a8,8,0,0,1-7.9-13.91A80,80,0,0,1,208,104c0,35.35,8.05,58.59,10.52,64.88A8,8,0,0,1,214,179.25Z"/></symbol>
+    <symbol id="i-contrast" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,16.37a86.4,86.4,0,0,1,16,3V212.67a86.4,86.4,0,0,1-16,3Zm32,9.26a87.81,87.81,0,0,1,16,10.54V195.83a87.81,87.81,0,0,1-16,10.54ZM40,128a88.11,88.11,0,0,1,80-87.63V215.63A88.11,88.11,0,0,1,40,128Zm160,50.54V77.46a87.82,87.82,0,0,1,0,101.08Z"/></symbol>
   </defs>
 </svg>
 
@@ -771,7 +816,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <section class="widget liquid" data-liquid="0" data-slot="R0" aria-label="Current task">
         <h3>Current task <small>Pip</small></h3>
         <div class="well" style="padding: 14px; display: grid; gap: 12px">
-          <div class="task-head"><div class="pipmini" data-state="working" aria-hidden="true"><div class="ms"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i></div><b></b></div><div><b>Slides from my notes</b><span id="taskLine">Building the outline</span></div></div>
+          <div class="task-head"><canvas class="dotorb" data-state="background" style="width: 40px; height: 40px" aria-hidden="true"></canvas><div><b>Slides from my notes</b><span id="taskLine">Building the outline</span></div></div>
           <div class="bar" role="progressbar" aria-label="Task progress" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><i id="taskBar" style="width: 40%"></i></div>
           <button type="button" class="btn btn-secondary sm" id="taskStop" style="justify-self: start">Stop task</button>
         </div>
@@ -790,7 +835,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Design guide -->
   <section class="win" id="w-guide" data-app="guide" aria-label="Design guide window">
     <header class="titlebar">
-      <span class="tile t-lilac appglyph"><svg class="i sm"><use href="#i-palette"/></svg></span>
+      <span class="appicon ai-guide"><svg class="i"><use href="#i-f-palette"/></svg></span>
       <span class="title">Design guide · Soft Matter</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
@@ -839,11 +884,11 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
         <section id="p-type" role="tabpanel" aria-labelledby="t-type" hidden>
           <span class="overline">Typography</span>
           <h2>Three faces, one scale</h2>
-          <p class="lead">Inter for the interface, Bricolage Grotesque for big moments, JetBrains Mono for code. All open-licensed, so SIX can ship them.</p>
+          <p class="lead">Geist for the interface, Instrument Serif for big, calm moments, Geist Mono for code and status labels. All open-licensed, so SIX can ship them.</p>
           <div class="faces">
-            <div class="face"><span class="big" style="font-family: var(--font-ui); font-weight: 600">Aa 0O Il1</span><b>Inter</b><small>UI · 12–20 px · tabular figures</small></div>
-            <div class="face"><span class="big" style="font-family: var(--font-display); font-weight: 700">Aa Six</span><b>Bricolage Grotesque</b><small>Display · 24 px and up</small></div>
-            <div class="face"><span class="big" style="font-family: var(--font-mono)">{ } =&gt;</span><b>JetBrains Mono</b><small>Terminal, code, IDs</small></div>
+            <div class="face"><span class="big" style="font-family: var(--font-ui); font-weight: 600">Aa 0O Il1</span><b>Geist</b><small>UI · 12–20 px · tabular figures</small></div>
+            <div class="face"><span class="big" style="font-family: var(--font-display); font-size: 48px">Aa <i>Six</i></span><b>Instrument Serif</b><small>Display · 28 px and up · roman + italic</small></div>
+            <div class="face"><span class="big" style="font-family: var(--font-mono)">{ } =&gt;</span><b>Geist Mono</b><small>Terminal, code, IDs</small></div>
             <div class="face"><span class="big" style="font-family: 'Noto Sans Bengali', var(--font-ui)">বাংলা</span><b>Noto Sans Bengali</b><small>Script fallback · +2 px line height</small></div>
           </div>
           <h3>Scale (desktop base 14 px)</h3>
@@ -933,6 +978,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
           <h2>Pip lives on the home screen</h2>
           <p class="lead">Home is a conversation. Type or talk; Pip answers, opens and arranges windows, and changes settings. Every state changes shape and motion, not just colour. Pick one to set Pip everywhere.</p>
           <div class="pips" id="pipStates"></div>
+          <h3>The small orb</h3>
+          <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
+          <div class="orb-tiles" id="orbTiles"></div>
           <h3>Voice</h3>
           <ul class="principles">
             <li><span class="n">1</span><div><b>Tap the mic, or hold Six + Space.</b> <span>No always-on wake word by default. The mic glyph and Pip's flat, rippling rings show it is listening.</span></div></li>
@@ -948,7 +996,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Files -->
   <section class="win" id="w-files" data-app="files" aria-label="Files window">
     <header class="titlebar">
-      <span class="tile t-sky appglyph"><svg class="i sm"><use href="#i-folder"/></svg></span>
+      <span class="appicon ai-files"><svg class="i"><use href="#i-f-folder"/></svg></span>
       <span class="title">Files · Documents</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
@@ -982,7 +1030,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Terminal (closed at start) -->
   <section class="win" id="w-terminal" data-app="terminal" aria-label="Terminal window" hidden>
     <header class="titlebar">
-      <span class="tile t-mint appglyph"><svg class="i sm"><use href="#i-terminal"/></svg></span>
+      <span class="appicon ai-terminal"><svg class="i"><use href="#i-f-terminal"/></svg></span>
       <span class="title">Terminal</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
@@ -993,8 +1041,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     <div class="win-body">
 <pre class="term"><span class="p">nadia@six ~ $</span> six-info
 <span class="g">SIX OS</span>      prototype · Soft Matter design language
-<span class="d">shell</span>       shelf · six menu · six search · pip
-<span class="d">fonts</span>       Inter · Bricolage Grotesque · JetBrains Mono
+<span class="d">shell</span>       menu bar · dock · six search · pip
+<span class="d">fonts</span>       Geist · Instrument Serif · Geist Mono
 <span class="d">home</span>        pip · chat + voice · plasma clay
 <span class="d">accent</span>      Iris #5340D9 (light) / #9C8FFF (dark)
 <span class="d">targets</span>     32 px pointer · 44 px touch
@@ -1034,7 +1082,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <button class="qtile" aria-pressed="false" data-qs="night"><svg class="i"><use href="#i-moon"/></svg><div><b>Night light</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="dark"><svg class="i"><use href="#i-sun"/></svg><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="touch"><svg class="i"><use href="#i-hand"/></svg><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="focus"><svg class="i"><use href="#i-moon"/></svg><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="focus"><svg class="i"><use href="#i-focus"/></svg><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
     </div>
     <div class="slider-row"><label for="bright" aria-label="Brightness"><svg class="i"><use href="#i-sun"/></svg></label><input type="range" id="bright" min="30" max="100" value="100"></div>
     <div class="slider-row"><label for="vol" aria-label="Volume"><svg class="i"><use href="#i-volume"/></svg></label><input type="range" id="vol" min="0" max="100" value="64"></div>
@@ -1042,7 +1090,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <span class="overline" style="padding: 4px 6px">Accessibility</span>
       <label class="sw-row" for="a11yTransp"><svg class="i"><use href="#i-layers"/></svg><span>Reduce transparency</span><input class="sw" type="checkbox" id="a11yTransp"></label>
       <label class="sw-row" for="a11yMotion"><svg class="i"><use href="#i-access"/></svg><span>Reduce motion</span><input class="sw" type="checkbox" id="a11yMotion"></label>
-      <label class="sw-row" for="a11yContrast"><svg class="i"><use href="#i-sun"/></svg><span>More contrast</span><input class="sw" type="checkbox" id="a11yContrast"></label>
+      <label class="sw-row" for="a11yContrast"><svg class="i"><use href="#i-contrast"/></svg><span>More contrast</span><input class="sw" type="checkbox" id="a11yContrast"></label>
     </div>
     <div class="switch-list" style="gap: 12px; padding: 12px">
       <span class="overline">Plasma clay</span>
@@ -1065,19 +1113,39 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   <div id="toast" class="glass" role="status" aria-live="polite"><span id="toastMsg"></span><button class="btn btn-secondary sm" id="toastAct">Undo</button></div>
 
-  <!-- Shelf -->
-  <nav id="shelf" class="glass rim" aria-label="Shelf">
-    <button class="six-btn" id="sixBtn" aria-label="Six Menu" aria-expanded="false" aria-controls="sixMenu"><svg class="i"><use href="#i-six"/></svg></button>
-    <button class="search-pill" id="searchPill" aria-label="Search"><svg class="i"><use href="#i-search"/></svg><span>Search</span><kbd>Ctrl K</kbd></button>
-    <div class="apps" id="shelfApps"></div>
-    <div class="tray">
-      <button class="traybtn" id="trayBtn" aria-label="Quick Settings" aria-expanded="false" aria-controls="qs">
-        <svg class="i hide-narrow"><use href="#i-wifi"/></svg><svg class="i hide-narrow"><use href="#i-volume"/></svg><svg class="i"><use href="#i-battery"/></svg>
-      </button>
-      <button class="traybtn" id="pipBtn" aria-label="Pip: Ready. Show home"><span class="pipmini" id="pipMini" data-state="ready" aria-hidden="true"><span class="ms"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i></span><b></b><span class="badge"></span></span></button>
-      <button class="traybtn clock tnum" id="clock" aria-label="Clock"><b id="clockT">10:42</b><span id="clockD" class="hide-narrow">12/10/2026</span></button>
+  <!-- Menu bar -->
+  <header id="menubar" class="glass" aria-label="Menu bar">
+    <button class="mb-btn mb-logo" id="sixBtn" aria-label="SIX menu" aria-expanded="false" aria-controls="sysMenu"><svg class="i"><use href="#i-six"/></svg></button>
+    <span class="mb-btn mb-app" id="mbApp">Home</span>
+    <div class="mb-right">
+      <button class="mb-btn" id="mbSearch" aria-label="Search (Ctrl K)"><svg class="i"><use href="#i-search"/></svg></button>
+      <button class="mb-btn" id="trayBtn" aria-label="Control Center" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi"/></svg><svg class="i"><use href="#i-battery"/></svg><svg class="i"><use href="#i-control"/></svg></button>
+      <button class="mb-btn" id="pipBtn" aria-label="Pip: Ready. Show home"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
+      <button class="mb-btn mb-clock" id="clock" aria-label="Clock"><span id="clockD" class="mb-hide">Mon 12 Oct</span><span id="clockT">10:42</span></button>
     </div>
-    <button class="show-desk" id="showDesk" aria-label="Show desktop"></button>
+  </header>
+
+  <!-- System menu (logo) -->
+  <div id="sysMenu" class="pop glass" role="menu" aria-label="SIX menu">
+    <button class="mrow" role="menuitem" data-sys="about">About SIX</button>
+    <div class="msep"></div>
+    <button class="mrow" role="menuitem" data-sys="settings">System Settings…</button>
+    <button class="mrow" role="menuitem" data-sys="search">Six Search<kbd>Ctrl K</kbd></button>
+    <div class="msep"></div>
+    <button class="mrow" role="menuitem" data-sys="sleep">Sleep</button>
+    <button class="mrow" role="menuitem" data-sys="restart">Restart…</button>
+    <button class="mrow" role="menuitem" data-sys="shutdown">Shut Down…</button>
+    <div class="msep"></div>
+    <button class="mrow" role="menuitem" data-sys="lock">Lock Screen<kbd>Six L</kbd></button>
+    <button class="mrow" role="menuitem" data-sys="logout">Log Out Nadia Rahman…</button>
+  </div>
+
+  <!-- Dock -->
+  <nav id="dock" class="glass" aria-label="Dock">
+    <div class="dock-apps" id="dockApps"></div>
+    <span class="dock-sep" aria-hidden="true"></span>
+    <button class="dk running" id="dockPip" aria-label="Pip: show home"><span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span><span class="dot"></span><span class="tip">Pip</span></button>
+    <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="i"><use href="#i-f-trash"/></svg></span><span class="tip">Bin</span></button>
   </nav>
 
   <div id="night"></div>
@@ -1097,25 +1165,37 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   /* ── App registry ───────────────────────────── */
   const APPS = [
-    { id: 'files', name: 'Files', icon: 'folder', tile: 't-sky', win: true },
-    { id: 'guide', name: 'Design guide', icon: 'palette', tile: 't-lilac', win: true },
-    { id: 'browser', name: 'Browser', icon: 'globe', tile: 't-peach' },
-    { id: 'mail', name: 'Mail', icon: 'mail', tile: 't-butter' },
-    { id: 'terminal', name: 'Terminal', icon: 'terminal', tile: 't-mint', win: true },
-    { id: 'music', name: 'Music', icon: 'music', tile: 't-rose' },
-    { id: 'settings', name: 'Settings', icon: 'sliders', tile: 't-lilac' },
+    { id: 'files', name: 'Files', icon: 'folder', glyph: 'f-folder', win: true },
+    { id: 'browser', name: 'Browser', icon: 'compass', glyph: 'f-compass' },
+    { id: 'mail', name: 'Mail', icon: 'mail', glyph: 'f-mail' },
+    { id: 'music', name: 'Music', icon: 'music', glyph: 'f-music' },
+    { id: 'terminal', name: 'Terminal', icon: 'terminal', glyph: 'f-terminal', win: true },
+    { id: 'guide', name: 'Design guide', icon: 'palette', glyph: 'f-palette', win: true },
+    { id: 'settings', name: 'Settings', icon: 'gear', glyph: 'f-gear' },
   ];
   const appById = Object.fromEntries(APPS.map(a => [a.id, a]));
+  const appIcon = (id, size) => `<span class="appicon ai-${id}"${size ? ` style="--ic:${size}px"` : ''}>${icon(appById[id].glyph)}</span>`;
 
-  /* ── Shelf apps & menu grid ─────────────────── */
-  const shelfApps = $('#shelfApps');
-  shelfApps.innerHTML = APPS.map(a => `
-    <button class="appbtn" data-app="${a.id}" aria-label="${a.name}">
-      <span class="tile ${a.tile}">${icon(a.icon)}</span><span class="pip"></span>
-      <span class="tip glass">${a.name}</span>
-    </button>`).join('');
+  /* ── Dock & Six Menu grid ───────────────────── */
+  const dock = $('#dock'), dockApps = $('#dockApps');
+  dockApps.innerHTML = `<button class="dk" id="launchBtn" aria-label="Six Menu, all apps" aria-expanded="false" aria-controls="sixMenu"><span class="appicon ai-launch">${icon('six')}</span><span class="tip">Six Menu</span></button>`
+    + APPS.map(a => `<button class="dk" data-app="${a.id}" aria-label="${a.name}">${appIcon(a.id)}<span class="dot"></span><span class="tip">${a.name}</span></button>`).join('');
   $('#pinned').innerHTML = APPS.map(a => `
-    <button class="grid-app" data-app="${a.id}"><span class="tile ${a.tile}">${icon(a.icon)}</span>${a.name}</button>`).join('');
+    <button class="grid-app" data-app="${a.id}">${appIcon(a.id, 52)}${a.name}</button>`).join('');
+  // magnification, as in the macOS Dock: icons near the pointer grow (off with reduced motion and on touch)
+  let dockCenters = [];
+  dock.addEventListener('pointerenter', () => {
+    $$('.dk', dock).forEach(b => b.style.setProperty('--s', 1));
+    dockCenters = $$('.dk', dock).map(b => { const r = b.getBoundingClientRect(); return r.left + r.width / 2; });
+  });
+  dock.addEventListener('pointermove', e => {
+    if (narrowMQ.matches || e.pointerType === 'touch' || root.dataset.motion === 'reduced' || (rmMQ.matches && root.dataset.motion !== 'full')) return;
+    $$('.dk', dock).forEach((b, i) => {
+      const d = Math.abs(e.clientX - (dockCenters[i] ?? 0)) / 160;
+      b.style.setProperty('--s', d < 1 ? (1 + 0.5 * Math.cos(d * Math.PI / 2) ** 2).toFixed(3) : 1);
+    });
+  });
+  dock.addEventListener('pointerleave', () => $$('.dk', dock).forEach(b => b.style.setProperty('--s', 1)));
 
   const FILES = [
     { name: 'Quarterly report.xlsx', mod: 'Yesterday', size: '248 KB', icon: 'file', tile: 't-mint' },
@@ -1134,25 +1214,24 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   const wins = {};
   $$('.win').forEach(el => { wins[el.dataset.app] = { el, max: false, snapped: null, prev: null, min: false }; });
 
-  const work = () => {
-    const shelf = $('#shelf');
-    return { x: 0, y: 0, w: desk.clientWidth, h: desk.clientHeight - shelf.offsetHeight - 16 };
-  };
+  const mbH = () => $('#menubar').offsetHeight;
+  const dockSpace = () => $('#dock').offsetHeight + 16;
+  const work = () => ({ x: 0, y: mbH(), w: desk.clientWidth, h: desk.clientHeight - mbH() - dockSpace() });
   const setRect = (el, r) => Object.assign(el.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' });
   const getRect = el => ({ x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight });
 
   function placeInitial() {
     const W = work();
     const gw = Math.min(900, W.w - 180), gh = Math.min(620, W.h - 60);
-    setRect(wins.guide.el, { x: Math.max(120, (W.w - gw) / 2 - 80), y: Math.max(16, (W.h - gh) / 2 - 10), w: gw, h: gh });
+    setRect(wins.guide.el, { x: Math.max(120, (W.w - gw) / 2 - 80), y: W.y + Math.max(16, (W.h - gh) / 2 - 10), w: gw, h: gh });
     const fw = Math.min(560, W.w - 160), fh = Math.min(420, W.h - 120);
-    setRect(wins.files.el, { x: Math.max(140, W.w - fw - 40), y: Math.max(40, W.h - fh - 20), w: fw, h: fh });
-    setRect(wins.terminal.el, { x: Math.max(130, W.w * 0.22), y: Math.max(30, W.h * 0.12), w: Math.min(620, W.w - 160), h: Math.min(380, W.h - 80) });
+    setRect(wins.files.el, { x: Math.max(140, W.w - fw - 40), y: W.y + Math.max(40, W.h - fh - 20), w: fw, h: fh });
+    setRect(wins.terminal.el, { x: Math.max(130, W.w * 0.22), y: W.y + Math.max(30, W.h * 0.12), w: Math.min(620, W.w - 160), h: Math.min(380, W.h - 80) });
   }
 
   function focusWin(id) {
     Object.entries(wins).forEach(([k, w]) => w.el.classList.toggle('active', k === id));
-    if (z > 800) { // keep windows below the shelf and popovers
+    if (z > 800) { // keep windows below the dock and popovers
       z = 10;
       Object.values(wins).sort((a, b) => (+a.el.style.zIndex || 0) - (+b.el.style.zIndex || 0)).forEach(w => { w.el.style.zIndex = ++z; });
     }
@@ -1160,13 +1239,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     syncShelf(id);
   }
   function syncShelf(activeId) {
-    $$('.appbtn', shelfApps).forEach(b => {
+    $$('.dk[data-app]', dock).forEach(b => {
       const w = wins[b.dataset.app];
       const running = !!w && !w.el.hidden || (w && w.min);
       b.classList.toggle('running', !!running);
-      b.classList.toggle('focused', !!w && b.dataset.app === activeId && !w.el.hidden);
       b.setAttribute('aria-label', appById[b.dataset.app].name + (running ? ', running' : ''));
     });
+    $('#mbApp').textContent = activeId ? appById[activeId].name : 'Home';
   }
   const topVisible = () => Object.entries(wins).filter(([, w]) => !w.el.hidden)
     .sort((a, b) => (+b[1].el.style.zIndex || 0) - (+a[1].el.style.zIndex || 0))[0]?.[0] || null;
@@ -1184,6 +1263,10 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       w.el.classList.add('opening');
       void w.el.offsetWidth; // commit the start state, then animate in (no frame dependency)
       w.el.classList.remove('opening');
+      const dk = $(`.dk[data-app="${id}"]`);
+      if (dk && root.dataset.motion !== 'reduced' && !(rmMQ.matches && root.dataset.motion !== 'full')) {
+        dk.classList.remove('bounce'); void dk.offsetWidth; dk.classList.add('bounce'); setTimeout(() => dk.classList.remove('bounce'), 950);
+      }
     }
     focusWin(id);
   }
@@ -1199,13 +1282,14 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   }
   function zoneRect(zone) {
     const W = work(), hw = W.w / 2, hh = W.h / 2;
-    return {
+    const r = {
       MAX: { x: 0, y: 0, w: W.w, h: W.h },
       L50: { x: 0, y: 0, w: hw, h: W.h }, R50: { x: hw, y: 0, w: hw, h: W.h },
       L66: { x: 0, y: 0, w: W.w * 2 / 3, h: W.h }, R33: { x: W.w * 2 / 3, y: 0, w: W.w / 3, h: W.h },
       TL: { x: 0, y: 0, w: hw, h: hh }, TR: { x: hw, y: 0, w: hw, h: hh },
       BL: { x: 0, y: hh, w: hw, h: hh }, BR: { x: hw, y: hh, w: hw, h: hh },
     }[zone];
+    return r && { ...r, y: r.y + W.y };
   }
   function animateTo(el, r) {
     el.classList.add('anim'); setRect(el, r);
@@ -1264,10 +1348,11 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
         moved = true;
         const W = work();
         el.style.left = Math.min(Math.max(px - ox, -start.w + 80), W.w - 80) + 'px';
-        el.style.top = Math.min(Math.max(py - oy, 0), W.h - 40) + 'px';
+        el.style.top = Math.min(Math.max(py - oy, W.y), W.y + W.h - 40) + 'px';
         const edge = 10;
-        zone = py <= edge ? 'MAX' : px <= edge ? (py < W.h * 0.25 ? 'TL' : py > W.h * 0.75 ? 'BL' : 'L50')
-          : px >= W.w - edge ? (py < W.h * 0.25 ? 'TR' : py > W.h * 0.75 ? 'BR' : 'R50') : null;
+        const vy = py - W.y;
+        zone = vy <= edge ? 'MAX' : px <= edge ? (vy < W.h * 0.25 ? 'TL' : vy > W.h * 0.75 ? 'BL' : 'L50')
+          : px >= W.w - edge ? (vy < W.h * 0.25 ? 'TR' : vy > W.h * 0.75 ? 'BR' : 'R50') : null;
         if (zone) { setRect(preview, zoneRect(zone)); preview.classList.add('show'); }
         else preview.classList.remove('show');
       };
@@ -1326,7 +1411,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   $$('.z', fly).forEach(b => b.addEventListener('click', () => { if (flyFor) snap(flyFor, b.dataset.zone); hideFly(true); }));
 
   /* ── Popovers ───────────────────────────────── */
-  const POPS = { six: ['#sixMenu', '#sixBtn'], qs: ['#qs', '#trayBtn'] };
+  const POPS = { six: ['#sixMenu', '#launchBtn'], sys: ['#sysMenu', '#sixBtn'], qs: ['#qs', '#trayBtn'] };
   function openPop(key) {
     Object.entries(POPS).forEach(([k, [p, b]]) => {
       const on = k === key && !$(p).classList.contains('open');
@@ -1338,30 +1423,30 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   function closeAllPops() {
     Object.values(POPS).forEach(([p, b]) => { $(p).classList.remove('open'); $(b).setAttribute('aria-expanded', 'false'); });
   }
-  $('#sixBtn').addEventListener('click', e => { e.stopPropagation(); openPop('six'); });
+  $('#launchBtn').addEventListener('click', e => { e.stopPropagation(); openPop('six'); });
+  $('#sixBtn').addEventListener('click', e => { e.stopPropagation(); openPop('sys'); });
+  $('#sysMenu').addEventListener('click', e => {
+    const b = e.target.closest('.mrow'); if (!b) return;
+    closeAllPops();
+    const k = b.dataset.sys;
+    if (k === 'settings') openPop('qs');
+    else if (k === 'search') openSearch();
+    else if (k === 'about') toast('SIX · Soft Matter design prototype: Pip, plasma clay, Geist type and Phosphor icons.', null);
+    else toast(b.textContent.replace(/…|Ctrl K|Six L/g, '').trim() + ' isn’t part of this prototype.', null);
+  });
+  $('#dockPip').addEventListener('click', () => { showHome(); setTimeout(() => $('#ask').focus(), 50); });
+  let binCount = 0;
+  $('#dockBin').addEventListener('click', () => toast(binCount ? `${binCount} ${binCount === 1 ? 'file' : 'files'} in the Bin.` : 'The Bin is empty.', null));
   $('#trayBtn').addEventListener('click', e => { e.stopPropagation(); openPop('qs'); });
   $('#clock').addEventListener('click', () => toast('Calendar and notifications open here.'));
   document.addEventListener('pointerdown', e => {
-    if (!e.target.closest('.pop, #sixBtn, #trayBtn')) closeAllPops();
+    if (!e.target.closest('.pop, #sixBtn, #trayBtn, #launchBtn')) closeAllPops();
   });
   $('#menuQ').addEventListener('input', e => { const v = e.target.value; closeAllPops(); openSearch(v); e.target.value = ''; });
 
-  shelfApps.addEventListener('click', e => { const b = e.target.closest('.appbtn'); if (b) openApp(b.dataset.app); });
+  dockApps.addEventListener('click', e => { const b = e.target.closest('.dk[data-app]'); if (b) openApp(b.dataset.app); });
   $('#pinned').addEventListener('click', e => { const b = e.target.closest('.grid-app'); if (b) openApp(b.dataset.app); });
   $('#recent').addEventListener('click', e => { if (e.target.closest('.row-btn')) openApp('files'); });
-
-  let deskShown = false, hiddenByDesk = [];
-  $('#showDesk').addEventListener('click', () => {
-    if (!deskShown) {
-      hiddenByDesk = Object.keys(wins).filter(k => !wins[k].el.hidden);
-      hiddenByDesk.forEach(k => { wins[k].el.hidden = true; wins[k].min = true; });
-      focusWin(null);
-    } else {
-      hiddenByDesk.forEach(k => { wins[k].el.hidden = false; wins[k].min = false; });
-      focusWin(topVisible());
-    }
-    deskShown = !deskShown;
-  });
 
   /* ── Quick Settings ─────────────────────────── */
   const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : darkMQ.matches;
@@ -1391,7 +1476,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   modeSwitch('#a11yContrast', 'contrast', 'more');
   if (rmMQ.matches) $('#a11yMotion').checked = true;
   $('#bright').addEventListener('input', e => { $('#dim').style.opacity = (100 - e.target.value) / 100 * 0.8; });
-  $('#vol').addEventListener('input', e => { $('#trayBtn').setAttribute('aria-label', `Quick Settings. Volume ${e.target.value} %`); });
+  $('#vol').addEventListener('input', e => { $('#trayBtn').setAttribute('aria-label', `Control Center. Volume ${e.target.value} %`); });
   darkMQ.addEventListener('change', syncThemeTile);
 
   /* ── Six Search ─────────────────────────────── */
@@ -1404,7 +1489,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     { name: 'Touch mode', sub: 'Settings › Accessibility', run: () => qsTile('touch').click(), kw: 'large targets tablet' },
   ];
   const ACTIONS = [
-    { name: 'Show desktop', sub: 'Action', hint: 'Six + D', run: () => $('#showDesk').click(), kw: 'minimize all' },
+    { name: 'Show home', sub: 'Action', hint: 'Six + D', run: () => showHome(), kw: 'desktop minimize all' },
     { name: 'Snap Design guide left', sub: 'Action', hint: 'Six + ←', run: () => { openApp('guide'); snap('guide', 'L50'); }, kw: 'window' },
     { name: 'Snap Files right', sub: 'Action', hint: 'Six + →', run: () => { openApp('files'); snap('files', 'R50'); }, kw: 'window' },
   ];
@@ -1433,7 +1518,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const groups = [];
     const c = calc(q.trim());
     if (c !== null) groups.push(['Answer', [{ name: `= ${c.toLocaleString()}`, sub: 'Enter copies the result', icon: 'spark', tile: 't-butter', run: () => { navigator.clipboard?.writeText(String(c)).catch(() => {}); toast(`Copied ${c.toLocaleString()}`, null); } }]]);
-    const apps = APPS.filter(a => m(a)).map(a => ({ name: a.name, sub: 'App', icon: a.icon, tile: a.tile, run: () => openApp(a.id) }));
+    const apps = APPS.filter(a => m(a)).map(a => ({ name: a.name, sub: 'App', app: a.id, run: () => openApp(a.id) }));
     const files = FILES.filter(f => s && m(f)).map(f => ({ name: f.name, sub: `Documents · ${f.size}`, icon: f.icon, tile: f.tile, hint: 'Space to preview', run: () => openApp('files') }));
     const sets = SETTINGS.filter(m).map(x => ({ ...x, icon: 'sliders', tile: 't-lilac' }));
     const acts = ACTIONS.filter(m).map(x => ({ ...x, icon: 'spark', tile: 't-peach' }));
@@ -1452,7 +1537,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     $('#results').innerHTML = groups.length ? groups.map(([g, items]) => `
       <div class="res-group overline">${g}</div>
       ${items.map(r => `<button class="res" role="option" id="r${i}" data-i="${i}" aria-selected="${i++ === sel}">
-        <span class="tile ${r.tile}">${icon(r.icon)}</span>
+        ${r.app ? appIcon(r.app, 30) : `<span class="tile ${r.tile}">${icon(r.icon)}</span>`}
         <span><span class="main">${r.name.replace(/</g, '&lt;')}</span><span class="sub">${r.sub || ''}</span></span>
         ${r.hint ? `<span class="hint">${r.hint}</span>` : ''}</button>`).join('')}`).join('')
       : `<div class="empty">No results. Try an app name, a setting like "night light", or a sum like 12*18.</div>`;
@@ -1466,7 +1551,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   }
   function closeSearch() { $('#search').classList.remove('open'); $('#searchScrim').classList.remove('open'); }
   const runSel = i => { const r = results[i]; if (!r) return; closeSearch(); r.run(); };
-  $('#searchPill').addEventListener('click', () => openSearch());
+  $('#mbSearch').addEventListener('click', () => openSearch());
   $('#searchScrim').addEventListener('click', closeSearch);
   $('#q').addEventListener('input', () => { sel = 0; renderResults(); });
   $('#q').addEventListener('keydown', e => {
@@ -1511,7 +1596,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     if (fsel < 0) return;
     const [f] = files.splice(fsel, 1), at = fsel;
     fsel = -1; renderFiles();
-    toast(`Moved "${f.name}" to Bin`, () => { files.splice(at, 0, f); fsel = at; renderFiles(); });
+    binCount++;
+    toast(`Moved "${f.name}" to Bin`, () => { files.splice(at, 0, f); fsel = at; binCount--; renderFiles(); });
   }
   $('#flist').addEventListener('click', e => { const r = e.target.closest('.frow'); if (!r) return; fsel = +r.dataset.i; renderFiles(); $(`.frow[data-i="${fsel}"]`).focus(); });
   $('#flist').addEventListener('keydown', e => {
@@ -1536,9 +1622,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   }));
 
   const TYPE = [
-    ['display', '48 / 56 · 700', 'Welcome to SIX', 'var(--text-display)', '-0.02em'],
-    ['headline', '32 / 40 · 700', 'Display & brightness', 'var(--text-headline)', '-0.02em'],
-    ['title-lg', '24 / 32 · 650', 'Save changes to "Budget 2026"?', 'var(--text-title-lg)', '-0.01em'],
+    ['display', '56 / 60 · 400 serif', 'Welcome to SIX', 'var(--text-display)', '-0.01em'],
+    ['headline', '40 / 46 · 400 serif', 'Display & brightness', 'var(--text-headline)', '-0.01em'],
+    ['title-lg', '28 / 34 · 400 serif', 'Save changes to "Budget 2026"?', 'var(--text-title-lg)', '0'],
     ['title', '20 / 28 · 600', 'Bluetooth devices', 'var(--text-title)', '0'],
     ['title-sm', '16 / 22 · 600', 'Backup finished', 'var(--text-title-sm)', '0'],
     ['body-lg', '16 / 24 · 400', 'Night light shifts the screen toward warmer colours after sunset.', 'var(--text-body-lg)', '0'],
@@ -1580,6 +1666,77 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   $('#demoToast').addEventListener('click', () => toast('Moved "Interview notes.md" to Bin', () => toast('Restored "Interview notes.md"', null)));
   $$('.seg button').forEach(b => b.addEventListener('click', () => $$('button', b.parentElement).forEach(x => x.setAttribute('aria-pressed', x === b))));
+
+  /* ── Small orb: a dotted sphere (after "thinking orbs") ────────
+     Used in the menu bar, the dock, task cards and message labels. Big Pip stays on home. */
+  const ORB_MODE = { ready: 'idle', listening: 'listen', thinking: 'reason', speaking: 'speak', searching: 'search', working: 'gyro', complete: 'done', asking: 'lighthouse', resting: 'rest', background: 'background' };
+  const fib = n => Array.from({ length: n }, (_, i) => { const y = 1 - (i + 0.5) * 2 / n, r = Math.sqrt(1 - y * y), th = i * 2.399963; return [Math.cos(th) * r, y, Math.sin(th) * r]; });
+  const FIB = { s: fib(64), m: fib(150), l: fib(260), bg: fib(48) };
+  const norm = v => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+  const orbs = new Set();
+  const rgbOf = el => (getComputedStyle(el).color.match(/[\d.]+/g) || [255, 255, 255]).slice(0, 3).map(Number);
+  function mountOrb(el, still) { el._col = rgbOf(el); if (!still) orbs.add(el); drawOrb(el, 2); }
+  function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; }); }
+  function drawOrb(el, t) {
+    const size = el.clientWidth; if (!size) return;
+    const dpr = Math.min(devicePixelRatio || 1, 2), px = Math.round(size * dpr);
+    if (el.width !== px) { el.width = px; el.height = px; }
+    const ctx = el.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, size, size);
+    const mode = ORB_MODE[el.dataset.state] || 'idle';
+    const pts = mode === 'background' ? FIB.bg : size < 26 ? FIB.s : size < 60 ? FIB.m : FIB.l;
+    const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
+    const R = size * 0.42, cx = size / 2, cy = size / 2;
+    const speed = { idle: 0.35, listen: 0.5, reason: 0.22, speak: 0.45, search: 0.35, gyro: 1.15, done: 0.6, lighthouse: 0.25, rest: 0, background: 0.22 }[mode];
+    const a = t * speed, tilt = mode === 'gyro' ? 0.55 + 0.35 * Math.sin(t * 0.9) : 0.35;
+    const ca = Math.cos(a), sa = Math.sin(a), ct = Math.cos(tilt), st = Math.sin(tilt);
+    const S = mode === 'reason' ? norm([Math.sin(t * 1.7) * 0.8, Math.cos(t * 1.3) * 0.6, 0.85])
+      : mode === 'search' ? norm([Math.sin(t * 1.1) * 0.85, -0.1 + Math.sin(t * 0.7) * 0.35, 0.7]) : null;
+    const beam = t * 1.5;
+    const col = mode === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : el._col;
+    const dot = size < 26 ? 0.66 : size < 60 ? 0.95 : 1.5, gain = size < 26 ? 1.35 : 1;
+    for (const p of pts) {
+      let x = p[0] * ca + p[2] * sa, z = -p[0] * sa + p[2] * ca, y = p[1];
+      const y2 = y * ct - z * st; z = y * st + z * ct; y = y2;
+      const depth = (z + 1) / 2;
+      let r = dot * (0.5 + 0.8 * depth), b;
+      const lit = Math.max(0, -0.55 * x - 0.6 * y + 0.6 * z);
+      if (mode === 'reason' || mode === 'search') {
+        const hot = Math.exp(-((x - S[0]) ** 2 + (y - S[1]) ** 2 + (z - S[2]) ** 2) / (mode === 'reason' ? 0.012 : 0.09));
+        b = 0.08 + 0.3 * depth + 0.9 * hot; r *= 1 + (mode === 'reason' ? 1.3 : 0.7) * hot;
+      } else if (mode === 'lighthouse') {
+        const lon = Math.atan2(p[0], p[2]), dl = Math.atan2(Math.sin(lon - beam), Math.cos(lon - beam));
+        b = 0.1 + 0.28 * depth + 0.85 * Math.exp(-(dl * dl) / 0.08) * depth;
+      } else if (mode === 'listen') {
+        const wave = 0.5 + 0.5 * Math.sin(Math.hypot(x, y) * 14 - t * 7);
+        b = (0.15 + 0.7 * depth) * (0.35 + 0.65 * wave); r *= 0.8 + 0.5 * wave * depth;
+      } else if (mode === 'speak') {
+        b = 0.15 + 0.85 * lit * depth + 0.15 * depth; r *= 1 + amp * 0.9 * depth;
+      } else if (mode === 'background') {
+        const tw = 0.5 + 0.5 * Math.sin(t * 2.2 + p[0] * 9 + p[1] * 7);
+        b = (0.25 + 0.75 * depth) * (0.45 + 0.55 * tw); r = (size < 26 ? 1.1 : size < 60 ? 2 : 3) * (0.55 + 0.6 * depth) * (0.85 + 0.25 * tw);
+      } else if (mode === 'rest') b = 0.06 + 0.22 * depth;
+      else if (mode === 'done') b = 0.2 + 0.8 * depth;
+      else b = 0.07 + 0.95 * Math.pow(lit, 1.15) * depth + 0.1 * depth;
+      if (b < 0.02) continue;
+      ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${Math.min(1, b * gain).toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(cx + x * R, cy + y * R, r, 0, 6.2832); ctx.fill();
+    }
+  }
+  let lastOrb = 0;
+  function tickOrbs(now) {
+    if (now - lastOrb < 33) return;
+    lastOrb = now;
+    const still = reducedMotion();
+    orbs.forEach(o => {
+      if (!o.isConnected) { orbs.delete(o); return; }
+      if (o.offsetParent === null) return;
+      const key = o.dataset.state + (o.style.getPropertyValue('--amp') || '');
+      if (still && o._key === key) return;   // reduced motion: draw only on change
+      o._key = key;
+      drawOrb(o, still ? 2 : now / 1000);
+    });
+  }
 
   /* ── Pip (globe form, ported from the character canvas) ─────── */
   const PIP_STATES = {
@@ -1637,11 +1794,12 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   }
   const pipHome = $('#pipHome');
   buildPip(pipHome);
+  $$('.dotorb').forEach(o => mountOrb(o));
   let pipNow = 'ready', ampTimer = null;
   function setPip(state) {
     pipNow = state;
     const [name] = PIP_STATES[state];
-    [pipHome, $('#pipMini')].forEach(p => { p.dataset.state = state; });
+    [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
     pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase());
     $('#pipState').textContent = 'Pip · ' + name.toLowerCase();
     $('#pipBtn').setAttribute('aria-label', 'Pip: ' + name + '. Show home');
@@ -1649,8 +1807,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     clearInterval(ampTimer);
     if (state === 'speaking') {
       let a = 0;
-      ampTimer = setInterval(() => { a = a * 0.5 + Math.random() * 0.5; [pipHome, $('#pipMini')].forEach(p => p.style.setProperty('--amp', a.toFixed(2))); }, 110);
-    } else [pipHome, $('#pipMini')].forEach(p => p.style.setProperty('--amp', '0'));
+      ampTimer = setInterval(() => { a = a * 0.5 + Math.random() * 0.5; [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => p.style.setProperty('--amp', a.toFixed(2))); }, 110);
+    } else [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => p.style.setProperty('--amp', '0'));
   }
 
   function buildPipCards() {
@@ -1658,6 +1816,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     $('#pipStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n, d]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" data-state="${k}" aria-hidden="true"></span><b>${n}</b><small>${d}</small></button>`).join('');
     $$('#pipStates .pip').forEach(buildPip);
+    $('#orbTiles').innerHTML = [['ready', 'Ready', ''], ['working', 'Working', ' · Gyro'], ['thinking', 'Reasoning', ''], ['searching', 'Searching', ''], ['asking', 'Waiting for you', ' · Lighthouse'], ['listening', 'Listening', ''], ['speaking', 'Speaking', ''], ['background', 'Background tasks', '']]
+      .map(([k, n, v]) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}" aria-hidden="true"></canvas></div><span>${n}<small>${v}</small></span></div>`).join('');
+    $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#t-pip').addEventListener('click', buildPipCards);
@@ -1678,16 +1839,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const wide = isWide();
     home.classList.toggle('stack', !wide);
     if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); return; }
-    const pad = 24, gap = 12, sideW = 284;
-    let yL = pad, yR = pad;
-    const H = desk.clientHeight - $('#shelf').offsetHeight - 24;
+    const pad = 24, gap = 12, sideW = 284, top = mbH() + 16;
+    let yL = top, yR = top;
+    const H = desk.clientHeight - dockSpace() - 8;
     widgetEls.forEach(el => {
       const ph = phys.get(el), left = el.dataset.slot[0] === 'L';
       const x = left ? pad : desk.clientWidth - pad - sideW, y = left ? yL : yR;
       if (left) yL += el.offsetHeight + gap; else yR += el.offsetHeight + gap;
       if (!ph.moved) { ph.x = ph.tx = x; ph.y = ph.ty = y; }
       ph.tx = Math.min(Math.max(ph.tx, 0), desk.clientWidth - el.offsetWidth);
-      ph.ty = Math.min(Math.max(ph.ty, 0), H - el.offsetHeight);
+      ph.ty = Math.min(Math.max(ph.ty, mbH() + 8), H - el.offsetHeight);
       if (!ph.moved) { ph.x = ph.tx; ph.y = ph.ty; }
       el.style.left = ph.x + 'px'; el.style.top = ph.y + 'px';
     });
@@ -1708,9 +1869,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       const up = () => {
         el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
         el.classList.remove('drag'); dragging = null;
-        const H = desk.clientHeight - $('#shelf').offsetHeight - 24;
+        const H = desk.clientHeight - dockSpace() - 8;
         ph.tx = Math.min(Math.max(Math.round(ph.tx / 24) * 24, 0), desk.clientWidth - el.offsetWidth); // 24 px grid
-        ph.ty = Math.min(Math.max(Math.round(ph.ty / 24) * 24, 0), H - el.offsetHeight);
+        ph.ty = Math.min(Math.max(Math.round(ph.ty / 24) * 24, mbH() + 8), H - el.offsetHeight);
         if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
       };
       el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
@@ -1723,10 +1884,10 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
       if (!e.altKey || !d || !isWide() || e.target !== el) return;
       e.preventDefault();
-      const ph = phys.get(el), H = desk.clientHeight - $('#shelf').offsetHeight - 24;
+      const ph = phys.get(el), H = desk.clientHeight - dockSpace() - 8;
       ph.moved = true;
       ph.tx = Math.min(Math.max(Math.round((ph.tx + d[0]) / 24) * 24, 0), desk.clientWidth - el.offsetWidth);
-      ph.ty = Math.min(Math.max(Math.round((ph.ty + d[1]) / 24) * 24, 0), H - el.offsetHeight);
+      ph.ty = Math.min(Math.max(Math.round((ph.ty + d[1]) / 24) * 24, mbH() + 8), H - el.offsetHeight);
     });
   });
   function stepPhysics(dt) {
@@ -1755,12 +1916,12 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     $('#taskBar').style.width = taskPct + '%';
     $('#taskBar').parentElement.setAttribute('aria-valuenow', taskPct);
     $('#taskLine').textContent = taskPct < 70 ? 'Building the outline' : taskPct < 100 ? 'Designing 12 slides' : 'Done. Saved to Documents.';
-    if (taskPct >= 100) $('.widget[data-slot="R0"] .pipmini').dataset.state = 'complete';
+    if (taskPct >= 100) $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete';
   }, 2500);
   $('#taskStop').addEventListener('click', () => {
     clearInterval(taskTimer);
     $('#taskLine').textContent = 'Stopped. Nothing was changed.';
-    $('.widget[data-slot="R0"] .pipmini').dataset.state = 'resting';
+    $('.widget[data-slot="R0"] .dotorb').dataset.state = 'resting';
     $('#taskStop').disabled = true;
   });
 
@@ -1949,6 +2110,7 @@ void main(){
   function frame(now) {
     const dt = Math.min(0.033, (now - lastT) / 1000); lastT = now;
     if (stepPhysics(dt)) glDirty = true;
+    tickOrbs(now);
     if (gl) drawGL(now);
     else if (!reducedMotion() && now - lastWall > 60) { paintWall(false, now); lastWall = now; }
     raf = requestAnimationFrame(frame);
@@ -1973,7 +2135,8 @@ void main(){
   segGroup('segRim', 'rim');
   $('#frost').addEventListener('input', e => { plasma.frost = e.target.value / 100; $('#frostV').textContent = (+e.target.value / 100).toFixed(2); paintWall(true); });
   $('#refr').addEventListener('input', e => { plasma.refr = e.target.value / 100; $('#refrV').textContent = (+e.target.value / 100).toFixed(2); paintWall(true); });
-  new MutationObserver(() => paintWall(true)).observe(root, { attributes: true, attributeFilter: ['data-transparency', 'data-contrast', 'data-theme'] });
+  new MutationObserver(() => { paintWall(true); recolorOrbs(); }).observe(root, { attributes: true, attributeFilter: ['data-transparency', 'data-contrast', 'data-theme'] });
+  darkMQ.addEventListener('change', recolorOrbs);
 
   /* ── Pip chat + voice ────────────────────────────────────────── */
   const center = $('#center'), thread = $('#thread'), ask = $('#ask');
@@ -1998,10 +2161,11 @@ void main(){
     thread.hidden = false; center.dataset.chat = 'on'; $('#suggest').hidden = true;
     const m = document.createElement('div');
     m.className = 'msg from-' + who;
-    if (who === 'pip') m.innerHTML = '<span class="who"><span class="pipmini" aria-hidden="true" data-state="ready" style="width:16px;height:16px"><span class="ms"></span><b style="width:5px;height:5px"></b></span>PIP</span><p class="txt"></p><div class="acts"></div>';
+    if (who === 'pip') m.innerHTML = '<span class="who"><canvas class="dotorb" data-state="ready" style="width:16px;height:16px;color:var(--pip-line)" aria-hidden="true"></canvas>PIP</span><p class="txt"></p><div class="acts"></div>';
     else m.innerHTML = '<p class="txt"></p>';
     $('.txt', m).textContent = text;
     thread.append(m);
+    const o = $('.dotorb', m); if (o) mountOrb(o, true);
     thread.scrollTop = thread.scrollHeight;
     return m;
   }
@@ -2072,7 +2236,7 @@ void main(){
   }
   const RULES = () => `You are Pip, the assistant built into SIX, a desktop operating system. You are running inside an interactive design prototype in a web page.
 Personality: calm, curious, a little dry, straight. Short, plain sentences (usually 1 to 3). No exclamation marks, no emoji, no fake cheer, no markdown formatting. Say what you did and what you did not do. If unsure, say so.
-${sampleTools ? 'You can operate the prototype with the tools provided (open, close and snap app windows, change settings, change the plasma surface mood or viscosity, show home). Use them when the person asks for something they cover, then confirm in one short sentence. Never claim an action you did not take with a tool.' : 'You cannot operate the prototype from this view. If asked to, say which control to use instead (Quick Settings in the tray, the shelf, or Six Search with Ctrl + K).'}
+${sampleTools ? 'You can operate the prototype with the tools provided (open, close and snap app windows, change settings, change the plasma surface mood or viscosity, show home). Use them when the person asks for something they cover, then confirm in one short sentence. Never claim an action you did not take with a tool.' : 'You cannot operate the prototype from this view. If asked to, say which control to use instead (Control Center in the menu bar, the dock, or Six Search with Ctrl + K).'}
 For anything else (questions, writing help, explanations), answer helpfully and briefly.
 Current prototype state: ${stateSummary()}`;
   function toolsFor(m) {
@@ -2221,7 +2385,7 @@ Current prototype state: ${stateSummary()}`;
   function tick() {
     const d = new Date();
     $('#clockT').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    $('#clockD').textContent = d.toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' });
+    $('#clockD').textContent = d.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
     $('#clock').setAttribute('aria-label', d.toLocaleString([], { dateStyle: 'full', timeStyle: 'short' }));
   }
   tick(); setInterval(tick, 15000);

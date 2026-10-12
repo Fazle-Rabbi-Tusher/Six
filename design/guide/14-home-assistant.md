@@ -2,7 +2,7 @@
 
 The SIX home screen is a conversation. When no window is open you see Pip, the SIX assistant,
 a composer to type or talk into, and a few plasma clay cards with what matters right now. The
-shelf, Six Menu and windows work exactly as before (see [12 · Coming from Windows](12-windows-migration.md)),
+menu bar, dock, Six Menu and windows work exactly as before (see [12 · Coming from Windows](12-windows-migration.md)),
 so the assistant adds a way of working without taking the familiar one away.
 
 ![Home screen, dark theme, Tidal mood](../screens/home-dark.png)
@@ -33,7 +33,7 @@ This chapter covers how Pip works inside the OS.
 | Part | Spec |
 |---|---|
 | **Pip** | 240 px globe centred above the greeting; shrinks to 132 px once a conversation starts so the thread gets the room. State label in mono caps below it ("PIP · LISTENING") |
-| **Greeting** | `text-headline` in the display face, by time of day ("Good evening, Nadia."); a one-line hint under it until the first message |
+| **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."); a one-line hint under it until the first message |
 | **Thread** | Plasma clay, max 44 % of the screen height, scrolls. Your messages: accent clay bubbles on the right. Pip's: plain text on the surface, labelled PIP, with action chips |
 | **Composer** | Plasma clay, 64 px, `--radius-2xl`. Text field, Send (becomes Stop while Pip answers), and the voice button: a 48 px accent clay circle, the one primary action on home |
 | **Suggestions** | Up to four clay chips with real things Pip can do now. Hidden once a conversation starts |
@@ -41,7 +41,7 @@ This chapter covers how Pip works inside the OS.
 | **Below 1100 px** | Everything stacks in one scrolling column: Pip, conversation, suggestions, then cards in a grid |
 
 **Typing anywhere on home goes to Pip.** With no window focused, the first key you press lands in
-the composer. Clicking Pip's mini globe in the shelf shows home from anywhere.
+the composer. Clicking Pip's orb in the menu bar or the dock shows home from anywhere.
 
 ## Conversation
 
@@ -82,7 +82,7 @@ Rules:
 
 ## Pip's states
 
-The home globe and the shelf's mini globe share one state at a time.
+The home globe and every small orb share one state at a time.
 
 | State | Globe | When |
 |---|---|---|
@@ -99,6 +99,12 @@ The home globe and the shelf's mini globe share one state at a time.
 The character canvas also defines the tower (thinking, speaking, asking) and cube (working,
 resting) forms; the OS uses the globe for all states at small sizes and may morph to the other
 forms on the home screen when performance allows.
+
+## The small orb
+
+Outside home, Pip is drawn as a dotted sphere (menu bar 21 px, dock 40 px, task cards 40 px,
+message labels 16 px). Its states and rules are in [09 · Shell → Pip's small orb](09-shell.md#pips-small-orb).
+The task card uses the *Background tasks* variant; every other small orb follows Pip's state.
 
 ## Accessibility
 

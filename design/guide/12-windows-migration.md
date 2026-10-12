@@ -4,12 +4,21 @@ SIX aims to replace Windows on everyday PCs. Research shows switchers judge an O
 their existing habit still works (see [01 · Research](01-research.md#1-familiarity-beats-novelty-for-people-switching-operating-systems)).
 This page lists what stays the same, what changes, and how the change is introduced.
 
+## Layout: dock by default, taskbar on request
+
+SIX's default layout is macOS-style: a menu bar at the top and a centred dock at the bottom. For
+people coming from Windows, Settings › Desktop offers the **Taskbar layout**: launcher
+bottom-left, apps, tray and clock in one bottom bar, exactly where Windows puts them. It is
+switched on automatically when someone imports their data from Windows, and the first-run screen
+"How do you like your desktop?" shows both as live previews. Everything in the table below works
+the same in both layouts.
+
 ## Stays exactly the same
 
 | Habit | Windows | SIX |
 |---|---|---|
-| Open launcher | Win key / Start button bottom-left | Six key / Six button bottom-left |
-| Taskbar | Bottom, apps + tray + clock | Shelf, same zones |
+| Open launcher | Win key / Start button | Six key / Six Menu icon (first in the dock, or bottom-left in the Taskbar layout) |
+| Taskbar | Bottom, apps + tray + clock | Dock (apps) + menu bar (status, clock), or the Taskbar layout |
 | Window controls | Top-right: ─ ▢ ✕ | Top-right: ─ ▢ ✕ |
 | Snap | Win + arrows, drag to edges, Snap Layouts on maximize hover | Identical |
 | Right-click | Context menu everywhere | Identical, same first group order |
@@ -19,7 +28,7 @@ This page lists what stays the same, what changes, and how the change is introdu
 | Delete | Del → Recycle Bin; Shift + Del permanently | Del → Bin; Shift + Del permanently (with confirm) |
 | Close / quit | Alt + F4 | Alt + F4 |
 | Switch apps | Alt + Tab | Alt + Tab (glass switcher with live previews) |
-| Show desktop | Win + D, bottom-right corner | Six + D, bottom-right corner |
+| Show desktop | Win + D, bottom-right corner | Six + D, or Pip in the dock / menu bar (shows home) |
 | Lock | Win + L | Six + L |
 | File manager | Win + E | Six + E (Files) |
 | Settings | Win + I | Six + I |
@@ -35,7 +44,7 @@ This page lists what stays the same, what changes, and how the change is introdu
 
 | New in SIX | How users find it |
 |---|---|
-| **Six Search** (apps, files, settings, actions, answers) | The search field in the shelf, already where Windows has it |
+| **Six Search** (apps, files, settings, actions, answers) | The search icon in the menu bar, the Six Menu, or `Ctrl + K`; in the Taskbar layout, the search field where Windows has it |
 | **Quick Look** (Space previews a file) | Hint in the Files status bar for the first week |
 | **Pip on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask Pip anything…" |
 | **Undo for file operations** | Every delete/move toast has "Undo" |
@@ -53,10 +62,10 @@ This page lists what stays the same, what changes, and how the change is introdu
 - **Never more than one new concept per screen** in the first-run tour (max 4 steps, skippable).
 - Tips appear at the moment they're useful ("Tip: press Space to preview"), at most once per day,
   and stop after they've been used once.
-- The *Familiar* layout is default when Windows data is imported; *Focus* layout is offered,
+- The *Taskbar* layout is the default when Windows data is imported; the *Dock* layout is offered,
   not forced.
 - A Settings page "Make SIX more like Windows" collects every compatibility toggle in one place
-  (window button order, shelf labels, Ctrl-click behaviour, legacy context menu).
+  (Taskbar layout, taskbar labels, window button order, Ctrl-click behaviour, legacy context menu).
 
 ## Words: Windows term → SIX term
 Keep the Windows word where it is the common word.
@@ -64,11 +73,11 @@ Keep the Windows word where it is the common word.
 | Windows | SIX | Note |
 |---|---|---|
 | Start | Six Menu | Six button looks like the Start button's position and role |
-| Taskbar | Shelf | Settings search also matches "taskbar" |
+| Taskbar | Dock (or Taskbar layout) | Settings search also matches "taskbar" |
 | Recycle Bin | Bin | Search matches "recycle bin", "trash" |
 | File Explorer | Files | Search matches "explorer", "my computer", "this pc" |
 | Control Panel | Settings | One settings app; search matches "control panel" |
 | Task Manager | System Monitor | Same shortcut |
-| Action Center | Quick Settings + Notifications | Same position (tray, clock) |
+| Action Center | Control Center + Notifications | In the menu bar (top right) |
 
 Every Settings search matches Windows terms, so typing the old word always finds the new place.
