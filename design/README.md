@@ -60,9 +60,9 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/guide-pip.png) |
 
-| Dragging a card onto another | A stack of three, with previews |
-|---|---|
-| ![](screens/stack-drop.png) | ![](screens/stack.png) |
+| Dragging a card onto another | A stack with previews | Stack opened: cards fan out |
+|---|---|---|
+| ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
 
 | Pip's small orb, every state |
 |---|

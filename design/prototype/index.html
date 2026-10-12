@@ -435,8 +435,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
 /* widgets: draggable plasma-clay cards that fuse when close */
 .widget { position: absolute; width: var(--side-w); padding: 16px; display: grid; gap: 12px; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
-.widget.drag { cursor: grabbing; z-index: 5; }
-.widget.stack-top { z-index: 3; }
+.widget.drag { cursor: grabbing; z-index: 25; }
+.widget.stack-top { z-index: 20; }
 .widget.stack-hidden { visibility: hidden; pointer-events: none; }
 .widget.drop-target { outline: 2px dashed var(--c-focus); outline-offset: 6px; border-radius: var(--radius-xl); }
 .widget.drop-target::after { content: "Release to stack"; position: absolute; z-index: 6; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 5px 12px; border-radius: 999px; background: var(--c-accent); color: var(--c-text-on-accent); font: var(--text-label); white-space: nowrap; box-shadow: var(--shadow-2); }
@@ -462,6 +462,27 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .stack-count svg.i { width: 14px; height: 14px; color: var(--c-accent); }
 .stack-btn { border: 0; height: 28px; padding: 0 10px; white-space: nowrap; flex: none; border-radius: 999px; background: color-mix(in srgb, var(--c-surface-3) 70%, transparent); color: var(--c-text); font: 600 12px/1 var(--font-ui); }
 .stack-btn:hover { background: var(--c-surface-3); }
+.widget.stack-top { cursor: pointer; }
+.widget.stack-top.drag { cursor: grabbing; }
+/* stack pop-up: cards fan out from under the top card, like a notification stack */
+#stackScrim { position: absolute; inset: 0; z-index: 30; background: color-mix(in srgb, var(--c-bg) 58%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+#stackScrim.open { opacity: 1; }
+#stackPop { position: absolute; z-index: 31; width: var(--side-w); display: flex; flex-direction: column; gap: 8px; overflow-y: auto; overscroll-behavior: contain; padding: 0 2px 12px; scrollbar-width: thin; }
+.stack-pop-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 6px; padding: 6px 0 8px; }
+.stack-pop-head b { margin-right: auto; font: var(--text-title-sm); color: var(--c-text); }
+.stack-pop-list { display: flex; flex-direction: column; gap: 10px; }
+.widget.in-pop { position: relative; left: auto !important; top: auto !important; width: auto; flex: none; cursor: pointer; z-index: auto;
+  background: var(--glass-fill-strong) !important; border: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-3);
+  -webkit-backdrop-filter: blur(var(--glass-blur)); backdrop-filter: blur(var(--glass-blur));
+  animation: fan-in 0.46s var(--ease-out) both; animation-delay: calc(var(--i) * 55ms); }
+.widget.in-pop .stack-bar { display: none; }
+.widget.in-pop:hover { box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-4); }
+.widget.in-pop.fan-out { animation: fan-out 0.22s var(--ease-in) both; animation-delay: calc(var(--i) * 18ms); }
+@keyframes fan-in { from { opacity: 0; transform: translateY(calc(var(--i) * -72px)) scale(0.9); } 60% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes fan-out { to { opacity: 0; transform: translateY(calc(var(--i) * -72px)) scale(0.9); } }
+:root[data-motion="reduced"] .widget.in-pop { animation: none; }
+@media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .widget.in-pop { animation: none; } }
 #home.stack .widget.stack-hidden { visibility: visible; pointer-events: auto; }
 #home.stack .peek { display: none; }
 .widget:focus-visible { outline-offset: 4px; border-radius: var(--radius-xl); }
@@ -831,6 +852,11 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
           <div class="stat"><span>Updates</span><span>Tonight, 02:00</span></div>
         </div>
       </section>
+    </div>
+    <div id="stackScrim" hidden></div>
+    <div id="stackPop" role="dialog" aria-label="Stack" hidden>
+      <div class="stack-pop-head"><b id="stackPopCount">Stack</b><button type="button" class="stack-btn" id="stackPopLess">Show less</button><button type="button" class="stack-btn" id="stackPopUnstack">Unstack</button></div>
+      <div class="stack-pop-list" id="stackPopList"></div>
     </div>
   </main>
 
@@ -1884,7 +1910,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const H = desk.clientHeight - dockSpace() - 8;
     // cards the user placed (or stacked) stay put; the rest flow down their column around them
     const taken = widgetEls.filter(c => phys.get(c).moved && !c.classList.contains('stack-hidden')).map(c => {
-      const p = phys.get(c), st = stackOf(c), plates = st && !st.open && st.cards[0] === c ? (st.cards.length > 2 ? 62 : 34) : 0;
+      const p = phys.get(c), st = stackOf(c), plates = st && st.cards[0] === c ? peekSpace(st) : 0;
       return [p.tx, p.ty, c.offsetWidth, c.offsetHeight + plates];
     });
     widgetEls.forEach(el => {
@@ -1931,22 +1957,22 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       const bar = document.createElement('div');
       bar.className = 'stack-bar';
       bar.innerHTML = `<span class="stack-count">${icon('layers')}${st.cards.length} stacked</span>`
-        + `<button type="button" class="stack-btn" data-act="toggle" aria-expanded="${st.open}">${st.open ? 'Collapse' : 'Show all'}</button>`
+        + `<button type="button" class="stack-btn" data-act="toggle" aria-haspopup="dialog">Show all</button>`
         + `<button type="button" class="stack-btn" data-act="unstack">Unstack</button>`;
       top.append(bar);
-      let y = st.y;
       st.cards.forEach((c, i) => {
         const ph = phys.get(c);
-        ph.moved = true; ph.tx = st.x; ph.ty = st.open ? y : st.y;
-        y += c.offsetHeight + 12;
-        if (!st.open && i) c.classList.add('stack-hidden');
+        ph.moved = true; ph.tx = st.x; ph.ty = st.y;
+        if (i) c.classList.add('stack-hidden');
       });
-      if (!st.open) for (let d = 1; d <= Math.min(2, st.cards.length - 1); d++) {
-        const c = st.cards[d], more = st.cards.length - 3;
+      const shown = Math.min(PEEK_MAX, st.cards.length - 1);
+      for (let d = 1; d <= shown; d++) {
+        const c = st.cards[d], more = st.cards.length - 1 - shown;
         const p = document.createElement('button');
         p.type = 'button'; p.className = 'peek'; p.dataset.depth = d; p._top = top; p._card = c;
-        p.setAttribute('aria-label', `${cardName(c)}, in this stack. Click to bring it to the front, or drag it out.`);
-        p.innerHTML = `<b>${cardName(c)}</b><span class="peek-line">${peekLine(c)}</span>` + (d === 2 && more > 0 ? `<span class="peek-more">+${more} more</span>` : '');
+        p.style.zIndex = 20 - d;
+        p.setAttribute('aria-label', `${cardName(c)}, in this stack. Click to open the stack, or drag it out.`);
+        p.innerHTML = `<b>${cardName(c)}</b><span class="peek-line">${peekLine(c)}</span>` + (d === shown && more > 0 ? `<span class="peek-more">+${more} more</span>` : '');
         $('#widgets').append(p);
       }
     });
@@ -1955,9 +1981,12 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   function updatePlates() {
     $$('.peek').forEach(p => {
       const ph = phys.get(p._top), d = +p.dataset.depth, w = p._top.offsetWidth, h = p._top.offsetHeight;
-      Object.assign(p.style, { left: ph.x + 10 * d + 'px', top: ph.y + h - 2 + (d - 1) * 30 + 'px', width: w - 20 * d + 'px', height: (d === 1 ? 34 : 28) + 'px' });
+      const inset = Math.min(10 * d, 40);
+      Object.assign(p.style, { left: ph.x + inset + 'px', top: ph.y + h - 2 + (d > 1 ? 30 + (d - 2) * 26 : 0) + 'px', width: w - inset * 2 + 'px', height: (d === 1 ? 34 : 30) + 'px' });
     });
   }
+  const PEEK_MAX = 5;
+  const peekSpace = st => { const n = Math.min(PEEK_MAX, st.cards.length - 1); return n ? 34 + (n - 1) * 26 : 0; };
   function pullOut(el) {
     const st = stackOf(el); if (!st) return;
     st.cards.splice(st.cards.indexOf(el), 1);
@@ -1985,12 +2014,64 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     st.cards.forEach(c => { phys.get(c).moved = false; });
     renderStacks();
   }
+  const stackPop = $('#stackPop'), stackScrim = $('#stackScrim');
+  let popStack = null;
+  function openStack(st) {
+    if (!st || !isWide()) return;
+    if (popStack) closeStack(true);
+    popStack = st;
+    $$('.peek').forEach(p => { p.style.visibility = 'hidden'; });
+    $('#stackPopCount').textContent = `${st.cards.length} cards`;
+    const list = $('#stackPopList');
+    st.cards.forEach((c, i) => { c.classList.remove('stack-hidden', 'fan-out'); c.classList.add('in-pop'); c.style.setProperty('--i', i); list.append(c); });
+    // anchor the column at the stack; lift it if it would run into the dock
+    const top = mbH() + 8, bottom = desk.clientHeight - dockSpace() - 8;
+    stackPop.hidden = false; stackScrim.hidden = false;
+    stackPop.style.left = st.x + 'px';
+    stackPop.style.maxHeight = bottom - top + 'px';
+    const h = Math.min(stackPop.scrollHeight, bottom - top);
+    stackPop.style.top = Math.max(top, Math.min(st.y - 44, bottom - h)) + 'px';
+    requestAnimationFrame(() => { stackScrim.classList.add('open'); });
+    markDirty();
+    $('#stackPopLess').focus();
+  }
+  function closeStack(instant, after) {
+    const st = popStack; if (!st) return;
+    popStack = null;
+    const finish = () => {
+      st.cards.forEach(c => { c.classList.remove('in-pop', 'fan-out'); c.style.removeProperty('--i'); $('#widgets').append(c); });
+      stackPop.hidden = true; stackScrim.hidden = true;
+      renderStacks();
+      if (after) after(); else $('.stack-btn', st.cards[0])?.focus();
+    };
+    stackScrim.classList.remove('open');
+    if (instant || reducedMotion()) finish();
+    else { st.cards.forEach(c => c.classList.add('fan-out')); setTimeout(finish, 240); }
+  }
+  stackScrim.addEventListener('click', () => closeStack());
+  $('#stackPopLess').addEventListener('click', () => closeStack());
+  $('#stackPopUnstack').addEventListener('click', () => { const st = popStack; closeStack(true, () => unstack(st)); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && popStack) closeStack(); });
+  // in the pop-up: click a card to bring it to the front; drag a card to pull just that one out
+  stackPop.addEventListener('pointerdown', e => {
+    const card = e.target.closest('.widget');
+    if (!card || e.button !== 0 || e.target.closest('button, a, input')) return;
+    e.preventDefault();
+    const sx = e.clientX, sy = e.clientY;
+    const done = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
+    const mv = ev => { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return; done(); closeStack(true, () => {}); beginDrag(card, e, true); };
+    const up = () => { done(); closeStack(false, () => bringToFront(card)); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up);
+  });
+  stackPop.addEventListener('click', e => {   // buttons inside a card (open a file, stop a task) close the pop-up first
+    if (e.target.closest('.wrow, #taskStop')) closeStack(true, () => {});
+  });
   $('#widgets').addEventListener('click', e => {
     const p = e.target.closest('.peek');
-    if (p) { bringToFront(p._card); return; }
+    if (p) { openStack(stackOf(p._card)); return; }
     const b = e.target.closest('.stack-btn'); if (!b) return;
     const st = stackOf(b.closest('.widget')); if (!st) return;
-    if (b.dataset.act === 'toggle') { st.open = !st.open; renderStacks(); } else unstack(st);
+    if (b.dataset.act === 'toggle') openStack(st); else unstack(st);
   });
   let dragging = null, dropTarget = null;
   // one drag moves exactly one card; if it was stacked, it leaves the stack and the rest stay put
@@ -2015,7 +2096,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     };
     const up = () => {
       removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
-      if (!started) return;   // a plain click on a preview is handled by the click listener
+      if (!started) { if (!fromPeek && el.classList.contains('stack-top')) openStack(stackOf(el)); return; }   // click a stack to pop it up
       el.classList.remove('drag'); dragging = null;
       if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
       const H = desk.clientHeight - dockSpace() - 8;
@@ -2036,7 +2117,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       phys.get(el).moved = false; layoutHome();
     });
     el.addEventListener('pointerdown', e => {
-      if (e.button !== 0 || !isWide() || e.target.closest('button, a, input')) return;
+      if (e.button !== 0 || !isWide() || e.target.closest('button, a, input') || el.classList.contains('in-pop')) return;   // pop-up cards have their own handler
       e.preventDefault(); beginDrag(el, e, false);
     });
   });
@@ -2045,7 +2126,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     el.tabIndex = 0;
     el.addEventListener('keydown', e => {
       const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
-      if (!e.altKey || !d || !isWide() || e.target !== el) return;
+      if (!e.altKey || !d || !isWide() || e.target !== el || el.classList.contains('in-pop')) return;
       e.preventDefault();
       if (stackOf(el)) pullOut(el);
       const ph = phys.get(el), H = desk.clientHeight - dockSpace() - 8;
@@ -2083,7 +2164,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     $('#taskBar').style.width = taskPct + '%';
     $('#taskBar').parentElement.setAttribute('aria-valuenow', taskPct);
     $('#taskLine').textContent = taskPct < 70 ? 'Building the outline' : taskPct < 100 ? 'Designing 12 slides' : 'Done. Saved to Documents.';
-    if (taskPct >= 100) $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete';
+    if (taskPct >= 100) { $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete'; $('#taskStop').disabled = true; }
   }, 2500);
   // the menu bar and dock orbs carry the running task's progress as a ring
   let taskLive = true;
@@ -2247,7 +2328,7 @@ void main(){
     const cr = glCanvas.getBoundingClientRect();
     let n = 0, key = '';
     $$('[data-liquid]').forEach(el => {
-      if (n >= MAXR || el.offsetParent === null || el.classList.contains('stack-hidden')) return;
+      if (n >= MAXR || el.offsetParent === null || el.classList.contains('stack-hidden') || el.classList.contains('in-pop')) return;
       const r = el.getBoundingClientRect();
       if (r.width < 2 || r.bottom < cr.top || r.top > cr.bottom) return;
       rectBuf.set([r.left - cr.left, r.top - cr.top, r.width, r.height], n * 4);

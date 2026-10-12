@@ -50,11 +50,11 @@ Like notification stacks on a phone: drag one card onto another and they become 
 | Moment | What the person sees |
 |---|---|
 | Dragging over a card | The target gets a dashed accent outline and a "Release to stack" label |
-| Dropped | The dragged card lands on top with a small pop; the top card gains a bar: ⧉ *3 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
-| Preview | Under the top card, the next two cards peek out as slim previews: their title and one live line ("TODAY · Next: 10:00 Design review", "CURRENT TASK · Slides from my notes · 64 %"); the second preview adds "+N more" when the stack is deeper |
-| Pull one out | A drag always moves exactly **one** card: drag the top card, or grab a preview to pull out that specific card. The rest of the stack stays where it is |
-| Bring to front | Click (or press Enter on) a preview: that card moves to the top of the stack |
-| Show all | The stack fans out into a column (cards fuse as liquid); **Collapse** folds it back |
+| Dropped | The dragged card lands on top with a small pop; the top card gains a bar: ⧉ *4 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
+| Preview | Under the top card, **every** card in the stack peeks out as a slim preview (up to five, then "+N more"): its title and one live line, for example "TODAY · Next: 10:00 Design review", "CURRENT TASK · Slides from my notes · 64 %" |
+| Open the stack | Click the stack (the top card, any preview, or **Show all**). Nothing else on home moves: the home dims and blurs behind, and the cards **fan out** from under the top card into a column, each sliding down a little after the one before (55 ms stagger). The column scrolls if it is taller than the screen. **Show less**, a click outside or `Esc` folds them back up under the top card |
+| In the open stack | Click a card to bring it to the front and close; drag a card to pull **just that one** out onto home; buttons inside cards (open a file, stop a task) work as usual |
+| Pull one out | From the closed stack, drag the top card or grab its preview: a drag always moves exactly one card, and the rest of the stack stays put |
 | Put things back | **Unstack** sends every card in the stack back to its original place; double-click any moved card to return it alone |
 
 Other cards flow around stacks and moved cards, so nothing overlaps. Keyboard: previews and the
