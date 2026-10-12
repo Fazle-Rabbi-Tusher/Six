@@ -12,23 +12,24 @@ how windows behave. We change how things *feel*, never where they *are*.
 without help?
 
 ### 2. Touch it, float it, read it
-Every pixel belongs to one of three materials:
+Every pixel belongs to one of four materials:
 
 | Material | Role | Examples |
 |---|---|---|
 | **Clay** | things you press | buttons, toggles, quick-setting tiles, app icons |
 | **Plasma glass** | things that float above content for a moment | shelf, menus, popovers, notifications, Six Search |
 | **Paper** (flat) | things you read and work in | window content, documents, lists, settings pages |
+| **Plasma clay** | the living surfaces of home | home cards, Pip's conversation and composer, desktop widgets |
 
-If you can't say which of the three an element is, it's a design bug.
+If you can't say which material an element is, it's a design bug.
 
 ### 3. One obvious next step
 Each screen has one primary action, and it looks like it: accent fill, clay elevation, bigger.
 Everything else is quieter. If two things are shouting, one of them is wrong.
 
 ### 4. Calm by default, alive on purpose
-Motion and colour explain what happened (a window came *from* its shelf icon, the Orb is
-*thinking*). Ambient effects (plasma wallpaper, the Orb's idle breathing) are slow and can be
+Motion and colour explain what happened (a window came *from* its shelf icon, Pip is
+*thinking*). Ambient effects (plasma wallpaper, Pip's slowly turning globe) are slow and can be
 turned off. Nothing blinks for attention unless the user must act.
 
 ### 5. Everyone, every setting

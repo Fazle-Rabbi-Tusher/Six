@@ -127,6 +127,17 @@
   --plasma-3: #ff8a6b;
   --plasma-4: #f6c9ff;
 
+  /* plasma clay moods: deep, mid, vein, glint (dark theme values; light theme mixes toward white) */
+  --mood-tidal-1: #05262c; --mood-tidal-2: #0e4c55; --mood-tidal-3: #5fd8cb; --mood-tidal-4: #7b6cff;
+  --mood-aurora-1: #17123f; --mood-aurora-2: #3a2f8f; --mood-aurora-3: #9ef0ff; --mood-aurora-4: #ff8a6b;
+  --mood-ember-1: #240c18; --mood-ember-2: #6b2236; --mood-ember-3: #ffb86b; --mood-ember-4: #ff6b4a;
+
+  /* Pip, the assistant (from the SIX assistant character canvas) */
+  --pip-line: #1a64b5;
+  --pip-deep: #1d5fd0;
+  --pip-glow: #75ddff;
+  --pip-core: #d8fcff;
+
   /* ── Materials ────────────────────────────────────────── */
   /* Clay: things you touch */
   --clay-highlight: rgba(255, 255, 255, 0.75);
@@ -154,6 +165,15 @@
   --shadow-3: 0 18px 40px -12px rgba(25, 20, 60, 0.28), 0 4px 10px rgba(25, 20, 60, 0.08);
   --shadow-4: 0 32px 64px -16px rgba(25, 20, 60, 0.38), 0 8px 18px rgba(25, 20, 60, 0.12);
 
+  /* Plasma clay: home surfaces drawn by one shader (guide/05-materials.md §5) */
+  --liquid-blend: 40px;      /* smooth-union distance; viscosity presets 54 / 40 / 32 / off */
+  --liquid-bevel: 24px;
+  --liquid-fill: 0.78;       /* surface fill floor over the refracted wallpaper */
+  --liquid-frost: 0.55;
+  --liquid-refraction: 1;
+  --liquid-max-surfaces: 12;
+  --liquid-grid: 24px;
+
   --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--c-focus);
   --scrim: rgba(17, 16, 23, 0.4);
 }
@@ -162,6 +182,9 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
+    --pip-line: #75ddff;
+    --pip-deep: #287bff;
+    --liquid-fill: 0.72;
     --c-bg: #111017;
     --c-surface: #1b1a23;
     --c-surface-2: #262431;
@@ -206,6 +229,9 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  --pip-line: #75ddff;
+  --pip-deep: #287bff;
+  --liquid-fill: 0.72;
   --c-bg: #111017;
   --c-surface: #1b1a23;
   --c-surface-2: #262431;
@@ -249,6 +275,8 @@
 
 /* ── Accessibility modes (user settings, not decoration) ── */
 :root[data-transparency="reduced"] {
+  --liquid-fill: 1;
+  --liquid-refraction: 0;
   --glass-fill: var(--c-surface);
   --glass-fill-strong: var(--c-surface);
   --glass-blur: 0px;

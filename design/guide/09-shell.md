@@ -1,7 +1,8 @@
 # 09 · The SIX shell
 
 The shell is everything outside app content: shelf, Six Menu, Six Search, windows, Quick
-Settings, notifications, the Orb, Overview, the lock screen and the first-run setup.
+Settings, notifications, Pip in the shelf, Overview, the lock screen and the first-run setup.
+The home screen itself, where Pip lives, has its own chapter: [14 · Home](14-home-assistant.md).
 
 ## Shelf (taskbar)
 
@@ -12,7 +13,7 @@ A floating glass bar, 60 px tall, 8 px above the bottom edge, full width minus 8
 ╭──────────────────────────────────────────────────────────────────────────────╮
 │ ◉  [⌕ Search apps, files, settings]  │ ▣ ▣• ▣• ▣ ▣ │      ⌃  ⇅ 🔊 ▮▮▯  ●  10:42 │▏
 ╰──────────────────────────────────────────────────────────────────────────────╯
-  ↑ Six button     ↑ search field        ↑ pinned & running     ↑ tray   ↑ Orb ↑ clock  ↑ show desktop
+  ↑ Six button     ↑ search field        ↑ pinned & running     ↑ tray   ↑ Pip ↑ clock  ↑ show desktop
 ```
 
 | Zone | Behaviour |
@@ -24,7 +25,7 @@ A floating glass bar, 60 px tall, 8 px above the bottom edge, full width minus 8
 | **Window previews** | Hover an icon → live thumbnails of its windows above the shelf, with close buttons |
 | **Progress** | Downloads/copies show a thin progress arc around the app icon |
 | **Tray** | Overflow (⌃), network, volume, battery; one click opens Quick Settings |
-| **Orb** | The assistant and background-task presence (see below) |
+| **Pip** | Mini globe for the assistant and background work. Click → home and Pip's composer (see below) |
 | **Clock** | Time + date (tabular figures). Click → calendar and notifications |
 | **Show desktop** | Last 8 px at the right edge, extends to the bottom-right corner |
 
@@ -68,7 +69,7 @@ iridescent rim, results appear as you type (< 50 ms target for local results).
 | Settings | "night light" → toggle inline | Toggles without opening Settings |
 | Actions | "restart", "empty bin", "new note" | Runs (destructive ones ask first) |
 | Answers | `12*18`, `20 usd in bdt`, `time in tokyo` | Copies result |
-| Ask Orb | Anything else | Sends to the assistant |
+| Ask Pip | Anything else | Shows home and sends it to Pip |
 
 Each result shows its keyboard shortcut on the right (teaches shortcuts without a manual).
 `Tab` reveals secondary actions (Open folder, Copy path, Run as admin…).
@@ -122,26 +123,25 @@ Opens from the tray. Glass, 360 px wide.
 - Each notification has: app icon, title (`text-title-sm`), one-line body, up to 2 actions,
   and a ⋯ menu with "Turn off notifications from this app" (one step to stop spam).
 
-## The Six Orb
+## Pip in the shelf
 
-One small animated orb in the tray (24 px) represents the **assistant and long-running system
-work**. It replaces generic spinners for anything that takes > 2 s without a known percentage.
-Inspired by "thinking orbs": a spinner says "wait", the Orb says *what* is happening.
+Pip, the assistant, lives on the home screen (see [14 · Home](14-home-assistant.md)). In the tray
+it shrinks to a 30 px mini globe: three rings around a glowing core. It stands in for generic
+spinners whenever SIX or Pip works on something for more than 2 s without a known percentage.
 
-| State | Shape / motion | Colour | Meaning |
-|---|---|---|---|
-| Idle | Round, slow breathing (9 s) | Iris → Tide gradient, low saturation | Ready |
-| Listening | Ripples outward with voice level | Tide | Mic is on (also shows the mic glyph in tray) |
-| Thinking | Dots orbit inside the orb | Iris | Working out an answer |
-| Working | Arc fills clockwise | Iris | Long task running (install, backup, index) |
-| Done | Brief pulse, then idle | Moss | Finished; a toast says what finished |
-| Needs you | Gentle single bounce + badge | Sun | Waiting for a decision |
-| Error | Small shake, then static | Ember + "!" glyph | Failed; click for the reason and a fix |
+| State | Mini globe | Meaning |
+|---|---|---|
+| Ready | Rings turn slowly | Nothing running |
+| Listening | Rings lie flat and ripple; the mic glyph shows in the tray too | Mic is on |
+| Thinking / working | Rings spin fast | Working out an answer, or a long task (install, backup, index) |
+| Speaking | Core pulses | Reading a reply aloud |
+| Complete | Core turns green once, then back to ready | Finished; a toast says what finished |
+| Asking | Sun-coloured badge | Waiting for your yes |
 
-Rules: shape *and* colour change for every state (works in grayscale); hover tooltip names the
-state in words; the mic state is impossible to hide; the Orb never animates under Reduce motion
-(it switches shape with a crossfade). Clicking the Orb opens a glass panel with the conversation
-and a list of running tasks.
+Clicking the mini globe shows home (all windows minimize) with the cursor in Pip's composer.
+Shape and motion change for every state, so it reads in grayscale; the tooltip names the state in
+words; the listening state can never be hidden; under Reduce motion the rings stop and states
+switch with a crossfade.
 
 ## Overview and desktops
 

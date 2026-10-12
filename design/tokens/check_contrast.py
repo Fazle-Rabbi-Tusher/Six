@@ -29,6 +29,8 @@ PAIRS = [
     ("semantic.success", "semantic.success-soft", 4.5, "success badge"),
     ("semantic.warning", "semantic.warning-soft", 4.5, "warning badge"),
     ("semantic.danger", "semantic.danger-soft", 4.5, "danger banner"),
+    ("pip.line", "semantic.bg", 4.5, "Pip state label on home"),
+    ("pip.line", "semantic.surface-2", 4.5, "Pip label in wells"),
 ] + [("semantic.text", f"clay.{c}", 4.5, "text on clay tile") for c in ("lilac", "mint", "peach", "sky", "butter", "rose")]
 
 

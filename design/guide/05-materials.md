@@ -1,6 +1,7 @@
 # 05 · Materials and elevation
 
-Soft Matter has exactly three materials. Pick by **role**, never by taste.
+Soft Matter has three core materials and one hybrid, plasma clay, reserved for the home screen.
+Pick by **role**, never by taste.
 
 ```
            ┌──────────────── Plasma glass ────────────────┐   floats above, temporary
@@ -36,7 +37,7 @@ A filled, rounded object that looks soft and slightly inflated. Built from three
 |---|---|---|
 | clay-1 | `--clay-1` | Buttons, segmented controls, toggles' thumb, chips |
 | clay-2 | `--clay-2` | Quick-setting tiles, cards that are clickable, app-grid icons |
-| clay-3 | `--clay-3` | Shelf app icons on hover, onboarding hero objects, the Orb |
+| clay-3 | `--clay-3` | Shelf app icons on hover, onboarding hero objects, the voice button |
 | pressed | `--clay-pressed` | Pressed / toggled-on state (the object pushes *in*) |
 
 **Rules**
@@ -91,12 +92,61 @@ or on battery saver) and freezes to a still frame under *Reduce motion*.
 Desktop widgets may use the **liquid** behaviour from plasma-ui (fuse when dragged together, snap
 to the 24 px grid). Functional UI never stretches or wobbles.
 
+## 5. Plasma clay: the home's living surfaces
+
+Clay's soft volume plus plasma glass's liquid optics, inspired by plasma-ui's liquid panels.
+Used **only** on the home screen and desktop widgets: home cards, Pip's conversation thread and
+composer. Never inside windows, menus or dialogs.
+
+![Plasma clay on the home screen](../screens/home-dark.png)
+
+**How it is built.** One full-screen GPU pass (a fragment shader) draws the wallpaper and every
+plasma clay surface together:
+
+| Layer | What happens | Default |
+|---|---|---|
+| Shape | Each surface is a rounded rectangle as a signed distance field; surfaces in the same group are joined with a **smooth union**, so two cards closer than the blend distance melt into one body | blend 40 px |
+| Refraction | Inside the surface the wallpaper is sampled with an offset that grows toward the edge, like a thick lens | 1.0 |
+| Dispersion | Red, green and blue are sampled at slightly different offsets near the edge | on |
+| Frost | The refracted wallpaper is taken from a smoother (fewer-octave) version of itself, which reads as blur at no extra cost | 0.55 |
+| Fill | The surface colour is laid over the refracted image | 78 % light / 72 % dark, 100 % with Reduce transparency or More contrast |
+| Clay light | A normal from the distance field's slope gives the bevel; lit from the top left with a soft highlight, darker bottom right | bevel 24 px |
+| Rim | An iridescent 2 px edge plus a faint inner glow; hue follows the edge angle and drifts slowly. Options: Iridescent, Accent, Off | Iridescent |
+| Shadow + glow | A soft offset shadow under the body and a faint coloured glow on the wallpaper around it | on |
+
+**Groups.** Surfaces only fuse within their group: *cards* fuse with cards, *conversation*
+(thread + composer) with itself. Chrome (shelf, menus) is never plasma clay.
+
+**Viscosity** sets how a dragged card follows the hand (spring stiffness / damping) and how far
+surfaces reach for each other (blend distance):
+
+| Viscosity | Stiffness / damping | Blend | Feel |
+|---|---|---|---|
+| Water | 320 / 13 | 54 px | Quick, wobbles |
+| Gel (default) | 210 / 21 | 40 px | Settles calmly |
+| Honey | 70 / 17 | 32 px | Slow, heavy |
+| Solid | none (moves 1:1) | off | No fusing, no spring |
+
+Dropped cards settle on the 24 px grid.
+
+**Moods** recolour the wallpaper and rims: **Tidal** (default; deep teal with light veins, matches
+the reference), **Aurora** (violet and cyan) and **Ember** (warm reds). Users pick mood, viscosity,
+frost, refraction and rim in Quick Settings › Plasma clay.
+
+**Rules**
+- Text sits on the fill, never on raw refraction: the fill floor above keeps body text above
+  4.5:1 over the brightest wallpaper vein.
+- Budget: at most 12 plasma clay surfaces, one shader pass, capped at 1.5× pixel density. Under
+  Reduce motion the wallpaper freezes and frames are drawn only when something changes.
+- Fallback: no GPU (or WebGL) → each surface becomes CSS glass with clay shadows, same layout.
+- Reduce transparency / More contrast → solid fill, no refraction, rim at half strength.
+
 ## Elevation scale
 
 | z | Surface | Material | Shadow |
 |---|---|---|---|
 | 0 | Wallpaper | Plasma wallpaper | none |
-| 1 | Desktop widgets, desktop icons | Glass (widgets) | `--shadow-1` |
+| 1 | Home cards, Pip's conversation, desktop widgets | Plasma clay | drawn by the shader |
 | 2 | Inactive windows | Paper | `--shadow-2` |
 | 3 | Active window | Paper | `--shadow-3` |
 | 4 | Shelf | Glass + iridescent rim | `--shadow-3` |

@@ -14,7 +14,7 @@ dark = css.split(':root[data-theme="dark"] {')[1].split("}")[0]
 
 
 def colors(block):
-    pattern = r"--((?:c|clay|plasma)-[a-z0-9-]+):\s*(#[0-9a-fA-F]{6}|rgba\([^)]*\))"
+    pattern = r"--((?:c|clay|plasma|mood|pip)-[a-z0-9-]+):\s*(#[0-9a-fA-F]{6}|rgba\([^)]*\))"
     return dict(re.findall(pattern, block))
 
 
@@ -46,18 +46,24 @@ tokens = {
         k: {"$type": "dimension", "$value": v.strip()}
         for k, v in re.findall(r"--((?:control|target|titlebar|shelf|icon|appicon)-[a-z-]*|measure):\s*([^;]+);", root)
     },
+    "liquid": {k: {"$type": "number" if "px" not in v else "dimension", "$value": v.split("/*")[0].strip()} for k, v in re.findall(r"--liquid-([a-z-]+):\s*([^;]+);", root)},
     "duration": vals("dur", "duration"),
     "easing": {k: {"$type": "cubicBezier", "$value": v.strip()} for k, v in re.findall(r"--ease-([a-z]+):\s*(cubic-bezier\([^)]*\))", root)},
     "spring": {
         "snappy": {"$type": "spring", "$value": {"stiffness": 420, "damping": 34, "mass": 1}, "$description": "menus, toggles, window snap"},
         "gentle": {"$type": "spring", "$value": {"stiffness": 220, "damping": 26, "mass": 1}, "$description": "window open, overview, orb"},
         "liquid": {"$type": "spring", "$value": {"stiffness": 140, "damping": 14, "mass": 1}, "$description": "plasma surfaces fusing; decorative only"},
+        "viscosity-water": {"$type": "spring", "$value": {"stiffness": 320, "damping": 13, "mass": 1}, "$description": "home cards, blend 54 px"},
+        "viscosity-gel": {"$type": "spring", "$value": {"stiffness": 210, "damping": 21, "mass": 1}, "$description": "home cards (default), blend 40 px"},
+        "viscosity-honey": {"$type": "spring", "$value": {"stiffness": 70, "damping": 17, "mass": 1}, "$description": "home cards, blend 32 px"},
     },
     "color": {
         theme: {
             "semantic": group("c-", palette),
             "clay": group("clay-", palette),
             "plasma": group("plasma-", palette),
+            "mood": group("mood-", palette),
+            "pip": group("pip-", palette),
         }
         for theme, palette in (("light", light), ("dark", dark_colors))
     },

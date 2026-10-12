@@ -37,7 +37,7 @@ This page lists what stays the same, what changes, and how the change is introdu
 |---|---|
 | **Six Search** (apps, files, settings, actions, answers) | The search field in the shelf, already where Windows has it |
 | **Quick Look** (Space previews a file) | Hint in the Files status bar for the first week |
-| **The Orb** (assistant + background tasks) | First-run tour step; tooltip on first hover |
+| **Pip on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask Pip anything…" |
 | **Undo for file operations** | Every delete/move toast has "Undo" |
 | **Window groups / auto-arrange** | Offered after the user snaps windows three times |
 

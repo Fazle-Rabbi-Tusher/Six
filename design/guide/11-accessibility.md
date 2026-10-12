@@ -9,7 +9,7 @@ listed. Accessibility settings are designed states, tested like dark mode.
 |---|---|---|
 | **Reduce transparency** | All glass becomes solid `--c-surface`; blur off | `[data-transparency="reduced"]` |
 | **More contrast** | Secondary text → primary; dividers → strong; glass off; focus ring 3 px | `[data-contrast="more"]` |
-| **Reduce motion** | Movement → crossfades; wallpaper and Orb still | `[data-motion="reduced"]` + `prefers-reduced-motion` |
+| **Reduce motion** | Movement → crossfades; wallpaper, Pip and home cards still | `[data-motion="reduced"]` + `prefers-reduced-motion` |
 | **Text size** | 100–200 % for all text; layouts reflow | root font scale |
 | **Touch density** | Targets 44 px, rows 44 px, title bar 52 px | `[data-density="touch"]` |
 | **High-contrast themes** | Black/white/yellow themes that override every colour token (Windows "Contrast themes") | separate theme files |
@@ -45,11 +45,11 @@ and from the first-run setup (`Ctrl + Alt + A`).
 **Robust**
 - [ ] Every control exposes role, name, state and value to AT-SPI (Linux) / the shell's
       accessibility tree; tested with the built-in screen reader.
-- [ ] Custom-drawn shell surfaces (shelf, Orb, Overview) publish an accessibility tree, not a
+- [ ] Custom-drawn shell surfaces (shelf, Pip, home cards, Overview) publish an accessibility tree, not a
       bitmap.
 
 ## Screen reader and magnifier
-- The built-in screen reader announces Orb state changes politely ("Backup finished") and
+- The built-in screen reader announces Pip's state changes politely ("Backup finished") and
   never interrupts typing.
 - Magnifier follows keyboard focus and the text caret, not only the pointer.
 - Shelf items announce as "Files, running, 2 windows".
