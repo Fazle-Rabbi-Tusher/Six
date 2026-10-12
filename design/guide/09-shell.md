@@ -91,6 +91,10 @@ iridescent rim, results appear as you type (< 50 ms target for local results).
 | Answers | `12*18`, `20 usd in bdt`, `time in tokyo` | Copies result |
 | Ask Pip | Anything else | Shows home and sends it to Pip |
 
+**Every result says what Enter will do before it runs.** Settings show their current state and the
+change ("Off now · Enter turns it on"); actions name their effect ("Opens it on the left half of
+the screen"). Nothing in Six Search acts by surprise.
+
 Each result shows its keyboard shortcut on the right (teaches shortcuts without a manual).
 `Tab` reveals secondary actions (Open folder, Copy path, Run as admin…).
 
@@ -145,32 +149,59 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 
 ## Pip's small orb
 
-Pip, the assistant, lives on the home screen as the big globe (see [14 · Home](14-home-assistant.md)).
+Pip, the assistant, lives on the home screen as the big realistic orb (see [14 · Home](14-home-assistant.md)).
 Everywhere else (menu bar, dock, task cards, message labels) Pip is a **dotted sphere**: points on
-a slowly turning globe whose light moves differently in each state, after the
-[thinking orbs](https://www.thinkingorbs.com/) style. It stands in for generic spinners whenever
-SIX or Pip works on something for more than 2 s without a known percentage.
+a slowly turning globe whose light moves differently in each state. It stands in for generic
+spinners whenever SIX or Pip works on something for more than 2 s without a known percentage.
 
-| State | Small orb | Meaning |
-|---|---|---|
-| Ready | Turning sphere lit from the top left | Nothing running |
-| Working · Gyro | Spins fast on a wobbling axis | A long task (install, backup, index) |
-| Reasoning | Dim sphere, one bright dot wanders | Working out an answer |
-| Searching | A bright patch sweeps the surface | Looking through files or the web |
-| Waiting for you · Lighthouse | A bright meridian beam turns | Needs a yes |
-| Listening | Rings of light ripple out from the centre | Mic is on |
-| Speaking | Front dots swell with the voice | Reading a reply aloud |
-| Background tasks | Fewer, larger dots twinkle | Work running in the background (task cards) |
-| Complete | Dots turn green once | Finished; a toast says what finished |
+The motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh
+([MIT](https://github.com/yogesharc/thinking-orbs)), which gives three rules every orb follows:
+
+- **One clock per look.** Every orb in the same state shares one clock, so the menu bar, the dock
+  and a task card move in step instead of drifting apart. A frame gap counts at most 100 ms, so an
+  orb coming back from a hidden tab carries on rather than jumping.
+- **The back fades.** A dot's opacity ramps from 0 just behind the rim to 1 at the front, so the
+  far side disappears instead of leaving a grey haze.
+- **Nothing below 0.45 px.** About 4 dots per pixel of size (1 for *Background*), each shrinking
+  as they multiply, so coverage holds from 16 px to 76 px.
+
+| State | Look | Small orb | Meaning |
+|---|---|---|---|
+| Ready | Base | Turns once every 6.5 s; the back fades away | Nothing running |
+| Working | Working | A ring of light runs down the sphere every 1.7 s, pulling in what it passes | A long task (install, backup, export) |
+| | · Gyro | Spins on an axis that circles like a top, the ends twisting against the middle | Alternative for system tasks |
+| Thinking | Reasoning | Dims to half; a spark hops dot to dot every 220 ms, trailing its last five hops | Working out an answer |
+| | · Twins | Two sparks that keep apart | Comparing or planning |
+| Searching | Searching | A lens hops between spots on the face and magnifies them | Looking through files or the web |
+| Asking | Searching · Lighthouse | A leaning beam circles every 2.5 s with a fading trail | Waiting for your review |
+| Waiting | Waiting | A comet circles and spirals pole to pole | A service made Pip wait (rate limit, queue) |
+| Retrying | Retrying | Turns, brakes, springs back 60 %, goes again | Trying a failed step once more |
+| | · Surge | Each turn launches fast and eases out | Alternative |
+| Compacting | Compacting | A line sweeps left to right, packing the dots, then they spring loose | Tidying history, freeing space |
+| | · Squeeze, · Fuse | Twist-and-release; a burning fuse with no bounce | Alternatives |
+| Background tasks | Background | Fewer, larger dots (· Spiral: eight arms wound pole to pole) | Work running in the background (task cards) |
+| Listening | SIX | Ripples spread from the centre | Mic is on |
+| Speaking | SIX | Front dots swell with the voice | Reading a reply aloud |
+| Complete | SIX | Turns green and glows once | Finished; a toast says what finished |
+| Failed | SIX | Turns red (Ember) and slows | Something didn't work; the reason is written beside it |
+| Cancelled, Resting | SIX | Dims and almost stops | Stopped by you; focus mode or battery saver |
+
+A view sets the look with `data-state` and, where a state has alternatives, `data-variant`
+(`gyro`, `twins`, `lighthouse`, `spiral`, `surge`, `squeeze`, `fuse`).
 
 **Progress.** While a task runs, the menu bar and dock orbs draw a thin ring around the sphere
 that fills clockwise with the task's progress (like a dock progress bar on macOS); the tooltip and
 accessible name say it in words ("Pip · Slides from my notes, 64 %"). The ring disappears when
 the task finishes or is stopped.
 
-Motion carries the state, so it reads at 18 px and in grayscale; the tooltip names the state in
-words; the listening state can never be hidden; under Reduce motion the orb is drawn still and
-only redraws when its state changes.
+**Never colour alone.** Complete and Failed change colour, but every state also moves
+differently, the tooltip names it, and the label under the home orb says what Pip is actually
+doing ("Pip · searching Documents"). Under Reduce motion the orb is drawn still on a fixed frame
+and only redraws when its state changes.
+
+**Listening is impossible to miss.** While the mic is on, an amber mic pill sits in the menu bar
+next to Control Center, separate from Pip's orb, so it shows even when Pip is busy with something
+else.
 
 ## Overview and desktops
 

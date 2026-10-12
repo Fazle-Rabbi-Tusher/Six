@@ -42,6 +42,8 @@ ship as plain SVG paths, so the shell embeds only the ones it uses.
   percentage in tabular figures.
 - Control Center is a two-toggle glyph; Pip is the small orb, with a progress ring while a task
   runs.
+- While the microphone is on, a mic glyph on an amber pill appears left of Control Center. It is
+  never folded into another icon.
 - Every status item has an accessible label ("Battery 64 %, charging"); hover shows the exact value.
 
 ## Desktop and file icons

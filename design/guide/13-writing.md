@@ -20,6 +20,10 @@ Words are interface. SIX talks like a capable friend who knows computers: plain,
 | Empty state | "No downloads yet. Files you download from the browser appear here." | "Nothing here" |
 | Permission | "Allow Camera to use your location? It adds the place to photo details." | "Camera wants to access location services" |
 | Progress | "Copying 12 of 240 files · about 2 min left" | "Please wait…" |
+| Assistant status | "Pip · searching Documents", "Pip · waiting for your review" | "Pip · working…", "Thinking…" with no subject |
+| Assistant failure | "I couldn't find an app called "Photoshop" on this PC. Nothing was opened." + *Search for "Photoshop"* | "Something went wrong" |
+| Stopped or cancelled | "Stopped. 1 action had already run and stays as it is." | "Cancelled" (with nothing about what changed) |
+| Review before acting | "Moves this one file to the Bin. Nothing else changes." | "This action may affect your files" |
 
 ## Mechanics
 - Sentence case for everything except proper names.

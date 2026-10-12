@@ -32,7 +32,7 @@ This chapter covers how Pip works inside the OS.
 
 | Part | Spec |
 |---|---|
-| **Pip** | 260 px realistic orb centred above the greeting; shrinks to 168 px once a conversation starts. State label in mono caps below it ("PIP · LISTENING") |
+| **Pip** | 260 px realistic orb centred above the greeting; shrinks to 168 px once a conversation starts. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
 | **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."); a one-line hint under it until the first message |
 | **Conversation** | Compact by default: only the latest question and answer, max 190 px. **History · N messages** expands the full thread (max 44 % of the screen); × hides it, and "Show conversation (N)" in the hint line brings it back. Your messages: accent clay bubbles on the right. Pip's: plain text, labelled PIP, with action chips |
 | **Composer** | Plasma clay, 64 px, `--radius-2xl`. Text field, Send (becomes Stop while Pip answers), and the voice button: a 48 px accent clay circle, the one primary action on home |
@@ -66,16 +66,44 @@ the stack one grid step at a time.
 - **Local first.** Plain commands ("open files", "turn on night light", "switch to the ember mood",
   "put Terminal on the right") are understood on the device, instantly, with no network. They are
   marked *Handled on this device*.
+- **Where the answer came from is always shown.** Each reply ends with a small note: *Handled on
+  this device* or *Answered by Claude, in the cloud*. While Pip works, the status label says which
+  one it is asking ("PIP · ASKING CLAUDE").
 - **Everything else** goes to the language model. On-device by default where hardware allows; a
   cloud model only after the person agrees, said in Pip's words: "This needs the cloud model.
   Nothing leaves until you say so."
 - **Pip can act.** It can open, close and snap windows, change settings and switch moods. Every
   action shows as a chip under the reply (✓ *Snapped Files left*); failed actions show a Sun chip
   with the reason. Pip never claims an action it didn't take.
-- **Changes to files ask first.** Anything that edits, moves or deletes the person's files puts Pip
-  in its *Asking* state with a clear yes/no ("This one changes your files. Shall I?").
+- **Changes to files ask first, with a review card.** Anything that edits, moves or deletes the
+  person's files puts Pip in its *Asking* state and shows a review card in the reply (below). Pip
+  does nothing until the person answers.
+- **Failures name the reason and the next step.** "I couldn't find an app called "Photoshop" on
+  this PC. Nothing was opened." is followed by recovery chips (*Search for "Photoshop"*, *Show all
+  apps*). Never a bare "Something went wrong", never a dead end.
 - **Stop is always there.** Send turns into Stop while Pip answers; the current task card has Stop
-  too, and stopping says what did and didn't happen ("Stopped. Nothing was changed.").
+  too, and stopping says what did and didn't happen ("Stopped. 1 action had already run and stays
+  as it is.", "Stopped at 64 %. The outline was kept in Documents; no slides were made.").
+- **Waiting and retrying are said, not hidden.** If the cloud model asks Pip to slow down, the orb
+  shows *Waiting* and the reply says when to try again, with an *Ask again* chip. A dropped
+  connection is retried once, quietly, in the *Retrying* state; a second failure is reported.
+
+![Pip asks for review before moving a file to the Bin](../screens/pip-review.png)
+
+### The review card
+
+| Part | Content |
+|---|---|
+| Heading | ⓘ *Review before I do this* |
+| Target | The exact item: file icon, full name, location, size and when it last changed. Several items list each one, never "3 files" |
+| Effect | One line per consequence, in plain words: "Moves this one file to the Bin. Nothing else changes." "You can put it back from the Bin for 30 days." |
+| Buttons | The action named by its verb (*Move to Bin*, Ember for destructive actions) and *Cancel*. Never *OK* / *Yes* |
+| After | The card dims and its buttons disable; the reply says what happened, the action shows as a chip, and a toast offers **Undo** |
+
+Cancel is never a failure: Pip says "Cancelled. Nothing was changed." and the orb shows
+*Cancelled* for a moment before returning to *Ready*.
+
+![A failure with recovery chips](../screens/pip-failed.png)
 - **When a window covers home**, Pip's reply also appears as a toast, so the person isn't left
   wondering.
 
@@ -83,14 +111,14 @@ the stack one grid step at a time.
 
 | Step | What the person sees and hears |
 |---|---|
-| Start | Tap the voice button or hold `Six + Space`. The button turns Ember with a stop glyph; Pip's rings drop flat and ripple (*Listening*); the tray shows a mic glyph |
+| Start | Tap the voice button or hold `Six + Space`. The button turns Ember with a stop glyph; Pip ripples (*Listening*); an amber mic pill appears in the menu bar |
 | Speak | A live waveform and the transcript as it forms, inside the composer, so a misheard word is visible before anything runs |
 | Finish | Pause or tap again. The transcript becomes a normal message in the thread |
 | Answer | Pip replies in the thread and, with *Speak replies* on, reads it aloud; the core pulses while it speaks (*Speaking*). Tap the voice button to interrupt |
 
 Rules:
 - **No always-on wake word by default.** "Hey Pip" is an opt-in setting, processed on-device.
-- The listening state is impossible to hide: Pip's rings, the button colour and the tray mic glyph.
+- The listening state is impossible to hide: Pip's ripples, the button colour and the menu bar mic pill.
 - Every spoken reply is also written. Voice never carries information that the screen doesn't.
 - Voice has full keyboard parity: everything voice does can be typed.
 - Captions: the transcript and replies use the normal text size setting and can be enlarged.
@@ -102,25 +130,48 @@ Rules:
 
 Pip is one design at every size: a sphere of points of light (see the small orb in
 [09](09-shell.md#pips-small-orb)). On home it is rendered realistically: about 1,100 points with
-perspective, depth of field (back points soft and blurred, front points sharp), a glass edge that
-catches light, a faint core glow, a specular highlight and a soft floor shadow. Dark mode draws
-light points on matte black; light mode draws graphite points on white. The home orb and every
-small orb share one state at a time.
+perspective, depth of field (back points soft and blurred, front points sharp), a key light from
+the top left, a glass edge that catches light, a faint core glow, a specular highlight and a soft
+floor shadow. Dark mode draws light points on matte black; light mode draws graphite points on
+white. The home orb and every small orb share one state at a time, and one clock, so they move in
+step.
 
-| State | Orb | When |
-|---|---|---|
-| Ready | Slowly turning sphere, lit from the top left | Idle, waiting |
-| Listening | Rings of light ripple out from the centre | Mic is on |
-| Thinking | Dims; one bright point wanders | Working out an answer |
-| Speaking | Front points swell with the voice | Streaming or reading a reply |
-| Searching | A bright patch sweeps the surface | Looking through files |
-| Working | Spins on a wobbling gyro axis; the sphere fills with light as the task progresses, with a thin progress ring | A long task runs |
-| Complete | Glows green once | Just finished |
-| Asking | A lighthouse beam turns | Needs a yes |
-| Resting | Dim and still | Focus mode, battery saver, or the screen is idle |
+The motion of each state comes from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh (MIT);
+Listening, Speaking, Complete, Failed, Cancelled and Resting are SIX's own.
+
+| State | Orb | When | Status label example |
+|---|---|---|---|
+| Ready | Turns slowly; the back of the sphere fades away | Idle, waiting | PIP · READY |
+| Listening | Ripples spread from the centre | Mic is on | PIP · LISTENING |
+| Thinking | A spark walks from point to point, trailing light | Working out an answer | PIP · ASKING CLAUDE |
+| Speaking | Front points swell with the voice | Streaming or reading a reply | PIP · SPEAKING |
+| Searching | A lens hops across the face, magnifying what it passes | Looking through files | PIP · SEARCHING DOCUMENTS |
+| Working | A ring of light runs down the sphere; the sphere fills with light as the task progresses, with a thin progress ring | Acting, or a long task runs | PIP · ARRANGING WINDOWS |
+| Asking | A lighthouse beam turns | Waiting for the person's review | PIP · WAITING FOR YOUR REVIEW |
+| Waiting | A comet circles | A service made Pip wait | PIP · RATE LIMITED · TRY IN A MINUTE |
+| Retrying | Turns, brakes, springs back, goes again | Trying a failed step once more | PIP · CONNECTION DROPPED · TRYING AGAIN |
+| Compacting | A line sweeps across, packing the points | Making room in a long conversation | PIP · MAKING ROOM · OLDER MESSAGES |
+| Complete | Glows green once | Just finished | PIP · COMPLETE |
+| Failed | Turns red and slows | Something didn't work; the reply says why | PIP · APP NOT FOUND |
+| Cancelled | Dims | The person said no or pressed Stop | PIP · CANCELLED |
+| Resting | Dim and almost still | Focus mode, battery saver, or the screen is idle | PIP · RESTING |
+
+Outcome states (Complete, Failed, Cancelled, Waiting) settle back to Ready on their own after 1.4
+to 9 s; the reply in the thread keeps the record.
 
 Pip's personality and voice still come from the character canvas; its earlier globe-of-rings
 look is replaced by the dotted orb in the OS.
+
+## The current task card
+
+| Moment | Card |
+|---|---|
+| Running | Background orb, title, a status line in words ("Designing 12 slides"), progress bar, **Stop task** |
+| Finished | The orb turns Complete; the line says where the result went ("Done. Saved to Documents."); an **output preview** replaces Stop: file icon, name, "12 slides · 4.2 MB · Documents", with **Open** and **Show in Files** |
+| Stopped | The orb shows Cancelled; the line says what was kept ("Stopped at 64 %. The outline was kept in Documents; no slides were made.") |
+
+The status line is a polite `status` region that only changes when the step changes, so a screen
+reader hears "Designing 12 slides" once, not every percent.
 
 ## The small orb
 
@@ -130,8 +181,10 @@ The task card uses the *Background tasks* variant; every other small orb follows
 
 ## Accessibility
 
-- Pip is `role="img"` with its state in the label; state changes are announced politely through a
-  live region ("Pip, complete").
+- Pip is `role="img"` with its state and current activity in the label; changes are announced
+  politely through a live region ("Pip · searching Documents").
+- Review cards are a labelled group with real buttons; focus is not moved to them, so typing is
+  never interrupted.
 - The thread is a `log` region; new replies are announced without stealing focus.
 - Under Reduce motion Pip stops turning and switches states with a crossfade; cards stop springing
   and jump to place; the wallpaper freezes.

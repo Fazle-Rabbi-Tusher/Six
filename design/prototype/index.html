@@ -381,6 +381,15 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .stage { position: relative; isolation: isolate; display: grid; justify-items: center; gap: 6px; text-align: center; flex: none; transition: gap var(--dur-slow); }
 /* text never sits on raw wallpaper: a soft scrim keeps the greeting legible over bright veins */
 .stage::before { content: ""; position: absolute; z-index: -1; left: -90px; right: -90px; top: 38%; bottom: -24px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--c-bg) 82%, transparent), color-mix(in srgb, var(--c-bg) 50%, transparent) 60%, transparent); pointer-events: none; }
+.mb-mic { display: inline-flex; align-items: center; justify-content: center; align-self: center; height: 20px; padding: 0 7px; border-radius: 999px; background: var(--c-warning); color: var(--c-surface); flex: none; }
+.mb-mic[hidden] { display: none; }
+.mb-mic svg.i { width: 13px; height: 13px; }
+.task-out { display: grid; gap: 10px; }
+.task-out[hidden] { display: none; }
+.task-file { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.task-file small { display: block; font: var(--text-caption); color: var(--c-text-3); }
+.task-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.frow.empty-row { display: block; padding: 28px 12px; text-align: center; color: var(--c-text-2); cursor: default; }
 .pip-state { font: 600 12px/16px var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--pip-line); }
 .greet { margin: 0; font: var(--text-headline); letter-spacing: -0.01em; text-wrap: balance; }
 .greet-sub { margin: 0; color: var(--c-text-2); font: var(--text-body-lg); }
@@ -389,6 +398,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
 #thread { width: 100%; max-height: min(44vh, 420px); overflow-y: auto; padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
 #thread.compact { max-height: 190px; }
+#thread.compact:has(.review:not(.done)) { max-height: min(44vh, 340px); }  /* a review is never cut off */
 #thread.compact .msg:not(.latest) { display: none; }
 .thread-head { display: flex; align-items: center; gap: 8px; position: sticky; top: -12px; z-index: 1; margin: -4px 0 -2px; }
 .thread-head button { border: 0; background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); color: var(--c-text-2); font: 600 12px/1 var(--font-ui); height: 26px; padding: 0 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
@@ -405,7 +415,19 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .acts { display: flex; flex-wrap: wrap; gap: 6px; }
 .act { display: inline-flex; align-items: center; gap: 6px; font: var(--text-caption); padding: 4px 10px; border-radius: 999px; background: var(--c-success-soft); color: var(--c-success); }
 .act.warn { background: var(--c-warning-soft); color: var(--c-warning); }
-.msg .note { font: var(--text-caption); color: var(--c-text-3); }
+.msg .note { font: var(--text-caption); color: var(--c-text-3); display: inline-flex; align-items: center; gap: 6px; }
+.msg .note svg.i { width: 13px; height: 13px; }
+.fixes { display: flex; flex-wrap: wrap; gap: 6px; }
+.fixes .sugg { height: 30px; padding: 0 12px; font: var(--text-caption); font-weight: 600; }
+/* review card: names the exact target and effect before Pip changes anything */
+.review { display: grid; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--c-surface-2); border: 1px solid var(--c-line-strong); max-width: 420px; }
+.review .rv-head { display: flex; align-items: center; gap: 6px; font: var(--text-label); color: var(--c-text); }
+.review .rv-item { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.review .rv-item b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.review .rv-item small { display: block; font: var(--text-caption); color: var(--c-text-3); }
+.review ul { margin: 0; padding-left: 18px; font: var(--text-body-sm); color: var(--c-text-2); display: grid; gap: 2px; }
+.review .rv-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.review.done { opacity: 0.72; }
 
 #composer { width: 100%; min-height: 64px; display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 20px; border-radius: var(--radius-2xl); flex: none; }
 #composer input { flex: 1; min-width: 0; height: 44px; border: 0; outline: 0; background: transparent; color: var(--c-text); font: var(--text-body-lg); }
@@ -552,6 +574,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .res .tile svg.i { width: 60%; height: 60%; }
 .res .sub { font: var(--text-caption); color: var(--c-text-3); display: block; }
 .res .hint { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); }
+.res .fx { color: var(--c-text-2); }
+.res .rt { display: grid; min-width: 0; }
 .res[aria-selected="true"] { background: var(--c-accent-soft); }
 .res[aria-selected="true"] .main { color: var(--c-accent); }
 .empty { padding: 18px 12px; color: var(--c-text-2); }
@@ -839,9 +863,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <section class="widget liquid" data-liquid="0" data-slot="R0" aria-label="Current task">
         <h3>Current task <small>Pip</small></h3>
         <div class="well" style="padding: 14px; display: grid; gap: 12px">
-          <div class="task-head"><canvas class="dotorb" data-state="background" style="width: 40px; height: 40px" aria-hidden="true"></canvas><div><b>Slides from my notes</b><span id="taskLine">Building the outline</span></div></div>
+          <div class="task-head"><canvas class="dotorb" data-state="background" style="width: 40px; height: 40px" aria-hidden="true"></canvas><div><b>Slides from my notes</b><span id="taskLine" role="status">Building the outline</span></div></div>
           <div class="bar" role="progressbar" aria-label="Task progress" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><i id="taskBar" style="width: 40%"></i></div>
           <button type="button" class="btn btn-secondary sm" id="taskStop" style="justify-self: start">Stop task</button>
+          <div class="task-out" id="taskOut" hidden>
+            <div class="task-file"><span class="ficon-slot" data-name="Slides from my notes.pdf"></span><span><b>Slides from my notes.pdf</b><small>12 slides · 4.2 MB · Documents</small></span></div>
+            <div class="task-btns"><button type="button" class="btn btn-primary sm" id="taskOpen">Open</button><button type="button" class="btn btn-secondary sm" id="taskShow">Show in Files</button></div>
+          </div>
         </div>
       </section>
       <section class="widget liquid" data-liquid="0" data-slot="R1" aria-label="This device">
@@ -1009,9 +1037,10 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
           <h3>The small orb</h3>
           <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
           <div class="orb-tiles" id="orbTiles"></div>
+          <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
           <ul class="principles">
-            <li><span class="n">1</span><div><b>Tap the mic, or hold Six + Space.</b> <span>No always-on wake word by default. The mic glyph and Pip's flat, rippling rings show it is listening.</span></div></li>
+            <li><span class="n">1</span><div><b>Tap the mic, or hold Six + Space.</b> <span>No always-on wake word by default. The amber mic pill in the menu bar and Pip's ripples show it is listening.</span></div></li>
             <li><span class="n">2</span><div><b>See what Pip heard.</b> <span>The live transcript sits in the composer, so a wrong word is caught before anything runs.</span></div></li>
             <li><span class="n">3</span><div><b>Hear the answer, read it too.</b> <span>Spoken replies always appear in the thread. Tap the mic again to interrupt.</span></div></li>
           </ul>
@@ -1147,7 +1176,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     <span class="mb-btn mb-app" id="mbApp">Home</span>
     <div class="mb-right">
       <button class="mb-btn" id="mbSearch" aria-label="Search (Ctrl K)"><svg class="i"><use href="#i-search-b"/></svg></button>
-      <button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
+      <span class="mb-mic" id="micInd" role="img" aria-label="Microphone on. Pip is listening" title="Microphone on. Pip is listening" hidden><svg class="i"><use href="#i-mic"/></svg></span><button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
       <button class="mb-btn" id="pipBtn" aria-label="Pip: Ready. Show home"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
       <button class="mb-btn mb-clock" id="clock" aria-label="Clock"><span id="clockD" class="mb-hide">Mon 12 Oct</span><span id="clockT">10:42</span></button>
     </div>
@@ -1513,18 +1542,20 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   darkMQ.addEventListener('change', syncThemeTile);
 
   /* ── Six Search ─────────────────────────────── */
+  const pressed = id => qsTile(id).getAttribute('aria-pressed') === 'true';
   const SETTINGS = [
-    { name: 'Dark mode', sub: 'Settings › Personalisation', run: () => qsTile('dark').click(), kw: 'theme night appearance' },
-    { name: 'Night light', sub: 'Settings › Display', run: () => qsTile('night').click(), kw: 'warm blue light' },
-    { name: 'Reduce transparency', sub: 'Settings › Accessibility', run: () => $('#a11yTransp').click(), kw: 'glass blur' },
-    { name: 'Reduce motion', sub: 'Settings › Accessibility', run: () => $('#a11yMotion').click(), kw: 'animation' },
-    { name: 'More contrast', sub: 'Settings › Accessibility', run: () => $('#a11yContrast').click(), kw: 'high contrast' },
-    { name: 'Touch mode', sub: 'Settings › Accessibility', run: () => qsTile('touch').click(), kw: 'large targets tablet' },
+    { name: 'Dark mode', sub: 'Settings › Personalisation', on: () => isDark(), run: () => qsTile('dark').click(), kw: 'theme night appearance' },
+    { name: 'Night light', sub: 'Settings › Display', on: () => pressed('night'), run: () => qsTile('night').click(), kw: 'warm blue light' },
+    { name: 'Reduce transparency', sub: 'Settings › Accessibility', on: () => $('#a11yTransp').checked, run: () => $('#a11yTransp').click(), kw: 'glass blur' },
+    { name: 'Reduce motion', sub: 'Settings › Accessibility', on: () => $('#a11yMotion').checked, run: () => $('#a11yMotion').click(), kw: 'animation' },
+    { name: 'More contrast', sub: 'Settings › Accessibility', on: () => $('#a11yContrast').checked, run: () => $('#a11yContrast').click(), kw: 'high contrast' },
+    { name: 'Touch mode', sub: 'Settings › Accessibility', on: () => pressed('touch'), run: () => qsTile('touch').click(), kw: 'large targets tablet' },
   ];
+  // every action says what it will do before Enter runs it
   const ACTIONS = [
-    { name: 'Show home', sub: 'Action', hint: 'Six + D', run: () => showHome(), kw: 'desktop minimize all' },
-    { name: 'Snap Design guide left', sub: 'Action', hint: 'Six + ←', run: () => { openApp('guide'); snap('guide', 'L50'); }, kw: 'window' },
-    { name: 'Snap Files right', sub: 'Action', hint: 'Six + →', run: () => { openApp('files'); snap('files', 'R50'); }, kw: 'window' },
+    { name: 'Show home', sub: 'Action', fx: 'Minimises every window', hint: 'Six + D', run: () => showHome(), kw: 'desktop minimize all' },
+    { name: 'Snap Design guide left', sub: 'Action', fx: 'Opens it on the left half of the screen', hint: 'Six + ←', run: () => { openApp('guide'); snap('guide', 'L50'); }, kw: 'window' },
+    { name: 'Snap Files right', sub: 'Action', fx: 'Opens Files on the right half of the screen', hint: 'Six + →', run: () => { openApp('files'); snap('files', 'R50'); }, kw: 'window' },
   ];
   let results = [], sel = 0;
   function calc(q) {
@@ -1552,8 +1583,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const c = calc(q.trim());
     if (c !== null) groups.push(['Answer', [{ name: `= ${c.toLocaleString()}`, sub: 'Enter copies the result', icon: 'spark', tile: 't-butter', run: () => { navigator.clipboard?.writeText(String(c)).catch(() => {}); toast(`Copied ${c.toLocaleString()}`, null); } }]]);
     const apps = APPS.filter(a => m(a)).map(a => ({ name: a.name, sub: 'App', app: a.id, run: () => openApp(a.id) }));
-    const files = FILES.filter(f => s && m(f)).map(f => ({ name: f.name, sub: `Documents · ${f.size}`, file: f.name, hint: 'Space to preview', run: () => openApp('files') }));
-    const sets = SETTINGS.filter(m).map(x => ({ ...x, icon: 'sliders', tile: 't-lilac' }));
+    const files = files_().filter(f => s && m(f)).map(f => ({ name: f.name, sub: `Documents · ${f.size}`, file: f.name, hint: 'Space to preview', run: () => openApp('files') }));
+    const sets = SETTINGS.filter(m).map(x => ({ ...x, fx: x.on() ? 'On now · Enter turns it off' : 'Off now · Enter turns it on', icon: 'sliders', tile: 't-lilac' }));
     const acts = ACTIONS.filter(m).map(x => ({ ...x, icon: 'spark', tile: 't-peach' }));
     if (apps.length) groups.push(['Apps', apps]);
     if (files.length) groups.push(['Files', files]);
@@ -1571,7 +1602,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <div class="res-group overline">${g}</div>
       ${items.map(r => `<button class="res" role="option" id="r${i}" data-i="${i}" aria-selected="${i++ === sel}">
         ${r.app ? appIcon(r.app, 30) : r.file ? fileIcon(r.file, 30) : `<span class="tile ${r.tile}">${icon(r.icon)}</span>`}
-        <span><span class="main">${r.name.replace(/</g, '&lt;')}</span><span class="sub">${r.sub || ''}</span></span>
+        <span class="rt"><span class="main">${r.name.replace(/</g, '&lt;')}</span><span class="sub">${r.sub || ''}${r.fx ? ` · <span class="fx">${r.fx}</span>` : ''}</span></span>
         ${r.hint ? `<span class="hint">${r.hint}</span>` : ''}</button>`).join('')}`).join('')
       : `<div class="empty">No results. Try an app name, a setting like "night light", or a sum like 12*18.</div>`;
     $('#q').setAttribute('aria-activedescendant', results.length ? 'r' + sel : '');
@@ -1617,8 +1648,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   /* ── Files app ──────────────────────────────── */
   let files = FILES.slice(), fsel = -1;
+  const files_ = () => files;
   function renderFiles() {
-    $('#flist').innerHTML = files.map((f, i) => `
+    $('#flist').innerHTML = !files.length ? '<li class="frow empty-row">Documents is empty. Files you save or download land here; deleted files wait in the Bin.</li>' : files.map((f, i) => `
       <li class="frow" role="option" tabindex="${i === Math.max(fsel, 0) ? 0 : -1}" data-i="${i}" aria-selected="${i === fsel}">
         <span class="fname">${fileIcon(f.name, 26)}<span>${f.name}</span></span>
         <span class="r">${f.mod}</span><span class="r">${f.size}</span></li>`).join('');
@@ -1701,47 +1733,227 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   $$('.seg button').forEach(b => b.addEventListener('click', () => $$('button', b.parentElement).forEach(x => x.setAttribute('aria-pressed', x === b))));
 
   /* ── Pip's orb: one dotted-sphere design at every size ─────────
-     Small orbs (menu bar, dock, cards, labels) are drawn flat and crisp. The home orb is the
-     same sphere rendered realistically: perspective, depth of field, a glass shell, core light
-     and a soft floor shadow. */
-  const ORB_MODE = { ready: 'idle', listening: 'listen', thinking: 'reason', speaking: 'speak', searching: 'search', working: 'gyro', complete: 'done', asking: 'lighthouse', resting: 'rest', background: 'background' };
-  const fib = n => Array.from({ length: n }, (_, i) => { const y = 1 - (i + 0.5) * 2 / n, r = Math.sqrt(1 - y * y), th = i * 2.399963; return [Math.cos(th) * r, y, Math.sin(th) * r]; });
-  const FIB = { s: fib(64), m: fib(150), l: fib(260), bg: fib(48), hi: fib(1100), hibg: fib(220) };
-  const norm = v => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+     The motion engine is ported from Thinking Orbs by Yogesh (MIT, github.com/yogesharc/thinking-orbs):
+     one shared clock per look so every orb in a state moves in step, dots that fade out toward the
+     back instead of leaving a grey haze, and a look per thing Pip does. SIX adds Listening, Speaking,
+     Complete, Failed, Cancelled and Resting, and draws the home orb realistically: perspective, depth
+     of field, a glass shell, core light and a soft floor shadow. */
+  const TAU = Math.PI * 2, GOLDEN = Math.PI * (3 - Math.sqrt(5));
+  const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
+  const hash = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
+  const dist2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+  // Pip's state → the look its orb takes; data-variant picks an alternative look where one exists
+  const ORB_LOOK = { ready: 'base', listening: 'listen', thinking: 'reasoning', speaking: 'speak', searching: 'searching', working: 'working', complete: 'done',
+    asking: 'searching-lighthouse', resting: 'rest', background: 'background', retrying: 'retrying', compacting: 'compacting', waiting: 'waiting', failed: 'failed', cancelled: 'cancelled' };
+  const ORB_VARIANTS = { working: ['gyro'], reasoning: ['twins'], searching: ['lighthouse'], background: ['spiral'], retrying: ['surge'], compacting: ['squeeze', 'fuse'] };
+  function lookOf(el) {
+    const base = ORB_LOOK[el.dataset.state] || 'base', v = el.dataset.variant;
+    return v && (ORB_VARIANTS[base] || []).includes(v) ? base + '-' + v : base;
+  }
+  // time for one full turn, ms
+  const PERIOD = { base: 6500, working: 3000, 'working-gyro': 3000, reasoning: 6500, 'reasoning-twins': 6500, searching: 13000, 'searching-lighthouse': 13000,
+    background: 13000, 'background-spiral': 13000, retrying: 13000, 'retrying-surge': 13000, compacting: 10000, 'compacting-squeeze': 10000, 'compacting-fuse': 10000,
+    waiting: 13000, listen: 9000, speak: 8000, done: 5000, failed: 16000, cancelled: 40000, rest: 60000 };
+  // one clock per look, so orbs of one look stay in phase; a frame gap counts at most 100 ms
+  const clocks = new Map();
+  function orbClock(look, now) {
+    let c = clocks.get(look);
+    if (!c) clocks.set(look, (c = { t: 0, last: now }));
+    if (now > c.last) { c.t += Math.min(now - c.last, 100); c.last = now; }
+    return c.t;
+  }
+  // a spring settling from 0 to 1 (overshoots ~22 %, lands exactly at x = 1)
+  const spring = x => 1 - Math.exp(-4.5 * x) * Math.cos(3 * Math.PI * x) - x * Math.exp(-4.5);
+  // Retrying: turns 2 s, brakes, springs back 60 % of what it turned, then speeds up again
+  function rewind(t, w) {
+    const P = 3200, k = Math.floor(t / P), u = t - k * P, back = 0.6 * 2100 * w, fwd = 2200 * w;
+    let a;
+    if (u < 2000) a = u * w;
+    else if (u < 2200) { const x = (u - 2000) / 200; a = (2000 + 200 * (x - x * x / 2)) * w; }
+    else if (u < 3000) a = 2100 * w - back * spring((u - 2200) / 800);
+    else { const x = (u - 3000) / 200; a = 2100 * w - back + 100 * x * x * w; }
+    return k * (fwd - back) + a;
+  }
+  function yawOf(look, t) {
+    if (look === 'retrying') return rewind(2 * t, TAU / 9000);
+    if (look === 'retrying-surge') { const n = t / 3250, u = n - Math.floor(n); return (Math.floor(n) + (1 - (1 - u) ** 3)) * TAU; }
+    return t / PERIOD[look] * TAU;
+  }
+  // Working: the ring of light's axis, tipped 30° toward you and rolled 10°
+  const RING_AXIS = (() => { const tip = Math.PI / 6, roll = Math.PI / 18; return [-Math.sin(roll) * Math.cos(tip), Math.cos(roll) * Math.cos(tip), Math.sin(tip)]; })();
+  const TWIST = 1.4, LEAN = Math.PI / 6, TRAIL = Math.PI / 2;
+  // Searching: a lens hops between spots 15–45° off centre, gliding for the first 40 % of each hop
+  const LENS_MS = 1800, MOVE = 0.4, LENS = 0.6;
+  function spot(k) { const phi = k * 2.45 + hash(k) * 1.5, th = (15 + 30 * hash(k + 0.5)) * Math.PI / 180; return [Math.sin(th) * Math.cos(phi), Math.sin(th) * Math.sin(phi), Math.cos(th)]; }
+  function lensAt(t) {
+    const k = Math.floor(t / LENS_MS), u = t / LENS_MS - k, e = u < MOVE ? ease(u / MOVE) : 1, a = spot(k), b = spot(k + 1);
+    const v = a.map((x, j) => x + (b[j] - x) * e), n = Math.hypot(v[0], v[1], v[2]);
+    return v.map(x => x / n);
+  }
+  // Reasoning: a spark hops every HOP ms to one of the REACH nearest dots, its last TAIL hops still lit
+  const HOP = 220, TAIL = 5, REACH = 24, WALK = 16;
+  function nearest(pts, i, k) {
+    const idx = [], d = [], p = pts[i];
+    for (let j = 0; j < pts.length; j++) {
+      if (j === i) continue;
+      const e = dist2(p, pts[j]);
+      let at = idx.length;
+      if (at === k) { if (e >= d[k - 1]) continue; at--; }
+      while (at > 0 && d[at - 1] > e) { idx[at] = idx[at - 1]; d[at] = d[at - 1]; at--; }
+      idx[at] = j; d[at] = e;
+    }
+    return idx;
+  }
+  // Background · Spiral: eight arms wound pole to pole, thinned toward the poles so the caps don't clot
+  function arms(count) {
+    const at = (lat, lon) => [Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon)];
+    const g = Math.sqrt(4 * Math.PI / count), n = 8, along = 0.6 * g;
+    return Array.from({ length: n }, (_, m) => {
+      const room = m ? m & -m : n, lim = Math.min(85 * Math.PI / 180, Math.acos(Math.min(1, g * n / (TAU * room)))), out = [];
+      for (let lat = -lim + ((m * 0.618) % 1) * along; lat <= lim; lat += along / Math.sqrt(1 + Math.cos(lat) ** 2)) out.push(at(lat, m / n * TAU - lat));
+      return out;
+    }).flat();
+  }
+  const fib = n => Array.from({ length: n }, (_, i) => { const y = 1 - 2 * (i + 0.5) / n, r = Math.sqrt(1 - y * y), th = i * GOLDEN; return [r * Math.cos(th), y, r * Math.sin(th)]; });
+  const PTS = new Map(), NEAR = new WeakMap();
+  function pointsFor(look, count) {
+    const key = (look === 'background-spiral' ? 's' : 'f') + count;
+    if (!PTS.has(key)) PTS.set(key, look === 'background-spiral' ? arms(count) : fib(count));
+    return PTS.get(key);
+  }
+  const nearOf = pts => { if (!NEAR.has(pts)) NEAR.set(pts, pts.map((_, i) => nearest(pts, i, REACH))); return NEAR.get(pts); };
+
+  /* The shared motion: for each dot, where it is in view space (x right, y up, z toward you), how
+     much bigger it draws (rm), how opaque (a) and how much of the state's own light it carries (g).
+     backA keeps a little of the back of the sphere for renderers with depth of field; spread lets
+     the reasoning spark light dots near its path on dense spheres. */
+  function orbDots(el, look, t, pts, o, emit) {
+    const yaw = yawOf(look, t), gyro = look === 'working-gyro' ? t / 5000 * TAU : null;
+    const pitch = (20 + (gyro === null ? 0 : 10 * Math.cos(gyro))) * Math.PI / 180;
+    const roll = gyro === null ? 0 : 12 * Math.sin(gyro) * Math.PI / 180, sr = Math.sin(roll), cr = Math.cos(roll);
+    const sy = Math.sin(yaw), cy = Math.cos(yaw), st = Math.sin(pitch), ct = Math.cos(pitch);
+    const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
+    // Reasoning: walk the spark(s), steering toward the dots that face you
+    const reasoning = (look === 'reasoning' || look === 'reasoning-twins') && pts.length > 1;
+    let tail = null;
+    if (reasoning) {
+      const near = nearOf(pts), facing = k => pts[k][1] * st + (-pts[k][0] * sy + pts[k][2] * cy) * ct;
+      let W = el._walk;
+      if (!W || W.look !== look || W.pts !== pts || t / HOP < W.hops - 1) {
+        const first = [...pts.keys()].reduce((b, k) => (facing(k) > facing(b) ? k : b), 0), apart = k => facing(k) + dist2(pts[k], pts[first]);
+        W = el._walk = { look, pts, hops: Math.floor(t / HOP), walks: Array.from({ length: look === 'reasoning-twins' ? 2 : 1 }, (_, w) => [w ? [...pts.keys()].reduce((b, k) => (apart(k) > apart(b) ? k : b), 0) : first]) };
+      }
+      const s = t / HOP, n = Math.floor(s), f = s - n;
+      W.hops = Math.max(W.hops, n - WALK);
+      for (; W.hops < n; W.hops++) {
+        W.walks.forEach((walk, w) => {
+          const recent = walk.slice(-8), from = walk[walk.length - 1], other = W.walks.length > 1 ? W.walks[1 - w].at(-1) : undefined;
+          let best = -1, score = -Infinity;
+          near[from].forEach((k, j) => {
+            const apart = other === undefined ? 0 : 1.2 * Math.min(Math.sqrt(dist2(pts[k], pts[other])), 0.8);
+            const sc = facing(k) + 0.35 * hash(W.hops * 31 + j + w * 977) + apart;
+            if (!recent.includes(k) && sc > score) { score = sc; best = k; }
+          });
+          walk.push(best < 0 ? near[from][0] : best);
+          if (walk.length > WALK) walk.shift();
+        });
+      }
+      tail = [];
+      for (const walk of W.walks) for (let j = TAIL - 1; j >= 0; j--) {
+        const k = walk[walk.length - 1 - j];
+        if (k !== undefined) tail.push([k, j === 0 ? ease(Math.min(1, f * 2)) : 1 - (j - 1 + f) / TAIL]);
+      }
+    }
+    const lit = tail && new Map();
+    if (tail && !o.spread) tail.forEach(([k, v]) => lit.set(k, Math.max(lit.get(k) || 0, v)));
+    // Waiting: a comet laps every 2 s, spiralling from 70° north to 70° south every 6 s
+    const head = t / 2000 * TAU + yaw, ahead = TAU / 2000 + TAU / PERIOD.waiting;
+    const headLat = tt => 70 * Math.PI / 180 * (1 - 2 * ((((tt % 6000) + 6000) % 6000) / 6000));
+    const glow = Math.min(1, 3 * Math.sin(Math.PI * ((t % 6000) / 6000)));
+    const lens = look === 'searching' ? lensAt(t) : null;
+    const tw = look === 'working-gyro' ? 0.5 * Math.sin(t / 2600 * TAU) : look === 'compacting-squeeze' ? Math.sin(t / 2600 * TAU) : 0;
+    // Compacting: a line crosses left to right over 2 s, packing what it passed, then lets go
+    let sweep = null;
+    if (look === 'compacting' || look === 'compacting-fuse') {
+      const u = (t % 2800) / 2800, s = (u - 0.7) / 0.3;
+      const release = look === 'compacting-fuse' ? (1 - s) ** 3 : s < 0.45 ? 1 - 1.25 * ease(s / 0.45) : s < 0.7 ? -0.25 * (1 - (s - 0.45) / 0.25) ** 2 : 0;
+      sweep = { at: -1.15 + 2.3 * Math.min(1, u / 0.7), hold: u < 0.7 ? 1 : release };
+    }
+    const backA = o.backA || 0, small = o.size <= 24;
+    for (let i = 0; i < pts.length; i++) {
+      const [x, y, z] = pts[i];
+      const turn = yaw + TWIST * tw * y, ly = tw ? Math.sin(turn) : sy, lc = tw ? Math.cos(turn) : cy;
+      const z1 = -x * ly + z * lc;
+      let vx = x * lc + z * ly, vy = y * ct - z1 * st;
+      const vz = y * st + z1 * ct, d = (vz + 1) / 2;
+      let rm = 1, a = backA + (1 - backA) * Math.max(0, (d - 0.3) / 0.7), g = 0;
+      const light = v => { if (v > 0) { a += (1 - a) * v; g = Math.max(g, v); } };
+      if (lens) {
+        const ang = Math.acos(Math.min(1, (vx * lens[0] + vy * lens[1] + vz * lens[2]) / Math.hypot(vx, vy, vz)));
+        const w = ang < LENS ? (1 - (ang / LENS) ** 2) ** 2 : 0;
+        a *= 1 - 0.55 * (1 - w);
+        if (small) rm *= 1 + 0.5 * w;
+        if (w) { vx *= 1 + 0.12 * w; vy *= 1 + 0.12 * w; vx += (vx - lens[0]) * 0.35 * w; vy += (vy - lens[1]) * 0.35 * w; rm *= 1 + 0.9 * w; light(w); }
+      }
+      if (sweep) {
+        const q = vx, w = Math.min(1, Math.max(0, (sweep.at - q) / 0.2)) * sweep.hold, k = look === 'compacting' ? 1.5 : 1;
+        vx *= 1 - 0.2 * k * w; vy *= 1 - 0.2 * k * w; rm *= 1 - 0.3 * k * w;
+        if (look === 'compacting-fuse') {
+          a *= 1 - 0.5 * w;
+          const gg = Math.exp(-(((q - sweep.at) / 0.08) ** 2)) * Math.max(0, sweep.hold) * Math.min(1, d / 0.5);
+          rm *= 1 + 0.8 * gg; light(gg);
+        }
+      }
+      if (look === 'working') {
+        // every 1.7 s a ring of light runs down the sphere; what it passed pulls in, then lets go
+        const u = t % 1700, at = 1.3 - 2.6 * ease(Math.min(1, u / 1200)), q = vx * RING_AXIS[0] + vy * RING_AXIS[1] + vz * RING_AXIS[2];
+        const gg = u < 1200 ? Math.exp(-(((q - at) / 0.2) ** 2)) : 0;
+        rm *= 1 + 0.6 * gg; light(gg);
+        const w = Math.min(1, Math.max(0, (q - at) / 0.2)) * (u < 1200 ? 1 : 1 - Math.min(1, 1.6 * ((u - 1200) / 800)));
+        vx *= 1 - 0.08 * w; vy *= 1 - 0.08 * w; rm *= 1 - 0.15 * w;
+      }
+      if (look === 'searching-lighthouse') {
+        // a beam leaning 30° circles every 2.5 s, its trail dying out 90° behind it
+        a *= 0.5;
+        const lr = Math.sin(LEAN), lc2 = Math.cos(LEAN), across = vx * lc2 - vy * lr, toward = -st * (vx * lr + vy * lc2) + ct * vz;
+        const off = Math.atan2(across, toward) - (((t / 2500) % 1) * TAU - Math.PI), dphi = ((((off + Math.PI) % TAU) + TAU) % TAU) - Math.PI;
+        const beam = dphi < 0 ? Math.max(0, 1 + dphi / TRAIL) : Math.exp(-((dphi / 0.45) ** 2));
+        const gg = beam * (0.25 + 0.75 * Math.min(1, Math.max(0, (d - 0.4) / 0.3)));
+        rm *= 1 + 0.6 * gg; light(gg);
+      }
+      if (reasoning) {
+        let spark = 0;
+        if (o.spread) for (const [k, v] of tail) { const e = v * Math.exp(-dist2(pts[i], pts[k]) / o.spread); if (e > spark) spark = e; }
+        else spark = lit.get(i) || 0;
+        a *= 0.5;
+        if (spark > 0.01) { rm *= 1 + 0.8 * spark; light(spark); }
+      }
+      if (look === 'waiting') {
+        const lat = Math.asin(y / (Math.hypot(x, y, z) || 1)), lon = Math.atan2(z, x);
+        const off = Math.atan2(Math.sin(lon - head), Math.cos(lon - head)), along = off * Math.cos(lat);
+        const gg = Math.exp(-(((lat - headLat(t + off / ahead)) / 0.28) ** 2)) * Math.exp(-((along / (off * ahead > 0 ? 0.12 : 1)) ** 2));
+        const w = glow * gg ** 0.6;
+        a = a * 0.5 + (1 - a * 0.5) * w; g = Math.max(g, w); rm *= 1 + 1.1 * w;
+      }
+      // SIX's own states
+      if (look === 'listen') { const w = 0.5 + 0.5 * Math.sin(Math.hypot(vx, vy) * 14 - t * 0.007); a *= 0.35 + 0.65 * w; rm *= 0.8 + 0.5 * w * d; }
+      else if (look === 'speak') { rm *= 1 + amp * 0.9 * d; light(amp * 0.6 * d); }
+      else if (look === 'done') light(0.35 * d * Math.max(0, 1 - t / 1600));
+      else if (look === 'failed') a *= 0.7;
+      else if (look === 'rest' || look === 'cancelled') a *= 0.38;
+      if (roll) [vx, vy] = [vx * cr - vy * sr, vx * sr + vy * cr];
+      emit(i, vx, vy, vz, d, rm, a, g);
+    }
+  }
+
   const orbs = new Set();
   const rgbOf = el => (getComputedStyle(el).color.match(/[\d.]+/g) || [255, 255, 255]).slice(0, 3).map(Number);
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
-  function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 2); }
+  function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 1500); }
   function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; o._sprites = null; }); }
   const drawAnyOrb = (el, t) => (el._hi ? drawHiOrb(el, t) : drawOrb(el, t));
-  const ORB_SPEED = { idle: 0.55, listen: 0.5, reason: 0.25, speak: 0.45, search: 0.4, gyro: 1.2, done: 0.6, lighthouse: 0.3, rest: 0, background: 0.25 };
-  function orbFrame(mode, t) {
-    const a = t * ORB_SPEED[mode], tilt = mode === 'gyro' ? 0.55 + 0.35 * Math.sin(t * 0.9) : 0.35;
-    return {
-      ca: Math.cos(a), sa: Math.sin(a), ct: Math.cos(tilt), st: Math.sin(tilt), beam: t * 1.5,
-      S: mode === 'reason' ? norm([Math.sin(t * 1.7) * 0.8, Math.cos(t * 1.3) * 0.6, 0.85])
-        : mode === 'search' ? norm([Math.sin(t * 1.1) * 0.85, -0.1 + Math.sin(t * 0.7) * 0.35, 0.7]) : null,
-    };
-  }
-  // brightness and size multiplier of one point, per state
-  function shade(mode, p, x, y, z, t, F, amp) {
-    const depth = (z + 1) / 2, lit = Math.max(0, -0.55 * x - 0.6 * y + 0.6 * z);
-    if (mode === 'reason' || mode === 'search') {
-      const hot = Math.exp(-((x - F.S[0]) ** 2 + (y - F.S[1]) ** 2 + (z - F.S[2]) ** 2) / (mode === 'reason' ? 0.012 : 0.09));
-      return [0.08 + 0.3 * depth + 0.9 * hot, 1 + (mode === 'reason' ? 1.3 : 0.7) * hot];
-    }
-    if (mode === 'lighthouse') {
-      const lon = Math.atan2(p[0], p[2]), dl = Math.atan2(Math.sin(lon - F.beam), Math.cos(lon - F.beam));
-      return [0.1 + 0.28 * depth + 0.85 * Math.exp(-(dl * dl) / 0.08) * depth, 1];
-    }
-    if (mode === 'listen') { const w = 0.5 + 0.5 * Math.sin(Math.hypot(x, y) * 14 - t * 7); return [(0.15 + 0.7 * depth) * (0.35 + 0.65 * w), 0.8 + 0.5 * w * depth]; }
-    if (mode === 'speak') return [0.15 + 0.85 * lit * depth + 0.15 * depth, 1 + amp * 0.9 * depth];
-    if (mode === 'background') { const tw = 0.5 + 0.5 * Math.sin(t * 2.2 + p[0] * 9 + p[1] * 7); return [(0.25 + 0.75 * depth) * (0.45 + 0.55 * tw), 2.2 * (0.85 + 0.25 * tw)]; }
-    if (mode === 'rest') return [0.06 + 0.22 * depth, 1];
-    if (mode === 'done') return [0.2 + 0.8 * depth, 1];
-    return [0.07 + 0.95 * Math.pow(lit, 1.15) * depth + 0.1 * depth, 1];
-  }
-  const rot = (p, F) => { const x = p[0] * F.ca + p[2] * F.sa, z0 = -p[0] * F.sa + p[2] * F.ca; return [x, p[1] * F.ct - z0 * F.st, p[1] * F.st + z0 * F.ct]; };
+  // Complete and Failed take their semantic colour; everything else draws in the orb's own colour
+  const colOf = (el, look) => look === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : look === 'failed' ? hex(tok('--c-danger')).map(v => Math.round(v * 255)) : el._col;
   const progressOf = el => (el.dataset.progress !== undefined && el.dataset.progress !== '' ? Math.max(0, Math.min(1, +el.dataset.progress)) : null);
   function setupCanvas(el) {
     const size = el.clientWidth; if (!size) return null;
@@ -1751,72 +1963,70 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, size, size);
     return [ctx, size];
   }
-  function drawRing(ctx, c, cx, cy, r, w, prog, col) {
+  function drawRing(ctx, cx, cy, r, w, prog, col) {
     ctx.lineCap = 'round'; ctx.lineWidth = w;
-    ctx.strokeStyle = rgba(col, 0.2); ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.2832); ctx.stroke();
-    ctx.strokeStyle = rgba(col, 0.95); ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + prog * 6.2832); ctx.stroke();
+    ctx.strokeStyle = rgba(col, 0.2); ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.stroke();
+    ctx.strokeStyle = rgba(col, 0.95); ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + prog * TAU); ctx.stroke();
   }
+  // small orbs: flat and crisp, sized like Thinking Orbs (4 dots per px, background 1)
   function drawOrb(el, t) {
     const s = setupCanvas(el); if (!s) return;
     const [ctx, size] = s;
-    const mode = ORB_MODE[el.dataset.state] || 'idle', prog = progressOf(el), ring = prog !== null && prog < 1;
-    const pts = mode === 'background' ? FIB.bg : size < 26 ? FIB.s : size < 60 ? FIB.m : FIB.l;
-    const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
-    const R = size * (ring ? 0.3 : 0.42), cx = size / 2, cy = size / 2;
-    const F = orbFrame(mode, t);
-    const col = mode === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : el._col;
-    const dot = (size < 26 ? 0.66 : size < 60 ? 0.95 : 1.5) * (ring ? 0.85 : 1), gain = size < 26 ? 1.35 : 1;
-    for (const p of pts) {
-      const [x, y, z] = rot(p, F);
-      const [b, rm] = shade(mode, p, x, y, z, t, F, amp);
-      if (b < 0.02) continue;
-      ctx.fillStyle = rgba(col, b * gain);
-      ctx.beginPath(); ctx.arc(cx + x * R, cy + y * R, dot * (0.5 + 0.8 * (z + 1) / 2) * rm, 0, 6.2832); ctx.fill();
-    }
-    if (ring) drawRing(ctx, null, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, col);
+    const look = lookOf(el), prog = progressOf(el), ring = prog !== null && prog < 1;
+    const body = ring ? size * 0.75 : size, dens = look === 'background' ? 1 : 4;
+    const pts = pointsFor(look, Math.max(8, Math.round(body * dens)));
+    const R = body * 0.4, c = size / 2, col = colOf(el, look);
+    const rs = (body / 64) ** 0.6 * 0.72 * Math.sqrt(4 / dens), gain = size < 26 ? 1.2 : 1;
+    orbDots(el, look, t, pts, { size: body }, (i, vx, vy, vz, d, rm, a) => {
+      if (a < 0.005) return;
+      ctx.fillStyle = rgba(col, a * gain);
+      ctx.beginPath(); ctx.arc(c + vx * R, c - vy * R, Math.max(0.45, (0.5 + 1.4 * d) * rs * rm), 0, TAU); ctx.fill();
+    });
+    if (ring) drawRing(ctx, c, c, size * 0.45, Math.max(1.6, size * 0.085), prog, col);
   }
-  function sprites(el) {
-    if (el._sprites) return el._sprites;
-    const c = el._col;
+  function sprites(el, col) {
+    if (el._sprites && el._sprites.col === col) return el._sprites;
     const mk = (core, mid, midA) => {
       const cv = document.createElement('canvas'); cv.width = cv.height = 64;
       const g = cv.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-      gr.addColorStop(0, rgba(c, 1)); gr.addColorStop(core, rgba(c, core > 0.2 ? 1 : 0.7)); gr.addColorStop(mid, rgba(c, midA)); gr.addColorStop(1, rgba(c, 0));
+      gr.addColorStop(0, rgba(col, 1)); gr.addColorStop(core, rgba(col, core > 0.2 ? 1 : 0.7)); gr.addColorStop(mid, rgba(col, midA)); gr.addColorStop(1, rgba(col, 0));
       g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return cv;
     };
-    return (el._sprites = [mk(0.42, 0.55, 0.3), mk(0.22, 0.6, 0.22), mk(0.05, 0.55, 0.16)]);  // in focus, soft, out of focus
+    const s = [mk(0.42, 0.55, 0.3), mk(0.22, 0.6, 0.22), mk(0.05, 0.55, 0.16)];  // in focus, soft, out of focus
+    s.col = col;
+    return (el._sprites = s);
   }
+  const CORE = { base: 0.16, listen: 0.26, reasoning: 0.26, 'reasoning-twins': 0.26, speak: 0.22, searching: 0.2, 'searching-lighthouse': 0.2, working: 0.28, 'working-gyro': 0.28,
+    done: 0.38, failed: 0.18, rest: 0.05, cancelled: 0.05, background: 0.18, 'background-spiral': 0.18, retrying: 0.22, 'retrying-surge': 0.22, compacting: 0.24, 'compacting-squeeze': 0.24, 'compacting-fuse': 0.24, waiting: 0.14 };
+  // the home orb: the same motion, rendered with depth
   function drawHiOrb(el, t) {
     const s = setupCanvas(el); if (!s) return;
     const [ctx, size] = s;
-    const dark = isDark();
-    const mode = ORB_MODE[el.dataset.state] || 'idle', prog = mode === 'gyro' ? progressOf(el) : null;
+    const dark = isDark(), look = lookOf(el), prog = look.startsWith('working') ? progressOf(el) : null;
     const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
-    const F = orbFrame(mode, t);
-    const cx = size / 2, cy = size * 0.46, R = size * 0.34, f = 3.2;
-    const col = mode === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : el._col;
+    const cx = size / 2, cy = size * 0.46, R = size * 0.34, f = 3.2, col = colOf(el, look);
     // floor: a soft contact shadow (light) or faint reflection (dark)
     const fy = cy + R * 1.42, fg = ctx.createRadialGradient(cx, fy, 0, cx, fy, R * 0.95);
     fg.addColorStop(0, rgba(dark ? col : [0, 0, 0], dark ? 0.1 : 0.16)); fg.addColorStop(1, rgba(dark ? col : [0, 0, 0], 0));
-    ctx.save(); ctx.translate(cx, fy); ctx.scale(1, 0.16); ctx.translate(-cx, -fy); ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(cx, fy, R * 0.95, 0, 6.2832); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.translate(cx, fy); ctx.scale(1, 0.16); ctx.translate(-cx, -fy); ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(cx, fy, R * 0.95, 0, TAU); ctx.fill(); ctx.restore();
     // core light
-    const coreA = ({ idle: 0.16, listen: 0.26, reason: 0.3, speak: 0.22 + amp * 0.35, search: 0.2, gyro: 0.28, done: 0.38, lighthouse: 0.2, rest: 0.05, background: 0.18 })[mode] * (dark ? 1 : 0.45);
+    const coreA = ((CORE[look] || 0.16) + (look === 'speak' ? amp * 0.35 : 0)) * (dark ? 1 : 0.45);
     const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.95);
     cg.addColorStop(0, rgba(col, coreA)); cg.addColorStop(1, rgba(col, 0));
-    ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, R * 0.95, 0, 6.2832); ctx.fill();
-    // points, back to front, with perspective and depth of field
-    const list = [];
-    for (const p of mode === 'background' ? FIB.hibg : FIB.hi) {
-      const [x, y, z] = rot(p, F);
-      let [b, rm] = shade(mode, p, x, y, z, t, F, amp);
-      b += (dark ? 0.24 : 0.14) * Math.pow(1 - Math.abs(z), 4);          // fresnel: the glass edge catches light
-      if (prog !== null && Math.atan2(p[0], p[2]) / 6.2832 + 0.5 < prog) b = Math.max(b, 0.32 + 0.6 * (z + 1) / 2);  // task progress fills the sphere
-      if (b < 0.015) continue;
-      const k = f / (f - z);
-      list.push([z, cx + x * R * k, cy + y * R * k, b, rm * k]);
-    }
+    ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, R * 0.95, 0, TAU); ctx.fill();
+    // points, back to front, with perspective, a key light from the top left and depth of field
+    const pts = pointsFor(look, look === 'background' ? 220 : 1100), list = [];
+    orbDots(el, look, t, pts, { size, backA: 0.12, spread: 0.014 }, (i, vx, vy, vz, d, rm, a, g) => {
+      const key = Math.max(0, -0.55 * vx + 0.6 * vy + 0.6 * vz);
+      let b = a * ((0.32 + 0.9 * Math.pow(key, 1.15)) * (1 - g) + g);
+      b += (dark ? 0.22 : 0.13) * Math.pow(1 - Math.abs(vz), 4) * (a > 0.06 ? 1 : 0.5);   // fresnel: the glass edge catches light
+      if (prog !== null) { const p = pts[i]; if (Math.atan2(p[0], p[2]) / TAU + 0.5 < prog) b = Math.max(b, 0.3 + 0.6 * d); else b *= 0.5 + 0.5 * g; }  // task progress fills the sphere
+      if (b < 0.015) return;
+      const k = f / (f - vz);
+      list.push([vz, cx + vx * R * k, cy - vy * R * k, b, rm * k * (look === 'background' ? 1.9 : 1)]);
+    });
     list.sort((a, b) => a[0] - b[0]);
-    const spr = sprites(el), base = size * 0.0088;
+    const spr = sprites(el, col), base = size * 0.0088;
     for (const [z, px, py, b, rm] of list) {
       const lvl = z < -0.35 ? 2 : z < 0.2 ? 1 : 0;
       const r = base * (0.55 + 0.75 * (z + 1) / 2) * rm * (lvl === 2 ? 2.3 : lvl === 1 ? 1.55 : 1.25);
@@ -1826,48 +2036,59 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     ctx.globalAlpha = 1;
     // glass shell: faint outline and a specular highlight at the top left
     ctx.lineWidth = 1; ctx.strokeStyle = rgba(col, dark ? 0.07 : 0.12);
-    ctx.beginPath(); ctx.arc(cx, cy, R * 1.12, 0, 6.2832); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, R * 1.12, 0, TAU); ctx.stroke();
     const hx = cx - R * 0.48, hy = cy - R * 0.55, hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, R * 0.6);
     hg.addColorStop(0, `rgba(255,255,255,${dark ? 0.1 : 0.55})`); hg.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, R * 0.6, 0, 6.2832); ctx.fill();
-    if (prog !== null && prog < 1) drawRing(ctx, null, cx, cy, R * 1.24, 2, prog, col);
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, R * 0.6, 0, TAU); ctx.fill();
+    if (prog !== null && prog < 1) drawRing(ctx, cx, cy, R * 1.24, 2, prog, col);
   }
   let lastOrb = 0;
   function tickOrbs(now) {
-    const still = reducedMotion(), small = now - lastOrb >= 33;
+    const still = reducedMotion(), small = now - lastOrb >= 33, ts = new Map();
     if (small) lastOrb = now;
     orbs.forEach(o => {
       if (!o.isConnected) { orbs.delete(o); return; }
-      if (o.offsetParent === null || (!o._hi && !small)) return;
-      const key = o.dataset.state + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth;
-      if (still && o._key === key) return;   // reduced motion: draw only on change
+      if (o.offsetParent === null || ((!o._hi || o.clientWidth < 200) && !small)) return;
+      const look = lookOf(o), key = look + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth;
+      // a state just entered starts its own clock from zero (Complete glows once on entry)
+      if (o._look !== look) { o._look = look; if (look === 'done' || look === 'failed') clocks.delete(look); }
+      if (still && o._key === key) return;   // reduced motion: draw only on change, on a fixed frame
       o._key = key;
-      drawAnyOrb(o, still ? 2 : now / 1000);
+      if (!ts.has(look)) ts.set(look, still ? 1500 : orbClock(look, now));
+      drawAnyOrb(o, ts.get(look));
     });
   }
 
   /* ── Pip ─────────────────────────────────────────────────────── */
   const PIP_STATES = {
-    ready: ['Ready', 'A slowly turning sphere of light.'],
+    ready: ['Ready', 'Turns slowly; the back of the sphere fades away.'],
     listening: ['Listening', 'Ripples spread from the centre with your voice.'],
-    thinking: ['Thinking', 'Dims; one bright point wanders while it reasons.'],
+    thinking: ['Thinking', 'A spark walks from point to point, trailing light.'],
     speaking: ['Speaking', 'Front points swell with each word.'],
-    searching: ['Searching', 'A bright patch sweeps the surface.'],
-    working: ['Working', 'Spins on a gyro axis and fills as the task progresses.'],
+    searching: ['Searching', 'A lens hops across the face, magnifying what it passes.'],
+    working: ['Working', 'A ring of light runs down the sphere; it fills as the task progresses.'],
+    asking: ['Asking', 'A lighthouse beam turns until you review and answer.'],
+    waiting: ['Waiting', 'A comet circles while a service makes Pip wait.'],
+    retrying: ['Retrying', 'Turns, brakes and springs back, then tries again.'],
+    compacting: ['Compacting', 'A line sweeps across, packing the points in.'],
     complete: ['Complete', 'Glows green once, then settles.'],
-    asking: ['Asking', 'A lighthouse beam turns, waiting for your yes.'],
-    resting: ['Resting', 'Dim and still.'],
+    failed: ['Failed', 'Turns red and slows. The reason is always written beside it.'],
+    cancelled: ['Cancelled', 'Dims. Pip says what did and didn’t happen.'],
+    resting: ['Resting', 'Dim and almost still.'],
   };
   const pipHome = $('#pipHome');
   pipHome.innerHTML = '<canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>';
   $$('.dotorb').forEach(o => mountOrb(o));
-  let pipNow = 'ready', ampTimer = null;
-  function setPip(state) {
-    pipNow = state;
+  let pipNow = 'ready', pipLabel = '', ampTimer = null, pipBack = null;
+  // label: what Pip is doing right now, in words ("searching Documents"), shown under the orb
+  function setPip(state, label = '') {
+    pipNow = state; pipLabel = label;
+    clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
-    pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase());
-    $('#pipState').textContent = 'Pip · ' + name.toLowerCase();
+    pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase() + (label ? ', ' + label : ''));
+    $('#pipState').textContent = 'Pip · ' + (label || name.toLowerCase());
+    $('#micInd').hidden = state !== 'listening';
     if (typeof syncTaskOrbs === 'function') syncTaskOrbs(); else $('#pipBtn').setAttribute('aria-label', 'Pip: ' + name + '. Show home');
     $$('.pip-card').forEach(c => c.setAttribute('aria-pressed', c.dataset.state === state));
     clearInterval(ampTimer);
@@ -1876,14 +2097,20 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       ampTimer = setInterval(() => { a = a * 0.5 + Math.random() * 0.5; [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => p.style.setProperty('--amp', a.toFixed(2))); }, 110);
     } else [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => p.style.setProperty('--amp', '0'));
   }
+  // an outcome state (complete, failed, cancelled, waiting) settles back to Ready on its own
+  function settlePip(state, label, ms) { setPip(state, label); pipBack = setTimeout(() => { if (pipNow === state) setPip('ready'); }, ms); }
 
+  const ORB_GALLERY = [['ready', '', 'Ready'], ['working', '', 'Working'], ['working', 'gyro', 'Working', ' · Gyro'], ['thinking', '', 'Reasoning'], ['thinking', 'twins', 'Reasoning', ' · Twins'],
+    ['searching', '', 'Searching'], ['asking', '', 'Asking', ' · Lighthouse'], ['waiting', '', 'Waiting'], ['background', '', 'Background tasks'], ['background', 'spiral', 'Background', ' · Spiral'],
+    ['retrying', '', 'Retrying'], ['retrying', 'surge', 'Retrying', ' · Surge'], ['compacting', '', 'Compacting'], ['compacting', 'squeeze', 'Compacting', ' · Squeeze'], ['compacting', 'fuse', 'Compacting', ' · Fuse'],
+    ['listening', '', 'Listening'], ['speaking', '', 'Speaking'], ['failed', '', 'Failed']];
   function buildPipCards() {
     if ($('#pipStates').children.length) return;
     $('#pipStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n, d]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b><small>${d}</small></button>`).join('');
     $$('#pipStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
-    $('#orbTiles').innerHTML = [['ready', 'Ready', ''], ['working', 'Working', ' · Gyro'], ['thinking', 'Reasoning', ''], ['searching', 'Searching', ''], ['asking', 'Waiting for you', ' · Lighthouse'], ['listening', 'Listening', ''], ['speaking', 'Speaking', ''], ['background', 'Background tasks', '']]
-      .map(([k, n, v]) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}" aria-hidden="true"></canvas></div><span>${n}<small>${v}</small></span></div>`).join('');
+    $('#orbTiles').innerHTML = ORB_GALLERY
+      .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
@@ -1939,7 +2166,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   const cardName = el => el.getAttribute('aria-label');
   const peekLine = c => ({
     L0: 'Quarterly report.xlsx · 2 more', L1: 'Next: 10:00 Design review',
-    R0: `Slides from my notes · ${typeof taskPct === 'number' ? taskPct : 40} %`, R1: 'Battery 64 % · 212 GB free',
+    R0: `Slides from my notes · ${$('.widget[data-slot="R0"]').dataset.status || '40 %'}`, R1: 'Battery 64 % · 212 GB free',
   })[c.dataset.slot] || '';
   function targetAt(el, x, y) {
     return widgetEls.find(c => {
@@ -2163,9 +2390,19 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     syncTaskOrbs();
     $('#taskBar').style.width = taskPct + '%';
     $('#taskBar').parentElement.setAttribute('aria-valuenow', taskPct);
-    $('#taskLine').textContent = taskPct < 70 ? 'Building the outline' : taskPct < 100 ? 'Designing 12 slides' : 'Done. Saved to Documents.';
-    if (taskPct >= 100) { $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete'; $('#taskStop').disabled = true; }
+    const line = taskPct < 70 ? 'Building the outline' : taskPct < 100 ? 'Designing 12 slides' : 'Done. Saved to Documents.';
+    if ($('#taskLine').textContent !== line) $('#taskLine').textContent = line;   // a status region: speak only on change
+    $('.widget[data-slot="R0"]').dataset.status = taskPct >= 100 ? 'done' : taskPct + ' %';
+    if (taskPct >= 100) {
+      $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete';
+      $('#taskStop').hidden = true; $('#taskOut').hidden = false;
+      files.unshift({ name: 'Slides from my notes.pdf', mod: 'Just now', size: '4.2 MB' }); if (fsel >= 0) fsel++; renderFiles();
+      layoutHome();
+    }
   }, 2500);
+  const showOutput = () => { openApp('files'); fsel = files.findIndex(f => f.name === 'Slides from my notes.pdf'); renderFiles(); };
+  $('#taskOpen').addEventListener('click', () => { showOutput(); toast('Opening "Slides from my notes.pdf"', null); });
+  $('#taskShow').addEventListener('click', showOutput);
   // the menu bar and dock orbs carry the running task's progress as a ring
   let taskLive = true;
   function syncTaskOrbs() {
@@ -2180,8 +2417,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   syncTaskOrbs();
   $('#taskStop').addEventListener('click', () => {
     clearInterval(taskTimer);
-    $('#taskLine').textContent = 'Stopped. Nothing was changed.';
-    $('.widget[data-slot="R0"] .dotorb').dataset.state = 'resting';
+    $('#taskLine').textContent = taskPct < 70 ? `Stopped at ${taskPct} %. Nothing was saved.` : `Stopped at ${taskPct} %. The outline was kept in Documents; no slides were made.`;
+    $('.widget[data-slot="R0"]').dataset.status = 'stopped';
+    $('.widget[data-slot="R0"] .dotorb').dataset.state = 'cancelled';
     $('#taskStop').disabled = true;
     taskLive = false; syncTaskOrbs();
   });
@@ -2519,6 +2757,19 @@ void main(){
     if ((m = s.match(/^(?:switch to |use |change to )?(?:the )?(matte|tidal|aurora|ember)(?: mood)?$/))) return done('Switched. Drag the cards together to see the surfaces fuse.', [ACT.plasma(m[1])]);
     if ((m = s.match(/^(?:make (?:it|the surfaces) |use )?(water|gel|honey|solid)(?: surfaces)?$/))) return done('Changed how the surfaces move.', [ACT.plasma(null, m[1])]);
     if (/^(show )?(home|desktop)$/.test(s)) return done('Home.', [ACT.home()]);
+    // changes to files never run straight away: Pip shows a review card naming the file and the effect
+    if ((m = s.match(/^(?:delete|remove|trash|throw away|bin) (?:the )?(?:file )?(.+)$/)) || (m = s.match(/^move (?:the )?(?:file )?(.+?) (?:to|into) (?:the )?(?:bin|trash)$/))) {
+      const q = m[1].replace(/["“”']/g, '').trim(), f = files.find(x => x.name.toLowerCase() === q) || files.find(x => x.name.toLowerCase().includes(q));
+      if (f) return { review: f };
+      return { fail: `I can’t find a file called “${q}” in Documents, so nothing was changed.`, label: 'file not found', fixes: [['Open Files', () => openApp('files')], [`Search for “${q}”`, () => openSearch(q)]] };
+    }
+    if ((m = s.match(/^(?:find|search for|search|look for|where is|where's) (?:my |the )?(.+?)(?: files?)?$/))) return { search: m[1].replace(/["“”']/g, '').trim() };
+    if ((m = s.match(/^(?:open|launch|start|run) (?:the |my )?(?:app )?([a-z0-9][\w .+-]{1,30})$/))) {
+      const a = APPS.find(x => x.name.toLowerCase() === m[1] || x.id === m[1]);
+      if (a) { const ok = a.win || a.id === 'settings'; openApp(a.id); return done(ok ? 'Here you go.' : 'That app isn’t part of this prototype yet.', ok ? ['Opened ' + a.name] : []); }
+      const name = m[1].replace(/^./, c => c.toUpperCase());
+      return { fail: `I couldn’t find an app called “${name}” on this PC. Nothing was opened.`, label: 'app not found', fixes: [[`Search for “${name}”`, () => openSearch(m[1])], ['Show all apps', () => setTimeout(() => openPop('six'), 0)]] };
+    }
     if (/(calendar|schedule|meetings?|today)/.test(s) && s.length < 60) return done('Two things today: the design review at 10:00, then a call with Arif at 14:30.', []);
     if (/^(what can you do|help|what do you do)$/.test(s)) return done('I can open, close and snap windows, change settings like dark mode or night light, and switch the plasma mood. Ask in plain words, or tap the mic and talk.', []);
     return null;
@@ -2529,15 +2780,15 @@ ${sampleTools ? 'You can operate the prototype with the tools provided (open, cl
 For anything else (questions, writing help, explanations), answer helpfully and briefly.
 Current prototype state: ${stateSummary()}`;
   function toolsFor(m) {
-    const wrap = fn => (input) => { try { const r = fn(input || {}); actChip(m, r); return r; } catch (e) { actChip(m, String(e.message || e), true); throw e; } };
+    const wrap = (label, fn) => (input) => { setPip('working', label); try { const r = fn(input || {}); actChip(m, r); return r; } catch (e) { actChip(m, String(e.message || e), true); throw e; } };
     const appEnum = { type: 'string', enum: ['files', 'terminal', 'guide'] };
     return [
-      { name: 'open_app', description: 'Open an app window (files, terminal, guide = the design guide). Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap(i => ACT.open(String(i.app))) },
-      { name: 'close_app', description: 'Close an app window. Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap(i => ACT.close(String(i.app))) },
-      { name: 'snap_window', description: 'Open if needed and snap an app window to a screen zone.', inputSchema: { type: 'object', properties: { app: appEnum, zone: { type: 'string', enum: Object.keys(ZONES) } }, required: ['app', 'zone'] }, execute: wrap(i => ACT.snap(String(i.app), String(i.zone))) },
-      { name: 'set_setting', description: 'Turn a system setting on or off.', inputSchema: { type: 'object', properties: { setting: { type: 'string', enum: ['dark_mode', 'night_light', 'focus', 'touch_mode', 'reduce_motion', 'reduce_transparency', 'more_contrast'] }, on: { type: 'boolean' } }, required: ['setting', 'on'] }, execute: wrap(i => ACT.setting(String(i.setting), !!i.on)) },
-      { name: 'set_plasma', description: 'Change the plasma clay surfaces: mood (matte, tidal, aurora, ember) and/or viscosity (water, gel, honey, solid).', inputSchema: { type: 'object', properties: { mood: { type: 'string', enum: Object.keys(MOODS) }, viscosity: { type: 'string', enum: Object.keys(VISC) } } }, execute: wrap(i => ACT.plasma(i.mood && String(i.mood), i.viscosity && String(i.viscosity))) },
-      { name: 'show_home', description: 'Minimize all windows to show the home screen with this conversation.', execute: wrap(() => ACT.home()) },
+      { name: 'open_app', description: 'Open an app window (files, terminal, guide = the design guide). Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('opening a window', i => ACT.open(String(i.app))) },
+      { name: 'close_app', description: 'Close an app window. Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('closing a window', i => ACT.close(String(i.app))) },
+      { name: 'snap_window', description: 'Open if needed and snap an app window to a screen zone.', inputSchema: { type: 'object', properties: { app: appEnum, zone: { type: 'string', enum: Object.keys(ZONES) } }, required: ['app', 'zone'] }, execute: wrap('arranging windows', i => ACT.snap(String(i.app), String(i.zone))) },
+      { name: 'set_setting', description: 'Turn a system setting on or off.', inputSchema: { type: 'object', properties: { setting: { type: 'string', enum: ['dark_mode', 'night_light', 'focus', 'touch_mode', 'reduce_motion', 'reduce_transparency', 'more_contrast'] }, on: { type: 'boolean' } }, required: ['setting', 'on'] }, execute: wrap('changing a setting', i => ACT.setting(String(i.setting), !!i.on)) },
+      { name: 'set_plasma', description: 'Change the plasma clay surfaces: mood (matte, tidal, aurora, ember) and/or viscosity (water, gel, honey, solid).', inputSchema: { type: 'object', properties: { mood: { type: 'string', enum: Object.keys(MOODS) }, viscosity: { type: 'string', enum: Object.keys(VISC) } } }, execute: wrap('changing the surfaces', i => ACT.plasma(i.mood && String(i.mood), i.viscosity && String(i.viscosity))) },
+      { name: 'show_home', description: 'Minimize all windows to show the home screen with this conversation.', execute: wrap('showing home', () => ACT.home()) },
     ];
   }
   const ERR = {
@@ -2551,6 +2802,32 @@ Current prototype state: ${stateSummary()}`;
     $('#sendBtn').innerHTML = icon(on ? 'stop' : 'send');
     $('#sendBtn').setAttribute('aria-label', on ? 'Stop' : 'Send');
   }
+  const NOTE = { local: ['monitor', 'Handled on this device'], cloud: ['globe', 'Answered by Claude, in the cloud'] };
+  const note = (m, k) => { if (!$('.note', m)) m.insertAdjacentHTML('beforeend', `<span class="note">${icon(NOTE[k][0], 'i')}${NOTE[k][1]}</span>`); };
+  // recovery chips: the next useful step after a failure, never a dead end
+  function fixChips(m, fixes) {
+    if (!fixes || !fixes.length) return;
+    const box = document.createElement('div'); box.className = 'fixes';
+    fixes.forEach(([label, run]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sugg'; b.textContent = label; b.onclick = run; box.append(b); });
+    m.insertBefore(box, $('.acts', m).nextSibling);
+  }
+  function reviewCard(m, f) {
+    return new Promise(res => {
+      const box = document.createElement('div');
+      box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Review before Pip acts');
+      box.innerHTML = `<div class="rv-head">${icon('info', 'i sm')}Review before I do this</div>
+        <div class="rv-item">${fileIcon(f.name, 30)}<span><b></b><small>Documents · ${f.size} · changed ${f.mod}</small></span></div>
+        <ul><li>Moves this one file to the Bin. Nothing else changes.</li><li>You can put it back from the Bin for 30 days.</li></ul>
+        <div class="rv-btns"><button type="button" class="btn btn-danger sm">Move to Bin</button><button type="button" class="btn btn-secondary sm">Cancel</button></div>`;
+      $('b', box).textContent = f.name;
+      m.insertBefore(box, $('.acts', m));
+      const [yes, no] = $$('.rv-btns button', box);
+      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; res(ok); };
+      yes.onclick = () => end(true); no.onclick = () => end(false);
+      thread.scrollTop = thread.scrollHeight;
+    });
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));
   async function send(text, viaVoice) {
     text = text.trim(); if (!text) return;
     if (busy) busy.abort();
@@ -2558,45 +2835,90 @@ Current prototype state: ${stateSummary()}`;
     const m = addMsg('pip', 'Thinking…');
     const txt = $('.txt', m);
     txt.classList.add('wait');
-    setPip('thinking');
-    let reply = '';
-    let local = null;
-    try { local = localIntent(text); } catch (e) { local = { reply: "That didn't work. " + (e.message || ''), acts: [] }; }
-    if (local) {
-      await new Promise(r => setTimeout(r, 380));
+    let reply = '', local = null, outcome = 'complete', label = '', fixes = null;
+    try { local = localIntent(text); } catch (e) { local = { fail: "That didn't work. " + (e.message || ''), label: 'couldn’t do that' }; }
+    setPip('thinking', local ? 'on this device' : sample ? 'asking Claude' : '');
+    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; };
+    if (local && local.review) {
+      await wait(300);
+      note(m, 'local');
+      say('This changes your files, so here is exactly what will happen.');
+      setPip('asking', 'waiting for your review');
+      const f = local.review;
+      if (await reviewCard(m, f)) {
+        const at = files.indexOf(f);
+        if (at >= 0) { files.splice(at, 1); if (fsel >= at) fsel = -1; binCount++; renderFiles(); }
+        actChip(m, `Moved “${f.name}” to Bin`);
+        reply = 'Done. It’s in the Bin if you want it back.';
+        toast(`Moved "${f.name}" to Bin`, () => { files.splice(Math.max(0, at), 0, f); binCount--; renderFiles(); });
+      } else { reply = 'Cancelled. Nothing was changed.'; outcome = 'cancelled'; }
+    } else if (local && local.search) {
+      const q = local.search, words = q.toLowerCase().split(/[\s.]+/).filter(w => w.length > 2);
+      setPip('searching', 'searching Documents');
+      await wait(1100);
+      note(m, 'local');
+      const hits = files.filter(f => words.some(w => f.name.toLowerCase().includes(w)));
+      if (hits.length) {
+        reply = `Found ${hits.length} in Documents.`;
+        fixes = hits.slice(0, 4).map(f => [f.name, () => { openApp('files'); fsel = files.indexOf(f); renderFiles(); }]);
+      } else {
+        reply = `Nothing in Documents matches “${q}”.`;
+        fixes = [['Search everywhere', () => openSearch(q)]];
+      }
+    } else if (local && local.fail) {
+      await wait(380);
+      note(m, 'local');
+      reply = local.fail; outcome = 'failed'; label = local.label; fixes = local.fixes;
+    } else if (local) {
+      await wait(380);
       local.acts.forEach(a => actChip(m, a));
       reply = local.reply;
-      $('.note', m) || m.insertAdjacentHTML('beforeend', '<span class="note">Handled on this device</span>');
+      note(m, 'local');
     } else if (sample) {
       const ctl = new AbortController(); busy = ctl; setBusy(true);
+      if (turns.length >= 12) { setPip('compacting', 'making room · older messages'); await wait(700); setPip('thinking', 'asking Claude'); }
       turns.push({ role: 'user', content: text });
-      try {
-        const opts = { signal: ctl.signal, cache: false, modelTier: 'quick', onText: ({ text: t }) => { txt.classList.remove('wait'); txt.textContent = t; if (pipNow === 'thinking') setPip('speaking'); thread.scrollTop = thread.scrollHeight; } };
-        if (sampleTools) { delete opts.cache; opts.tools = toolsFor(m); }
-        const res = await sample([{ role: 'user', content: RULES() }, ...turns.slice(-12)], opts);
-        reply = res.text;
-        turns.push({ role: 'assistant', content: reply });
-      } catch (e) {
-        turns.pop();
-        const code = e && e.code;
-        if (code === 'cancelled') reply = (e.text || '') + (e.text ? ' ' : '') + '(stopped)';
-        else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].includes(code)) {
-          sample = null; reply = "I can't use Claude in this view, so here I only handle simple commands like “open files” or “turn on night light”.";
-          $('#aiNote').textContent = 'Simple commands run on this device.';
-        } else if (code === 'tools_unavailable') { sampleTools = false; reply = 'I can’t operate the prototype from this view. Ask again and I’ll answer without tools.'; }
-        else reply = (code === 'refused' ? '' : (e.text ? e.text + ' ' : '')) + (ERR[code] || 'Something interrupted me. Ask again when you’re ready.');
-      } finally { busy = null; setBusy(false); }
+      for (let attempt = 0; ; attempt++) {
+        try {
+          const opts = { signal: ctl.signal, cache: false, modelTier: 'quick', onText: ({ text: t }) => { say(t); if (pipNow === 'thinking' || pipNow === 'working' || pipNow === 'retrying') setPip('speaking'); } };
+          if (sampleTools) { delete opts.cache; opts.tools = toolsFor(m); }
+          const res = await sample([{ role: 'user', content: RULES() }, ...turns.slice(-12)], opts);
+          reply = res.text;
+          turns.push({ role: 'assistant', content: reply });
+          note(m, 'cloud');
+        } catch (e) {
+          const code = e && e.code;
+          // one quiet retry for a dropped connection, shown as Retrying
+          if (!code && attempt === 0 && !ctl.signal.aborted) { setPip('retrying', 'connection dropped · trying again'); await wait(1200); continue; }
+          turns.pop();
+          const did = $$('.act:not(.warn)', m).length;
+          if (code === 'cancelled') {
+            reply = (e.text ? e.text + ' ' : '') + 'Stopped. ' + (did ? `${did} ${did === 1 ? 'action' : 'actions'} had already run and stay as they are.` : 'Nothing was changed.');
+            outcome = 'cancelled';
+          } else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].includes(code)) {
+            sample = null; reply = "I can't use Claude in this view, so here I only handle simple commands like “open files” or “turn on night light”.";
+            $('#aiNote').textContent = 'Simple commands run on this device.';
+            outcome = 'failed'; label = 'Claude unavailable here';
+          } else if (code === 'tools_unavailable') { sampleTools = false; reply = 'I can’t operate the prototype from this view. Ask again and I’ll answer without tools.'; outcome = 'failed'; label = 'can’t use tools here'; fixes = [['Ask again', () => send(text, false)]]; }
+          else if (code === 'rate_limited') { reply = ERR.rate_limited; outcome = 'waiting'; label = 'rate limited · try in a minute'; fixes = [['Ask again', () => send(text, false)]]; }
+          else {
+            reply = (code === 'refused' ? '' : (e.text ? e.text + ' ' : '')) + (ERR[code] || 'Something interrupted me. Ask again when you’re ready.');
+            outcome = code === 'refused' ? 'complete' : 'failed'; label = code === 'session_expired' ? 'signed out of Claude' : 'didn’t finish';
+            if (outcome === 'failed') fixes = [['Ask again', () => send(text, false)]];
+          }
+        }
+        break;
+      }
+      busy = null; setBusy(false);
     } else {
-      await new Promise(r => setTimeout(r, 380));
+      await wait(380);
       reply = 'In this copy I only understand simple commands, like “open files”, “turn on dark mode” or “switch to the ember mood”. In SIX I’d answer this properly.';
     }
-    txt.classList.remove('wait');
-    txt.textContent = reply;
-    thread.scrollTop = thread.scrollHeight;
+    say(reply);
+    fixChips(m, fixes);
     if (topVisible() && reply) toast('Pip: ' + reply.slice(0, 120) + (reply.length > 120 ? '…' : ''), null);
-    if (viaVoice && $('#speakToggle').checked && speak(reply)) return;
-    setPip('complete');
-    setTimeout(() => { if (pipNow === 'complete') setPip('ready'); }, 1400);
+    if (outcome === 'complete' && viaVoice && $('#speakToggle').checked && speak(reply)) return;
+    settlePip(outcome, label, { complete: 1400, cancelled: 2200, failed: 4000, waiting: 9000 }[outcome]);
   }
   function speak(text) {
     try {

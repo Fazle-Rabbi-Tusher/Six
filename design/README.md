@@ -12,7 +12,7 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Ask Pip to "delete interview notes" to see a review card, or "open photoshop" to see a failure with recovery. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -33,7 +33,8 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The home screen: Pip, chat, voice, cards, Pip's states |
+| [14 · Home](guide/14-home-assistant.md) | The home screen: Pip, chat, voice, cards, review cards, failures and recovery, Pip's states |
+| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, ten tasks, targets, and the order to build SIX in |
 
 ## Tokens
 
@@ -64,6 +65,16 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
 
-| Pip's small orb, every state |
+| Pip asks for review before changing a file | A failure with recovery chips |
+|---|---|
+| ![](screens/pip-review.png) | ![](screens/pip-failed.png) |
+
+| Pip's small orb, every state and variant |
 |---|
 | ![](screens/small-orbs.png) |
+
+## Credits
+
+Pip's orb motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh
+([github.com/yogesharc/thinking-orbs](https://github.com/yogesharc/thinking-orbs), MIT licence).
+System glyphs are [Phosphor](https://phosphoricons.com) (MIT).
