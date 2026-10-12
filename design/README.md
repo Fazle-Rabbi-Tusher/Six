@@ -57,4 +57,4 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 
 | Voice | Phone width | Design guide app |
 |---|---|---|
-| ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/desktop-dark-orb.png) |
+| ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/guide-pip.png) |
