@@ -12,7 +12,7 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Ask Pip to "delete interview notes" to see a review card, or "open photoshop" to see a failure with recovery. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Click **Add widgets** (or ask Pip to "make a widget that counts down to my exam on 14 December") to add or design widgets. Ask Pip to "delete interview notes" to see a review card, or "open photoshop" to see a failure with recovery. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -33,7 +33,7 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The home screen: Pip, chat, voice, cards, review cards, failures and recovery, Pip's states |
+| [14 · Home](guide/14-home-assistant.md) | The home screen: Pip, chat, voice, widgets (gallery and widgets Pip makes), stacks, review cards, failures and recovery, Pip's states |
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, ten tasks, targets, and the order to build SIX in |
 
 ## Tokens
@@ -68,6 +68,10 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 | Pip asks for review before changing a file | A failure with recovery chips |
 |---|---|
 | ![](screens/pip-review.png) | ![](screens/pip-failed.png) |
+
+| Widget gallery | Clock and Now playing added | Pip designs a widget |
+|---|---|---|
+| ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/widget-pip.png) |
 
 | Pip's small orb, every state and variant |
 |---|

@@ -400,7 +400,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 #thread.compact { max-height: 190px; }
 #thread.compact:has(.review:not(.done)) { max-height: min(44vh, 340px); }  /* a review is never cut off */
 #thread.compact .msg:not(.latest) { display: none; }
-.thread-head { display: flex; align-items: center; gap: 8px; position: sticky; top: -12px; z-index: 1; margin: -4px 0 -2px; }
+.thread-head { display: flex; align-items: center; gap: 8px; position: sticky; top: -12px; z-index: 1; margin: -4px -6px -2px; padding: 4px 6px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--c-surface) 80%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .thread-head button { border: 0; background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); color: var(--c-text-2); font: 600 12px/1 var(--font-ui); height: 26px; padding: 0 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
 .thread-head button:hover { color: var(--c-text); background: var(--c-surface-3); }
 .thread-head .hide { margin-left: auto; width: 26px; padding: 0; justify-content: center; }
@@ -509,7 +509,104 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 #home.stack .peek { display: none; }
 .widget:focus-visible { outline-offset: 4px; border-radius: var(--radius-xl); }
 .widget h3 { margin: 0; font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-2); display: flex; justify-content: space-between; align-items: center; }
-.widget h3 small { font: var(--text-caption); text-transform: none; letter-spacing: 0; color: var(--c-text-3); }
+.widget h3 small { font: var(--text-caption); text-transform: none; letter-spacing: 0; color: var(--c-text-3); white-space: nowrap; flex: none; margin-left: 8px; }
+.widget h3 > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* gallery widgets */
+.widget .sub { font: var(--text-caption); color: var(--c-text-3); }
+.w-clock .well, .w-timer .well, .w-weather .well, .w-music .well { padding: 14px; display: grid; gap: 10px; }
+.widget .big { font: 400 46px/1 var(--font-display); letter-spacing: -0.01em; }
+.tnum { font-variant-numeric: tabular-nums; }
+.wz { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 10px; border-top: 1px solid var(--c-line); font: var(--text-caption); color: var(--c-text-3); }
+.wz b { display: block; font: 600 16px/22px var(--font-ui); color: var(--c-text); font-variant-numeric: tabular-nums; }
+.w-weather .now { display: flex; align-items: center; gap: 14px; }
+.w-weather .deg { font: 400 46px/1 var(--font-display); }
+.w-weather .now b { display: block; font: var(--text-label); }
+.hours { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; font: var(--text-caption); color: var(--c-text-3); }
+.hours svg.i { display: block; width: 18px; height: 18px; margin: 4px auto; color: var(--c-text-2); }
+.hours b { color: var(--c-text); font-weight: 600; }
+.np { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.np b { display: block; font: var(--text-label); }
+.np span span { font: var(--text-caption); color: var(--c-text-3); }
+.art { width: 52px; height: 52px; flex: none; border-radius: 12px; display: grid; place-items: center; color: #fff; box-shadow: var(--clay-2); }
+.art svg.i { width: 24px; height: 24px; }
+.times { display: flex; justify-content: space-between; margin-top: -4px; font: var(--text-caption); color: var(--c-text-3); }
+.transport { display: flex; justify-content: center; align-items: center; gap: 14px; }
+.transport button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: var(--c-text); display: grid; place-items: center; }
+.transport button:hover { background: var(--c-surface-3); }
+.transport button.play { width: 44px; height: 44px; background: var(--c-text); color: var(--c-surface); box-shadow: var(--clay-1); }
+.transport svg.i { width: 18px; height: 18px; }
+.nrow { display: grid; gap: 2px; width: 100%; padding: 8px 12px; border: 0; background: transparent; color: var(--c-text); text-align: left; border-radius: var(--radius-md); }
+.nrow:hover { background: var(--c-surface-3); }
+.nrow span { font: var(--text-caption); color: var(--c-text-3); }
+.nrow b { font: 500 13px/18px var(--font-ui); }
+.topics { display: flex; flex-wrap: wrap; gap: 6px; }
+.w-notes textarea { display: block; width: 100%; min-height: 96px; resize: vertical; border: 0; outline: 0; background: transparent; color: var(--c-text); font: var(--text-body); padding: 12px; cursor: text; }
+.w-notes .well:focus-within { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.todo { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 38px; padding: 6px 12px; border: 0; background: transparent; color: var(--c-text); text-align: left; font: var(--text-body-sm); border-radius: var(--radius-md); }
+.todo:hover { background: var(--c-surface-3); }
+.todo svg.i { width: 18px; height: 18px; flex: none; color: var(--c-text-3); }
+.todo[aria-checked="true"] span { text-decoration: line-through; color: var(--c-text-3); }
+.todo[aria-checked="true"] svg.i { color: var(--c-accent); }
+.w-add { display: flex; padding: 2px 12px 10px 40px; }
+.w-add input { flex: 1; min-width: 0; height: 30px; border: 0; border-bottom: 1px solid var(--c-line-strong); background: transparent; color: var(--c-text); font: var(--text-body-sm); outline: 0; }
+.w-add input:focus { border-bottom-color: var(--c-focus); }
+.row-btns { display: flex; gap: 8px; }
+.w-timer .bar { width: 100%; }
+.month { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 10px; text-align: center; font: var(--text-caption); }
+.month span { height: 28px; display: grid; place-items: center; border-radius: 50%; font-variant-numeric: tabular-nums; }
+.month .dow { color: var(--c-text-3); font-weight: 600; }
+.month .today { background: var(--c-accent); color: var(--c-text-on-accent); font-weight: 700; }
+/* widgets Pip makes: drawn from a spec with the same parts */
+.wb { display: grid; }
+.wb-stat { display: grid; gap: 4px; padding: 12px 14px; }
+.wb-stat b { font: 400 40px/1 var(--font-display); }
+.wb-stat span { font: var(--text-caption); color: var(--c-text-3); }
+.wb-date { height: 34px; border: 1px solid var(--c-line-strong); border-radius: var(--radius-sm, 8px); background: var(--c-surface); color: var(--c-text); font: var(--text-body-sm); padding: 0 8px; }
+.wb-text { padding: 12px 14px; font: var(--text-body-sm); color: var(--c-text-2); white-space: pre-wrap; }
+.wb-count { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 12px; padding: 12px 14px; }
+.wb-count b { font: 400 40px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.wb-count > span:nth-of-type(1) { font: var(--text-caption); color: var(--c-text-3); }
+.wb-count .btns { display: flex; gap: 6px; }
+.wb-count .btns button { width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--c-surface-3); color: var(--c-text); display: grid; place-items: center; box-shadow: var(--clay-1); }
+.wb-count .bar { grid-column: 1 / -1; }
+.wb-prog { display: grid; gap: 6px; padding: 10px 14px; font: var(--text-caption); color: var(--c-text-2); }
+.wb-apps { display: flex; gap: 10px; padding: 12px 14px; }
+.wb-app { border: 0; padding: 0; background: transparent; border-radius: 10px; }
+.wb .stat .meta, .wb .stat b { font-variant-numeric: tabular-nums; }
+.wprev { width: min(284px, 100%); border-radius: var(--radius-lg); background: var(--c-surface); padding: 8px; box-shadow: var(--shadow-2); }
+.review.done .wprev { pointer-events: none; }
+#addWidget { position: absolute; z-index: 4; display: inline-flex; align-items: center; gap: 6px; }
+#addWidget svg.i { width: 15px; height: 15px; }
+#addWidget[hidden] { display: none; }
+#home.stack #addWidget { position: static; justify-self: start; }
+/* widget gallery */
+#galScrim { position: absolute; inset: 0; z-index: 970; background: var(--scrim); opacity: 0; transition: opacity var(--dur-base); }
+#galScrim.open { opacity: 1; }
+#gallery { position: absolute; z-index: 971; left: 50%; top: calc(var(--menubar-h) + 24px); width: min(780px, calc(100% - 32px)); max-height: calc(100% - var(--menubar-h) - var(--dock-h) - 72px); overflow: auto;
+  border-radius: var(--radius-2xl); padding: 20px; display: grid; gap: 14px; transform: translateX(-50%) translateY(-8px) scale(0.98); opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+#gallery.open { opacity: 1; transform: translateX(-50%); }
+.gal-head { display: flex; align-items: flex-start; gap: 12px; }
+.gal-head h2 { margin: 0; font: var(--text-title-lg); }
+.gal-head p { margin: 2px 0 0; font: var(--text-body-sm); color: var(--c-text-2); }
+.gal-head .iconbtn { margin-left: auto; flex: none; }
+.gal-make { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 999px; background: var(--c-surface-2); box-shadow: var(--clay-pressed); }
+.gal-make:focus-within { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.gal-make .dotorb { width: 22px; height: 22px; flex: none; color: var(--pip-line); }
+.gal-make input { flex: 1; min-width: 0; height: 36px; border: 0; outline: 0; background: transparent; color: var(--c-text); font: var(--text-body); }
+.gal-make input::placeholder { color: var(--c-text-3); }
+#galIdeas { display: flex; flex-wrap: wrap; gap: 8px; }
+#galIdeas .sugg { height: auto; min-height: 30px; padding-block: 6px; text-align: left; font: var(--text-caption); font-weight: 600; }
+.gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; }
+.gal-grid[hidden], #galMineH[hidden] { display: none; }
+.gal-tile { display: grid; grid-template-columns: 36px 1fr; align-items: center; gap: 2px 10px; padding: 12px; border-radius: var(--radius-lg); border: 1px solid var(--c-line); background: color-mix(in srgb, var(--c-surface-2) 55%, transparent); }
+.gal-tile.on { border-color: var(--c-accent); }
+.gal-tile .tile { width: 36px; height: 36px; border-radius: 10px; grid-row: span 2; }
+.gal-tile b { font: var(--text-label); }
+.gal-tile small { grid-column: 2; font: var(--text-caption); color: var(--c-text-3); }
+.gal-tile .btn { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
+#wMenu { position: absolute; z-index: 972; width: 220px; padding: 6px; border-radius: var(--radius-lg); }
+#wMenu[hidden] { display: none; }
 .wrow { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 8px 10px; border: 0; background: transparent; color: var(--c-text); text-align: left; border-radius: var(--radius-md); cursor: pointer; }
 .wrow:hover { background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); }
 .wrow .meta { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); white-space: nowrap; }
@@ -804,6 +901,28 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     <symbol id="i-clock" viewBox="0 0 256 256"><path d="M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z"/></symbol>
     <symbol id="i-chev-up" viewBox="0 0 256 256"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></symbol>
     <symbol id="i-cc" viewBox="0 0 24 24"><rect x="2.5" y="4.25" width="19" height="6.5" rx="3.25" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.75" cy="7.5" r="1.9"/><rect x="2.5" y="13.25" width="19" height="6.5" rx="3.25" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6.25" cy="16.5" r="1.9"/></symbol>
+    <symbol id="i-clock-face" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></symbol>
+    <symbol id="i-cloud-sun" viewBox="0 0 256 256"><path d="M164,72a76.2,76.2,0,0,0-20.26,2.73,55.63,55.63,0,0,0-9.41-11.54l9.51-13.57a8,8,0,1,0-13.11-9.18L121.22,54A55.9,55.9,0,0,0,96,48c-.58,0-1.16,0-1.74,0L91.37,31.71a8,8,0,1,0-15.75,2.77L78.5,50.82A56.1,56.1,0,0,0,55.23,65.67L41.61,56.14a8,8,0,1,0-9.17,13.11L46,78.77A55.55,55.55,0,0,0,40,104c0,.57,0,1.15,0,1.72L23.71,108.6a8,8,0,0,0,1.38,15.88,8.24,8.24,0,0,0,1.39-.12l16.32-2.88a55.74,55.74,0,0,0,5.86,12.42A52,52,0,0,0,84,224h80a76,76,0,0,0,0-152ZM56,104a40,40,0,0,1,72.54-23.24,76.26,76.26,0,0,0-35.62,40,52.14,52.14,0,0,0-31,4.17A40,40,0,0,1,56,104ZM164,208H84a36,36,0,1,1,4.78-71.69c-.37,2.37-.63,4.79-.77,7.23a8,8,0,0,0,16,.92,58.91,58.91,0,0,1,1.88-11.81c0-.16.09-.32.12-.48A60.06,60.06,0,1,1,164,208Z"/></symbol>
+    <symbol id="i-cloud-rain" viewBox="0 0 256 256"><path d="M158.66,196.44l-32,48a8,8,0,1,1-13.32-8.88l32-48a8,8,0,0,1,13.32,8.88ZM232,92a76.08,76.08,0,0,1-76,76H132.28l-29.62,44.44a8,8,0,1,1-13.32-8.88L113.05,168H76A52,52,0,0,1,76,64a53.26,53.26,0,0,1,8.92.76A76.08,76.08,0,0,1,232,92Zm-16,0A60.06,60.06,0,0,0,96,88.46a8,8,0,0,1-16-.92q.21-3.66.77-7.23A38.11,38.11,0,0,0,76,80a36,36,0,0,0,0,72h80A60.07,60.07,0,0,0,216,92Z"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 256 256"><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Z"/></symbol>
+    <symbol id="i-newspaper" viewBox="0 0 256 256"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></symbol>
+    <symbol id="i-note-pencil" viewBox="0 0 256 256"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></symbol>
+    <symbol id="i-list-checks" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 256 256"><path d="M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"/></symbol>
+    <symbol id="i-arrow-counter-clockwise" viewBox="0 0 256 256"><path d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 256 256"><path d="M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75ZM128,216a72.08,72.08,0,0,1-72-72c0-57.23,55.47-105,72-118,16.53,13,72,60.75,72,118A72.08,72.08,0,0,1,128,216Zm55.89-62.66a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z"/></symbol>
+    <symbol id="i-square" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Z"/></symbol>
+    <symbol id="i-check-square" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM224,48V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM208,208V48H48V208H208Z"/></symbol>
+    <symbol id="i-squares-four" viewBox="0 0 256 256"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></symbol>
+    <symbol id="i-hourglass-medium" viewBox="0 0 256 256"><path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.07,16.07,0,0,0,6.4,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16.09,16.09,0,0,0-6.35-12.77L141.27,128l52.38-39.6A16.05,16.05,0,0,0,200,75.64ZM72,40H184V75.64L178.23,80H77.33L72,76Zm56,78L98.67,96h58.4Zm56,98H72V180l48-36v24a8,8,0,0,0,16,0V144.08l48,36.28Z"/></symbol>
+    <symbol id="i-globe-hemisphere-west" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"/></symbol>
+    <symbol id="i-f-play" viewBox="0 0 256 256"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></symbol>
+    <symbol id="i-f-pause" viewBox="0 0 256 256"><path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"/></symbol>
+    <symbol id="i-f-skip-back" viewBox="0 0 256 256"><path d="M208,47.88V208.12a16,16,0,0,1-24.43,13.43L64,146.77V216a8,8,0,0,1-16,0V40a8,8,0,0,1,16,0v69.23L183.57,34.45A15.95,15.95,0,0,1,208,47.88Z"/></symbol>
+    <symbol id="i-f-skip-forward" viewBox="0 0 256 256"><path d="M208,40V216a8,8,0,0,1-16,0V146.77L72.43,221.55A15.95,15.95,0,0,1,48,208.12V47.88A15.95,15.95,0,0,1,72.43,34.45L192,109.23V40a8,8,0,0,1,16,0Z"/></symbol>
+    <symbol id="i-f-check-square" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm-34.34,77.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"/></symbol>
   </defs>
 </svg>
 
@@ -845,6 +964,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     </div>
 
     <div class="widgets" id="widgets">
+      <button type="button" class="sugg" id="addWidget" aria-haspopup="dialog"><svg class="i"><use href="#i-plus"/></svg>Add widgets</button>
       <section class="widget liquid" data-liquid="0" data-slot="L0" aria-label="Pick up where you left off">
         <h3>Pick up where you left off</h3>
         <div class="well">
@@ -1161,6 +1281,17 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   </div>
 
   <!-- Six Search -->
+  <div id="galScrim" hidden></div>
+  <div id="gallery" class="glass rim" role="dialog" aria-modal="true" aria-labelledby="galTitle" hidden>
+    <div class="gal-head"><div><h2 id="galTitle">Widgets</h2><p>Glanceable cards for home, one job each. Drag them anywhere, or onto each other to stack.</p></div><button type="button" class="iconbtn" id="galClose" aria-label="Close widgets"><svg class="i"><use href="#i-close"/></svg></button></div>
+    <form class="gal-make" id="galMake"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><input id="galAsk" aria-label="Describe a widget for Pip to make" placeholder="Describe any widget and Pip makes it…"><button type="submit" class="btn btn-primary sm">Make it</button></form>
+    <div id="galIdeas" aria-label="Ideas"></div>
+    <span class="overline">On SIX</span>
+    <div class="gal-grid" id="galGrid"></div>
+    <span class="overline" id="galMineH" hidden>Made by Pip</span>
+    <div class="gal-grid" id="galMine" hidden></div>
+  </div>
+  <div id="wMenu" class="glass" role="menu" aria-label="Widget" hidden></div>
   <div id="searchScrim"></div>
   <div id="search" class="glass rim" role="dialog" aria-label="Six Search">
     <label class="menu-search" for="q"><svg class="i"><use href="#i-search"/></svg><input id="q" placeholder="Search apps, files, settings, or type a sum" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="results"><kbd>Esc</kbd></label>
@@ -1188,6 +1319,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     <div class="msep"></div>
     <button class="mrow" role="menuitem" data-sys="settings">System Settings…</button>
     <button class="mrow" role="menuitem" data-sys="search">Six Search<kbd>Ctrl K</kbd></button>
+    <button class="mrow" role="menuitem" data-sys="widgets">Edit widgets…</button>
     <div class="msep"></div>
     <button class="mrow" role="menuitem" data-sys="sleep">Sleep</button>
     <button class="mrow" role="menuitem" data-sys="restart">Restart…</button>
@@ -1493,6 +1625,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const k = b.dataset.sys;
     if (k === 'settings') openPop('qs');
     else if (k === 'search') openSearch();
+    else if (k === 'widgets') openGallery();
     else if (k === 'about') toast('SIX · Soft Matter design prototype: Pip, plasma clay, Geist type and Phosphor icons.', null);
     else toast(b.textContent.replace(/…|Ctrl K|Six L/g, '').trim() + ' isn’t part of this prototype.', null);
   });
@@ -1556,6 +1689,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     { name: 'Show home', sub: 'Action', fx: 'Minimises every window', hint: 'Six + D', run: () => showHome(), kw: 'desktop minimize all' },
     { name: 'Snap Design guide left', sub: 'Action', fx: 'Opens it on the left half of the screen', hint: 'Six + ←', run: () => { openApp('guide'); snap('guide', 'L50'); }, kw: 'window' },
     { name: 'Snap Files right', sub: 'Action', fx: 'Opens Files on the right half of the screen', hint: 'Six + →', run: () => { openApp('files'); snap('files', 'R50'); }, kw: 'window' },
+    { name: 'Add widgets', sub: 'Action', fx: 'Opens the widget gallery', run: () => openGallery(), kw: 'widget gallery clock weather music news notes reminders timer calendar edit' },
   ];
   let results = [], sel = 0;
   function calc(q) {
@@ -2131,7 +2265,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   function layoutHome() {
     const wide = isWide();
     home.classList.toggle('stack', !wide);
-    if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); return; }
+    if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; return; }
     const pad = 24, gap = 12, sideW = 284, top = mbH() + 16;
     let yL = top, yR = top;
     const H = desk.clientHeight - dockSpace() - 8;
@@ -2149,7 +2283,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
           bumped = false;
           for (const [ox, oy, ow, oh] of taken) if (x < ox + ow && x + w > ox && y < oy + oh + gap && y + h + gap > oy) { y = oy + oh + gap; bumped = true; }
         }
-        ph.tx = x; ph.ty = y; taken.push([x, y, w, h]);
+        ph.tx = x; ph.ty = y; ph.flowY = y; ph.over = y + h > H; taken.push([x, y, w, h]);
         if (left) yL = y + h + gap; else yR = y + h + gap;
       }
       ph.tx = Math.min(Math.max(ph.tx, 0), desk.clientWidth - el.offsetWidth);
@@ -2157,7 +2291,27 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       if (!ph.init) { ph.x = ph.tx; ph.y = ph.ty; ph.init = true; }
       el.style.left = ph.x + 'px'; el.style.top = ph.y + 'px';
     });
+    // Add widgets sits at the foot of the shorter column while there is room for it
+    const add = $('#addWidget');
+    const foot = col => Math.max(top, ...widgetEls.filter(c => !c.classList.contains('stack-hidden') && sideOf(c) === col).map(c => {
+      const ph = phys.get(c), st = stackOf(c);
+      return ph.ty + c.offsetHeight + (st && st.cards[0] === c ? peekSpace(st) : 0) + gap;
+    }));
+    const fl = foot('L'), fr = foot('R'), aL = fl <= fr, ay = Math.min(fl, fr);
+    add.hidden = ay + 40 > H;
+    add.style.left = (aL ? pad : desk.clientWidth - pad - sideW) + 'px'; add.style.top = ay + 'px';
+    // a card that no longer fits its column (another card grew, or a stack sits below) goes into
+    // the stack at the foot of that column instead of overlapping it
+    if (!fitting && !tucking) {
+      const over = widgetEls.find(c => { const ph = phys.get(c); return !ph.moved && ph.over && !stackOf(c); });
+      const foot = over && footOf(sideOf(over), over);
+      if (foot) {
+        tucking = true; tuckUnder(over, foot); tucking = false;
+        toast(`No room for “${cardName(over)}”, so it went into the stack under “${cardName(foot)}”.`, null);
+      }
+    }
   }
+  let fitting = false, tucking = false;
   // Stacks, like notification stacks: drop one card on another and they stack. Under the top card,
   // previews of the next cards peek out (title + one line). A drag only ever takes one card out:
   // the top card, or the card whose preview you grab. Click a preview to bring that card to the front.
@@ -2167,7 +2321,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   const peekLine = c => ({
     L0: 'Quarterly report.xlsx · 2 more', L1: 'Next: 10:00 Design review',
     R0: `Slides from my notes · ${$('.widget[data-slot="R0"]').dataset.status || '40 %'}`, R1: 'Battery 64 % · 212 GB free',
-  })[c.dataset.slot] || '';
+  })[c.dataset.slot] || (c._peek ? c._peek() : '');
   function targetAt(el, x, y) {
     return widgetEls.find(c => {
       if (c === el || c.classList.contains('stack-hidden')) return false;
@@ -2282,7 +2436,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   // in the pop-up: click a card to bring it to the front; drag a card to pull just that one out
   stackPop.addEventListener('pointerdown', e => {
     const card = e.target.closest('.widget');
-    if (!card || e.button !== 0 || e.target.closest('button, a, input')) return;
+    if (!card || e.button !== 0 || e.target.closest('button, a, input, textarea')) return;
     e.preventDefault();
     const sx = e.clientX, sy = e.clientY;
     const done = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
@@ -2338,18 +2492,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     if (!p || e.button !== 0 || !isWide()) return;
     e.preventDefault(); beginDrag(p._card, e, true);
   });
-  widgetEls.forEach(el => {
+  function wireWidget(el) {
     el.addEventListener('dblclick', e => {   // double-click a moved card to send it back to its place
-      if (e.target.closest('button, a, input') || stackOf(el)) return;
+      if (e.target.closest('button, a, input, textarea') || stackOf(el)) return;
       phys.get(el).moved = false; layoutHome();
     });
     el.addEventListener('pointerdown', e => {
-      if (e.button !== 0 || !isWide() || e.target.closest('button, a, input') || el.classList.contains('in-pop')) return;   // pop-up cards have their own handler
+      if (e.button !== 0 || !isWide() || e.target.closest('button, a, input, textarea') || el.classList.contains('in-pop')) return;   // pop-up cards have their own handler
       e.preventDefault(); beginDrag(el, e, false);
     });
-  });
-  // keyboard alternative to dragging (WCAG 2.5.7): focus a card, Alt + arrows moves it one grid step
-  widgetEls.forEach(el => {
+    // keyboard alternative to dragging (WCAG 2.5.7): focus a card, Alt + arrows moves it one grid step
     el.tabIndex = 0;
     el.addEventListener('keydown', e => {
       const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
@@ -2361,7 +2513,445 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       ph.tx = Math.min(Math.max(Math.round((ph.tx + d[0]) / 24) * 24, 0), desk.clientWidth - el.offsetWidth);
       ph.ty = Math.min(Math.max(Math.round((ph.ty + d[1]) / 24) * 24, mbH() + 8), H - el.offsetHeight);
     });
+  }
+  widgetEls.forEach(wireWidget);
+
+  /* ── Widgets: a gallery of glanceable cards, and ones Pip makes ──
+     Every widget does one job and can be read at a glance; the few controls it has (play, check
+     off, start a timer) work in place. Widgets Pip makes are data, not code: Pip writes a small
+     spec (title, icon, up to four blocks) and SIX draws it with its own components, so a made
+     widget always looks native and can't run anything. */
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const tnow = (tz, sec) => { try { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', ...(sec ? { second: '2-digit' } : {}), timeZone: tz }); } catch { return '--:--'; } };
+  function shell(kind, title, small, body) {
+    const el = document.createElement('section');
+    el.className = 'widget liquid w-' + kind; el.dataset.liquid = '0'; el.dataset.kind = kind;
+    el.setAttribute('aria-label', title);
+    el.innerHTML = `<h3><span></span><small></small></h3>${body}`;
+    $('h3 span', el).textContent = title; $('h3 small', el).textContent = small;
+    return el;
+  }
+  const mmss = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  const TRACKS = [
+    { t: 'Night Drive', a: 'Soft Matter Sessions', len: 214, g: 'linear-gradient(135deg, #ff6b4a, #c2477f)' },
+    { t: 'Tidal', a: 'Low Orbit', len: 187, g: 'linear-gradient(135deg, #2f6bff, #39c6d4)' },
+    { t: 'Aurora Hum', a: 'Iris Choir', len: 243, g: 'linear-gradient(135deg, #7b6cff, #9ef0e0)' },
+  ];
+  const W_KINDS = {
+    recent: { name: 'Pick up where you left off', short: 'Recent', desc: 'Files and apps you used last', icon: 'file', tile: 't-sky', el: $('.widget[data-slot="L0"]') },
+    today: { name: 'Today', desc: 'Your next meetings', icon: 'calendar', tile: 't-peach', el: $('.widget[data-slot="L1"]') },
+    task: { name: 'Current task', desc: 'What Pip is working on, with Stop', icon: 'spark', tile: 't-lilac', el: $('.widget[data-slot="R0"]') },
+    device: { name: 'This device', desc: 'Battery, storage and updates', icon: 'monitor', tile: 't-mint', el: $('.widget[data-slot="R1"]') },
+    clock: {
+      name: 'Clock', desc: 'The time here and in two other cities', icon: 'clock-face', tile: 't-butter',
+      make() {
+        const el = shell('clock', 'Clock', 'Here', `<div class="well"><div class="big tnum" data-t></div><span class="sub" data-d></span>
+          <div class="wz"><div>London<b class="tnum" data-z="Europe/London"></b></div><div>New York<b class="tnum" data-z="America/New_York"></b></div></div></div>`);
+        el._tick = () => { $('[data-t]', el).textContent = tnow(); $('[data-d]', el).textContent = new Date().toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' }); };
+        el._peek = () => `${tnow()} · London ${tnow('Europe/London')}`;
+        return el;
+      },
+    },
+    weather: {
+      name: 'Weather', desc: 'Now and the next few hours', icon: 'cloud-sun', tile: 't-sky',
+      make() {
+        const hrs = [['Now', 'cloud-sun', 31], ['15:00', 'cloud-sun', 32], ['16:00', 'cloud', 31], ['17:00', 'cloud-rain', 29], ['18:00', 'cloud-rain', 28]];
+        const el = shell('weather', 'Weather', 'Dhaka · sample', `<div class="well"><div class="now"><span class="deg">31°</span><span><b>Partly cloudy</b><span class="sub">Feels like 36° · rain from 17:00</span></span></div>
+          <div class="hours">${hrs.map(([h, i, d]) => `<div>${h}${icon(i)}<b>${d}°</b></div>`).join('')}</div></div>`);
+        el._peek = () => 'Dhaka 31° · partly cloudy, rain from 17:00';
+        return el;
+      },
+    },
+    music: {
+      name: 'Now playing', short: 'Music', desc: 'Play, pause and skip without opening Music', icon: 'music', tile: 't-rose',
+      make() {
+        const el = shell('music', 'Now playing', 'Music', `<div class="well"><div class="np"><span class="art">${icon('f-music')}</span><span><b data-tt></b><span data-ta></span></span></div>
+          <div class="bar" role="progressbar" aria-label="Track position" aria-valuemin="0" aria-valuemax="100"><i data-tp style="width:0%"></i></div>
+          <div class="times tnum"><span data-t0></span><span data-t1></span></div>
+          <div class="transport"><button type="button" data-m="prev" aria-label="Previous track">${icon('f-skip-back')}</button><button type="button" class="play" data-m="play" aria-label="Play">${icon('f-play')}</button><button type="button" data-m="next" aria-label="Next track">${icon('f-skip-forward')}</button></div></div>`);
+        const s = { i: 0, pos: 52, on: false };
+        const draw = () => {
+          const tr = TRACKS[s.i];
+          $('[data-tt]', el).textContent = tr.t; $('[data-ta]', el).textContent = tr.a; $('.art', el).style.background = tr.g;
+          $('[data-tp]', el).style.width = (s.pos / tr.len * 100).toFixed(1) + '%'; $('.bar', el).setAttribute('aria-valuenow', Math.round(s.pos / tr.len * 100));
+          $('[data-t0]', el).textContent = mmss(s.pos); $('[data-t1]', el).textContent = '−' + mmss(tr.len - s.pos);
+          const pb = $('[data-m="play"]', el); pb.innerHTML = icon(s.on ? 'f-pause' : 'f-play'); pb.setAttribute('aria-label', s.on ? 'Pause' : 'Play');
+        };
+        el.addEventListener('click', e => {
+          const b = e.target.closest('[data-m]'); if (!b) return;
+          if (b.dataset.m === 'play') s.on = !s.on;
+          else { s.i = (s.i + (b.dataset.m === 'next' ? 1 : TRACKS.length - 1)) % TRACKS.length; s.pos = 0; }
+          draw();
+        });
+        el._tick = () => { if (!s.on) return; if (++s.pos >= TRACKS[s.i].len) { s.i = (s.i + 1) % TRACKS.length; s.pos = 0; } draw(); };
+        el._peek = () => `${s.on ? 'Playing' : 'Paused'} · ${TRACKS[s.i].t}, ${TRACKS[s.i].a}`;
+        draw();
+        return el;
+      },
+    },
+    news: {
+      name: 'Headlines', short: 'News', desc: 'Three headlines from topics you pick. No feed, no ads', icon: 'newspaper', tile: 't-peach',
+      make() {
+        const rows = [['Technology', '2 h', 'Open-source desktop projects publish a shared accessibility checklist'], ['Bangladesh', '3 h', 'Metro rail extends evening service on weekdays'], ['Design', '5 h', 'Why calm interfaces are coming back']];
+        const el = shell('news', 'Headlines', 'Sample · your topics', `<div class="well">${rows.map(([t, h, x]) => `<button type="button" class="nrow"><span>${t} · ${h}</span><b>${x}</b></button>`).join('')}</div>
+          <div class="topics"><span class="chip">Technology</span><span class="chip">Bangladesh</span><span class="chip">Design</span></div>`);
+        el.addEventListener('click', e => { if (e.target.closest('.nrow')) openApp('browser'); });
+        el._peek = () => 'Open-source desktop projects publish a shared…';
+        return el;
+      },
+    },
+    notes: {
+      name: 'Note', short: 'Notes', desc: 'A note you can type straight into', icon: 'note-pencil', tile: 't-butter',
+      make() {
+        const el = shell('notes', 'Note', 'Saved as you type', '<div class="well"><textarea aria-label="Note" placeholder="Type a note…"></textarea></div>');
+        const ta = $('textarea', el);
+        try { ta.value = localStorage.getItem('six-note') || 'Pick up the slides\nCall Arif about the shell build'; } catch { ta.value = 'Pick up the slides\nCall Arif about the shell build'; }
+        ta.addEventListener('input', () => { try { localStorage.setItem('six-note', ta.value); } catch {} });
+        el._peek = () => ta.value.split('\n')[0] || 'Empty note';
+        return el;
+      },
+    },
+    todo: {
+      name: 'Reminders', short: 'To-do', desc: 'Check things off and add new ones', icon: 'list-checks', tile: 't-mint',
+      make() {
+        const el = shell('todo', 'Reminders', '', '<div class="well"><div data-list></div></div>');
+        const items = [{ t: 'Send the review notes', d: false }, { t: 'Book the Cox’s Bazar trip', d: false }, { t: 'Renew the domain', d: true }];
+        el._items = items;
+        checklist($('[data-list]', el), items, n => { $('h3 small', el).textContent = n ? `${n} left` : 'All done'; });
+        el._peek = () => { const n = items.filter(i => !i.d).length; return n ? `${n} left · ${items.find(i => !i.d).t}` : 'All done'; };
+        return el;
+      },
+    },
+    timer: {
+      name: 'Focus timer', desc: 'A 25-minute focus session with a break reminder', icon: 'timer', tile: 't-lilac',
+      make() {
+        const el = shell('timer', 'Focus timer', '25 min', `<div class="well"><div class="big tnum" data-left>25:00</div>
+          <div class="bar" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i style="width:0%"></i></div>
+          <div class="row-btns"><button type="button" class="btn btn-primary sm" data-go>Start</button><button type="button" class="btn btn-secondary sm" data-reset>Reset</button></div></div>`);
+        const s = { left: 1500, on: false };
+        const draw = () => {
+          $('[data-left]', el).textContent = mmss(s.left);
+          const p = Math.round((1 - s.left / 1500) * 100);
+          $('.bar i', el).style.width = p + '%'; $('.bar', el).setAttribute('aria-valuenow', p);
+          $('[data-go]', el).textContent = s.on ? 'Pause' : s.left < 1500 ? 'Resume' : 'Start';
+        };
+        $('[data-go]', el).addEventListener('click', () => { s.on = !s.on; draw(); });
+        $('[data-reset]', el).addEventListener('click', () => { s.on = false; s.left = 1500; draw(); });
+        el._tick = () => { if (!s.on) return; if (--s.left <= 0) { s.on = false; s.left = 1500; toast('Focus session done. Take five minutes.', null); } draw(); };
+        el._peek = () => s.on ? `${mmss(s.left)} left` : s.left < 1500 ? `Paused at ${mmss(s.left)}` : 'Ready · 25 min';
+        return el;
+      },
+    },
+    month: {
+      name: 'Calendar', desc: 'This month at a glance', icon: 'calendar', tile: 't-rose',
+      make() {
+        const d = new Date(), y = d.getFullYear(), mo = d.getMonth(), first = (new Date(y, mo, 1).getDay() + 6) % 7, days = new Date(y, mo + 1, 0).getDate();
+        const cells = ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(x => `<span class="dow" aria-hidden="true">${x}</span>`)
+          .concat(Array.from({ length: first }, () => '<span class="out"></span>'))
+          .concat(Array.from({ length: days }, (_, i) => `<span${i + 1 === d.getDate() ? ' class="today" aria-current="date"' : ''}>${i + 1}</span>`));
+        const el = shell('month', 'Calendar', d.toLocaleDateString([], { month: 'long', year: 'numeric' }), `<div class="well"><div class="month">${cells.join('')}</div></div>`);
+        el._peek = () => d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+        return el;
+      },
+    },
+  };
+  Object.entries(W_KINDS).forEach(([k, v]) => { if (v.el) v.el.dataset.kind = k; });
+  // a checklist block, shared by Reminders and widgets Pip makes
+  function checklist(box, items, onChange) {
+    const draw = () => {
+      box.innerHTML = items.map((it, i) => `<button type="button" class="todo" role="checkbox" aria-checked="${it.d}" data-i="${i}">${icon(it.d ? 'f-check-square' : 'square')}<span></span></button>`).join('')
+        + '<form class="w-add"><input aria-label="Add an item" placeholder="Add an item"></form>';
+      $$('.todo span', box).forEach((s, i) => { s.textContent = items[i].t; });
+      onChange && onChange(items.filter(i => !i.d).length);
+    };
+    box.addEventListener('click', e => { const b = e.target.closest('.todo'); if (!b) return; items[+b.dataset.i].d = !items[+b.dataset.i].d; draw(); $(`.todo[data-i="${b.dataset.i}"]`, box)?.focus(); });
+    box.addEventListener('submit', e => { e.preventDefault(); const v = $('input', box).value.trim(); if (!v) return; items.push({ t: v.slice(0, 80), d: false }); draw(); layoutHome(); $('input', box).focus(); });
+    draw();
+  }
+  setInterval(() => {
+    widgetEls.forEach(el => el._tick && el._tick());
+    $$('[data-z]').forEach(b => { b.textContent = tnow(b.dataset.z); });
+  }, 1000);
+
+  // ── widgets Pip makes: a small, checked spec drawn with SIX components ──
+  const SPEC_ICONS = ['spark', 'clock-face', 'hourglass-medium', 'drop', 'list-checks', 'note-pencil', 'calendar', 'globe-hemisphere-west', 'music', 'timer', 'squares-four', 'sun', 'moon', 'book', 'bell', 'user'];
+  const SPEC_APPS = APPS.map(a => a.id);
+  const clip = (t, n) => String(t ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
+  function cleanSpec(s) {
+    if (!s || typeof s !== 'object') return null;
+    const blocks = (Array.isArray(s.blocks) ? s.blocks : []).slice(0, 4).map(b => {
+      if (!b || typeof b !== 'object') return null;
+      switch (b.type) {
+        case 'stat': return { type: 'stat', value: clip(b.value, 16), label: clip(b.label, 60) };
+        case 'text': return { type: 'text', text: clip(b.text, 200) };
+        case 'list': return { type: 'list', items: (b.items || []).slice(0, 5).map(i => ({ text: clip(i && (i.text ?? i), 70), meta: clip(i && i.meta, 24) })).filter(i => i.text) };
+        case 'checklist': return { type: 'checklist', items: (b.items || []).slice(0, 8).map(i => clip(i && (i.text ?? i), 70)).filter(Boolean) };
+        case 'countdown': return { type: 'countdown', label: clip(b.label, 40), to: /^\d{4}-\d{2}-\d{2}$/.test(b.to) ? b.to : '' };
+        case 'counter': return { type: 'counter', label: clip(b.label, 40), goal: Math.max(1, Math.min(999, Math.round(+b.goal) || 8)) };
+        case 'progress': return { type: 'progress', label: clip(b.label, 60), value: Math.max(0, Math.min(1, +b.value || 0)) };
+        case 'clock': { try { new Intl.DateTimeFormat([], { timeZone: b.tz }); } catch { return null; } return { type: 'clock', label: clip(b.label, 24), tz: String(b.tz) }; }
+        case 'apps': return { type: 'apps', items: (b.items || []).filter(a => SPEC_APPS.includes(a)).slice(0, 5) };
+        default: return null;
+      }
+    }).filter(b => b && (b.items ? b.items.length : true));
+    if (!blocks.length) return null;
+    return { title: clip(s.title, 32) || 'My widget', icon: SPEC_ICONS.includes(s.icon) ? s.icon : 'spark', blocks, note: clip(s.note, 160) };
+  }
+  const daysTo = iso => Math.ceil((new Date(iso + 'T00:00:00') - new Date(new Date().toDateString())) / 864e5);
+  function renderBlocks(spec, well, el) {
+    const peeks = [];
+    spec.blocks.forEach(b => {
+      const d = document.createElement('div');
+      if (b.type === 'stat') { d.className = 'wb-stat'; d.innerHTML = '<b></b><span></span>'; $('b', d).textContent = b.value; $('span', d).textContent = b.label; peeks.push(() => `${b.value} ${b.label}`); }
+      else if (b.type === 'text') { d.className = 'wb-text'; d.textContent = b.text; peeks.push(() => b.text); }
+      else if (b.type === 'list') { b.items.forEach(i => { const r = document.createElement('div'); r.className = 'stat'; r.innerHTML = '<span></span><span class="meta"></span>'; r.children[0].textContent = i.text; r.children[1].textContent = i.meta; d.append(r); }); peeks.push(() => b.items[0].text); }
+      else if (b.type === 'checklist') { const items = b.items.map(t => ({ t, d: false })); checklist(d, items); peeks.push(() => `${items.filter(i => !i.d).length} of ${items.length} left`); }
+      else if (b.type === 'countdown') {
+        d.className = 'wb-stat';
+        const draw = () => {
+          if (!b.to) {
+            d.innerHTML = `<span>When is ${esc(b.label || 'it')}?</span><input type="date" class="wb-date" aria-label="Date for ${esc(b.label || 'the countdown')}">`;
+            $('input', d).addEventListener('change', e => { if (e.target.value) { b.to = e.target.value; draw(); layoutHome(); } });
+            return;
+          }
+          const n = daysTo(b.to), when = new Date(b.to + 'T00:00:00').toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+          d.innerHTML = '<b class="tnum"></b><span></span>';
+          $('b', d).textContent = n > 0 ? `${n} ${n === 1 ? 'day' : 'days'}` : n === 0 ? 'Today' : `${-n} days ago`;
+          $('span', d).textContent = `${n >= 0 ? 'until' : 'since'} ${b.label || 'the day'} · ${when}`;
+        };
+        draw();
+        peeks.push(() => b.to ? `${daysTo(b.to)} days until ${b.label}` : `${b.label} · date not set`);
+      }
+      else if (b.type === 'counter') {
+        let n = 0;
+        d.className = 'wb-count';
+        d.innerHTML = `<b class="tnum">0</b><span></span><span class="btns"><button type="button" aria-label="One less">${icon('minus')}</button><button type="button" aria-label="One more">${icon('plus')}</button></span><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${b.goal}" aria-valuenow="0"><i style="width:0%"></i></div>`;
+        const draw = () => { $('b', d).textContent = n; $('span', d).textContent = `of ${b.goal} · ${b.label}`; $('.bar i', d).style.width = Math.min(100, n / b.goal * 100) + '%'; $('.bar', d).setAttribute('aria-valuenow', n); $('.bar', d).setAttribute('aria-label', b.label); };
+        const [less, more] = $$('.btns button', d);
+        less.onclick = () => { n = Math.max(0, n - 1); draw(); }; more.onclick = () => { n++; draw(); if (n === b.goal) toast(`Goal reached: ${b.goal} ${b.label.toLowerCase()}.`, null); };
+        draw(); peeks.push(() => `${n} of ${b.goal} · ${b.label}`);
+      }
+      else if (b.type === 'progress') { d.className = 'wb-prog'; d.innerHTML = `<span></span><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(b.value * 100)}"><i style="width:${(b.value * 100).toFixed(0)}%"></i></div>`; $('span', d).textContent = `${b.label} · ${Math.round(b.value * 100)} %`; $('.bar', d).setAttribute('aria-label', b.label); peeks.push(() => `${b.label} · ${Math.round(b.value * 100)} %`); }
+      else if (b.type === 'clock') { d.className = 'stat'; d.innerHTML = '<span></span><b class="tnum"></b>'; d.children[0].textContent = b.label; d.children[1].dataset.z = b.tz; d.children[1].textContent = tnow(b.tz); peeks.push(() => `${b.label} ${tnow(b.tz)}`); }
+      else if (b.type === 'apps') { d.className = 'wb-apps'; d.innerHTML = b.items.map(a => `<button type="button" class="wb-app" data-open="${a}" aria-label="Open ${esc(appById[a].name)}">${appIcon(a, 34)}</button>`).join(''); d.addEventListener('click', e => { const x = e.target.closest('[data-open]'); if (x) openApp(x.dataset.open); }); peeks.push(() => b.items.map(a => appById[a].name).join(', ')); }
+      well.append(d);
+    });
+    if (el) el._peek = () => peeks.map(f => f()).join(' · ').slice(0, 70);
+  }
+  let pipWidgets = 0;
+  function mkCustom(spec) {
+    const key = 'pip' + (++pipWidgets);
+    const el = shell('pip', spec.title, 'Made by Pip', '<div class="well wb"></div>');
+    el.dataset.kind = key;
+    renderBlocks(spec, $('.well', el), el);
+    W_KINDS[key] = { name: spec.title, desc: spec.blocks.map(b => b.type).join(', '), icon: spec.icon, tile: 't-lilac', el, custom: true };
+    return el;
+  }
+
+  // ── adding and removing ──
+  let wSeq = 0;
+  function addEl(el) {
+    if (widgetEls.includes(el)) return { already: true };
+    if (popStack) closeStack(true);
+    const id = 'x' + (++wSeq);
+    $('#widgets').insertBefore(el, $('#addWidget'));
+    widgetEls.push(el);
+    phys.set(el, { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, moved: false });
+    wireWidget(el);
+    if (!isWide()) { layoutHome(); markDirty(); return { col: null }; }
+    // the column with more room; when neither has room, it joins the stack at the foot of a column
+    const fit = col => { el.dataset.slot = col + id; layoutHome(); const ph = phys.get(el); return { col, y: ph.flowY, over: ph.over }; };
+    fitting = true;
+    const a = fit('L'), b = fit('R');
+    const best = [a, b].filter(c => !c.over).sort((p, q) => p.y - q.y)[0];
+    const col = best ? best.col : (a.y <= b.y ? 'L' : 'R');
+    fit(col);
+    fitting = false;
+    const ph = phys.get(el);
+    ph.x = ph.tx; ph.y = ph.ty + 28; ph.init = true;
+    el.classList.remove('merged'); void el.offsetWidth; el.classList.add('merged');
+    markDirty();
+    if (!best) {
+      const foot = footOf(col, el);
+      if (foot) { tucking = true; tuckUnder(el, foot); tucking = false; return { col, stackedOn: cardName(foot) }; }
+    }
+    layoutHome();
+    return { col };
+  }
+  // which side of home a card sits on, and the lowest visible card (or stack) on that side
+  function sideOf(c) { return phys.get(c).tx + c.offsetWidth / 2 < desk.clientWidth / 2 ? 'L' : 'R'; }
+  const footOf = (col, not) => widgetEls.filter(c => c !== not && !c.classList.contains('stack-hidden') && sideOf(c) === col)
+    .sort((p, q) => phys.get(q).ty - phys.get(p).ty)[0] || null;
+  // a widget with no room goes into the foot stack, right under the top card: the column keeps its
+  // height, and its preview shows it's there (click the preview to bring it up)
+  function tuckUnder(el, target) {
+    let st = stackOf(target);
+    if (!st) { const tp = phys.get(target); st = { cards: [target], x: tp.tx, y: tp.ty, open: false }; stacks.push(st); }
+    st.cards.splice(1, 0, el);
+    const ph = phys.get(el); ph.x = st.x; ph.y = st.y;
+    renderStacks();
+  }
+  function removeEl(el) {
+    if (!widgetEls.includes(el)) return false;
+    if (popStack) closeStack(true);
+    if (stackOf(el)) pullOut(el);
+    widgetEls.splice(widgetEls.indexOf(el), 1); phys.delete(el); el.remove();
+    layoutHome(); markDirty(); renderGallery();
+    return true;
+  }
+  const colName = c => c === 'L' ? 'left' : 'right';
+  function addKind(k, quiet) {
+    const v = W_KINDS[k]; if (!v) return null;
+    if (!v.el) v.el = v.make();
+    const r = addEl(v.el), name = v.short ? v.name : v.name;
+    renderGallery();
+    const msg = r.already ? `${name} is already on home.` : r.stackedOn ? `Home is full, so ${name} went into the stack under “${r.stackedOn}”. Click its preview to bring it up.` : r.col ? `Added ${name} to the ${colName(r.col)} column.` : `Added ${name}.`;
+    if (!quiet && !r.already) toast(msg, () => removeKind(k, true), 'Undo');
+    return msg;
+  }
+  function removeKind(k, quiet) {
+    const v = W_KINDS[k]; if (!v || !v.el) return null;
+    if (!removeEl(v.el)) return `${v.name} isn’t on home.`;
+    if (!quiet) toast(`Removed ${v.name} from home`, () => addKind(k, true), 'Undo');
+    return `Removed ${v.name}`;
+  }
+  const kindOf = el => el && el.dataset.kind;
+
+  // ── the gallery ──
+  const gallery = $('#gallery'), galScrim = $('#galScrim');
+  const WIDGET_IDEAS = ['A countdown to my exam on 14 December', 'Glasses of water today, goal 8', 'Packing list for Cox’s Bazar: swimsuit, sunscreen, charger, hat', 'World clock for Tokyo and Toronto'];
+  function renderGallery() {
+    const tile = (k, v) => { const on = !!v.el && widgetEls.includes(v.el); return `<div class="gal-tile${on ? ' on' : ''}"><span class="tile ${v.tile}" aria-hidden="true">${icon(v.icon)}</span><b>${esc(v.short || v.name)}</b><small>${esc(v.desc)}</small><button type="button" class="btn ${on ? 'btn-secondary' : 'btn-primary'} sm" data-k="${k}" data-act="${on ? 'remove' : 'add'}" aria-label="${on ? 'Remove' : 'Add'} ${esc(v.short || v.name)}">${on ? 'Remove' : 'Add'}</button></div>`; };
+    const all = Object.entries(W_KINDS);
+    $('#galGrid').innerHTML = all.filter(([, v]) => !v.custom).map(([k, v]) => tile(k, v)).join('');
+    const mine = all.filter(([, v]) => v.custom);
+    $('#galMineH').hidden = $('#galMine').hidden = !mine.length;
+    $('#galMine').innerHTML = mine.map(([k, v]) => tile(k, v)).join('');
+  }
+  function openGallery() {
+    closeAllPops(); closeSearch(); hideWMenu();
+    if (topVisible()) showHome();
+    renderGallery();
+    $('#galIdeas').innerHTML = WIDGET_IDEAS.map(t => `<button type="button" class="sugg">${esc(t)}</button>`).join('');
+    gallery.hidden = galScrim.hidden = false;
+    requestAnimationFrame(() => { gallery.classList.add('open'); galScrim.classList.add('open'); });
+    setTimeout(() => $('#galAsk').focus(), 40);
+  }
+  function closeGallery() {
+    if (gallery.hidden) return;
+    gallery.classList.remove('open'); galScrim.classList.remove('open');
+    setTimeout(() => { if (!gallery.classList.contains('open')) gallery.hidden = galScrim.hidden = true; }, 220);
+  }
+  const makeWidget = t => { if (!t.trim()) return; closeGallery(); askPip('Make a widget: ' + t.trim()); };
+  gallery.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (b) { b.dataset.act === 'add' ? addKind(b.dataset.k) : removeKind(b.dataset.k); renderGallery(); $(`[data-k="${b.dataset.k}"]`, gallery)?.focus(); return; }
+    const idea = e.target.closest('#galIdeas .sugg'); if (idea) makeWidget(idea.textContent);
   });
+  $('#galMake').addEventListener('submit', e => { e.preventDefault(); makeWidget($('#galAsk').value); $('#galAsk').value = ''; });
+  $('#galClose').addEventListener('click', closeGallery);
+  galScrim.addEventListener('click', closeGallery);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGallery(); hideWMenu(); } });
+  $('#addWidget').addEventListener('click', openGallery);
+
+  // right-click a widget (or empty home) for Edit widgets / Remove
+  const wMenu = $('#wMenu');
+  function hideWMenu() { wMenu.hidden = true; }
+  $('#home').addEventListener('contextmenu', e => {
+    if (e.target.closest('#center, input, textarea') || !isWide()) return;
+    e.preventDefault();
+    const card = e.target.closest('.widget'), k = kindOf(card);
+    wMenu.innerHTML = '<button class="mrow" role="menuitem" data-w="edit">Edit widgets…</button>' + (k ? `<div class="msep"></div><button class="mrow" role="menuitem" data-w="remove">Remove “${esc(W_KINDS[k]?.name || cardName(card))}”</button>` : '');
+    wMenu._k = k;
+    const dr = desk.getBoundingClientRect();
+    wMenu.hidden = false;
+    wMenu.style.left = Math.min(e.clientX - dr.left, desk.clientWidth - wMenu.offsetWidth - 8) + 'px';
+    wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
+    $('.mrow', wMenu).focus();
+  });
+  wMenu.addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b) return; hideWMenu(); b.dataset.w === 'edit' ? openGallery() : removeKind(wMenu._k); });
+  document.addEventListener('pointerdown', e => { if (!wMenu.hidden && !e.target.closest('#wMenu')) hideWMenu(); });
+
+  // ── Pip designs a widget from a description ──
+  const CITY_TZ = { dhaka: 'Asia/Dhaka', chattogram: 'Asia/Dhaka', chittagong: 'Asia/Dhaka', sylhet: 'Asia/Dhaka', london: 'Europe/London', paris: 'Europe/Paris', berlin: 'Europe/Berlin', madrid: 'Europe/Madrid', rome: 'Europe/Rome', istanbul: 'Europe/Istanbul', moscow: 'Europe/Moscow',
+    'new york': 'America/New_York', toronto: 'America/Toronto', chicago: 'America/Chicago', 'los angeles': 'America/Los_Angeles', 'san francisco': 'America/Los_Angeles', seattle: 'America/Los_Angeles', 'mexico city': 'America/Mexico_City', 'sao paulo': 'America/Sao_Paulo', 'são paulo': 'America/Sao_Paulo',
+    tokyo: 'Asia/Tokyo', seoul: 'Asia/Seoul', beijing: 'Asia/Shanghai', shanghai: 'Asia/Shanghai', 'hong kong': 'Asia/Hong_Kong', singapore: 'Asia/Singapore', 'kuala lumpur': 'Asia/Kuala_Lumpur', bangkok: 'Asia/Bangkok', jakarta: 'Asia/Jakarta',
+    delhi: 'Asia/Kolkata', 'new delhi': 'Asia/Kolkata', mumbai: 'Asia/Kolkata', kolkata: 'Asia/Kolkata', karachi: 'Asia/Karachi', kathmandu: 'Asia/Kathmandu', dubai: 'Asia/Dubai', riyadh: 'Asia/Riyadh', doha: 'Asia/Qatar',
+    cairo: 'Africa/Cairo', lagos: 'Africa/Lagos', nairobi: 'Africa/Nairobi', sydney: 'Australia/Sydney', melbourne: 'Australia/Melbourne', auckland: 'Pacific/Auckland' };
+  const cap = t => t.replace(/^./, c => c.toUpperCase());
+  function parseDay(t) {
+    t = t.replace(/(\d)(st|nd|rd|th)\b/gi, '$1').trim();
+    if (!t) return '';
+    let d = /^\d{4}-\d{2}-\d{2}$/.test(t) ? new Date(t + 'T00:00:00') : new Date(/\d{4}/.test(t) ? t : `${t} ${new Date().getFullYear()}`);
+    if (isNaN(d)) return '';
+    if (!/\d{4}/.test(t) && d < new Date(new Date().toDateString())) d.setFullYear(d.getFullYear() + 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+  const MONTHS = 'jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?';
+  // the common kinds are made on the device; anything else goes to Claude when it's available
+  function localWidget(raw) {
+    const t = raw.trim().replace(/[.!]+$/, '').replace(/^(?:that |which )?(?:tracks?|counts?(?! ?down)|shows?|showing|displays?|keeps?)\s+(?:track of\s+|the\s+|my\s+)?/i, ''), lo = t.toLowerCase();
+    let m;
+    if ((m = t.match(/(?:world )?clocks? (?:for|in|of) (.+)$/i)) || (m = t.match(/time in (.+)$/i))) {
+      const cities = m[1].split(/,| and | & /i).map(x => x.trim().toLowerCase()).filter(Boolean);
+      const known = cities.filter(c => CITY_TZ[c]), unknown = cities.filter(c => !CITY_TZ[c]);
+      if (!known.length) return { fail: `I don’t know the time zone for ${unknown.map(cap).join(', ')}. Try a capital or a big city nearby.` };
+      return { title: 'World clock', icon: 'globe-hemisphere-west', blocks: known.slice(0, 4).map(c => ({ type: 'clock', tz: CITY_TZ[c], label: c.split(' ').map(cap).join(' ') })), note: unknown.length ? `I left out ${unknown.map(cap).join(', ')}: I don’t know its time zone.` : '' };
+    }
+    if ((m = t.match(/(?:count ?down|days?|how long) (?:to|until|till|before) (.+)$/i))) {
+      let what = m[1], to = '';
+      const dm = what.match(new RegExp(`\\s*(?:on|is on|,)?\\s*(\\d{4}-\\d{2}-\\d{2}|\\d{1,2}(?:st|nd|rd|th)? (?:${MONTHS})(?: \\d{4})?|(?:${MONTHS}) \\d{1,2}(?:st|nd|rd|th)?(?:,? \\d{4})?)$`, 'i'));
+      if (dm) { to = parseDay(dm[1]); what = what.slice(0, dm.index); }
+      what = what.replace(/^(?:my|the|our)\s+/i, '').trim() || 'the day';
+      return { title: cap(what), icon: 'hourglass-medium', blocks: [{ type: 'countdown', label: what, to }], note: to ? '' : 'Pick the date on the widget and it starts counting.' };
+    }
+    if ((m = t.match(/^(.*?)(?:check ?list|list|to-?dos?)(?: for ([^:]+))?(?::\s*(.+))?$/i)) && /list|to-?do/i.test(t)) {
+      const items = (m[3] || '').split(/,| and /i).map(x => x.trim()).filter(Boolean);
+      const title = cap(t.split(':')[0].trim()).slice(0, 32) || 'Checklist';
+      return { title, icon: 'list-checks', blocks: [{ type: 'checklist', items: items.length ? items : ['First thing'] }], note: items.length ? '' : 'Add items on the widget.' };
+    }
+    if (/(water|glass|cups?|steps|push-?ups|pages|count|tally|track)/.test(lo)) {
+      const goal = +(lo.match(/\b(\d{1,3})\b/) || [])[1] || 8;
+      const label = cap(t.replace(/,?\s*goal (?:of )?\d+/i, '').replace(/\b(?:a |an )?(?:counter|tracker) (?:for|of)\s*/i, '').replace(/\btoday\b/i, '').trim()).slice(0, 40) || 'Count';
+      return { title: /water|glass|cup/.test(lo) ? 'Water' : label.slice(0, 32), icon: /water|glass|cup/.test(lo) ? 'drop' : 'plus', blocks: [{ type: 'counter', label, goal }] };
+    }
+    if ((m = t.match(/^(?:a )?(?:sticky )?note(?: that says| saying| to self)?:?\s+(.+)$/i))) return { title: 'Note', icon: 'note-pencil', blocks: [{ type: 'text', text: m[1] }] };
+    if ((m = t.match(/^(?:shortcuts?|launcher|apps?) (?:for|to) (.+)$/i))) {
+      const ids = APPS.filter(a => new RegExp(`\\b${a.name.split(' ')[0]}\\b`, 'i').test(m[1])).map(a => a.id);
+      if (ids.length) return { title: 'Shortcuts', icon: 'squares-four', blocks: [{ type: 'apps', items: ids }] };
+    }
+    return null;
+  }
+  const WIDGET_RULES = d => `Design a home-screen widget for SIX, a desktop operating system. Reply with JSON only, no prose and no code fences.
+Schema: {"title": string (max 32 chars), "icon": one of ${JSON.stringify(SPEC_ICONS)}, "blocks": 1 to 4 blocks, "note": optional one short sentence for the person}.
+Blocks: {"type":"stat","value":string,"label":string} | {"type":"text","text":string (max 200 chars)} | {"type":"list","items":[{"text":string,"meta":string}] (max 5)} | {"type":"checklist","items":[string] (max 8)} | {"type":"countdown","label":string,"to":"YYYY-MM-DD"} | {"type":"counter","label":string,"goal":number} | {"type":"progress","label":string,"value":number from 0 to 1} | {"type":"clock","label":string,"tz":IANA time zone} | {"type":"apps","items":[any of ${JSON.stringify(SPEC_APPS)}]}.
+Rules: a widget does one job and reads at a glance. Use short, plain words. Today is ${new Date().toDateString()}. Never invent live data you cannot know (prices, scores, weather, news): use a checklist, counter, note or countdown instead, and say so in "note". If the request can't be a widget, reply {"title":"","blocks":[],"note":"why, in one sentence"}.
+Request: ${JSON.stringify(d)}`;
+  async function pipWidget(d) {
+    const res = await sample([{ role: 'user', content: WIDGET_RULES(d) }], { cache: false, modelTier: 'quick' });
+    const txt = res.text || '', j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+    const spec = cleanSpec(j);
+    return spec || { fail: clip(j && j.note, 160) || 'I couldn’t turn that into a widget.' };
+  }
+  // the preview Pip shows before adding: the real widget, drawn small, with Add / Cancel
+  function previewCard(m, spec) {
+    return new Promise(res => {
+      const box = document.createElement('div');
+      box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Widget preview');
+      box.innerHTML = `<div class="rv-head">${icon(spec.icon, 'i sm')}<span></span></div><div class="wprev"><div class="well wb"></div></div>
+        <div class="rv-btns"><button type="button" class="btn btn-primary sm">Add to home</button><button type="button" class="btn btn-secondary sm">Cancel</button></div>`;
+      $('.rv-head span', box).textContent = `Preview · ${spec.title}`;
+      renderBlocks(spec, $('.wprev .well', box));
+      m.insertBefore(box, $('.acts', m));
+      const [yes, no] = $$('.rv-btns button', box);
+      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; $$('button, input', $('.wprev', box)).forEach(x => { x.disabled = true; }); res(ok); };
+      yes.onclick = () => end(true); no.onclick = () => end(false);
+      thread.scrollTop = thread.scrollHeight;
+    });
+  }
+  const WIDGET_NAMES = { clock: 'clock', 'world clock': 'clock', weather: 'weather', music: 'music', 'now playing': 'music', news: 'news', headlines: 'news', notes: 'notes', note: 'notes', 'to-do': 'todo', todo: 'todo', 'to do': 'todo', reminders: 'todo', reminder: 'todo', timer: 'timer', 'focus timer': 'timer', focus: 'timer', pomodoro: 'timer', calendar: 'month', month: 'month', today: 'today', recent: 'recent', 'recent files': 'recent', device: 'device', 'this device': 'device', task: 'task', 'current task': 'task' };
+  const findKind = n => WIDGET_NAMES[n] || Object.keys(W_KINDS).find(k => W_KINDS[k].custom && W_KINDS[k].name.toLowerCase() === n);
+
   function stepPhysics(dt) {
     if (!isWide()) return false;
     let busy = false;
@@ -2425,7 +3015,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   });
 
   /* ── Plasma clay renderer (WebGL) ────────────────────────────── */
-  const MAXR = 12;
+  const MAXR = 16;
   const MATTE = { dark: ['#060607', '#151517', '#d4d4d9', '#2a2a2e'], light: ['#d4d4d8', '#f7f7f8', '#ffffff', '#c4c4c9'] };
   const MOODS = {
     matte: MATTE.dark,
@@ -2757,6 +3347,22 @@ void main(){
     if ((m = s.match(/^(?:switch to |use |change to )?(?:the )?(matte|tidal|aurora|ember)(?: mood)?$/))) return done('Switched. Drag the cards together to see the surfaces fuse.', [ACT.plasma(m[1])]);
     if ((m = s.match(/^(?:make (?:it|the surfaces) |use )?(water|gel|honey|solid)(?: surfaces)?$/))) return done('Changed how the surfaces move.', [ACT.plasma(null, m[1])]);
     if (/^(show )?(home|desktop)$/.test(s)) return done('Home.', [ACT.home()]);
+    // widgets: add or remove one from the gallery, or describe a new one and Pip designs it
+    const rawT = raw.trim().replace(/^(?:please |pip,? |hey pip,? )+/i, '');
+    if ((m = rawT.match(/^(?:can you |could you )?(?:make|create|build|design|add)(?: me)?(?: a| an)?(?: new)?(?: custom)? widget(?: that| which| for| to| with| showing|:)?\s+(.+)$/i))) return { widget: m[1] };
+    if (/^(?:edit|add|open|show|change)(?: the| my)? widgets?(?: gallery)?$/.test(s)) { openGallery(); return done('Here are the widgets. Add one, or describe a new one and I’ll make it.', []); }
+    if ((m = s.match(/^(?:add|show|put|give me|i want)(?: me)?(?: a| an| the| my)? (.+?) widget(?: (?:to|on) (?:the |my )?home(?: screen)?)?$/))) {
+      const k = findKind(m[1]);
+      if (!k) return { widget: m[1] };
+      const r = addKind(k, true);
+      return done(r, /already/.test(r) ? [] : [`Added ${W_KINDS[k].name}`]);
+    }
+    if ((m = s.match(/^(?:remove|hide|close|delete|get rid of)(?: the| my)? (.+?) widget$/))) {
+      const k = findKind(m[1]);
+      if (!k || !W_KINDS[k].el || !widgetEls.includes(W_KINDS[k].el)) return { fail: `There’s no ${m[1]} widget on home, so nothing was removed.`, label: 'widget not found', fixes: [['Edit widgets', () => openGallery()]] };
+      removeKind(k);
+      return done('Removed. It’s back in one click from the toast or the widget gallery.', [`Removed ${W_KINDS[k].name}`]);
+    }
     // changes to files never run straight away: Pip shows a review card naming the file and the effect
     if ((m = s.match(/^(?:delete|remove|trash|throw away|bin) (?:the )?(?:file )?(.+)$/)) || (m = s.match(/^move (?:the )?(?:file )?(.+?) (?:to|into) (?:the )?(?:bin|trash)$/))) {
       const q = m[1].replace(/["“”']/g, '').trim(), f = files.find(x => x.name.toLowerCase() === q) || files.find(x => x.name.toLowerCase().includes(q));
@@ -2852,6 +3458,32 @@ Current prototype state: ${stateSummary()}`;
         reply = 'Done. It’s in the Bin if you want it back.';
         toast(`Moved "${f.name}" to Bin`, () => { files.splice(Math.max(0, at), 0, f); binCount--; renderFiles(); });
       } else { reply = 'Cancelled. Nothing was changed.'; outcome = 'cancelled'; }
+    } else if (local && local.widget) {
+      setPip('working', 'designing a widget');
+      let spec = localWidget(local.widget), src = 'local';
+      if (!spec && sample) {
+        setPip('working', 'designing a widget · Claude'); src = 'cloud';
+        try { spec = await pipWidget(local.widget); } catch { spec = { fail: 'I couldn’t design that one just now.' }; }
+      }
+      await wait(src === 'local' ? 650 : 0);
+      note(m, src);
+      if (!spec && /\b(price|stock|bitcoin|crypto|score|exchange rate|live|traffic|flight)/i.test(local.widget)) spec = { fail: 'That needs live data I can’t fetch here, and I won’t make a widget that shows made-up numbers. A countdown, checklist or counter works on this device.' };
+      if (!spec || spec.fail) {
+        reply = (spec && spec.fail) || 'On this device I can make countdowns, checklists, counters, world clocks, notes and app shortcuts. Try one of these.';
+        outcome = 'failed'; label = 'couldn’t make that widget';
+        fixes = WIDGET_IDEAS.slice(0, 3).map(t => [t, () => send('Make a widget: ' + t, false)]);
+      } else {
+        spec = cleanSpec(spec);
+        say(`Here’s a preview.${spec.note ? ' ' + spec.note : ''} Add it to home?`);
+        setPip('asking', 'waiting for your review');
+        if (await previewCard(m, spec)) {
+          const el = mkCustom(spec), r = addEl(el);
+          renderGallery();
+          actChip(m, `Added “${spec.title}” to home`);
+          reply = r.stackedOn ? `Added. Home is full, so it went into the stack under “${r.stackedOn}”. Click its preview to bring it up.` : `Added to the ${r.col ? colName(r.col) + ' column' : 'home screen'}. Drag it anywhere, or right-click it to remove it.`;
+          toast(`Added “${spec.title}” to home`, () => removeEl(el), 'Undo');
+        } else { reply = 'Cancelled. Nothing was added.'; outcome = 'cancelled'; }
+      }
     } else if (local && local.search) {
       const q = local.search, words = q.toLowerCase().split(/[\s.]+/).filter(w => w.length > 2);
       setPip('searching', 'searching Documents');

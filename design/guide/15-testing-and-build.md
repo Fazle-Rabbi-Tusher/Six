@@ -32,6 +32,7 @@ Each task starts from the home screen with no window open. Give the goal, never 
 | 8 | "What is Pip doing right now?" (during a long task) | They read the status label or the task card | Whether the orb's look alone is enough (it should not need to be) |
 | 9 | Keyboard only: tasks 1, 2 and 3 | Same pass criteria | Focus order, visible focus, the review card reachable with `Tab` |
 | 10 | Screen reader: tasks 3 and 5 | Hears the review target and effect, and the stop result | Live region noise (the task line must speak only on change) |
+| 11 | "Put a clock on your home screen, then make one that counts down to your next holiday." | Clock added from the gallery or by asking; countdown previewed and added | Whether they find *Add widgets* or ask Pip; whether the preview is read before adding |
 
 ## What to measure
 
@@ -57,9 +58,9 @@ Each step ships behind a flag and is tested with the tasks it unlocks before the
 | 1 | Tokens and type: [`tokens.css`](../tokens/tokens.css) → native toolkit, Geist and fallbacks, contrast check in CI | — | `check_contrast.py` passes in CI, both themes |
 | 2 | Menu bar, dock, windows, Snap Layouts, Six Search (with effect lines) | 1, 7 | Tasks 1 and 7 pass with the mouse and with the keyboard |
 | 3 | Control Center, notifications, toasts with Undo | 2 | Task 2 passes; every destructive toast has Undo |
-| 4 | Home screen: matte wallpaper, cards, drag, stacks with previews and fan-out | 6 | Task 6 passes; Reduce motion makes it jump, not spring |
+| 4 | Home screen: matte wallpaper, cards, drag, stacks with previews and fan-out, widget gallery | 6, 11 | Task 6 passes; Reduce motion makes it jump, not spring |
 | 5 | Pip's orb engine (one clock per look, every state, small and realistic renderers), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU; task 8 passes |
-| 6 | Pip on device: local commands, review cards, failures with recovery, stop that reports what happened | 3, 4, 5 | Tasks 3–5 pass; nothing changes a file without a review |
+| 6 | Pip on device: local commands, review cards, failures with recovery, stop that reports what happened, widget specs | 3, 4, 5, 11 | Tasks 3–5 pass; nothing changes a file without a review |
 | 7 | Cloud model behind consent, provider note on every reply, waiting and retrying states | 3–5 again | No request leaves the device before consent; outages read as *Waiting*, not as broken |
 | 8 | Voice: push to talk, transcript, mic pill, spoken replies | All, by voice | Every voice task can be done by typing too |
 | 9 | Accessibility pass: screen reader, magnifier, More contrast, Reduce transparency | 9, 10 | Tasks 9 and 10 pass |

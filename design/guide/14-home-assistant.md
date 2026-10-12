@@ -62,6 +62,102 @@ Other cards flow around stacks and moved cards, so nothing overlaps. Keyboard: p
 stack bar's buttons are normal buttons; `Alt + arrows` on the focused top card moves it out of
 the stack one grid step at a time.
 
+## Widgets
+
+Home cards are widgets. Out of the box SIX shows four (*Pick up where you left off*, *Today*,
+*Current task*, *This device*); the person adds more from the **widget gallery**, or describes
+one and **Pip makes it**.
+
+![The widget gallery](../screens/widgets.png)
+
+### What the research says
+
+| Source | Finding | What SIX does |
+|---|---|---|
+| Apple HIG and WWDC20 "Meet WidgetKit" | Widgets are glanceable, not mini-apps; each size shows only what serves the widget's one purpose; a widget that only opens its app adds nothing and gets removed | One job per widget; only small in-place controls (play, check off, start a timer); no "open app" widgets |
+| Windows 11 widgets board | The most-upvoted Feedback Hub request was to remove the news feed from widgets; Microsoft later added a widgets-only setting | No feed and no ads. *Headlines* is opt-in, three items from topics the person picks, and labelled as such |
+| Android widget sizing | Widgets that don't fill their space or misalign with the grid are a common reason people remove them | Every widget is exactly one column wide (284 px) and sits on the 24 px grid |
+
+Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interface-guidelines/widgets),
+[Meet WidgetKit (WWDC20)](https://developer.apple.com/videos/play/wwdc2020/10028/),
+[Microsoft · Widgets design](https://learn.microsoft.com/windows/apps/design/widgets/),
+[Neowin · what users want in Windows 11 widgets](https://www.neowin.net/news/top-10-features-and-changes-users-want-in-windows-11-widgets/),
+[TechRadar · widgets-only board](https://www.techradar.com/computing/windows/hate-the-widgets-board-in-windows-11-microsoft-hopes-you-might-change-your-mind),
+[Android · widget sizing](https://developer.android.com/design/ui/mobile/guides/widgets/sizing).
+
+### The catalog
+
+| Widget | Shows | Does in place |
+|---|---|---|
+| Pick up where you left off | Last files and apps | Opens the item |
+| Today | Next meetings | — |
+| Current task | What Pip is working on, then its output | Stop, Open, Show in Files |
+| This device | Battery, storage, updates | — |
+| Clock | The time here, in the display face, plus two cities | — |
+| Weather | Now, feels-like, the next five hours | — |
+| Now playing | Track, artist, position | Previous, play/pause, next |
+| Headlines | Three headlines from chosen topics (no feed, no ads) | Opens the story in Browser |
+| Note | A plain note, saved as you type | Type |
+| Reminders | A checklist with what's left in the header | Check off, add |
+| Focus timer | A 25-minute session | Start, pause, reset; a toast at the end |
+| Calendar | This month, today in the accent colour | — |
+
+### Adding, removing and when home is full
+
+| Way in | What happens |
+|---|---|
+| **Add widgets** button | Sits at the foot of the shorter column while there is room; opens the gallery |
+| Right-click home or a widget | *Edit widgets…* and *Remove "Clock"* |
+| Six menu, Six Search | *Edit widgets…*, *Add widgets* |
+| Ask Pip | "Add a clock widget", "remove the music widget", "edit widgets" |
+
+- A new widget goes to the column with more room, slides in with a small pop, and a toast offers
+  **Undo**. Removing works the same way; nothing is ever deleted, the gallery adds it back as it was.
+- **When home is full**, a new widget goes into the stack at the foot of its column, right under the
+  top card, so the column keeps its height; its preview shows it is there, and a click brings it up.
+  If a card grows (a task finishing shows its output) and the card below no longer fits, that card
+  goes into the stack too, with a toast saying so. Cards never overlap.
+
+### Widgets Pip makes
+
+Describe any widget, in the gallery's *Describe any widget* field or straight to Pip ("make a
+widget that counts down to my exam on 14 December"). Pip designs it, shows a **preview card** in
+the conversation (the real widget, drawn small) with **Add to home** and **Cancel**, and adds it
+to the column with more room. Made widgets appear in the gallery under *Made by Pip*.
+
+![Pip previews a widget before adding it](../screens/widget-pip.png)
+
+**Made widgets are data, not code.** Pip writes a small spec and SIX draws it with its own
+components, so every made widget looks native, follows the theme, contrast and motion settings,
+and can't run anything or reach the network.
+
+```json
+{ "title": "Exam", "icon": "hourglass-medium",
+  "blocks": [ { "type": "countdown", "label": "exam", "to": "2026-12-14" } ] }
+```
+
+| Block | Draws as |
+|---|---|
+| `stat` | A big number in the display face with a caption |
+| `text` | A short paragraph (200 characters at most) |
+| `list` | Rows with an optional right-aligned detail |
+| `checklist` | Checkable rows plus *Add an item* |
+| `countdown` | Days until (or since) a date; asks for the date on the widget if none was given |
+| `counter` | A number with − and +, a goal and a progress bar |
+| `progress` | A labelled progress bar |
+| `clock` | A city and its time, kept live |
+| `apps` | Up to five app icons that open the app |
+
+Rules:
+- A spec has a title of 32 characters at most, one icon from a fixed set, and one to four blocks.
+  Anything else is dropped before drawing.
+- **No made-up live data.** On the device, Pip makes countdowns, checklists, counters, world clocks,
+  notes and app shortcuts. Prices, scores, news or weather need a connected source; without one Pip
+  says so ("That needs live data I can't fetch here, and I won't make a widget that shows made-up
+  numbers") and suggests a widget it can make.
+- Requests the device can't handle go to the cloud model only with the same consent as any other
+  question, and the reply is marked *Answered by Claude, in the cloud*.
+
 ## Conversation
 
 - **Local first.** Plain commands ("open files", "turn on night light", "switch to the ember mood",
