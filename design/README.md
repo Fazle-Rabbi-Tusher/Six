@@ -60,7 +60,7 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/guide-pip.png) |
 
-| Dragging a card onto another | Two cards stacked |
+| Dragging a card onto another | A stack of three, with previews |
 |---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) |
 

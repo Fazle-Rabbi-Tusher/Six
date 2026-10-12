@@ -442,16 +442,28 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .widget.drop-target::after { content: "Release to stack"; position: absolute; z-index: 6; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 5px 12px; border-radius: 999px; background: var(--c-accent); color: var(--c-text-on-accent); font: var(--text-label); white-space: nowrap; box-shadow: var(--shadow-2); }
 .widget.merged { animation: merge-pop 0.45s var(--ease-out); }
 @keyframes merge-pop { 0% { scale: 0.97; } 40% { scale: 1.03; } 100% { scale: 1; } }
-.plate { position: absolute; z-index: 2; pointer-events: none; border-radius: 0 0 18px 18px; border: 1px solid var(--glass-edge); border-top: 0;
-  background: color-mix(in srgb, var(--c-surface-3) 92%, transparent); box-shadow: inset 0 7px 8px -7px rgba(0, 0, 0, 0.55), 0 6px 12px -6px rgba(0, 0, 0, 0.4); }
-.plate[data-depth="2"] { z-index: 1; background: color-mix(in srgb, var(--c-surface-3) 66%, transparent); }
+.peek {
+  position: absolute; z-index: 2; display: flex; align-items: flex-end; gap: 8px; padding: 0 14px 8px; overflow: hidden; white-space: nowrap;
+  border: 1px solid var(--glass-edge); border-top: 0; border-radius: 0 0 16px 16px; cursor: grab; touch-action: none; text-align: left;
+  background: color-mix(in srgb, var(--c-surface-2) 94%, transparent); color: var(--c-text-2); font: var(--text-caption);
+  box-shadow: inset 0 9px 9px -9px rgba(0, 0, 0, 0.6), 0 6px 12px -6px rgba(0, 0, 0, 0.4);
+  transition: translate var(--dur-fast) var(--ease-out), background var(--dur-fast);
+}
+.peek b { flex: none; font: 600 10.5px/14px var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-text-2); }
+.peek .peek-line { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c-text-2); }
+.peek .peek-more { margin-left: auto; color: var(--c-text-3); }
+.peek:hover, .peek:focus-visible { background: var(--c-surface-3); translate: 0 3px; }
+.peek:focus-visible { outline-offset: 2px; }
+.peek[data-depth="2"] { z-index: 1; padding-bottom: 6px; background: color-mix(in srgb, var(--c-surface-2) 78%, transparent); }
+.peek[data-depth="2"] b { font-size: 10px; }
+.peek[data-depth="2"] .peek-line { opacity: 0.85; }
 .stack-bar { display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid var(--c-line); }
 .stack-count { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; font: var(--text-caption); color: var(--c-text-2); white-space: nowrap; }
 .stack-count svg.i { width: 14px; height: 14px; color: var(--c-accent); }
 .stack-btn { border: 0; height: 28px; padding: 0 10px; white-space: nowrap; flex: none; border-radius: 999px; background: color-mix(in srgb, var(--c-surface-3) 70%, transparent); color: var(--c-text); font: 600 12px/1 var(--font-ui); }
 .stack-btn:hover { background: var(--c-surface-3); }
 #home.stack .widget.stack-hidden { visibility: visible; pointer-events: auto; }
-#home.stack .plate { display: none; }
+#home.stack .peek { display: none; }
 .widget:focus-visible { outline-offset: 4px; border-radius: var(--radius-xl); }
 .widget h3 { margin: 0; font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-2); display: flex; justify-content: space-between; align-items: center; }
 .widget h3 small { font: var(--text-caption); text-transform: none; letter-spacing: 0; color: var(--c-text-3); }
@@ -1872,7 +1884,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const H = desk.clientHeight - dockSpace() - 8;
     // cards the user placed (or stacked) stay put; the rest flow down their column around them
     const taken = widgetEls.filter(c => phys.get(c).moved && !c.classList.contains('stack-hidden')).map(c => {
-      const p = phys.get(c), st = stackOf(c), plates = st && !st.open && st.cards[0] === c ? 24 : 0;
+      const p = phys.get(c), st = stackOf(c), plates = st && !st.open && st.cards[0] === c ? (st.cards.length > 2 ? 62 : 34) : 0;
       return [p.tx, p.ty, c.offsetWidth, c.offsetHeight + plates];
     });
     widgetEls.forEach(el => {
@@ -1893,11 +1905,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       el.style.left = ph.x + 'px'; el.style.top = ph.y + 'px';
     });
   }
-  // Stacks, like notification stacks: drop one card on another and they stack. The stack shows
-  // plates underneath, a count and two actions; pull the top card out or Unstack to put them back.
+  // Stacks, like notification stacks: drop one card on another and they stack. Under the top card,
+  // previews of the next cards peek out (title + one line). A drag only ever takes one card out:
+  // the top card, or the card whose preview you grab. Click a preview to bring that card to the front.
   const stacks = [];
   const stackOf = el => stacks.find(st => st.cards.includes(el));
   const cardName = el => el.getAttribute('aria-label');
+  const peekLine = c => ({
+    L0: 'Quarterly report.xlsx · 2 more', L1: 'Next: 10:00 Design review',
+    R0: `Slides from my notes · ${typeof taskPct === 'number' ? taskPct : 40} %`, R1: 'Battery 64 % · 212 GB free',
+  })[c.dataset.slot] || '';
   function targetAt(el, x, y) {
     return widgetEls.find(c => {
       if (c === el || c.classList.contains('stack-hidden')) return false;
@@ -1906,7 +1923,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     }) || null;
   }
   function renderStacks() {
-    $$('.plate').forEach(p => p.remove());
+    $$('.peek').forEach(p => p.remove());
     widgetEls.forEach(c => { c.classList.remove('stack-hidden', 'stack-top'); $('.stack-bar', c)?.remove(); });
     stacks.forEach(st => {
       const top = st.cards[0];
@@ -1925,17 +1942,20 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
         if (!st.open && i) c.classList.add('stack-hidden');
       });
       if (!st.open) for (let d = 1; d <= Math.min(2, st.cards.length - 1); d++) {
-        const p = document.createElement('div');
-        p.className = 'plate'; p.dataset.depth = d; p._top = top;
+        const c = st.cards[d], more = st.cards.length - 3;
+        const p = document.createElement('button');
+        p.type = 'button'; p.className = 'peek'; p.dataset.depth = d; p._top = top; p._card = c;
+        p.setAttribute('aria-label', `${cardName(c)}, in this stack. Click to bring it to the front, or drag it out.`);
+        p.innerHTML = `<b>${cardName(c)}</b><span class="peek-line">${peekLine(c)}</span>` + (d === 2 && more > 0 ? `<span class="peek-more">+${more} more</span>` : '');
         $('#widgets').append(p);
       }
     });
     updatePlates(); layoutHome(); markDirty();
   }
   function updatePlates() {
-    $$('.plate').forEach(p => {
+    $$('.peek').forEach(p => {
       const ph = phys.get(p._top), d = +p.dataset.depth, w = p._top.offsetWidth, h = p._top.offsetHeight;
-      Object.assign(p.style, { left: ph.x + 12 * d + 'px', top: ph.y + h - 1 + (d - 1) * 11 + 'px', width: w - 24 * d + 'px', height: (d === 1 ? 14 : 12) + 'px' });
+      Object.assign(p.style, { left: ph.x + 10 * d + 'px', top: ph.y + h - 2 + (d - 1) * 30 + 'px', width: w - 20 * d + 'px', height: (d === 1 ? 34 : 28) + 'px' });
     });
   }
   function pullOut(el) {
@@ -1943,6 +1963,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     st.cards.splice(st.cards.indexOf(el), 1);
     if (st.cards.length < 2) stacks.splice(stacks.indexOf(st), 1);
     renderStacks();
+  }
+  function bringToFront(el) {
+    const st = stackOf(el); if (!st || st.cards[0] === el) return;
+    st.cards.splice(st.cards.indexOf(el), 1); st.cards.unshift(el);
+    renderStacks();
+    el.classList.remove('merged'); void el.offsetWidth; el.classList.add('merged');
+    $('.stack-btn', el)?.focus();
   }
   function mergeInto(el, target) {
     let st = stackOf(target);
@@ -1959,11 +1986,50 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     renderStacks();
   }
   $('#widgets').addEventListener('click', e => {
+    const p = e.target.closest('.peek');
+    if (p) { bringToFront(p._card); return; }
     const b = e.target.closest('.stack-btn'); if (!b) return;
     const st = stackOf(b.closest('.widget')); if (!st) return;
     if (b.dataset.act === 'toggle') { st.open = !st.open; renderStacks(); } else unstack(st);
   });
   let dragging = null, dropTarget = null;
+  // one drag moves exactly one card; if it was stacked, it leaves the stack and the rest stay put
+  function beginDrag(el, e, fromPeek) {
+    const ph = phys.get(el), dr = desk.getBoundingClientRect();
+    let ox = e.clientX - dr.left - ph.x, oy = e.clientY - dr.top - ph.y, started = false;
+    const move = ev => {
+      if (!started) {
+        if (Math.hypot(ev.clientX - e.clientX, ev.clientY - e.clientY) < 5) return;
+        started = true; dragging = el; el.classList.add('drag');
+        if (stackOf(el)) pullOut(el);
+        if (fromPeek) {   // the card comes out from under the stack, held by its header
+          ox = Math.min(64, el.offsetWidth / 2); oy = 18;
+          ph.x = ev.clientX - dr.left - ox; ph.y = ev.clientY - dr.top - oy; ph.vx = ph.vy = 0;
+        }
+      }
+      ph.moved = true;
+      ph.tx = ev.clientX - dr.left - ox; ph.ty = ev.clientY - dr.top - oy;
+      if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
+      const t = targetAt(el, ev.clientX, ev.clientY);
+      if (t !== dropTarget) { dropTarget?.classList.remove('drop-target'); dropTarget = t; t?.classList.add('drop-target'); }
+    };
+    const up = () => {
+      removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      if (!started) return;   // a plain click on a preview is handled by the click listener
+      el.classList.remove('drag'); dragging = null;
+      if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
+      const H = desk.clientHeight - dockSpace() - 8;
+      ph.tx = Math.min(Math.max(Math.round(ph.tx / 24) * 24, 0), desk.clientWidth - el.offsetWidth); // 24 px grid
+      ph.ty = Math.min(Math.max(Math.round(ph.ty / 24) * 24, mbH() + 8), H - el.offsetHeight);
+      if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
+    };
+    addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+  }
+  $('#widgets').addEventListener('pointerdown', e => {
+    const p = e.target.closest('.peek');
+    if (!p || e.button !== 0 || !isWide()) return;
+    e.preventDefault(); beginDrag(p._card, e, true);
+  });
   widgetEls.forEach(el => {
     el.addEventListener('dblclick', e => {   // double-click a moved card to send it back to its place
       if (e.target.closest('button, a, input') || stackOf(el)) return;
@@ -1971,34 +2037,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     });
     el.addEventListener('pointerdown', e => {
       if (e.button !== 0 || !isWide() || e.target.closest('button, a, input')) return;
-      e.preventDefault();
-      const ph = phys.get(el), dr = desk.getBoundingClientRect();
-      const ox = e.clientX - dr.left - ph.x, oy = e.clientY - dr.top - ph.y;
-      let started = false;
-      el.setPointerCapture(e.pointerId);
-      const move = ev => {
-        if (!started) {
-          if (Math.hypot(ev.clientX - e.clientX, ev.clientY - e.clientY) < 5) return;
-          started = true; dragging = el; el.classList.add('drag');
-          if (stackOf(el)) pullOut(el);   // dragging a stacked card takes it out of the stack
-        }
-        ph.moved = true;
-        ph.tx = ev.clientX - dr.left - ox; ph.ty = ev.clientY - dr.top - oy;
-        if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
-        const t = targetAt(el, ev.clientX, ev.clientY);
-        if (t !== dropTarget) { dropTarget?.classList.remove('drop-target'); dropTarget = t; t?.classList.add('drop-target'); }
-      };
-      const up = () => {
-        el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
-        if (!started) return;
-        el.classList.remove('drag'); dragging = null;
-        if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
-        const H = desk.clientHeight - dockSpace() - 8;
-        ph.tx = Math.min(Math.max(Math.round(ph.tx / 24) * 24, 0), desk.clientWidth - el.offsetWidth); // 24 px grid
-        ph.ty = Math.min(Math.max(Math.round(ph.ty / 24) * 24, mbH() + 8), H - el.offsetHeight);
-        if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
-      };
-      el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      e.preventDefault(); beginDrag(el, e, false);
     });
   });
   // keyboard alternative to dragging (WCAG 2.5.7): focus a card, Alt + arrows moves it one grid step
@@ -2008,6 +2047,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
       if (!e.altKey || !d || !isWide() || e.target !== el) return;
       e.preventDefault();
+      if (stackOf(el)) pullOut(el);
       const ph = phys.get(el), H = desk.clientHeight - dockSpace() - 8;
       ph.moved = true;
       ph.tx = Math.min(Math.max(Math.round((ph.tx + d[0]) / 24) * 24, 0), desk.clientWidth - el.offsetWidth);
@@ -2051,6 +2091,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     $$('.dotorb[data-follow]:not(.orb-hi)').forEach(o => {
       if (taskLive && taskPct < 100) o.dataset.progress = (taskPct / 100).toFixed(2); else delete o.dataset.progress;
     });
+    $$('.peek').forEach(p => { const l = $('.peek-line', p); if (l) l.textContent = peekLine(p._card); });
     const label = taskLive && taskPct < 100 ? `Slides from my notes, ${taskPct} %` : '';
     $('#pipBtn').title = label ? 'Pip · ' + label : 'Pip';
     $('#pipBtn').setAttribute('aria-label', `Pip: ${PIP_STATES[pipNow][0]}${label ? '. ' + label : ''}. Show home`);

@@ -50,13 +50,16 @@ Like notification stacks on a phone: drag one card onto another and they become 
 | Moment | What the person sees |
 |---|---|
 | Dragging over a card | The target gets a dashed accent outline and a "Release to stack" label |
-| Dropped | The dragged card lands on top with a small pop; one or two plates peek out underneath; the top card gains a bar: ⧉ *2 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
+| Dropped | The dragged card lands on top with a small pop; the top card gains a bar: ⧉ *3 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
+| Preview | Under the top card, the next two cards peek out as slim previews: their title and one live line ("TODAY · Next: 10:00 Design review", "CURRENT TASK · Slides from my notes · 64 %"); the second preview adds "+N more" when the stack is deeper |
+| Pull one out | A drag always moves exactly **one** card: drag the top card, or grab a preview to pull out that specific card. The rest of the stack stays where it is |
+| Bring to front | Click (or press Enter on) a preview: that card moves to the top of the stack |
 | Show all | The stack fans out into a column (cards fuse as liquid); **Collapse** folds it back |
-| Pull one out | Drag the top card (or any card of an open stack) away; it leaves the stack and stays where dropped |
 | Put things back | **Unstack** sends every card in the stack back to its original place; double-click any moved card to return it alone |
 
-Other cards flow around stacks and moved cards, so nothing overlaps. The keyboard path is the
-same as for moving: focus a card, `Alt + arrows`; the stack bar's buttons are normal buttons.
+Other cards flow around stacks and moved cards, so nothing overlaps. Keyboard: previews and the
+stack bar's buttons are normal buttons; `Alt + arrows` on the focused top card moves it out of
+the stack one grid step at a time.
 
 ## Conversation
 
