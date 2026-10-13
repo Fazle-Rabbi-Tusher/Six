@@ -40,8 +40,8 @@ This chapter covers how Pip works inside the OS.
 |---|---|
 | **Pip** | 260 px realistic orb centred above the greeting, drawn as the blue Hologram by default (see [Pip's looks](#pips-third-look-the-hologram)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
 | **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."), and one line saying how to talk: "Press the mic in the menu bar, or hold Space, and talk." or, with Hey Pip on, "Say "Hey Pip", then what you need." |
-| **Full screen** | By default, talking to Pip opens the [full-screen Hologram](#pip-full-screen-the-hologram-hud), which carries what you said, Pip's reply and any review card |
-| **Caption** | With *Full screen when you talk* off: a plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Instrument Serif. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
+| **Moving Pip** | Pip starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move Pip back to the middle* or *Hide Pip from home*; `Alt + arrows` moves it from the keyboard. Hidden, Pip still listens through the menu bar mic; *Settings › Home & widgets › Pip on home* brings it back. Its place is remembered |
+| **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Instrument Serif. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
 | **Try saying** | Up to four example requests as chips. Clicking one plays it as if you had said it, which is also how the prototype is tested without a microphone. Hidden while a caption shows; can be turned off in Settings › Home & widgets |
 | **Hint line** | The listening mode with its shortcut, and **Type instead**, which opens the Pip app |
 | **Widgets** | 284 px plasma clay cards in two columns (see Widgets below). Cards in a column sit 12 px apart, so they fuse. Draggable; drop snaps to the 24 px grid; double-click a moved card to send it back. Drop one card on another to stack them |
@@ -339,7 +339,7 @@ wide glow, and added together so the bright places bloom.
 | Waist rings | A bright band of four strands, tilted so it reads as a wide ellipse, an inner ring around the core, and two fainter ones |
 | Standing rings | Three rings through the poles, turning the other way |
 | Spokes | Ten long, thin rays from the core to the shell, mostly across the face |
-| Core | A glowing tube with a hole through it (the hole recedes into the sphere), ringed by bright partial arcs and a soft glow |
+| Core | A glowing hexagonal frame with a hexagonal well through it (the well recedes into the sphere), braced by six struts to broken hexagons around it, and a soft glow |
 | Dust | Specks and a few large soft sparks floating inside |
 
 Each part turns on its own axis at its own speed, so the projection always has depth. In light
@@ -366,37 +366,6 @@ blurring into a blob.
 
 Like the Turbine it eases its speed and light from one state into the next, and it is drawn still
 under Reduce motion. Without WebGL it draws a sample of its points on a 2D canvas.
-
-## Pip full screen: the Hologram HUD
-
-When you talk to Pip (the mic, clicking Pip, Space, "Hey Pip" or a *Try saying* example), the
-hologram grows out of where Pip was and **fills the screen**, inside a projection in the style of
-a film's AI interface: everything you need to follow Pip, laid out around it.
-
-![Pip full screen, listening](../screens/home-voice.png)
-
-| Part | What it shows |
-|---|---|
-| The hologram | Pip, large, at the centre; click it to talk again |
-| Rings | Ticks every 3°, bearings every 30°, dashed and solid arcs and corner brackets, each turning on its own; they turn at the speed of what Pip is doing (slow when ready, fast when thinking or working) and ease between speeds |
-| Voice ring | 128 bars round the outside that move with your voice while Pip listens, and with Pip's while it speaks |
-| Radar sweep | A fading wedge that sweeps round while Pip thinks, searches, works or retries |
-| Working arc | An arc chasing round the inner ring while Pip carries something out |
-| Top left | Time and date, and readouts: Pip's load, battery, storage, network |
-| Top right | Pip's state in large letters with a blinking cursor, what it is doing in words, and a live trace of activity |
-| You (left) | What Pip heard, as you say it |
-| Pip (right) | Pip's reply, with review cards, previews and recovery chips; answer by voice or with the buttons |
-| Activity (bottom) | A log that types out each step with its time: "heard 'Delete interview notes'", "thinking · on this device", "asking · waiting for your review" |
-
-| Moment | Motion |
-|---|---|
-| Opens | The screen darkens and blurs; the hologram travels from the home orb (or the menu bar mic, over windows) to the centre and grows to full size (820 ms, precise spring); a shock ring of light spreads out; the rings power up one after another, turning into place; the grid flickers on; the panels slide in from the edges with a short flicker |
-| While Pip works | Rings, sweep, voice ring and log move as described; the hologram itself follows Pip's state |
-| Closes | A few seconds after the answer (2.6 s if Pip opened windows, so you see them; up to 7 s otherwise), or at once on `Esc` or a click outside: panels fade, rings fall back, and the hologram shrinks back into the orb (560 ms) |
-
-*Settings › Pip & voice › Full screen when you talk* turns it off; Pip then answers in the caption
-under the orb on home, or in the small voice panel over windows. Under Reduce motion the view
-fades in and out, and nothing turns.
 
 ## The current task card
 

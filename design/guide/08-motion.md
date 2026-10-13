@@ -65,7 +65,7 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
 | Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; the Turbine and the Hologram instead ease their speed and light into the new state over about 0.4 s, like a machine spinning up. The orb never jumps |
-| Pip full screen | The hologram travels from the orb to the centre and grows (820 ms, precise spring); a shock ring spreads; the rings power up 60 ms apart, turning into place; panels slide in with a short flicker. It closes by shrinking back into the orb (560 ms, ease-in-out). The rings' speed follows Pip's state and eases between speeds, never jumping |
+| Moving Pip | Pip follows the pointer exactly, lifted 4 %; on release it lands on a detent; the greeting and examples slide to close (or open) the space in the middle (520 ms). *Move back to the middle* glides it home (620 ms); hiding it fades and shrinks it (220 ms, ease-in) |
 | Unlock | A ring of accent light spreads from the password field across the screen while the lock lifts away (scales to 104 %, blurs and fades); light then crosses each widget in turn |
 | System update applied | The update screen fades and the same ring spreads from the centre |
 | Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff). Each icon's size rides its own spring (damping ratio 0.87) toward the size the pointer asks for, so the dock flows as the pointer sweeps across and glides back when it leaves; off under Reduce motion. The label rises 5 px into place on the precise spring |

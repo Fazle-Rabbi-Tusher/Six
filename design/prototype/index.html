@@ -398,6 +398,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .task-file small { display: block; font: var(--text-caption); color: var(--c-text-3); }
 .task-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .frow.empty-row { display: block; padding: 28px 12px; text-align: center; color: var(--c-text-2); cursor: default; }
+/* Pip can live anywhere on home: drag it out of the middle, and it stays where you put it */
+.pip-spot { display: grid; justify-items: center; gap: 6px; touch-action: none; }
+.pip-spot.floating { position: absolute; z-index: 22; }
+.pip-spot.floating .pip { --size: 190px; }
+.pip-spot.lift .pip { transform: scale(1.04); cursor: grabbing; }
+.pip-spot[hidden] { display: none; }
+#home.stack .pip-spot.floating { position: static; }
 .pip-state { font: 600 12px/16px var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--pip-line); }
 .greet { margin: 0; font: var(--text-headline); letter-spacing: -0.01em; text-wrap: balance; }
 .greet-sub { margin: 0; color: var(--c-text-2); font: var(--text-body-lg); }
@@ -456,6 +463,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
 /* widgets: draggable plasma-clay cards that fuse when close */
 .widget { position: absolute; width: var(--side-w); padding: 16px; display: grid; gap: 12px; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.widget > * { min-width: 0; }   /* content wraps inside the card instead of pushing past its edge */
 .widget.drag { cursor: grabbing; z-index: 25; }
 .widget.stack-top { z-index: 20; }
 .widget.stack-hidden { visibility: hidden; pointer-events: none; }
@@ -559,7 +567,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .wb-stat span { font: var(--text-caption); color: var(--c-text-3); }
 .wb-date { height: 34px; border: 1px solid var(--c-line-strong); border-radius: var(--radius-sm, 8px); background: var(--c-surface); color: var(--c-text); font: var(--text-body-sm); padding: 0 8px; }
 .wb-text { padding: 12px 14px; font: var(--text-body-sm); color: var(--c-text-2); white-space: pre-wrap; }
-.wb-count { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 12px; padding: 12px 14px; }
+.wb-count { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 12px 14px; }
 .wb-count b { font: 400 40px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .wb-count > span:nth-of-type(1) { font: var(--text-caption); color: var(--c-text-3); }
 .wb-count .btns { display: flex; gap: 6px; }
@@ -874,72 +882,6 @@ button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6p
 .qtile.wide { grid-column: 1 / -1; }
 #vhud { position: absolute; z-index: 965; top: calc(var(--menubar-h) + 10px); right: 12px; width: min(380px, calc(100% - 24px)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
 #vhud[hidden] { display: none; }
-/* ── Pip full screen: the Hologram HUD ─────────────────────────────
-   When you talk to Pip, the hologram grows out of where Pip was and fills the screen, inside a
-   projection of rings, readouts and a running log of what Pip is doing. */
-:root { --holo: 84 182 255; }
-:root[data-holo-hue="gold"] { --holo: 255 178 72; }
-:root[data-holo-hue="violet"] { --holo: 170 140 255; }
-:root[data-holo-hue="silver"] { --holo: 200 214 234; }
-#holoHud {
-  position: absolute; inset: 0; z-index: 968; overflow: hidden; color: rgb(var(--holo)); font: 500 12px/1.45 var(--font-mono); letter-spacing: 0.04em;
-  --c-text: #eef6ff; --c-text-2: #bccde2; --c-text-3: #8aa0ba; --c-surface: #16202e; --c-surface-2: #0f1824; --c-surface-3: #1e2b3c; --c-line: rgb(var(--holo) / 0.2); --c-line-strong: rgb(var(--holo) / 0.38);
-}
-#holoHud[hidden] { display: none; }
-.hh-back { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgb(4 10 22 / 0.8), rgb(2 5 12 / 0.96) 72%); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); }
-.hh-grid { position: absolute; inset: 0; pointer-events: none;
-  background-image: linear-gradient(rgb(var(--holo) / 0.07) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--holo) / 0.07) 1px, transparent 1px), repeating-linear-gradient(0deg, rgb(var(--holo) / 0.035) 0 1px, transparent 1px 3px);
-  background-size: 48px 48px, 48px 48px, auto; -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 18%, transparent 78%); mask-image: radial-gradient(circle at 50% 46%, #000 18%, transparent 78%); }
-.hh-core { --S: min(68vh, 56vw); position: absolute; left: 50%; top: 44%; width: var(--S); height: var(--S); margin: calc(var(--S) / -2) 0 0 calc(var(--S) / -2); }
-.hh-rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 0 5px rgb(var(--holo) / 0.55)); }
-.hh-rings line, .hh-rings circle, .hh-rings path { fill: none; stroke: rgb(var(--holo)); vector-effect: non-scaling-stroke; }
-.hh-rings text { fill: rgb(var(--holo)); font: 500 13px var(--font-mono); letter-spacing: 0.1em; opacity: 0.75; }
-.hh-rings .w path { fill: rgb(var(--holo)); stroke: none; }
-#hudOrb { position: absolute; left: 13.75%; top: 13.75%; width: 72.5%; height: 72.5%; color: rgb(var(--holo)); pointer-events: none; }
-.hh-hit { position: absolute; left: 22%; top: 22%; width: 56%; height: 56%; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
-.hh-hit:focus-visible { outline: 2px solid rgb(var(--holo)); outline-offset: 6px; }
-.hh-shock { position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; margin: -50% 0 0 -50%; border-radius: 50%; border: 2px solid rgb(var(--holo)); box-shadow: 0 0 40px rgb(var(--holo) / 0.6), inset 0 0 40px rgb(var(--holo) / 0.4); opacity: 0; pointer-events: none; }
-.hh-panel { position: absolute; padding: 12px 16px 14px; border: 1px solid rgb(var(--holo) / 0.38); text-shadow: 0 0 8px rgb(var(--holo) / 0.55);
-  background: linear-gradient(135deg, rgb(var(--holo) / 0.12), rgb(var(--holo) / 0.02) 60%); box-shadow: inset 0 0 26px rgb(var(--holo) / 0.08);
-  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); }
-.hh-panel::before { content: ""; position: absolute; left: 0; top: 0; width: 34px; height: 2px; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); }
-.hh-k { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; letter-spacing: 0.22em; opacity: 0.72; margin-bottom: 8px; text-transform: uppercase; }
-.hh-tl { top: calc(var(--menubar-h) + 16px); left: 24px; width: 250px; }
-.hh-tr { top: calc(var(--menubar-h) + 16px); right: 24px; width: 250px; }
-.hh-left { top: max(32%, 250px); left: 24px; width: min(300px, 22vw); }
-.hh-right { top: max(32%, 250px); right: 24px; width: min(360px, 25vw); max-height: 56%; overflow: auto; scrollbar-width: none; }
-.hh-bottom { bottom: 20px; left: 50%; width: min(600px, 52vw); margin-left: calc(min(600px, 52vw) / -2); }
-#hhClock { display: block; font: 600 26px/1 var(--font-mono); letter-spacing: 0.08em; color: #eaf6ff; }
-#hhDate { display: block; margin: 4px 0 10px; opacity: 0.75; }
-.hh-row { display: grid; grid-template-columns: 74px 1fr 46px; align-items: center; gap: 8px; margin-top: 5px; font-size: 11px; }
-.hh-bar { height: 4px; background: rgb(var(--holo) / 0.15); }
-.hh-bar i { display: block; height: 100%; width: 40%; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); transition: width 380ms var(--ease-out); }
-.hh-row b { font-weight: 500; text-align: right; color: #eaf6ff; }
-#hhState { font: 600 22px/1 var(--font-mono); letter-spacing: 0.2em; color: #eaf6ff; text-transform: uppercase; }
-.hh-cursor { display: inline-block; width: 10px; height: 18px; margin-left: 6px; vertical-align: -2px; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); animation: hh-blink 1s steps(1) infinite; }
-@keyframes hh-blink { 50% { opacity: 0; } }
-#hhLabel { display: block; margin-top: 8px; min-height: 17px; color: #d9ecff; }
-#hhSpark { display: block; width: 100%; height: 40px; margin-top: 10px; }
-#hhYou { margin: 0; font: 500 19px/1.35 var(--font-ui); letter-spacing: 0; color: #f2f8ff; text-shadow: 0 0 12px rgb(var(--holo) / 0.45); }
-#hhPip { margin: 0; font: 400 24px/1.3 var(--font-display); letter-spacing: 0; color: #f2f8ff; text-shadow: 0 0 14px rgb(var(--holo) / 0.5); }
-#hhYou:empty::before { content: "—"; opacity: 0.5; }
-#hhPip:empty::before { content: "…"; opacity: 0.5; }
-#hhCard { display: grid; gap: 8px; margin-top: 12px; text-shadow: none; }
-#hhCard:empty { display: none; }
-#hhCard .review { max-width: none; background: rgb(var(--holo) / 0.08); border-color: rgb(var(--holo) / 0.4); }
-#hhLog { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; min-height: 92px; }
-#hhLog li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #d4e8ff; }
-#hhLog li:not(:last-child) { opacity: 0.6; }
-#hhLog li b { font-weight: 500; opacity: 0.55; margin-right: 10px; color: rgb(var(--holo)); }
-.hh-hint { position: absolute; right: 26px; bottom: 22px; font-size: 10px; letter-spacing: 0.18em; opacity: 0.55; text-transform: uppercase; }
-@media (max-height: 780px) { .hh-core { --S: min(60vh, 52vw); top: 42%; } }
-@media (max-width: 900px) {
-  .hh-core { --S: min(58vh, 92vw); top: 36%; }
-  .hh-tl, .hh-tr, .hh-bottom, .hh-hint { display: none; }
-  .hh-left { top: auto; bottom: 168px; left: 12px; right: 12px; width: auto; }
-  .hh-right { top: auto; bottom: 12px; left: 12px; right: 12px; width: auto; max-height: 148px; }
-}
-
 #vhud > .dotorb { width: 40px; height: 40px; flex: none; color: var(--c-text); }
 .hud-text { display: grid; gap: 4px; min-width: 0; flex: 1; }
 #hudYou { font: var(--text-body-sm); color: var(--c-text-2); }
@@ -1351,8 +1293,10 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   <main id="home" aria-label="Home">
     <div class="center" id="center">
       <div class="stage">
-        <button type="button" class="pip" id="pipHome" data-state="ready" aria-label="Pip, ready. Press to talk"></button>
-        <div class="pip-state" id="pipState" aria-live="polite">Pip · ready</div>
+        <div class="pip-spot" id="pipSpot">
+          <button type="button" class="pip" id="pipHome" data-state="ready" aria-label="Pip, ready. Press to talk. Drag to move, or right-click to hide"></button>
+          <div class="pip-state" id="pipState" aria-live="polite">Pip · ready</div>
+        </div>
         <h1 class="greet" id="greet">Good morning, Nadia.</h1>
         <p class="greet-sub" id="greetSub">Press the mic in the menu bar, or hold Space, and talk.</p>
       </div>
@@ -1564,7 +1508,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
           <h2>Pip lives on the home screen</h2>
-          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has three looks (Settings › Pip &amp; voice › Look): the Hologram, the default; the dotted sphere, shown first here; and the Turbine. When you talk, the Hologram fills the screen. Every state moves its light differently. Pick one to set Pip everywhere.</p>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has three looks (Settings › Pip &amp; voice › Look): the Hologram, the default; the dotted sphere, shown first here; and the Turbine. Every state moves its light differently. Pick one to set Pip everywhere.</p>
           <div class="pips" id="pipStates"></div>
           <h3>The small orb</h3>
           <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
@@ -1574,7 +1518,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="holo" aria-pressed="true">Hologram</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div>
           <div class="pips" id="turbStates"></div>
           <h3>The Hologram</h3>
-          <p>Pip's default look: a projection in blue (or gold, violet or silver) hanging in the air. A sphere drawn in broken, sparking arcs, with circuit-like strokes stepping off it; a bright tilted ring and an inner one around its waist; rings standing on end; spokes running out from a ringed core with a hole through it; dust and soft sparks inside. Every part is a cloud of points of light in 3D, turning on its own axis, and bright places bloom. Thinking sends pulses out along the spokes, searching sweeps a scan line, working lights the sphere round as the task progresses.</p>
+          <p>Pip's default look: a projection in blue (or gold, violet or silver) hanging in the air. A sphere drawn in broken, sparking arcs, with circuit-like strokes stepping off it; a bright tilted ring and an inner one around its waist; rings standing on end; spokes running out from a hexagonal core with a well through it; dust and soft sparks inside. Every part is a cloud of points of light in 3D, turning on its own axis, and bright places bloom. Thinking sends pulses out along the spokes, searching sweeps a scan line, working lights the sphere round as the task progresses.</p>
           <div class="seg" role="group" aria-label="Hologram colour" id="segHueGuide"><button data-v="blue" aria-pressed="true">Blue</button><button data-v="gold" aria-pressed="false">Gold</button><button data-v="violet" aria-pressed="false">Violet</button><button data-v="silver" aria-pressed="false">Silver</button></div>
           <div class="pips" id="holoStates"></div>
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
@@ -1813,8 +1757,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
               <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="holo" aria-pressed="true">Hologram</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div></div>
-              <div class="srow"><span class="sl"><b>Hologram colour</b><small>The hologram and the full-screen view</small></span><div class="seg" role="group" aria-label="Hologram colour" id="segHue"><button data-v="blue" aria-pressed="true">Blue</button><button data-v="gold" aria-pressed="false">Gold</button><button data-v="violet" aria-pressed="false">Violet</button><button data-v="silver" aria-pressed="false">Silver</button></div></div>
-              <label class="srow"><span class="sl"><b>Full screen when you talk</b><small>The hologram fills the screen while Pip listens and works, then folds back</small></span><input class="sw" type="checkbox" id="hudToggle" checked></label>
+              <div class="srow"><span class="sl"><b>Hologram colour</b><small>Blue, or gold, violet or silver</small></span><div class="seg" role="group" aria-label="Hologram colour" id="segHue"><button data-v="blue" aria-pressed="true">Blue</button><button data-v="gold" aria-pressed="false">Gold</button><button data-v="violet" aria-pressed="false">Violet</button><button data-v="silver" aria-pressed="false">Silver</button></div></div>
               <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
@@ -1851,6 +1794,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <section class="spage" data-page="home" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Widgets</b><small id="wCount">4 on home</small></span><button type="button" class="btn btn-secondary sm" data-act="widgets">Edit widgets…</button></div>
+              <label class="srow"><span class="sl"><b>Pip on home</b><small>Drag Pip anywhere on home; right-click it to move it back or hide it</small></span><input class="sw" type="checkbox" data-bind="pip" id="pipShow" checked></label>
               <label class="srow"><span class="sl"><b>Greeting</b><small>“Good morning, Nadia.” under Pip</small></span><input class="sw" type="checkbox" data-bind="greet" checked></label>
               <label class="srow"><span class="sl"><b>“Try saying” examples</b><small>Shown on home until you’ve talked to Pip a few times</small></span><input class="sw" type="checkbox" data-bind="tries" checked></label>
               <div class="srow"><span class="sl"><b>When home is full</b><small>New cards go into the stack at the foot of their column</small></span><span class="chip">Stack</span></div>
@@ -2145,28 +2089,6 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="art" viewBox="0 0 64 64"><use href="#app-bin"/></svg></span><span class="tip">Bin</span></button>
   </nav>
 
-  <!-- Pip full screen: the hologram fills the screen while you talk to Pip -->
-  <div id="holoHud" role="dialog" aria-label="Pip" hidden>
-    <div class="hh-back"></div>
-    <div class="hh-grid" aria-hidden="true"></div>
-    <div class="hh-core">
-      <div class="hh-shock" aria-hidden="true"></div>
-      <svg class="hh-rings" id="hhRings" viewBox="-500 -500 1000 1000" aria-hidden="true"></svg>
-      <canvas class="dotorb orb-hi" id="hudOrb" data-follow="1" data-state="ready" aria-hidden="true"></canvas>
-      <button type="button" class="hh-hit" id="hudTalk" aria-label="Talk to Pip"></button>
-    </div>
-    <section class="hh-panel hh-tl" aria-hidden="true"><span class="hh-k"><span>SIX · Pip</span><span>on device</span></span><b id="hhClock">--:--:--</b><span id="hhDate"></span>
-      <div class="hh-row"><span>Pip load</span><span class="hh-bar"><i id="hhLoad"></i></span><b id="hhLoadN">0 %</b></div>
-      <div class="hh-row"><span>Battery</span><span class="hh-bar"><i style="width: 64%"></i></span><b>64 %</b></div>
-      <div class="hh-row"><span>Storage</span><span class="hh-bar"><i style="width: 58%"></i></span><b>212 GB</b></div>
-      <div class="hh-row"><span>Network</span><span class="hh-bar"><i id="hhNet"></i></span><b>5 GHz</b></div>
-    </section>
-    <section class="hh-panel hh-tr"><span class="hh-k"><span>Status</span><span id="hhSig">signal</span></span><b id="hhState">Ready</b><span class="hh-cursor" aria-hidden="true"></span><span id="hhLabel"></span><canvas id="hhSpark" aria-hidden="true"></canvas></section>
-    <section class="hh-panel hh-left"><span class="hh-k"><span>You</span><span>voice</span></span><p id="hhYou"></p></section>
-    <section class="hh-panel hh-right"><span class="hh-k"><span>Pip</span><span>reply</span></span><p id="hhPip" aria-live="polite"></p><div id="hhCard"></div></section>
-    <section class="hh-panel hh-bottom" aria-hidden="true"><span class="hh-k"><span>Activity</span><span id="hhCount">000</span></span><ol id="hhLog"></ol></section>
-    <div class="hh-hint" aria-hidden="true">Esc or click outside to close · click Pip to talk</div>
-  </div>
   <div id="vhud" class="glass" hidden><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><div class="hud-text"><span id="hudYou"></span><b id="hudPip" aria-live="polite"></b><div class="hud-card" id="hudCard"></div></div></div>
   <div id="lock" hidden>
     <div class="lock-time"><span id="lockT">10:42</span><span id="lockD">Tuesday 13 October</span></div>
@@ -3011,6 +2933,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (!k) return;
     if (BIND_QS.includes(k)) { if (pressed(k) !== el.checked) qsTile(k).click(); }
     else if (BIND_A11Y[k]) { const t = $(BIND_A11Y[k]); if (t.checked !== el.checked) t.click(); }
+    else if (k === 'pip') setPipShown(el.checked, true);
     else if (k === 'greet') { $('#greet').hidden = $('#greetSub').hidden = !el.checked; }
     else if (k === 'tries') $('#vTry').hidden = !el.checked;
     else if (k === 'mag') dockMag = el.checked;
@@ -3802,7 +3725,7 @@ void main() {
   /* ── The Hologram: Pip's third look ─────────────────────────────
      A gold projection hanging in the air: a sphere drawn in broken, sparking arcs (with little
      circuit-like strokes stepping off it), a bright tilted ring and an inner one around its
-     waist, rings standing on end, spokes running out from a ringed core with a hole through it,
+     waist, rings standing on end, spokes running out from a hexagonal core with a well through it,
      and dust and soft sparks floating inside. Every part is a cloud of points of light in 3D,
      drawn twice on the GPU (a sharp pass and a wide glow pass) and added together, so bright
      places bloom. Each part turns on its own axis; states change the motion and the light. */
@@ -3856,13 +3779,19 @@ void main() {
       const twin = i < 4 ? 0.012 : 0;
       for (const o of twin ? [-twin, twin] : [0]) arc(s => [d[0] / n * s - o * d[1], d[1] / n * s + o * d[0], d[2] / n * s], 0.16, end, 0.006, 1.05, 1.0 * (1 - 0.3 * (i % 3) / 2), 3);
     });
-    // 4 · the core: a ring with a hole through it, rings around it, and its glow
-    for (let u = 0; u < 110; u++) for (let v = 0; v < 16; v++) {   // a glowing tube, lit on its outer lip
-      const a = u / 110 * TAU, b2 = v / 16 * TAU, R0 = 0.15, r0 = 0.052;
-      add((R0 + r0 * Math.cos(b2)) * Math.cos(a), (R0 + r0 * Math.cos(b2)) * Math.sin(a), r0 * Math.sin(b2), 1.2, 0.5 + 0.9 * Math.max(0, Math.cos(b2 - 0.8)) ** 2, 4);
+    // 4 · the core: a hexagonal frame with a hexagonal well through it, hexagons around it, and its glow
+    const hex = (R, s, z = 0) => {   // a point s of the way round a flat-topped hexagon (s from 0 to 6)
+      const k = Math.floor(s) % 6, f = s - Math.floor(s), a0 = k * Math.PI / 3, a1 = (k + 1) * Math.PI / 3;
+      return [R * (Math.cos(a0) + (Math.cos(a1) - Math.cos(a0)) * f), R * (Math.sin(a0) + (Math.sin(a1) - Math.sin(a0)) * f), z];
+    };
+    for (let u = 0; u < 120; u++) for (let v = 0; v < 14; v++) {   // a glowing hexagonal tube, lit on its outer lip
+      const sU = u / 120 * 6, b2 = v / 14 * TAU, mid = (Math.floor(sU) + 0.5) * Math.PI / 3, r0 = 0.045;
+      const [x, y] = hex(0.16, sU), nx = Math.cos(mid), ny = Math.sin(mid);   // the edge's outward normal
+      add(x + r0 * Math.cos(b2) * nx, y + r0 * Math.cos(b2) * ny, r0 * Math.sin(b2), 1.2, 0.5 + 0.9 * Math.max(0, Math.cos(b2 - 0.8)) ** 2, 4);
     }
-    for (let z = 0; z < 8; z++) arc(a => [0.09 * Math.cos(a), 0.09 * Math.sin(a), -0.03 - z * 0.035], 0, TAU, 0.04, 1.0, 0.55 - z * 0.06, 4);   // the hole, receding
-    for (const [rad, b, a0, a1] of [[0.24, 1.25, 0.3, 4.4], [0.29, 0.9, 2.2, 6.0], [0.34, 0.6, 0, TAU], [0.4, 0.75, 3.6, 5.6]]) for (let k = 0; k < 2; k++) arc(a => [(rad + k * 0.012) * Math.cos(a), (rad + k * 0.012) * Math.sin(a), 0], a0, a1, 0.012, 1.2, b, 4, 0.02);
+    for (let z = 0; z < 8; z++) arc(s => hex(0.1, s, -0.03 - z * 0.035), 0, 5.99, 0.04, 1.0, 0.55 - z * 0.06, 4);   // the well, receding
+    for (const [rad, b, s0, s1] of [[0.25, 1.25, 0.2, 3.9], [0.31, 0.9, 2.1, 5.8], [0.37, 0.6, 0, 5.99], [0.44, 0.75, 3.4, 5.4]]) for (let k = 0; k < 2; k++) arc(s => hex(rad + k * 0.012, s), s0, s1, 0.012, 1.2, b, 4, 0.02);
+    for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; arc(r => [r * Math.cos(a), r * Math.sin(a), 0], 0.21, 0.36, 0.008, 1.0, 0.7, 4); }   // struts from frame to frame
     for (let i = 0; i < 10; i++) add((rnd() - 0.5) * 0.3, (rnd() - 0.5) * 0.3, 0, 10 + rnd() * 8, 0.2, 4);
     // 5 · dust and soft sparks
     for (let i = 0; i < 950; i++) {
@@ -3982,7 +3911,7 @@ void main() {
   function drawHolo(el, t) {
     const s = setupCanvas(el); if (!s) return;
     const [ctx, size] = s;
-    const hi = el._hi, dark = isDark() || el.id === 'hudOrb', look = lookOf(el), still = calm();   // the full-screen view is always dark
+    const hi = el._hi, dark = isDark(), look = lookOf(el), still = calm();
     const now = performance.now(), T = still ? 0 : now, dt = el._tt && !still ? Math.min(0.1, (now - el._tt) / 1000) : 0; el._tt = now;
     const amp = look === 'speak' ? parseFloat(el.style.getPropertyValue('--amp')) || 0 : 0;
     const prog = progressOf(el), ring = !hi && prog !== null && prog < 1, lit = look.startsWith('working') && prog !== null ? prog : null;
@@ -4094,11 +4023,9 @@ void main() {
   pipHome.innerHTML = '<canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>';
   $$('.dotorb').forEach(o => mountOrb(o));
   let pipNow = 'ready', pipLabel = '', ampTimer = null, pipBack = null;
-  let hudNote = null;   // the full-screen HUD logs each change (set up with the HUD below)
   // label: what Pip is doing right now, in words ("searching Documents"), shown under the orb
   function setPip(state, label = '') {
     pipNow = state; pipLabel = label;
-    if (hudNote) hudNote(state, label);
     clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
@@ -4164,7 +4091,7 @@ void main() {
   function layoutHome() {
     const wide = isWide();
     home.classList.toggle('stack', !wide);
-    if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; return; }
+    if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; applyPip(); return; }
     const pad = 24, gap = 12, sideW = 284, top = mbH() + 16;
     let yL = top, yR = top;
     const H = desk.clientHeight - dockSpace() - 8;
@@ -4196,6 +4123,7 @@ void main() {
       const ph = phys.get(c), st = stackOf(c);
       return ph.ty + c.offsetHeight + (st && st.cards[0] === c ? peekSpace(st) : 0) + gap;
     }));
+    applyPip();
     const fl = foot('L'), fr = foot('R'), aL = fl <= fr, ay = Math.min(fl, fr);
     add.hidden = ay + 40 > H;
     add.style.left = (aL ? pad : desk.clientWidth - pad - sideW) + 'px'; add.style.top = ay + 'px';
@@ -4211,6 +4139,81 @@ void main() {
     }
   }
   let fitting = false, tucking = false;
+  /* Pip on home: in the middle by default, but it's yours to move. Drag it anywhere (it keeps a
+     clear edge from the menu bar and dock), and it stays there, smaller, like something you set
+     down; right-click to send it back to the middle or hide it. Alt + arrows move it too. */
+  const pipSpot = $('#pipSpot'), pipStage = $('.stage');
+  let pipPlace = null, pipDragged = false;   // where Pip sits, as fractions of home, or null for the middle
+  try { pipPlace = JSON.parse(localStorage.getItem('six.pipPlace')) || null; } catch { pipPlace = null; }
+  const savePip = () => { try { localStorage.setItem('six.pipPlace', JSON.stringify(pipPlace)); } catch {} };
+  const pipBounds = () => ({ x0: 8, y0: mbH() + 8, x1: desk.clientWidth - pipSpot.offsetWidth - 8, y1: desk.clientHeight - dockSpace() - pipSpot.offsetHeight - 8 });
+  // the greeting and captions slide up or down when Pip leaves or comes back, instead of jumping
+  function centreFlip(fn) {
+    const els = $$('#greet, #greetSub, #vcap, #vTry').filter(e => e.offsetParent), before = els.map(e => e.getBoundingClientRect());
+    fn();
+    els.forEach((e, i) => moveFrom(e, before[i], { duration: 520 }));
+  }
+  function applyPip() {
+    const float = !!pipPlace && isWide();
+    if (float !== pipSpot.classList.contains('floating')) centreFlip(() => {
+      if (float) { $('#home').append(pipSpot); pipSpot.classList.add('floating'); }
+      else { pipSpot.classList.remove('floating'); pipSpot.style.left = pipSpot.style.top = ''; pipStage.prepend(pipSpot); }
+    });
+    if (float) {
+      const b = pipBounds();
+      pipSpot.style.left = Math.round(Math.min(b.x1, Math.max(b.x0, pipPlace.x * desk.clientWidth))) + 'px';
+      pipSpot.style.top = Math.round(Math.min(b.y1, Math.max(b.y0, pipPlace.y * desk.clientHeight))) + 'px';
+    }
+  }
+  function placePip(place) {
+    const from = pipSpot.getBoundingClientRect();
+    pipPlace = place; savePip(); applyPip();
+    moveFrom(pipSpot, from, { duration: 620 });
+  }
+  function setPipShown(on, quiet) {
+    if (on === !pipSpot.hidden) return;
+    $('#pipShow').checked = on;
+    if (on) { pipSpot.hidden = false; anim(pipSpot, [{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'none' }], { duration: 520 }); return; }
+    const a = anim(pipSpot, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.9)' }], { duration: 220, easing: EASE.in, fill: 'forwards' });
+    settled(a).then(() => { if (!$('#pipShow').checked) { centreFlip(() => { pipSpot.hidden = true; }); a && a.cancel(); } });
+    if (!quiet) toast('Pip is hidden from home. Talk with the mic in the menu bar; bring Pip back in Settings › Home & widgets.', () => setPipShown(true), 'Undo');
+  }
+  pipSpot.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || !isWide()) return;
+    const sx = e.clientX, sy = e.clientY, r0 = pipSpot.getBoundingClientRect();
+    let on = false, ox = 0, oy = 0;
+    const move = ev => {
+      if (!on) {
+        if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+        on = true; pipDragged = true;
+        if (!pipSpot.classList.contains('floating')) {   // lift Pip out of the middle, keeping it under the pointer
+          const dr = desk.getBoundingClientRect();
+          pipPlace = { x: (r0.left - dr.left) / desk.clientWidth, y: (r0.top - dr.top) / desk.clientHeight }; applyPip();
+        }
+        const r = pipSpot.getBoundingClientRect(); ox = sx - r.left - (r.width - r0.width) / 2; oy = sy - r.top;
+        pipSpot.classList.add('lift');
+      }
+      const dr = desk.getBoundingClientRect(), b = pipBounds();
+      pipSpot.style.left = Math.min(b.x1, Math.max(b.x0, ev.clientX - dr.left - ox)) + 'px';
+      pipSpot.style.top = Math.min(b.y1, Math.max(b.y0, ev.clientY - dr.top - oy)) + 'px';
+    };
+    const up = () => {
+      removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      if (!on) return;
+      pipSpot.classList.remove('lift');
+      pipPlace = { x: pipSpot.offsetLeft / desk.clientWidth, y: pipSpot.offsetTop / desk.clientHeight }; savePip();
+      settle($('#pipHome'));
+      setTimeout(() => { pipDragged = false; }, 0);
+    };
+    addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+  });
+  $('#pipHome').addEventListener('keydown', e => {   // keyboard alternative to dragging (WCAG 2.5.7)
+    const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
+    if (!e.altKey || !d || !isWide()) return;
+    e.preventDefault();
+    const dr = desk.getBoundingClientRect(), r = pipSpot.getBoundingClientRect();
+    pipPlace = { x: (r.left - dr.left + d[0]) / desk.clientWidth, y: (r.top - dr.top + d[1]) / desk.clientHeight }; savePip(); applyPip();
+  });
   // Stacks, like notification stacks: drop one card on another and they stack. Under the top card,
   // previews of the next cards peek out (title + one line). A drag only ever takes one card out:
   // the top card, or the card whose preview you grab. Click a preview to bring that card to the front.
@@ -4532,6 +4535,20 @@ void main() {
     });
   }
   widgetEls.forEach(wireWidget);
+  // a card that changes size (a date is picked, a list grows, a task finishes) re-flows home, so
+  // nothing overlaps it and Add widgets stays below the last card
+  let reflowQ = 0, reflowStacks = false;
+  const cardSizes = typeof ResizeObserver === 'function' ? new ResizeObserver(entries => {
+    if (entries.some(e => stackOf(e.target))) reflowStacks = true;
+    if (reflowQ) return;
+    reflowQ = requestAnimationFrame(() => {
+      reflowQ = 0;
+      if (dragging || popStack || !isWide()) { reflowStacks = false; return; }
+      if (reflowStacks && stacks.some(st => !st.swap && st.H !== Math.max(...st.cards.map(c => c.offsetHeight)))) renderStacks(); else layoutHome();
+      reflowStacks = false; markDirty();
+    });
+  }) : null;
+  widgetEls.forEach(el => cardSizes?.observe(el));
 
   /* ── Widgets: a gallery of glanceable cards, and ones Pip makes ──
      Every widget does one job and can be read at a glance; the few controls it has (play, check
@@ -4772,7 +4789,7 @@ void main() {
     if (popStack) closeStack(true);
     const id = 'x' + (++wSeq);
     $('#widgets').insertBefore(el, $('#addWidget'));
-    widgetEls.push(el);
+    widgetEls.push(el); cardSizes?.observe(el);
     phys.set(el, { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, moved: false });
     wireWidget(el);
     if (!isWide()) { layoutHome(); markDirty(); return { col: null }; }
@@ -4812,7 +4829,7 @@ void main() {
     if (!widgetEls.includes(el)) return false;
     if (popStack) closeStack(true);
     if (stackOf(el)) pullOut(el);
-    widgetEls.splice(widgetEls.indexOf(el), 1); phys.delete(el); el.remove();
+    widgetEls.splice(widgetEls.indexOf(el), 1); phys.delete(el); cardSizes?.unobserve(el); el.remove();
     layoutHome(); markDirty(); renderGallery();
     return true;
   }
@@ -4875,6 +4892,7 @@ void main() {
   const wMenu = $('#wMenu');
   function hideWMenu() { wMenu.hidden = true; }
   $('#home').addEventListener('contextmenu', e => {
+    if (e.target.closest('#pipSpot') && isWide()) { e.preventDefault(); pipMenu(e); return; }
     if (e.target.closest('#center, input, textarea') || !isWide()) return;
     e.preventDefault();
     const card = e.target.closest('.widget'), k = kindOf(card);
@@ -4887,7 +4905,21 @@ void main() {
     wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
     $('.mrow', wMenu).focus();
   });
-  wMenu.addEventListener('click', e => { const b = e.target.closest('[data-w]'); if (!b) return; hideWMenu(); b.dataset.w === 'edit' ? openGallery() : removeKind(wMenu._k); });
+  wMenu.addEventListener('click', e => {
+    const b = e.target.closest('[data-w]'); if (!b) return; hideWMenu();
+    const w = b.dataset.w;
+    if (w === 'edit') openGallery(); else if (w === 'pip-centre') placePip(null); else if (w === 'pip-hide') setPipShown(false); else removeKind(wMenu._k);
+  });
+  function pipMenu(e) {
+    const dr = desk.getBoundingClientRect();
+    wMenu.innerHTML = (pipPlace ? '<button class="mrow" role="menuitem" data-w="pip-centre">Move Pip back to the middle</button>' : '')
+      + '<button class="mrow" role="menuitem" data-w="pip-hide">Hide Pip from home</button>';
+    wMenu.hidden = false;
+    anim(wMenu, [{ opacity: 0, transform: 'scale(0.94)', transformOrigin: '0 0' }, { opacity: 1, transform: 'none', transformOrigin: '0 0' }], { duration: 420 });
+    wMenu.style.left = Math.min(e.clientX - dr.left, desk.clientWidth - wMenu.offsetWidth - 8) + 'px';
+    wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
+    $('.mrow', wMenu).focus();
+  }
   document.addEventListener('pointerdown', e => { if (!wMenu.hidden && !e.target.closest('#wMenu')) hideWMenu(); });
 
   // ── Pip designs a widget from a description ──
@@ -4916,7 +4948,7 @@ void main() {
       if (!known.length) return { fail: `I don’t know the time zone for ${unknown.map(cap).join(', ')}. Try a capital or a big city nearby.` };
       return { title: 'World clock', icon: 'globe-hemisphere-west', blocks: known.slice(0, 4).map(c => ({ type: 'clock', tz: CITY_TZ[c], label: c.split(' ').map(cap).join(' ') })), note: unknown.length ? `I left out ${unknown.map(cap).join(', ')}: I don’t know its time zone.` : '' };
     }
-    if ((m = t.match(/(?:count ?down|days?|how long) (?:to|until|till|before) (.+)$/i))) {
+    if ((m = t.match(/(?:counts? ?(?:s )?down|days?|how long|time left) (?:to|until|till|before) (.+)$/i))) {
       let what = m[1], to = '';
       const dm = what.match(new RegExp(`\\s*(?:on|is on|,)?\\s*(\\d{4}-\\d{2}-\\d{2}|\\d{1,2}(?:st|nd|rd|th)? (?:${MONTHS})(?: \\d{4})?|(?:${MONTHS}) \\d{1,2}(?:st|nd|rd|th)?(?:,? \\d{4})?)$`, 'i'));
       if (dm) { to = parseDay(dm[1]); what = what.slice(0, dm.index); }
@@ -4928,7 +4960,7 @@ void main() {
       const title = cap(t.split(':')[0].trim()).slice(0, 32) || 'Checklist';
       return { title, icon: 'list-checks', blocks: [{ type: 'checklist', items: items.length ? items : ['First thing'] }], note: items.length ? '' : 'Add items on the widget.' };
     }
-    if (/(water|glass|cups?|steps|push-?ups|pages|count|tally|track)/.test(lo)) {
+    if (/(water|glass|cups?|steps|push-?ups|pages|count|tally|track)/.test(lo) && !/count ?(?:s )?down|countdown/.test(lo)) {
       const goal = +(lo.match(/\b(\d{1,3})\b/) || [])[1] || 8;
       const label = cap(t.replace(/,?\s*goal (?:of )?\d+/i, '').replace(/\b(?:a |an )?(?:counter|tracker) (?:for|of)\s*/i, '').replace(/\btoday\b/i, '').trim()).slice(0, 40) || 'Count';
       return { title: /water|glass|cup/.test(lo) ? 'Water' : label.slice(0, 32), icon: /water|glass|cup/.test(lo) ? 'drop' : 'plus', blocks: [{ type: 'counter', label, goal }] };
@@ -5668,11 +5700,6 @@ Current prototype state: ${stateSummary()}`;
   // captions go under Pip on home; when windows cover home, into the small voice panel at the top right
   function capHost() {
     clearTimeout(capT);
-    if (hudOn && $('#lock').hidden) {   // full screen: the hologram HUD carries the conversation
-      $('#vcap').hidden = true; $('#vhud').hidden = true;
-      hudOpen();
-      return { you: $('#hhYou'), pip: $('#hhPip'), card: $('#hhCard') };
-    }
     if (!topVisible() && $('#lock').hidden) {
       const was = $('#vcap').hidden;
       $('#vhud').hidden = true; $('#vcap').hidden = false; $('#vTry').classList.add('away'); markDirty();
@@ -5684,7 +5711,6 @@ Current prototype state: ${stateSummary()}`;
   }
   function capDone(ms = 9000) {
     clearTimeout(capT);
-    if (hud.open) { hudDone(ms); return; }
     capT = setTimeout(() => {
       if (voice.pending || voice.on) { capDone(4000); return; }
       const out = el => el.hidden ? null : anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6px) scale(0.98)' }], { duration: 320, easing: EASE.in, fill: 'forwards' });
@@ -5759,7 +5785,6 @@ Current prototype state: ${stateSummary()}`;
     if (!final) return;
     stopListening();
     const s = t.trim().replace(/[.!?]+$/, '');
-    hudLog(`heard “${s}”`);
     if (voice.pending) {
       if (/^(yes|yeah|yep|sure|ok(ay)?|do it|go ahead|confirm|move it|add it)\b/i.test(s)) { voice.pending.yes(); return; }
       if (/^(no|nope|cancel|stop|don'?t|never ?mind)\b/i.test(s)) { voice.pending.no(); return; }
@@ -5793,157 +5818,8 @@ Current prototype state: ${stateSummary()}`;
   }
   function stopWake() { const r = voice.wakeRec; voice.wakeRec = null; if (r) try { r.abort(); } catch {} }
 
-  /* ── Pip full screen: the Hologram HUD ─────────────────────────────
-     Talking to Pip grows the hologram out of where Pip was (the home orb, or the menu bar mic over
-     windows) until it fills the screen, inside a projection: rings of ticks and bearings that
-     turn at the speed of what Pip is doing, a voice ring that moves with your voice, a radar
-     sweep while Pip thinks or searches, readouts in the corners, and a log that types out each
-     step. What you said and Pip's reply (with review cards) sit beside it. It folds back into Pip
-     a few seconds after the answer, or at once on Esc or a click outside. */
-  let hudOn = true;   // Settings › Pip & voice › Full screen when you talk
-  const hud = { open: false, el: $('#holoHud'), raf: 0, last: 0, ang: [0, 0, 0, 0, 0, 0], spd: 0.5, sweep: 0, level: 0, spark: [], closing: null, closeT: 0, n: 0, tick: 0 };
-  const HUD_SPEED = { ready: 0.4, listening: 0.8, thinking: 2.4, speaking: 0.9, searching: 1.6, working: 2.8, asking: 0.6, waiting: 0.5, retrying: 1.8, compacting: 1.3, complete: 0.9, failed: 0.25, cancelled: 0.2, resting: 0.15 };
-  const HUD_RATE = [5, -9, 20, -2.5, 1.2, 12];
-  const HUD_LINE = { ready: 'Standing by', listening: 'Hearing you, on this device', thinking: 'Working it out', speaking: 'Answering', searching: 'Searching', working: 'Carrying it out',
-    asking: 'Waiting for your answer', waiting: 'Waiting on a service', retrying: 'Trying again', compacting: 'Making room', complete: 'Done', failed: 'That didn’t work', cancelled: 'Cancelled', resting: 'Resting' };   // degrees a second for each ring at speed 1
-  (function buildHudRings() {
-    const P = (r, a) => `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
-    const arc = (r, a0, a1) => `M${P(r, a0)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${P(r, a1)}`;
-    const rad = d => d * Math.PI / 180;
-    const ticks = Array.from({ length: 120 }, (_, i) => { const a = rad(i * 3), l = i % 10 ? (i % 5 ? 7 : 13) : 22; return `<line x1="${P(330, a).split(' ')[0]}" y1="${P(330, a).split(' ')[1]}" x2="${P(330 + l, a).split(' ')[0]}" y2="${P(330 + l, a).split(' ')[1]}" stroke-width="${i % 10 ? 1 : 1.6}"/>`; }).join('');
-    const labels = Array.from({ length: 12 }, (_, i) => { const d = i * 30, a = rad(d - 90), [x, y] = P(440, a).split(' '); return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" transform="rotate(${d} ${x} ${y})">${String(d).padStart(3, '0')}</text>`; }).join('');
-    const sweep = Array.from({ length: 8 }, (_, i) => `<path d="M0 0 L${P(318, rad(-i * 4))} A318 318 0 0 0 ${P(318, rad(-(i + 1) * 4))} Z" style="opacity:${(0.32 * (1 - i / 8)).toFixed(3)}"/>`).join('');
-    const bars = Array.from({ length: 128 }, (_, i) => { const a = rad(i * 360 / 128), [x, y] = P(462, a).split(' '); return `<line x1="${x}" y1="${y}" x2="${x}" y2="${y}" stroke-width="2.2" data-a="${a.toFixed(4)}"/>`; }).join('');
-    $('#hhRings').innerHTML = `
-      <g class="hh-o" id="hhO0"><g id="hhR0"><circle r="300" stroke-width="1" opacity="0.35"/><circle r="312" stroke-width="1" stroke-dasharray="2 6" opacity="0.6"/></g></g>
-      <g class="hh-o" id="hhO1"><g id="hhR1"><circle r="330" stroke-width="1.2" opacity="0.8"/>${ticks}</g></g>
-      <g class="hh-o" id="hhO2"><g id="hhR2"><circle r="372" stroke-width="2" stroke-dasharray="30 12" opacity="0.5"/></g></g>
-      <g class="hh-o" id="hhO3"><g id="hhR3"><path d="${arc(398, rad(10), rad(80))}" stroke-width="6"/><path d="${arc(398, rad(130), rad(170))}" stroke-width="6"/><path d="${arc(398, rad(215), rad(300))}" stroke-width="6"/><path d="${arc(408, rad(320), rad(350))}" stroke-width="2"/></g></g>
-      <g class="hh-o" id="hhO4"><g id="hhR4"><circle r="420" stroke-width="1" opacity="0.4"/>${labels}</g></g>
-      <g class="hh-o" id="hhO5"><g id="hhR5">${[45, 135, 225, 315].map(d => `<path d="${arc(486, rad(d - 12), rad(d + 12))}" stroke-width="3"/><path d="${arc(494, rad(d - 4), rad(d + 4))}" stroke-width="1.4"/>`).join('')}</g></g>
-      <g class="hh-o w" id="hhSweep" style="opacity:0">${sweep}</g>
-      <g class="hh-o" id="hhWave">${bars}</g>
-      <g class="hh-o" id="hhProgO"><circle id="hhProg" r="300" stroke-width="4" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90)"/></g>`;
-  })();
-  const hudBars = $$('#hhWave line'), hudSpark = $('#hhSpark');
-  function hudLog(line) {
-    if (!hud.open) return;
-    const ol = $('#hhLog'), li = document.createElement('li'), d = new Date();
-    li.innerHTML = `<b>${d.toLocaleTimeString([], { hour12: false })}</b>`; li.append('› ' + line);
-    ol.append(li); while (ol.children.length > 5) ol.firstElementChild.remove();
-    $('#hhCount').textContent = String(++hud.n).padStart(3, '0');
-    anim(li, [{ opacity: 0, transform: 'translateX(-8px)', filter: 'blur(3px)' }, { opacity: 1, transform: 'none', filter: 'blur(0px)' }], { duration: 360, easing: EASE.out });
-  }
-  // Pip's state shows in the corner and every change goes in the log
-  hudNote = (state, label) => {
-    if (!hud.open) return;
-    const name = PIP_STATES[state][0];
-    if ($('#hhState').textContent !== name) { $('#hhState').textContent = name; anim($('#hhState'), [{ opacity: 0.2, letterSpacing: '0.5em' }, { opacity: 1, letterSpacing: '0.2em' }], { duration: 420, easing: EASE.out }); }
-    $('#hhLabel').textContent = label || HUD_LINE[state] || '';
-    hudLog(label ? `${name.toLowerCase()} · ${label}` : name.toLowerCase());
-  };
-  function hudTick(now) {
-    const dt = hud.last ? Math.min(0.05, (now - hud.last) / 1000) : 1 / 60; hud.last = now;
-    const still = calm(), k = 1 - Math.exp(-dt / 0.5);
-    hud.spd += ((still ? 0 : HUD_SPEED[pipNow] ?? 0.5) - hud.spd) * k;
-    hud.ang = hud.ang.map((a, i) => a + HUD_RATE[i] * hud.spd * dt);
-    hud.ang.forEach((a, i) => $('#hhR' + i).setAttribute('transform', `rotate(${a.toFixed(2)})`));
-    // radar sweep while Pip thinks, searches or works
-    const sw = ['thinking', 'searching', 'working', 'retrying'].includes(pipNow) && !still ? 1 : 0;
-    hud.sweep += (sw - hud.sweep) * k;
-    hud.sweepA = ((hud.sweepA || 0) + dt * 140 * (0.5 + hud.spd * 0.4)) % 360;
-    const sEl = $('#hhSweep'); sEl.style.opacity = hud.sweep.toFixed(3); sEl.setAttribute('transform', `rotate(${hud.sweepA.toFixed(1)})`);
-    // the voice ring: your voice while listening, Pip's while speaking
-    const amp = parseFloat($('#hudOrb').style.getPropertyValue('--amp')) || 0;
-    const lvl = voice.on ? (waveTalk ? 0.35 + Math.random() * 0.65 : 0.1) : pipNow === 'speaking' ? amp : 0.02;
-    hud.level += (lvl - hud.level) * (1 - Math.exp(-dt / 0.08));
-    const t = now / 1000;
-    hudBars.forEach((b, i) => {
-      const a = +b.dataset.a, n = 0.5 + 0.5 * Math.sin(i * 0.9 + t * 7) * Math.sin(i * 0.37 - t * 3), L = 2 + (still ? 0 : hud.level * 46 * n);
-      b.setAttribute('x2', ((462 + L) * Math.cos(a)).toFixed(1)); b.setAttribute('y2', ((462 + L) * Math.sin(a)).toFixed(1));
-    });
-    // working: an arc chases round the inner ring
-    const pr = $('#hhProg');
-    if (pipNow === 'working' && !still) { pr.setAttribute('stroke-dasharray', '18 82'); pr.setAttribute('stroke-dashoffset', (-(t * 46) % 100).toFixed(2)); }
-    else pr.setAttribute('stroke-dasharray', '0 100');
-    // readouts
-    if (now - hud.tick > 400) {
-      hud.tick = now;
-      const d = new Date();
-      $('#hhClock').textContent = d.toLocaleTimeString([], { hour12: false });
-      $('#hhDate').textContent = d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
-      const load = Math.round(Math.min(96, 8 + hud.spd * 28 + Math.random() * 12));
-      $('#hhLoad').style.width = load + '%'; $('#hhLoadN').textContent = load + ' %';
-      $('#hhNet').style.width = (70 + Math.random() * 20).toFixed(0) + '%';
-    }
-    hud.spark.push(hud.level * 0.7 + hud.spd * 0.1 + Math.random() * 0.06); if (hud.spark.length > 90) hud.spark.shift();
-    const c = hudSpark, w = c.clientWidth, h = c.clientHeight;
-    if (w) {
-      if (c.width !== w * 2) { c.width = w * 2; c.height = h * 2; }
-      const x = c.getContext('2d'), col = getComputedStyle(hud.el).color;
-      x.setTransform(2, 0, 0, 2, 0, 0); x.clearRect(0, 0, w, h);
-      x.strokeStyle = col; x.lineWidth = 1.2; x.shadowColor = col; x.shadowBlur = 6; x.beginPath();
-      hud.spark.forEach((v, i) => { const px = i / 89 * w, py = h - 3 - Math.min(1, v) * (h - 6); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke();
-    }
-    hud.raf = hud.open ? requestAnimationFrame(hudTick) : 0;
-  }
-  const hudFrom = () => ((!topVisible() && $('#lock').hidden ? $('#pipHome') : $('#mbMic')).getBoundingClientRect());
-  function hudOpen() {
-    clearTimeout(hud.closeT);
-    if (hud.open) return;
-    if (hud.closing) hud.closing();
-    hud.open = true; hud.n = 0;
-    const el = hud.el; el.hidden = false; closeAllPops();
-    $('#hhYou').textContent = ''; $('#hhPip').textContent = ''; $('#hhCard').replaceChildren(); $('#hhLog').replaceChildren();
-    $('#hhState').textContent = PIP_STATES[pipNow][0]; $('#hhLabel').textContent = HUD_LINE[pipNow] || '';
-    hudLog('Pip online · on this device');
-    hud.last = 0; hud.tick = 0; cancelAnimationFrame(hud.raf); hud.raf = requestAnimationFrame(hudTick);
-    if (calm()) { anim(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 160 }); return; }
-    // the hologram grows out of where Pip was; the rings and readouts power up around it
-    const core = $('.hh-core', el), from = hudFrom(), to = core.getBoundingClientRect(), s = (from.width || 24) / to.width * 1.6;
-    anim($('.hh-back', el), [{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE.out });
-    anim($('.hh-grid', el), [{ opacity: 0 }, { opacity: 0.4, offset: 0.3 }, { opacity: 0.1, offset: 0.4 }, { opacity: 1 }], { duration: 900, delay: 120, easing: EASE.out });
-    anim(core, [{ transform: `translate(${from.left + from.width / 2 - to.left - to.width / 2}px, ${from.top + from.height / 2 - to.top - to.height / 2}px) scale(${s})`, opacity: 0.4 }, { transform: 'none', opacity: 1 }], { duration: 820 });
-    anim($('.hh-shock', el), [{ transform: 'scale(0.3)', opacity: 0.9 }, { transform: 'scale(1.45)', opacity: 0 }], { duration: 1100, delay: 380, easing: EASE.out, fill: 'both' });
-    $$('.hh-o', el).forEach((g, i) => anim(g, [{ opacity: 0, transform: `scale(${0.72 + i * 0.02}) rotate(${i % 2 ? 40 : -40}deg)` }, { opacity: 1, transform: 'none' }], { duration: 760, delay: 240 + i * 60 }));
-    $$('.hh-panel, .hh-hint', el).forEach((p, i) => {
-      const dx = p.matches('.hh-tl, .hh-left') ? -28 : p.matches('.hh-tr, .hh-right, .hh-hint') ? 28 : 0, dy = p.matches('.hh-bottom') ? 20 : 0;
-      anim(p, [{ opacity: 0, transform: `translate(${dx}px, ${dy}px)` }, { opacity: 0.9, offset: 0.35 }, { opacity: 0.25, offset: 0.45 }, { opacity: 1, transform: 'none' }], { duration: 640, delay: 420 + i * 70, easing: EASE.out });
-    });
-    if (kbdNav) $('#hudTalk').focus({ preventScroll: true });
-  }
-  function hudClose(instant) {
-    clearTimeout(hud.closeT);
-    if (!hud.open) return;
-    hud.open = false;
-    const el = hud.el;
-    const fin = () => { hud.closing = null; if (hud.open) return; el.hidden = true; el.getAnimations({ subtree: true }).forEach(a => a.cancel()); cancelAnimationFrame(hud.raf); hud.raf = 0; $('#hhCard').replaceChildren(); };
-    if (instant || calm()) { fin(); return; }
-    hud.closing = fin;
-    const core = $('.hh-core', el), from = hudFrom(), to = core.getBoundingClientRect(), s = (from.width || 24) / to.width * 1.6;
-    const runs = [
-      anim(core, [{ transform: 'none', opacity: 1 }, { transform: `translate(${from.left + from.width / 2 - to.left - to.width / 2}px, ${from.top + from.height / 2 - to.top - to.height / 2}px) scale(${s})`, opacity: 0 }], { duration: 560, easing: EASE.inOut, fill: 'forwards' }),
-      anim($('.hh-back', el), [{ opacity: 1 }, { opacity: 0 }], { duration: 420, delay: 140, easing: EASE.in, fill: 'forwards' }),
-      anim($('.hh-grid', el), [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: EASE.in, fill: 'forwards' }),
-    ];
-    $$('.hh-panel, .hh-hint', el).forEach(p => runs.push(anim(p, [{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: EASE.in, fill: 'forwards' })));
-    $$('.hh-o', el).forEach((g, i) => runs.push(anim(g, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.8)' }], { duration: 320, delay: i * 20, easing: EASE.in, fill: 'forwards' })));
-    Promise.all(runs.map(settled)).then(() => { if (hud.closing === fin) fin(); });
-  }
-  // after Pip has answered, fold back: quickly if windows were opened, otherwise after the reply can be read
-  function hudDone(ms) {
-    clearTimeout(hud.closeT);
-    hud.closeT = setTimeout(() => {
-      if (voice.pending || voice.on) { hudDone(4000); return; }
-      hudClose();
-    }, Math.min(ms, topVisible() ? 2600 : 7000));
-  }
-  $('.hh-back', hud.el).addEventListener('click', () => { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); hudClose(); });
-  $('#hudTalk').addEventListener('click', () => startListening());
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && hud.open && !voice.on) { if (voice.pending) voice.pending.no(); hudClose(); } });
-  $('#hudToggle').addEventListener('change', e => { hudOn = e.target.checked; if (!hudOn) hudClose(true); });
   $('#mbMic').addEventListener('click', () => startListening());
-  $('#pipHome').addEventListener('click', () => startListening());
+  $('#pipHome').addEventListener('click', () => { if (!pipDragged) startListening(); });
   $('#micBtn').addEventListener('click', () => (voice.on ? stopListening() : startListening({ dictate: true })));
   $('#suggest').addEventListener('click', e => { const b = e.target.closest('.sugg'); if (b) { if (voice.on) stopListening(); startListening({ phrase: b.textContent }); } });
   $('#openChat').addEventListener('click', () => openPip());
