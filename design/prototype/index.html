@@ -874,6 +874,72 @@ button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6p
 .qtile.wide { grid-column: 1 / -1; }
 #vhud { position: absolute; z-index: 965; top: calc(var(--menubar-h) + 10px); right: 12px; width: min(380px, calc(100% - 24px)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
 #vhud[hidden] { display: none; }
+/* ── Pip full screen: the Hologram HUD ─────────────────────────────
+   When you talk to Pip, the hologram grows out of where Pip was and fills the screen, inside a
+   projection of rings, readouts and a running log of what Pip is doing. */
+:root { --holo: 84 182 255; }
+:root[data-holo-hue="gold"] { --holo: 255 178 72; }
+:root[data-holo-hue="violet"] { --holo: 170 140 255; }
+:root[data-holo-hue="silver"] { --holo: 200 214 234; }
+#holoHud {
+  position: absolute; inset: 0; z-index: 968; overflow: hidden; color: rgb(var(--holo)); font: 500 12px/1.45 var(--font-mono); letter-spacing: 0.04em;
+  --c-text: #eef6ff; --c-text-2: #bccde2; --c-text-3: #8aa0ba; --c-surface: #16202e; --c-surface-2: #0f1824; --c-surface-3: #1e2b3c; --c-line: rgb(var(--holo) / 0.2); --c-line-strong: rgb(var(--holo) / 0.38);
+}
+#holoHud[hidden] { display: none; }
+.hh-back { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgb(4 10 22 / 0.8), rgb(2 5 12 / 0.96) 72%); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); }
+.hh-grid { position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgb(var(--holo) / 0.07) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--holo) / 0.07) 1px, transparent 1px), repeating-linear-gradient(0deg, rgb(var(--holo) / 0.035) 0 1px, transparent 1px 3px);
+  background-size: 48px 48px, 48px 48px, auto; -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 18%, transparent 78%); mask-image: radial-gradient(circle at 50% 46%, #000 18%, transparent 78%); }
+.hh-core { --S: min(68vh, 56vw); position: absolute; left: 50%; top: 44%; width: var(--S); height: var(--S); margin: calc(var(--S) / -2) 0 0 calc(var(--S) / -2); }
+.hh-rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 0 5px rgb(var(--holo) / 0.55)); }
+.hh-rings line, .hh-rings circle, .hh-rings path { fill: none; stroke: rgb(var(--holo)); vector-effect: non-scaling-stroke; }
+.hh-rings text { fill: rgb(var(--holo)); font: 500 13px var(--font-mono); letter-spacing: 0.1em; opacity: 0.75; }
+.hh-rings .w path { fill: rgb(var(--holo)); stroke: none; }
+#hudOrb { position: absolute; left: 13.75%; top: 13.75%; width: 72.5%; height: 72.5%; color: rgb(var(--holo)); pointer-events: none; }
+.hh-hit { position: absolute; left: 22%; top: 22%; width: 56%; height: 56%; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.hh-hit:focus-visible { outline: 2px solid rgb(var(--holo)); outline-offset: 6px; }
+.hh-shock { position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; margin: -50% 0 0 -50%; border-radius: 50%; border: 2px solid rgb(var(--holo)); box-shadow: 0 0 40px rgb(var(--holo) / 0.6), inset 0 0 40px rgb(var(--holo) / 0.4); opacity: 0; pointer-events: none; }
+.hh-panel { position: absolute; padding: 12px 16px 14px; border: 1px solid rgb(var(--holo) / 0.38); text-shadow: 0 0 8px rgb(var(--holo) / 0.55);
+  background: linear-gradient(135deg, rgb(var(--holo) / 0.12), rgb(var(--holo) / 0.02) 60%); box-shadow: inset 0 0 26px rgb(var(--holo) / 0.08);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); }
+.hh-panel::before { content: ""; position: absolute; left: 0; top: 0; width: 34px; height: 2px; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); }
+.hh-k { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; letter-spacing: 0.22em; opacity: 0.72; margin-bottom: 8px; text-transform: uppercase; }
+.hh-tl { top: calc(var(--menubar-h) + 16px); left: 24px; width: 250px; }
+.hh-tr { top: calc(var(--menubar-h) + 16px); right: 24px; width: 250px; }
+.hh-left { top: max(32%, 250px); left: 24px; width: min(300px, 22vw); }
+.hh-right { top: max(32%, 250px); right: 24px; width: min(360px, 25vw); max-height: 56%; overflow: auto; scrollbar-width: none; }
+.hh-bottom { bottom: 20px; left: 50%; width: min(600px, 52vw); margin-left: calc(min(600px, 52vw) / -2); }
+#hhClock { display: block; font: 600 26px/1 var(--font-mono); letter-spacing: 0.08em; color: #eaf6ff; }
+#hhDate { display: block; margin: 4px 0 10px; opacity: 0.75; }
+.hh-row { display: grid; grid-template-columns: 74px 1fr 46px; align-items: center; gap: 8px; margin-top: 5px; font-size: 11px; }
+.hh-bar { height: 4px; background: rgb(var(--holo) / 0.15); }
+.hh-bar i { display: block; height: 100%; width: 40%; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); transition: width 380ms var(--ease-out); }
+.hh-row b { font-weight: 500; text-align: right; color: #eaf6ff; }
+#hhState { font: 600 22px/1 var(--font-mono); letter-spacing: 0.2em; color: #eaf6ff; text-transform: uppercase; }
+.hh-cursor { display: inline-block; width: 10px; height: 18px; margin-left: 6px; vertical-align: -2px; background: rgb(var(--holo)); box-shadow: 0 0 8px rgb(var(--holo)); animation: hh-blink 1s steps(1) infinite; }
+@keyframes hh-blink { 50% { opacity: 0; } }
+#hhLabel { display: block; margin-top: 8px; min-height: 17px; color: #d9ecff; }
+#hhSpark { display: block; width: 100%; height: 40px; margin-top: 10px; }
+#hhYou { margin: 0; font: 500 19px/1.35 var(--font-ui); letter-spacing: 0; color: #f2f8ff; text-shadow: 0 0 12px rgb(var(--holo) / 0.45); }
+#hhPip { margin: 0; font: 400 24px/1.3 var(--font-display); letter-spacing: 0; color: #f2f8ff; text-shadow: 0 0 14px rgb(var(--holo) / 0.5); }
+#hhYou:empty::before { content: "—"; opacity: 0.5; }
+#hhPip:empty::before { content: "…"; opacity: 0.5; }
+#hhCard { display: grid; gap: 8px; margin-top: 12px; text-shadow: none; }
+#hhCard:empty { display: none; }
+#hhCard .review { max-width: none; background: rgb(var(--holo) / 0.08); border-color: rgb(var(--holo) / 0.4); }
+#hhLog { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; min-height: 92px; }
+#hhLog li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #d4e8ff; }
+#hhLog li:not(:last-child) { opacity: 0.6; }
+#hhLog li b { font-weight: 500; opacity: 0.55; margin-right: 10px; color: rgb(var(--holo)); }
+.hh-hint { position: absolute; right: 26px; bottom: 22px; font-size: 10px; letter-spacing: 0.18em; opacity: 0.55; text-transform: uppercase; }
+@media (max-height: 780px) { .hh-core { --S: min(60vh, 52vw); top: 42%; } }
+@media (max-width: 900px) {
+  .hh-core { --S: min(58vh, 92vw); top: 36%; }
+  .hh-tl, .hh-tr, .hh-bottom, .hh-hint { display: none; }
+  .hh-left { top: auto; bottom: 168px; left: 12px; right: 12px; width: auto; }
+  .hh-right { top: auto; bottom: 12px; left: 12px; right: 12px; width: auto; max-height: 148px; }
+}
+
 #vhud > .dotorb { width: 40px; height: 40px; flex: none; color: var(--c-text); }
 .hud-text { display: grid; gap: 4px; min-width: 0; flex: 1; }
 #hudYou { font: var(--text-body-sm); color: var(--c-text-2); }
@@ -1498,17 +1564,18 @@ button.cal-cell:hover { background: var(--c-surface-3); }
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
           <h2>Pip lives on the home screen</h2>
-          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip is one dotted sphere at every size, rendered with depth and glass on home. Every state moves its light differently. Pick one to set Pip everywhere.</p>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has three looks (Settings › Pip &amp; voice › Look): the Hologram, the default; the dotted sphere, shown first here; and the Turbine. When you talk, the Hologram fills the screen. Every state moves its light differently. Pick one to set Pip everywhere.</p>
           <div class="pips" id="pipStates"></div>
           <h3>The small orb</h3>
           <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
           <div class="orb-tiles" id="orbTiles"></div>
           <h3>The Turbine</h3>
           <p>Pip's second look, after the machined, glossy controls of the Ferrari Luce cabin: a ring of twisted blades around a polished hub, drawn in 3D with a key light and a highlight that slides over the blades as they turn. Each state changes how it spins and where its light runs, never its shape, and it eases from one state into the next like a machine spinning up. Choose it in Settings › Pip &amp; voice › Look.</p>
-          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button><button data-v="holo" aria-pressed="false">Hologram</button></div>
+          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="holo" aria-pressed="true">Hologram</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div>
           <div class="pips" id="turbStates"></div>
           <h3>The Hologram</h3>
-          <p>Pip's third look: a gold projection hanging in the air. A sphere drawn in broken, sparking arcs, with circuit-like strokes stepping off it; a bright tilted ring and an inner one around its waist; rings standing on end; spokes running out from a ringed core with a hole through it; dust and soft sparks inside. Every part is a cloud of points of light in 3D, turning on its own axis, and bright places bloom. Thinking sends pulses out along the spokes, searching sweeps a scan line, working lights the sphere round as the task progresses.</p>
+          <p>Pip's default look: a projection in blue (or gold, violet or silver) hanging in the air. A sphere drawn in broken, sparking arcs, with circuit-like strokes stepping off it; a bright tilted ring and an inner one around its waist; rings standing on end; spokes running out from a ringed core with a hole through it; dust and soft sparks inside. Every part is a cloud of points of light in 3D, turning on its own axis, and bright places bloom. Thinking sends pulses out along the spokes, searching sweeps a scan line, working lights the sphere round as the task progresses.</p>
+          <div class="seg" role="group" aria-label="Hologram colour" id="segHueGuide"><button data-v="blue" aria-pressed="true">Blue</button><button data-v="gold" aria-pressed="false">Gold</button><button data-v="violet" aria-pressed="false">Violet</button><button data-v="silver" aria-pressed="false">Silver</button></div>
           <div class="pips" id="holoStates"></div>
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
@@ -1745,7 +1812,9 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
-              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button><button data-v="holo" aria-pressed="false">Hologram</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="holo" aria-pressed="true">Hologram</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div></div>
+              <div class="srow"><span class="sl"><b>Hologram colour</b><small>The hologram and the full-screen view</small></span><div class="seg" role="group" aria-label="Hologram colour" id="segHue"><button data-v="blue" aria-pressed="true">Blue</button><button data-v="gold" aria-pressed="false">Gold</button><button data-v="violet" aria-pressed="false">Violet</button><button data-v="silver" aria-pressed="false">Silver</button></div></div>
+              <label class="srow"><span class="sl"><b>Full screen when you talk</b><small>The hologram fills the screen while Pip listens and works, then folds back</small></span><input class="sw" type="checkbox" id="hudToggle" checked></label>
               <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
@@ -2076,6 +2145,28 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="art" viewBox="0 0 64 64"><use href="#app-bin"/></svg></span><span class="tip">Bin</span></button>
   </nav>
 
+  <!-- Pip full screen: the hologram fills the screen while you talk to Pip -->
+  <div id="holoHud" role="dialog" aria-label="Pip" hidden>
+    <div class="hh-back"></div>
+    <div class="hh-grid" aria-hidden="true"></div>
+    <div class="hh-core">
+      <div class="hh-shock" aria-hidden="true"></div>
+      <svg class="hh-rings" id="hhRings" viewBox="-500 -500 1000 1000" aria-hidden="true"></svg>
+      <canvas class="dotorb orb-hi" id="hudOrb" data-follow="1" data-state="ready" aria-hidden="true"></canvas>
+      <button type="button" class="hh-hit" id="hudTalk" aria-label="Talk to Pip"></button>
+    </div>
+    <section class="hh-panel hh-tl" aria-hidden="true"><span class="hh-k"><span>SIX · Pip</span><span>on device</span></span><b id="hhClock">--:--:--</b><span id="hhDate"></span>
+      <div class="hh-row"><span>Pip load</span><span class="hh-bar"><i id="hhLoad"></i></span><b id="hhLoadN">0 %</b></div>
+      <div class="hh-row"><span>Battery</span><span class="hh-bar"><i style="width: 64%"></i></span><b>64 %</b></div>
+      <div class="hh-row"><span>Storage</span><span class="hh-bar"><i style="width: 58%"></i></span><b>212 GB</b></div>
+      <div class="hh-row"><span>Network</span><span class="hh-bar"><i id="hhNet"></i></span><b>5 GHz</b></div>
+    </section>
+    <section class="hh-panel hh-tr"><span class="hh-k"><span>Status</span><span id="hhSig">signal</span></span><b id="hhState">Ready</b><span class="hh-cursor" aria-hidden="true"></span><span id="hhLabel"></span><canvas id="hhSpark" aria-hidden="true"></canvas></section>
+    <section class="hh-panel hh-left"><span class="hh-k"><span>You</span><span>voice</span></span><p id="hhYou"></p></section>
+    <section class="hh-panel hh-right"><span class="hh-k"><span>Pip</span><span>reply</span></span><p id="hhPip" aria-live="polite"></p><div id="hhCard"></div></section>
+    <section class="hh-panel hh-bottom" aria-hidden="true"><span class="hh-k"><span>Activity</span><span id="hhCount">000</span></span><ol id="hhLog"></ol></section>
+    <div class="hh-hint" aria-hidden="true">Esc or click outside to close · click Pip to talk</div>
+  </div>
   <div id="vhud" class="glass" hidden><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><div class="hud-text"><span id="hudYou"></span><b id="hudPip" aria-live="polite"></b><div class="hud-card" id="hudCard"></div></div></div>
   <div id="lock" hidden>
     <div class="lock-time"><span id="lockT">10:42</span><span id="lockD">Tuesday 13 October</span></div>
@@ -2934,6 +3025,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     else if (b.closest('#accents')) { if (b.dataset.v === 'iris') delete root.dataset.accent; else root.dataset.accent = b.dataset.v; syncSettings(); paintWall(true); }
     else if (b.closest('#segWake')) setVoiceMode(b.dataset.v);
     else if (b.closest('#segOrb')) setOrbForm(b.dataset.v);
+    else if (b.closest('#segHue')) setHoloHue(b.dataset.v);
     else if (b.closest('#segLayout') && b.dataset.v === 'taskbar') { toast('The Taskbar layout is specified in the guide (chapter 12). This prototype shows the menu bar and dock.', null); setTimeout(() => $$('#segLayout button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === 'mac')), 0); }
     else if (b.dataset.toast) toast(b.dataset.toast, null);
     else if (b.dataset.page && !b.closest('#setNav')) showPage(b.dataset.page);
@@ -3589,7 +3681,7 @@ void main() {
   function drawTurbine(el, t) {
     const s = setupCanvas(el); if (!s) return;
     const [ctx, size] = s;
-    const hi = el._hi, dark = isDark(), look = lookOf(el), still = reducedMotion();
+    const hi = el._hi, dark = isDark(), look = lookOf(el), still = calm();
     const now = performance.now(), T = still ? 0 : now, dt = el._tt && !still ? Math.min(0.1, (now - el._tt) / 1000) : 0; el._tt = now;
     const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
     const prog = progressOf(el), ring = !hi && prog !== null && prog < 1, lit = look.startsWith('working') && prog !== null ? prog : null;
@@ -3783,7 +3875,7 @@ void main() {
 uniform vec2 uRes; uniform vec3 uC;
 uniform mat3 uR0, uR1, uR2, uR3, uR4, uR5, uView;
 uniform float uT, uPass, uSpark, uComet, uCometA, uBeam, uBeamA, uScan, uScanY, uLit, uSq, uWave, uAmp, uDim, uFlick, uTintK, uLight, uKeep, uBoost;
-uniform vec3 uTint;
+uniform vec3 uTint, uLo, uMid, uHi;
 varying float vB; varying vec3 vCol;
 const float TAU = 6.2831853;
 float ang(float a) { return abs(atan(sin(a), cos(a))); }
@@ -3810,8 +3902,8 @@ void main() {
   if (uLit >= 0.0 && g < 1.5) b *= (lon / TAU + 0.5) < uLit ? 1.5 : 0.35;
   b *= (1.0 + uAmp * mix(0.35, 1.2, core)) * uDim * uBoost;
   vB = uPass > 0.5 ? b * mix(0.4, 1.0, uKeep) : b;   // smaller orbs bloom less, or they blow out
-  vec3 c = mix(vec3(1.0, 0.5, 0.1), vec3(1.0, 0.76, 0.32), smoothstep(0.2, 0.9, b));
-  c = mix(c, vec3(1.0, 0.95, 0.82), smoothstep(1.0, 1.8, b));
+  vec3 c = mix(uLo, uMid, smoothstep(0.2, 0.9, b));
+  c = mix(c, uHi, smoothstep(1.0, 1.8, b));
   c = mix(c, uTint, uTintK);
   if (uLight > 0.5) c *= vec3(0.78, 0.5, 0.26);
   vCol = c;
@@ -3845,7 +3937,7 @@ void main() {
       const buf = (data, name, n) => { const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, data, g.STATIC_DRAW); const l = g.getAttribLocation(pr, name); g.enableVertexAttribArray(l); g.vertexAttribPointer(l, n, g.FLOAT, false, 0, 0); };
       buf(geo.P, 'aP', 3); buf(geo.A, 'aA', 4);
       const U = {};
-      ['uRes', 'uC', 'uR0', 'uR1', 'uR2', 'uR3', 'uR4', 'uR5', 'uView', 'uT', 'uPass', 'uSpark', 'uComet', 'uCometA', 'uBeam', 'uBeamA', 'uScan', 'uScanY', 'uLit', 'uSq', 'uWave', 'uAmp', 'uDim', 'uFlick', 'uTintK', 'uLight', 'uKeep', 'uBoost', 'uTint']
+      ['uRes', 'uC', 'uR0', 'uR1', 'uR2', 'uR3', 'uR4', 'uR5', 'uView', 'uT', 'uPass', 'uSpark', 'uComet', 'uCometA', 'uBeam', 'uBeamA', 'uScan', 'uScanY', 'uLit', 'uSq', 'uWave', 'uAmp', 'uDim', 'uFlick', 'uTintK', 'uLight', 'uKeep', 'uBoost', 'uTint', 'uLo', 'uMid', 'uHi']
         .forEach(n => { U[n] = g.getUniformLocation(pr, n); });
       g.enable(g.BLEND); g.blendFunc(g.ONE, g.ONE); g.clearColor(0, 0, 0, 0);
       cv.addEventListener('webglcontextlost', () => { HGL = false; });
@@ -3859,6 +3951,14 @@ void main() {
   const rZ = a => [Math.cos(a), -Math.sin(a), 0, Math.sin(a), Math.cos(a), 0, 0, 0, 1];
   const mm = (A, B) => { const C = []; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) C.push(A[i * 3] * B[j] + A[i * 3 + 1] * B[3 + j] + A[i * 3 + 2] * B[6 + j]); return C; };
   const colMajor = M => [M[0], M[3], M[6], M[1], M[4], M[7], M[2], M[5], M[8]];
+  // the Hologram's colour: blue (the default), gold, violet or silver
+  const HOLO_HUES = {
+    blue: { lo: [0.08, 0.42, 1.0], mid: [0.3, 0.78, 1.0], hi: [0.86, 0.97, 1.0], haze: [60, 160, 255] },
+    gold: { lo: [1.0, 0.5, 0.1], mid: [1.0, 0.76, 0.32], hi: [1.0, 0.95, 0.82], haze: [255, 150, 40] },
+    violet: { lo: [0.42, 0.24, 1.0], mid: [0.68, 0.54, 1.0], hi: [0.95, 0.9, 1.0], haze: [140, 100, 255] },
+    silver: { lo: [0.45, 0.52, 0.64], mid: [0.78, 0.84, 0.92], hi: [1.0, 1.0, 1.0], haze: [180, 200, 230] },
+  };
+  const holoHue = () => HOLO_HUES[root.dataset.holoHue] || HOLO_HUES.blue;
   function holoTarget(look, T) {
     const base = look.split('-')[0];
     const tg = { spd: 0.5, flick: 0.25, spark: 0, comet: 0, beam: 0, scan: 0, sq: 0, wave: 0, dim: 1, tg: 0, tr: 0, glow: 0.16 };
@@ -3882,7 +3982,7 @@ void main() {
   function drawHolo(el, t) {
     const s = setupCanvas(el); if (!s) return;
     const [ctx, size] = s;
-    const hi = el._hi, dark = isDark(), look = lookOf(el), still = reducedMotion();
+    const hi = el._hi, dark = isDark() || el.id === 'hudOrb', look = lookOf(el), still = calm();   // the full-screen view is always dark
     const now = performance.now(), T = still ? 0 : now, dt = el._tt && !still ? Math.min(0.1, (now - el._tt) / 1000) : 0; el._tt = now;
     const amp = look === 'speak' ? parseFloat(el.style.getPropertyValue('--amp')) || 0 : 0;
     const prog = progressOf(el), ring = !hi && prog !== null && prog < 1, lit = look.startsWith('working') && prog !== null ? prog : null;
@@ -3891,7 +3991,7 @@ void main() {
     for (const k in tg) p[k] += (tg[k] - p[k]) * ease;
     el._hspin = still ? 0.8 : (el._hspin || 0) + dt * p.spd * TAU / 14;
     const body = ring ? size * 0.75 : size, cx = size / 2, cy = size / 2, R = body * (hi ? 0.4 : 0.46), sp = el._hspin;
-    const done = look === 'done' ? Math.max(0, 1 - t / 1600) : 0, tint = p.tr > p.tg ? [255, 70, 60] : [70, 230, 140];
+    const done = look === 'done' ? Math.max(0, 1 - t / 1600) : 0, tint = p.tr > p.tg ? [255, 70, 60] : [70, 230, 140], hue = holoHue(), hz = hue.haze;
     if (!dark) {   // light is added, so on a light background the projection sits in a dark lens
       const LR = R * (hi ? 1.2 : 1.1), lg = ctx.createRadialGradient(cx, cy, 0, cx, cy, LR);
       lg.addColorStop(0, 'rgba(22,15,10,0.96)'); lg.addColorStop(0.9, 'rgba(14,10,8,0.94)'); lg.addColorStop(1, 'rgba(14,10,8,0)');
@@ -3899,7 +3999,7 @@ void main() {
     }
     if (hi) {   // the projection lights the air around it
       const hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.3);
-      hg.addColorStop(0, `rgba(255,150,40,${((p.glow + done * 0.3) * p.dim).toFixed(3)})`); hg.addColorStop(1, 'rgba(255,150,40,0)');
+      hg.addColorStop(0, `rgba(${hz},${((p.glow + done * 0.3) * p.dim).toFixed(3)})`); hg.addColorStop(1, `rgba(${hz},0)`);
       ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(cx, cy, R * 1.3, 0, TAU); ctx.fill();
     }
     // each part turns on its own axis; the camera drifts a little
@@ -3918,16 +4018,17 @@ void main() {
         ['uLit', lit === null ? -1 : lit], ['uSq', p.sq * (0.5 + 0.5 * Math.sin(T / 520))], ['uWave', p.wave], ['uAmp', amp], ['uDim', p.dim * (1 + done * 0.6)], ['uFlick', p.flick],
         ['uTintK', Math.max(p.tg * 0.7, p.tr * 0.7)], ['uLight', 0], ['uKeep', Math.max(0.1, Math.min(1, (R * 2 / 230) ** 1.3))], ['uBoost', size < 48 ? 1.7 : 1]].forEach(([n, v]) => g.uniform1f(U[n], v));
       g.uniform3f(U.uTint, tint[0] / 255, tint[1] / 255, tint[2] / 255);
+      g.uniform3f(U.uLo, ...hue.lo); g.uniform3f(U.uMid, ...hue.mid); g.uniform3f(U.uHi, ...hue.hi);
       if (size >= 48) { g.uniform1f(U.uPass, 1); g.drawArrays(g.POINTS, 0, G.n); }   // the glow pass would blur a small orb into a blob
       g.uniform1f(U.uPass, 0); g.drawArrays(g.POINTS, 0, G.n);
       ctx.drawImage(cv, 0, cv.height - px, px, px, 0, 0, size, size);
-    } else drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size });
+    } else drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size, hue });
     if (ring) drawRing(ctx, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, el._col);
-    else if (hi && lit !== null && lit < 1) drawRing(ctx, cx, cy, R * 1.22, 2, lit, [255, 170, 60]);
+    else if (hi && lit !== null && lit < 1) drawRing(ctx, cx, cy, R * 1.22, 2, lit, hue.mid.map(v => Math.round(v * 255)));
   }
   // without WebGL: every third point, added together on a 2D canvas
   let holoGeo2D = null;
-  function drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size }) {
+  function drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size, hue }) {
     const geo = holoGeo2D || (holoGeo2D = holoGeometry()), Mv = M.map(m => mm(view, m));
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     const sc = R / 190;
@@ -3935,12 +4036,13 @@ void main() {
       const x = geo.P[i * 3], y = geo.P[i * 3 + 1], z = geo.P[i * 3 + 2], sz = geo.A[i * 4], b = geo.A[i * 4 + 1] * p.dim, m = Mv[Math.round(geo.A[i * 4 + 2])];
       const vx = m[0] * x + m[1] * y + m[2] * z, vy = m[3] * x + m[4] * y + m[5] * z, vz = m[6] * x + m[7] * y + m[8] * z, k = 3.4 / (3.4 - vz);
       const a = Math.min(1, b * (0.4 + 0.6 * (vz + 1) / 2)), r = Math.max(0.6, sz * sc * k * 1.4);
-      ctx.fillStyle = `rgba(255,${Math.round(150 + 80 * Math.min(1, b))},70,${(a * 0.8).toFixed(3)})`;
+      const c = mix3(hue.lo, hue.hi, Math.min(1, b * 0.8));
+      ctx.fillStyle = `rgba(${Math.round(c[0] * 255)},${Math.round(c[1] * 255)},${Math.round(c[2] * 255)},${(a * 0.8).toFixed(3)})`;
       ctx.fillRect(cx + vx * k * R - r / 2, cy - vy * k * R - r / 2, r, r);
     }
     ctx.restore();
   }
-  const formOf = el => el.dataset.form || root.dataset.orbForm || 'dots';
+  const formOf = el => el.dataset.form || root.dataset.orbForm || 'holo';   // the Hologram is Pip's default look
   let lastOrb = 0, orbsShown = 0;
   function tickOrbs(now) {
     // small orbs draw every frame while only a few are on screen (the menu bar, dock and a card),
@@ -3992,9 +4094,11 @@ void main() {
   pipHome.innerHTML = '<canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>';
   $$('.dotorb').forEach(o => mountOrb(o));
   let pipNow = 'ready', pipLabel = '', ampTimer = null, pipBack = null;
+  let hudNote = null;   // the full-screen HUD logs each change (set up with the HUD below)
   // label: what Pip is doing right now, in words ("searching Documents"), shown under the orb
   function setPip(state, label = '') {
     pipNow = state; pipLabel = label;
+    if (hudNote) hudNote(state, label);
     clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
@@ -4018,7 +4122,7 @@ void main() {
   function buildPipCards() {
     if ($('#pipStates').children.length) return;
     $('#pipStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n, d]]) => `
-      <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b><small>${d}</small></button>`).join('');
+      <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="dots" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b><small>${d}</small></button>`).join('');
     $$('#pipStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#turbStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="turbine" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b></button>`).join('');
@@ -4026,16 +4130,22 @@ void main() {
     $('#holoStates').innerHTML = $('#turbStates').innerHTML.replaceAll('data-form="turbine"', 'data-form="holo"');
     $$('#holoStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#orbTiles').innerHTML = ORB_GALLERY
-      .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
+      .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-form="dots" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   ['#turbStates', '#holoStates'].forEach(id => $(id).addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); }));
   // Pip's look, everywhere at once: the dotted sphere or the turbine
   function setOrbForm(v) {
-    if (v === 'turbine' || v === 'holo') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'dots'; }
+    if (v === 'turbine' || v === 'dots') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'holo'; }
     $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   }
+  // the Hologram's colour, for the orb and the full-screen view
+  function setHoloHue(v) {
+    if (v && v !== 'blue') root.dataset.holoHue = v; else { delete root.dataset.holoHue; v = 'blue'; }
+    $$('#segHue button, #segHueGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+  }
+  $('#segHueGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setHoloHue(b.dataset.v); });
   $('#segOrbGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setOrbForm(b.dataset.v); });
   $('#t-pip').addEventListener('click', buildPipCards);
 
@@ -5558,6 +5668,11 @@ Current prototype state: ${stateSummary()}`;
   // captions go under Pip on home; when windows cover home, into the small voice panel at the top right
   function capHost() {
     clearTimeout(capT);
+    if (hudOn && $('#lock').hidden) {   // full screen: the hologram HUD carries the conversation
+      $('#vcap').hidden = true; $('#vhud').hidden = true;
+      hudOpen();
+      return { you: $('#hhYou'), pip: $('#hhPip'), card: $('#hhCard') };
+    }
     if (!topVisible() && $('#lock').hidden) {
       const was = $('#vcap').hidden;
       $('#vhud').hidden = true; $('#vcap').hidden = false; $('#vTry').classList.add('away'); markDirty();
@@ -5569,6 +5684,7 @@ Current prototype state: ${stateSummary()}`;
   }
   function capDone(ms = 9000) {
     clearTimeout(capT);
+    if (hud.open) { hudDone(ms); return; }
     capT = setTimeout(() => {
       if (voice.pending || voice.on) { capDone(4000); return; }
       const out = el => el.hidden ? null : anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6px) scale(0.98)' }], { duration: 320, easing: EASE.in, fill: 'forwards' });
@@ -5643,6 +5759,7 @@ Current prototype state: ${stateSummary()}`;
     if (!final) return;
     stopListening();
     const s = t.trim().replace(/[.!?]+$/, '');
+    hudLog(`heard “${s}”`);
     if (voice.pending) {
       if (/^(yes|yeah|yep|sure|ok(ay)?|do it|go ahead|confirm|move it|add it)\b/i.test(s)) { voice.pending.yes(); return; }
       if (/^(no|nope|cancel|stop|don'?t|never ?mind)\b/i.test(s)) { voice.pending.no(); return; }
@@ -5676,6 +5793,155 @@ Current prototype state: ${stateSummary()}`;
   }
   function stopWake() { const r = voice.wakeRec; voice.wakeRec = null; if (r) try { r.abort(); } catch {} }
 
+  /* ── Pip full screen: the Hologram HUD ─────────────────────────────
+     Talking to Pip grows the hologram out of where Pip was (the home orb, or the menu bar mic over
+     windows) until it fills the screen, inside a projection: rings of ticks and bearings that
+     turn at the speed of what Pip is doing, a voice ring that moves with your voice, a radar
+     sweep while Pip thinks or searches, readouts in the corners, and a log that types out each
+     step. What you said and Pip's reply (with review cards) sit beside it. It folds back into Pip
+     a few seconds after the answer, or at once on Esc or a click outside. */
+  let hudOn = true;   // Settings › Pip & voice › Full screen when you talk
+  const hud = { open: false, el: $('#holoHud'), raf: 0, last: 0, ang: [0, 0, 0, 0, 0, 0], spd: 0.5, sweep: 0, level: 0, spark: [], closing: null, closeT: 0, n: 0, tick: 0 };
+  const HUD_SPEED = { ready: 0.4, listening: 0.8, thinking: 2.4, speaking: 0.9, searching: 1.6, working: 2.8, asking: 0.6, waiting: 0.5, retrying: 1.8, compacting: 1.3, complete: 0.9, failed: 0.25, cancelled: 0.2, resting: 0.15 };
+  const HUD_RATE = [5, -9, 20, -2.5, 1.2, 12];
+  const HUD_LINE = { ready: 'Standing by', listening: 'Hearing you, on this device', thinking: 'Working it out', speaking: 'Answering', searching: 'Searching', working: 'Carrying it out',
+    asking: 'Waiting for your answer', waiting: 'Waiting on a service', retrying: 'Trying again', compacting: 'Making room', complete: 'Done', failed: 'That didn’t work', cancelled: 'Cancelled', resting: 'Resting' };   // degrees a second for each ring at speed 1
+  (function buildHudRings() {
+    const P = (r, a) => `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
+    const arc = (r, a0, a1) => `M${P(r, a0)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${P(r, a1)}`;
+    const rad = d => d * Math.PI / 180;
+    const ticks = Array.from({ length: 120 }, (_, i) => { const a = rad(i * 3), l = i % 10 ? (i % 5 ? 7 : 13) : 22; return `<line x1="${P(330, a).split(' ')[0]}" y1="${P(330, a).split(' ')[1]}" x2="${P(330 + l, a).split(' ')[0]}" y2="${P(330 + l, a).split(' ')[1]}" stroke-width="${i % 10 ? 1 : 1.6}"/>`; }).join('');
+    const labels = Array.from({ length: 12 }, (_, i) => { const d = i * 30, a = rad(d - 90), [x, y] = P(440, a).split(' '); return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" transform="rotate(${d} ${x} ${y})">${String(d).padStart(3, '0')}</text>`; }).join('');
+    const sweep = Array.from({ length: 8 }, (_, i) => `<path d="M0 0 L${P(318, rad(-i * 4))} A318 318 0 0 0 ${P(318, rad(-(i + 1) * 4))} Z" style="opacity:${(0.32 * (1 - i / 8)).toFixed(3)}"/>`).join('');
+    const bars = Array.from({ length: 128 }, (_, i) => { const a = rad(i * 360 / 128), [x, y] = P(462, a).split(' '); return `<line x1="${x}" y1="${y}" x2="${x}" y2="${y}" stroke-width="2.2" data-a="${a.toFixed(4)}"/>`; }).join('');
+    $('#hhRings').innerHTML = `
+      <g class="hh-o" id="hhO0"><g id="hhR0"><circle r="300" stroke-width="1" opacity="0.35"/><circle r="312" stroke-width="1" stroke-dasharray="2 6" opacity="0.6"/></g></g>
+      <g class="hh-o" id="hhO1"><g id="hhR1"><circle r="330" stroke-width="1.2" opacity="0.8"/>${ticks}</g></g>
+      <g class="hh-o" id="hhO2"><g id="hhR2"><circle r="372" stroke-width="2" stroke-dasharray="30 12" opacity="0.5"/></g></g>
+      <g class="hh-o" id="hhO3"><g id="hhR3"><path d="${arc(398, rad(10), rad(80))}" stroke-width="6"/><path d="${arc(398, rad(130), rad(170))}" stroke-width="6"/><path d="${arc(398, rad(215), rad(300))}" stroke-width="6"/><path d="${arc(408, rad(320), rad(350))}" stroke-width="2"/></g></g>
+      <g class="hh-o" id="hhO4"><g id="hhR4"><circle r="420" stroke-width="1" opacity="0.4"/>${labels}</g></g>
+      <g class="hh-o" id="hhO5"><g id="hhR5">${[45, 135, 225, 315].map(d => `<path d="${arc(486, rad(d - 12), rad(d + 12))}" stroke-width="3"/><path d="${arc(494, rad(d - 4), rad(d + 4))}" stroke-width="1.4"/>`).join('')}</g></g>
+      <g class="hh-o w" id="hhSweep" style="opacity:0">${sweep}</g>
+      <g class="hh-o" id="hhWave">${bars}</g>
+      <g class="hh-o" id="hhProgO"><circle id="hhProg" r="300" stroke-width="4" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90)"/></g>`;
+  })();
+  const hudBars = $$('#hhWave line'), hudSpark = $('#hhSpark');
+  function hudLog(line) {
+    if (!hud.open) return;
+    const ol = $('#hhLog'), li = document.createElement('li'), d = new Date();
+    li.innerHTML = `<b>${d.toLocaleTimeString([], { hour12: false })}</b>`; li.append('› ' + line);
+    ol.append(li); while (ol.children.length > 5) ol.firstElementChild.remove();
+    $('#hhCount').textContent = String(++hud.n).padStart(3, '0');
+    anim(li, [{ opacity: 0, transform: 'translateX(-8px)', filter: 'blur(3px)' }, { opacity: 1, transform: 'none', filter: 'blur(0px)' }], { duration: 360, easing: EASE.out });
+  }
+  // Pip's state shows in the corner and every change goes in the log
+  hudNote = (state, label) => {
+    if (!hud.open) return;
+    const name = PIP_STATES[state][0];
+    if ($('#hhState').textContent !== name) { $('#hhState').textContent = name; anim($('#hhState'), [{ opacity: 0.2, letterSpacing: '0.5em' }, { opacity: 1, letterSpacing: '0.2em' }], { duration: 420, easing: EASE.out }); }
+    $('#hhLabel').textContent = label || HUD_LINE[state] || '';
+    hudLog(label ? `${name.toLowerCase()} · ${label}` : name.toLowerCase());
+  };
+  function hudTick(now) {
+    const dt = hud.last ? Math.min(0.05, (now - hud.last) / 1000) : 1 / 60; hud.last = now;
+    const still = calm(), k = 1 - Math.exp(-dt / 0.5);
+    hud.spd += ((still ? 0 : HUD_SPEED[pipNow] ?? 0.5) - hud.spd) * k;
+    hud.ang = hud.ang.map((a, i) => a + HUD_RATE[i] * hud.spd * dt);
+    hud.ang.forEach((a, i) => $('#hhR' + i).setAttribute('transform', `rotate(${a.toFixed(2)})`));
+    // radar sweep while Pip thinks, searches or works
+    const sw = ['thinking', 'searching', 'working', 'retrying'].includes(pipNow) && !still ? 1 : 0;
+    hud.sweep += (sw - hud.sweep) * k;
+    hud.sweepA = ((hud.sweepA || 0) + dt * 140 * (0.5 + hud.spd * 0.4)) % 360;
+    const sEl = $('#hhSweep'); sEl.style.opacity = hud.sweep.toFixed(3); sEl.setAttribute('transform', `rotate(${hud.sweepA.toFixed(1)})`);
+    // the voice ring: your voice while listening, Pip's while speaking
+    const amp = parseFloat($('#hudOrb').style.getPropertyValue('--amp')) || 0;
+    const lvl = voice.on ? (waveTalk ? 0.35 + Math.random() * 0.65 : 0.1) : pipNow === 'speaking' ? amp : 0.02;
+    hud.level += (lvl - hud.level) * (1 - Math.exp(-dt / 0.08));
+    const t = now / 1000;
+    hudBars.forEach((b, i) => {
+      const a = +b.dataset.a, n = 0.5 + 0.5 * Math.sin(i * 0.9 + t * 7) * Math.sin(i * 0.37 - t * 3), L = 2 + (still ? 0 : hud.level * 46 * n);
+      b.setAttribute('x2', ((462 + L) * Math.cos(a)).toFixed(1)); b.setAttribute('y2', ((462 + L) * Math.sin(a)).toFixed(1));
+    });
+    // working: an arc chases round the inner ring
+    const pr = $('#hhProg');
+    if (pipNow === 'working' && !still) { pr.setAttribute('stroke-dasharray', '18 82'); pr.setAttribute('stroke-dashoffset', (-(t * 46) % 100).toFixed(2)); }
+    else pr.setAttribute('stroke-dasharray', '0 100');
+    // readouts
+    if (now - hud.tick > 400) {
+      hud.tick = now;
+      const d = new Date();
+      $('#hhClock').textContent = d.toLocaleTimeString([], { hour12: false });
+      $('#hhDate').textContent = d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+      const load = Math.round(Math.min(96, 8 + hud.spd * 28 + Math.random() * 12));
+      $('#hhLoad').style.width = load + '%'; $('#hhLoadN').textContent = load + ' %';
+      $('#hhNet').style.width = (70 + Math.random() * 20).toFixed(0) + '%';
+    }
+    hud.spark.push(hud.level * 0.7 + hud.spd * 0.1 + Math.random() * 0.06); if (hud.spark.length > 90) hud.spark.shift();
+    const c = hudSpark, w = c.clientWidth, h = c.clientHeight;
+    if (w) {
+      if (c.width !== w * 2) { c.width = w * 2; c.height = h * 2; }
+      const x = c.getContext('2d'), col = getComputedStyle(hud.el).color;
+      x.setTransform(2, 0, 0, 2, 0, 0); x.clearRect(0, 0, w, h);
+      x.strokeStyle = col; x.lineWidth = 1.2; x.shadowColor = col; x.shadowBlur = 6; x.beginPath();
+      hud.spark.forEach((v, i) => { const px = i / 89 * w, py = h - 3 - Math.min(1, v) * (h - 6); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke();
+    }
+    hud.raf = hud.open ? requestAnimationFrame(hudTick) : 0;
+  }
+  const hudFrom = () => ((!topVisible() && $('#lock').hidden ? $('#pipHome') : $('#mbMic')).getBoundingClientRect());
+  function hudOpen() {
+    clearTimeout(hud.closeT);
+    if (hud.open) return;
+    if (hud.closing) hud.closing();
+    hud.open = true; hud.n = 0;
+    const el = hud.el; el.hidden = false; closeAllPops();
+    $('#hhYou').textContent = ''; $('#hhPip').textContent = ''; $('#hhCard').replaceChildren(); $('#hhLog').replaceChildren();
+    $('#hhState').textContent = PIP_STATES[pipNow][0]; $('#hhLabel').textContent = HUD_LINE[pipNow] || '';
+    hudLog('Pip online · on this device');
+    hud.last = 0; hud.tick = 0; cancelAnimationFrame(hud.raf); hud.raf = requestAnimationFrame(hudTick);
+    if (calm()) { anim(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 160 }); return; }
+    // the hologram grows out of where Pip was; the rings and readouts power up around it
+    const core = $('.hh-core', el), from = hudFrom(), to = core.getBoundingClientRect(), s = (from.width || 24) / to.width * 1.6;
+    anim($('.hh-back', el), [{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: EASE.out });
+    anim($('.hh-grid', el), [{ opacity: 0 }, { opacity: 0.4, offset: 0.3 }, { opacity: 0.1, offset: 0.4 }, { opacity: 1 }], { duration: 900, delay: 120, easing: EASE.out });
+    anim(core, [{ transform: `translate(${from.left + from.width / 2 - to.left - to.width / 2}px, ${from.top + from.height / 2 - to.top - to.height / 2}px) scale(${s})`, opacity: 0.4 }, { transform: 'none', opacity: 1 }], { duration: 820 });
+    anim($('.hh-shock', el), [{ transform: 'scale(0.3)', opacity: 0.9 }, { transform: 'scale(1.45)', opacity: 0 }], { duration: 1100, delay: 380, easing: EASE.out, fill: 'both' });
+    $$('.hh-o', el).forEach((g, i) => anim(g, [{ opacity: 0, transform: `scale(${0.72 + i * 0.02}) rotate(${i % 2 ? 40 : -40}deg)` }, { opacity: 1, transform: 'none' }], { duration: 760, delay: 240 + i * 60 }));
+    $$('.hh-panel, .hh-hint', el).forEach((p, i) => {
+      const dx = p.matches('.hh-tl, .hh-left') ? -28 : p.matches('.hh-tr, .hh-right, .hh-hint') ? 28 : 0, dy = p.matches('.hh-bottom') ? 20 : 0;
+      anim(p, [{ opacity: 0, transform: `translate(${dx}px, ${dy}px)` }, { opacity: 0.9, offset: 0.35 }, { opacity: 0.25, offset: 0.45 }, { opacity: 1, transform: 'none' }], { duration: 640, delay: 420 + i * 70, easing: EASE.out });
+    });
+    if (kbdNav) $('#hudTalk').focus({ preventScroll: true });
+  }
+  function hudClose(instant) {
+    clearTimeout(hud.closeT);
+    if (!hud.open) return;
+    hud.open = false;
+    const el = hud.el;
+    const fin = () => { hud.closing = null; if (hud.open) return; el.hidden = true; el.getAnimations({ subtree: true }).forEach(a => a.cancel()); cancelAnimationFrame(hud.raf); hud.raf = 0; $('#hhCard').replaceChildren(); };
+    if (instant || calm()) { fin(); return; }
+    hud.closing = fin;
+    const core = $('.hh-core', el), from = hudFrom(), to = core.getBoundingClientRect(), s = (from.width || 24) / to.width * 1.6;
+    const runs = [
+      anim(core, [{ transform: 'none', opacity: 1 }, { transform: `translate(${from.left + from.width / 2 - to.left - to.width / 2}px, ${from.top + from.height / 2 - to.top - to.height / 2}px) scale(${s})`, opacity: 0 }], { duration: 560, easing: EASE.inOut, fill: 'forwards' }),
+      anim($('.hh-back', el), [{ opacity: 1 }, { opacity: 0 }], { duration: 420, delay: 140, easing: EASE.in, fill: 'forwards' }),
+      anim($('.hh-grid', el), [{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: EASE.in, fill: 'forwards' }),
+    ];
+    $$('.hh-panel, .hh-hint', el).forEach(p => runs.push(anim(p, [{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: EASE.in, fill: 'forwards' })));
+    $$('.hh-o', el).forEach((g, i) => runs.push(anim(g, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.8)' }], { duration: 320, delay: i * 20, easing: EASE.in, fill: 'forwards' })));
+    Promise.all(runs.map(settled)).then(() => { if (hud.closing === fin) fin(); });
+  }
+  // after Pip has answered, fold back: quickly if windows were opened, otherwise after the reply can be read
+  function hudDone(ms) {
+    clearTimeout(hud.closeT);
+    hud.closeT = setTimeout(() => {
+      if (voice.pending || voice.on) { hudDone(4000); return; }
+      hudClose();
+    }, Math.min(ms, topVisible() ? 2600 : 7000));
+  }
+  $('.hh-back', hud.el).addEventListener('click', () => { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); hudClose(); });
+  $('#hudTalk').addEventListener('click', () => startListening());
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && hud.open && !voice.on) { if (voice.pending) voice.pending.no(); hudClose(); } });
+  $('#hudToggle').addEventListener('change', e => { hudOn = e.target.checked; if (!hudOn) hudClose(true); });
   $('#mbMic').addEventListener('click', () => startListening());
   $('#pipHome').addEventListener('click', () => startListening());
   $('#micBtn').addEventListener('click', () => (voice.on ? stopListening() : startListening({ dictate: true })));

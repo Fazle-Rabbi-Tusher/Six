@@ -56,7 +56,7 @@ two controls.
 | Sound | Output; volume; input (the mic Pip uses); alert sound |
 | Battery & power | Charge and time left; power mode (Saver, Balanced, Performance); battery protection at 80 %; screen off and sleep |
 | Storage | Used of total with a breakdown; free up space (empty the Bin, clear caches) |
-| Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
+| Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); Look (*Hologram*, the default, *Dotted* or *Turbine*); Hologram colour (*Blue*, *Gold*, *Violet*, *Silver*); Full screen when you talk; shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
 | Appearance | Theme (Light, Dark, Auto); accent (Iris, Tide, Moss, Sun); wallpaper mood; plasma clay viscosity, frost, refraction and rim |
 | Home & widgets | Edit widgets; greeting; "Try saying" examples; what happens when home is full |
 | Desktop & dock | Layout (*Menu bar + dock* or *Taskbar*, see [12](12-windows-migration.md)); magnification; hot corner |

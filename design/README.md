@@ -14,7 +14,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is voice only: press the mic in the menu bar, click Pip, hold Space or press `Ctrl + Space`, or click a **Try saying** example (in previews without a microphone Pip hears sample requests). Try "delete interview notes" for a review card you can answer by voice. Click the Pip icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Click **Add widgets**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is voice only: press the mic in the menu bar, click Pip, hold Space or press `Ctrl + Space`, or click a **Try saying** example, and Pip's hologram fills the screen while it listens and works (`Esc` closes it; Settings › Pip & voice sets the look, its colour and full screen) (in previews without a microphone Pip hears sample requests). Try "delete interview notes" for a review card you can answer by voice. Click the Pip icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Click **Add widgets**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -35,7 +35,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and its two other looks, the 3D Turbine and the gold Hologram |
+| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and looks (the Hologram, the default, in four colours; the dotted sphere; the 3D Turbine), and Pip full screen |
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, fifteen tasks, targets, and the order to build SIX in |
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
@@ -57,11 +57,11 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 
 ## Screens
 
-| Talking to Pip on home | Pip answers in a caption | Review by voice |
+| Talking to Pip: the full-screen Hologram | Pip answers beside it | Review by voice |
 |---|---|---|
 | ![](screens/home-voice.png) | ![](screens/voice-reply.png) | ![](screens/pip-review.png) |
 
-| Voice over windows | The Pip app | A failure with recovery chips |
+| Talking over windows | The Pip app | A failure with recovery chips |
 |---|---|---|
 | ![](screens/voice-hud.png) | ![](screens/pip-app.png) | ![](screens/pip-failed.png) |
 
@@ -97,9 +97,9 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|
 | ![](screens/home-turbine.png) | ![](screens/turbine-states.png) |
 
-| Pip as the Hologram on home | The Hologram in every state |
-|---|---|
-| ![](screens/home-hologram.png) | ![](screens/hologram-states.png) |
+| Pip as the Hologram on home (the default) | The Hologram in every state | Full screen in gold |
+|---|---|---|
+| ![](screens/home-hologram.png) | ![](screens/hologram-states.png) | ![](screens/hud-gold.png) |
 
 ## Credits
 
