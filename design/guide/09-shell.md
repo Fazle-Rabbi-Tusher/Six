@@ -28,11 +28,12 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 
 | Item | Behaviour |
 |---|---|
-| **Six logo** (left) | Opens the system menu: About SIX, System Settings, Six Search, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
+| **Six logo** (left) | Opens the system menu: About SIX, System Settings, Six Search, Edit widgets, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
 | **App name** | Bold name of the focused app ("Home" when none). App menus (File, Edit, View…) follow it |
 | **Search** | Opens Six Search (`Ctrl + K`, `Six + Space`) |
 | **Control Center** | Wi-Fi, a battery that shows its level and percentage, and a two-toggle glyph; opens Control Center (Quick Settings) under the bar |
-| **Pip** | The small dotted orb; shows Pip's state and a progress ring while a task runs; click → home and Pip's composer |
+| **Mic** | Talk to Pip from anywhere (`Six + Space`). Amber pill while Pip hears you; a small green dot when *Listen for "Hey Pip"* is on |
+| **Pip** | The small dotted orb at the top right; shows Pip's state and a progress ring while a task runs; click → the Pip app (the written conversation) |
 | **Clock** | "Mon 12 Oct 10:42" in tabular figures; click → calendar and notifications |
 
 **Dock** (glass, 68 px tall, centred, 8 px above the bottom edge, 24 px radius)
@@ -42,7 +43,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **Six Menu** | First icon (iris squircle with the six-dot mark); opens the Six Menu above the dock |
 | **Apps** | Pinned and running apps. Running = a 4 px dot under the icon |
 | **Separator** | Thin line before Pip and the Bin |
-| **Pip** | Pip's dotted orb on a dark tile; click → home |
+| **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |
 | **Bin** | Deleted files; shows a count |
 | **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius). Off under Reduce motion, on touch, and on narrow screens |
 | **Launch bounce** | An opening app's icon bounces once; never repeatedly for attention (a badge does that) |
@@ -135,6 +136,10 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 - Tiles can be added/removed/reordered (edit mode via the ✎ button).
 - *Accessibility* tile is always pinnable and opens the accessibility quick panel (text size,
   contrast, reduce motion, reduce transparency, screen reader, magnifier).
+- A wide **Listen for "Hey Pip"** tile switches Pip between press to talk and always listening;
+  its line says which ("Always listening, on this device" / "Off · press the mic to talk").
+- The ⚙ button opens Settings at the page you last used. Wallpaper mood and plasma clay controls
+  live in Settings › Appearance, not here: Control Center holds only what people change often.
 
 ## Notifications
 
@@ -199,9 +204,10 @@ differently, the tooltip names it, and the label under the home orb says what Pi
 doing ("Pip · searching Documents"). Under Reduce motion the orb is drawn still on a fixed frame
 and only redraws when its state changes.
 
-**Listening is impossible to miss.** While the mic is on, an amber mic pill sits in the menu bar
-next to Control Center, separate from Pip's orb, so it shows even when Pip is busy with something
-else.
+**Listening is impossible to miss.** The menu-bar mic turns into an amber pill whenever Pip is
+hearing you, separate from Pip's orb, so it shows even when Pip is busy with something else. With
+*Listen for "Hey Pip"* on, the mic carries a small green dot: listening for the wake word only,
+on this device.
 
 ## Overview and desktops
 

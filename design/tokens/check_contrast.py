@@ -5,6 +5,7 @@ Usage: python3 design/tokens/check_contrast.py   (exit code 1 if any pair fails)
 """
 import json
 import pathlib
+import re
 import sys
 
 TOKENS = json.loads((pathlib.Path(__file__).parent / "tokens.json").read_text())
@@ -55,6 +56,21 @@ for theme in ("light", "dark"):
     print(f"\n{theme}")
     for fg, bg, minimum, why in PAIRS:
         r = ratio(lookup(theme, fg), lookup(theme, bg))
+        ok = r >= minimum
+        failures += not ok
+        print(f"  {'PASS' if ok else 'FAIL'} {r:5.2f}:1  (min {minimum})  {fg} on {bg}  · {why}")
+
+# accent options from tokens.css: the accent pairs must hold for every choice, in both themes
+CSS = (pathlib.Path(__file__).parent / "tokens.css").read_text()
+for m in re.finditer(r':root\[data-accent="([a-z]+)"\](\[data-theme="dark"\])?\s*\{', CSS):
+    name, theme_sel = m.group(1), m.group(2) or ""
+    theme = "dark" if theme_sel else "light"
+    block = CSS[m.end():].split("}", 1)[0]
+    v = dict(re.findall(r"--c-([a-z-]+):\s*(#[0-9a-fA-F]{6})", block))
+    surface = lookup(theme, "semantic.surface")
+    print(f"\naccent {name} ({theme})")
+    for fg, bg, minimum, why in [(v["accent"], surface, 4.5, "links, selected labels"), (v["accent"], v["accent-soft"], 4.5, "selected row label"), (v["text-on-accent"], v["accent"], 4.5, "primary button label")]:
+        r = ratio(fg, bg)
         ok = r >= minimum
         failures += not ok
         print(f"  {'PASS' if ok else 'FAIL'} {r:5.2f}:1  (min {minimum})  {fg} on {bg}  · {why}")

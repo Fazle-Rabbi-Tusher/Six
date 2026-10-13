@@ -277,6 +277,16 @@
   --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
+/* ── Accent options (Settings › Appearance). Iris is the default; each option keeps the same
+   contrast as Iris (checked by check_contrast.py) and borrows its hue from a semantic colour. ── */
+:root[data-accent="tide"] { --c-accent: #066a75; --c-accent-hover: #05555e; --c-accent-soft: #cdeef1; --c-focus: #066a75; --c-text-on-accent: #ffffff; }
+:root[data-accent="moss"] { --c-accent: #1a6d47; --c-accent-hover: #145a3a; --c-accent-soft: #cfeedd; --c-focus: #1a6d47; --c-text-on-accent: #ffffff; }
+:root[data-accent="sun"] { --c-accent: #85540e; --c-accent-hover: #6e450b; --c-accent-soft: #fbeac6; --c-focus: #85540e; --c-text-on-accent: #ffffff; }
+:root[data-accent="tide"][data-theme="dark"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111017; }
+:root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111017; }
+:root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111017; }
+/* follow the system theme too: dark values apply under prefers-color-scheme: dark unless the person chose light */
+
 /* ── Accessibility modes (user settings, not decoration) ── */
 :root[data-transparency="reduced"] {
   --liquid-fill: 1;

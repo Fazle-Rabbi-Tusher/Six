@@ -29,9 +29,20 @@ Neutrals carry a slight violet bias toward the accent, so greys look intentional
 | `--c-accent-soft` | `#E3DFFF` | `#2E2A55` |
 | `--c-text-on-accent` | `#FFFFFF` | `#111017` |
 
-The accent marks **the primary action, selection, focus and links**, and nothing else. Users may
-pick a different accent in Settings; any user accent is auto-adjusted in lightness until it passes
-4.5:1 on `--c-surface` and with `--c-text-on-accent`.
+The accent marks **the primary action, selection, focus and links**, and nothing else.
+
+People pick the accent in Settings › Appearance. Besides Iris there are three options, each
+borrowing a semantic hue and checked against the same pairs as Iris (`check_contrast.py`):
+
+| Option | Light | Dark | Accent on surface (light / dark) |
+|---|---|---|---|
+| Iris (default) | `#5340D9` | `#9C8FFF` | 6.5 / 6.4:1 |
+| Tide | `#066A75` | `#4FD1DC` | 6.0 / 9.4:1 |
+| Moss | `#1A6D47` | `#5FD49A` | 6.0 / 9.3:1 |
+| Sun | `#85540E` | `#F2B95A` | 6.1 / 9.7:1 |
+
+Any other user accent is auto-adjusted in lightness until it passes 4.5:1 on `--c-surface` and
+with `--c-text-on-accent`.
 
 ## Semantic colours
 

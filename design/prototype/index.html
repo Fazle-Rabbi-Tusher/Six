@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SIX OS Prototype</title>
-<meta name="description" content="Interactive prototype of the SIX OS home screen (Pip, chat and voice, plasma clay) and desktop.">
+<meta name="description" content="Interactive prototype of SIX, a desktop OS built on Fedora Linux: voice-first home with Pip, the Pip app, Settings, Files, Software, Calendar and the lock screen.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Sans+Bengali:wght@400;600&display=swap">
@@ -396,15 +396,6 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .center[data-chat="on"] .greet { font: var(--text-title-lg); }
 .center[data-chat="on"] .greet-sub { display: none; }
 
-#thread { width: 100%; max-height: min(44vh, 420px); overflow-y: auto; padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
-#thread.compact { max-height: 190px; }
-#thread.compact:has(.review:not(.done)) { max-height: min(44vh, 340px); }  /* a review is never cut off */
-#thread.compact .msg:not(.latest) { display: none; }
-.thread-head { display: flex; align-items: center; gap: 8px; position: sticky; top: -12px; z-index: 1; margin: -4px -6px -2px; padding: 4px 6px; border-radius: var(--radius-md); background: color-mix(in srgb, var(--c-surface) 80%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.thread-head button { border: 0; background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); color: var(--c-text-2); font: 600 12px/1 var(--font-ui); height: 26px; padding: 0 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
-.thread-head button:hover { color: var(--c-text); background: var(--c-surface-3); }
-.thread-head .hide { margin-left: auto; width: 26px; padding: 0; justify-content: center; }
-.thread-head svg.i { width: 14px; height: 14px; }
 .histlink { border: 0; background: transparent; color: var(--c-accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; }
 .msg { display: grid; gap: 6px; max-width: 80%; flex: none; }
 .msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -830,6 +821,238 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   .fhead :nth-child(2), .frow :nth-child(2) { display: none; }
   .qs-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ══ Full system: icons, voice home, Pip app, Settings, Files, Software, Calendar, lock ══ */
+/* app icons: clay illustrations fill the squircle */
+.appicon .art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fold-ic { display: block; flex: none; overflow: visible; }
+.fold-ic .em { fill: none; stroke: rgba(14, 56, 140, 0.55); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.fold-ic .em.hi { stroke: rgba(255, 255, 255, 0.5); transform: translateY(0.9px); }
+/* accent colours (Settings › Appearance); each pair keeps 4.5:1 like Iris */
+:root[data-accent="tide"] { --c-accent: #066a75; --c-accent-hover: #05555e; --c-accent-soft: #cdeef1; --c-focus: #066a75; --c-text-on-accent: #ffffff; }
+:root[data-accent="moss"] { --c-accent: #1a6d47; --c-accent-hover: #145a3a; --c-accent-soft: #cfeedd; --c-focus: #1a6d47; --c-text-on-accent: #ffffff; }
+:root[data-accent="sun"] { --c-accent: #85540e; --c-accent-hover: #6e450b; --c-accent-soft: #fbeac6; --c-focus: #85540e; --c-text-on-accent: #ffffff; }
+@media (prefers-color-scheme: dark) {
+  :root[data-accent="tide"]:not([data-theme="light"]) { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111017; }
+  :root[data-accent="moss"]:not([data-theme="light"]) { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111017; }
+  :root[data-accent="sun"]:not([data-theme="light"]) { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111017; }
+}
+:root[data-accent="tide"][data-theme="dark"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111017; }
+:root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111017; }
+:root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111017; }
+
+/* home: voice only */
+.center { justify-content: center; }
+button.pip { border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 50%; color: inherit; }
+button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6px; }
+.vcap { width: min(560px, 100%); display: grid; justify-items: center; gap: 8px; padding: 16px 22px 18px; border-radius: var(--radius-2xl); text-align: center; flex: none; }
+.vcap[hidden] { display: none; }
+.vwave { display: flex; align-items: center; justify-content: center; gap: 3px; height: 32px; }
+.vwave[hidden] { display: none; }
+.vwave i { width: 4px; height: 20%; border-radius: 4px; background: var(--pip-line); box-shadow: 0 0 6px color-mix(in srgb, var(--pip-line) 60%, transparent); transition: height 90ms linear; }
+.vyou { margin: 0; font: var(--text-body-lg); color: var(--c-text-2); }
+.vpip { margin: 0; font: 400 24px/31px var(--font-display); color: var(--c-text); text-wrap: balance; }
+.vyou:empty, .vpip:empty, .vcard:empty { display: none; }
+.vcard { width: 100%; display: grid; justify-items: center; gap: 8px; }
+.vcard .review { text-align: left; width: 100%; max-width: 440px; }
+.vtry { display: grid; justify-items: center; gap: 8px; }
+.vtry.away, .vtry[hidden] { display: none; }
+.vmode { display: inline-flex; align-items: center; gap: 6px; }
+.vmode svg.i { width: 14px; height: 14px; color: var(--pip-line); }
+.vmode .demo { color: var(--c-warning); font-weight: 600; }
+.review .say { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); }
+/* menu bar mic: amber while it hears you; a green dot while it only waits for “Hey Pip” */
+.mb-micbtn { position: relative; }
+.mb-micbtn[data-mode="wake"]::after { content: ""; position: absolute; right: 3px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--c-success); }
+.mb-micbtn[aria-pressed="true"] { background: var(--c-warning); color: var(--c-surface); border-radius: 999px; }
+.mb-micbtn[aria-pressed="true"]::after { display: none; }
+.qtile.wide { grid-column: 1 / -1; }
+#vhud { position: absolute; z-index: 965; top: calc(var(--menubar-h) + 10px); right: 12px; width: min(380px, calc(100% - 24px)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
+#vhud[hidden] { display: none; }
+#vhud > .dotorb { width: 40px; height: 40px; flex: none; color: var(--c-text); }
+.hud-text { display: grid; gap: 4px; min-width: 0; flex: 1; }
+#hudYou { font: var(--text-body-sm); color: var(--c-text-2); }
+#hudPip { font: 500 14px/20px var(--font-ui); }
+#hudYou:empty, #hudPip:empty, .hud-card:empty { display: none; }
+.hud-card .review { max-width: none; }
+
+/* Pip app */
+.pip-side { width: 232px; }
+.side-h { font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-3); padding: 12px 10px 4px; }
+.new-chat { margin: 2px 2px 4px; justify-content: flex-start; }
+.conv { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 34px; padding: 0 10px; border: 0; background: transparent; border-radius: var(--radius-sm); color: var(--c-text); font: var(--text-body-sm); text-align: left; }
+.conv span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conv svg.i { width: 14px; height: 14px; color: var(--c-text-3); flex: none; }
+.conv:hover { background: var(--c-surface-3); }
+.conv[aria-current="true"] { background: var(--c-accent-soft); color: var(--c-accent); font-weight: 600; }
+.pip-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pip-head { display: flex; align-items: baseline; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--c-line); }
+.pip-head b { font: var(--text-label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pip-head span { font: var(--text-caption); color: var(--c-text-3); margin-left: auto; text-align: right; }
+.threads { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+#threads .thread { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 24px; display: flex; flex-direction: column; gap: 14px; }
+#threads .thread[hidden] { display: none; }
+.pip-empty { flex: 1; display: grid; justify-items: center; align-content: center; gap: 10px; padding: 24px; text-align: center; }
+.pip-empty[hidden] { display: none; }
+.pip-empty .dotorb { width: 132px; height: 132px; color: var(--c-text); }
+.pip-empty b { font: var(--text-title-lg); }
+.pip-empty > span { color: var(--c-text-2); max-width: 440px; font: var(--text-body); }
+#w-pip #composer { width: auto; min-height: 0; margin: 0 16px 16px; border-radius: var(--radius-xl); background: var(--c-surface-2); box-shadow: var(--clay-pressed); padding: 6px 6px 6px 16px; }
+#w-pip #composer input { height: 40px; font: var(--text-body); }
+#micBtn[aria-pressed="true"] { background: var(--c-warning); color: var(--c-surface); border-radius: 50%; }
+.msg .via { display: inline-flex; align-items: center; gap: 4px; font: var(--text-caption); opacity: 0.85; }
+.msg .via svg.i { width: 12px; height: 12px; }
+
+/* Settings */
+.set-side { width: 244px; }
+.set-search { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; margin: 0 2px 6px; border-radius: var(--radius-sm); background: var(--c-surface); border: 1px solid var(--c-line); }
+.set-search input { border: 0; outline: 0; background: transparent; flex: 1; width: 0; min-width: 0; font: var(--text-body-sm); color: var(--c-text); }
+.set-search { min-width: 0; }
+.set-search:focus-within { outline: 2px solid var(--c-focus); outline-offset: 1px; }
+.set-search svg.i { color: var(--c-text-3); }
+.sico { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; flex: none; background: var(--c); color: #fff; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2); }
+.sico svg.i { width: 15px; height: 15px; }
+#setNav { display: grid; gap: 1px; }
+#setNav .navbtn, #fSide .navbtn, #swNav .navbtn { min-height: 34px; font: var(--text-body-sm); }
+#setNav .navbtn[aria-selected="true"] .sico { box-shadow: 0 0 0 2px var(--c-surface), 0 0 0 3.5px var(--c); }
+.set-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.set-head { display: flex; align-items: center; gap: 2px; padding: 8px 14px; border-bottom: 1px solid var(--c-line); }
+.set-head .iconbtn { width: 30px; height: 30px; }
+.set-head .iconbtn:disabled { opacity: 0.35; }
+.set-head .crumb { margin-left: 8px; font: var(--text-body-sm); color: var(--c-text-2); }
+.set-head .crumb b { color: var(--c-text); }
+.set-scroll { flex: 1; overflow: auto; padding: 20px 28px 32px; }
+.spage, #setResults { display: grid; gap: 12px; max-width: 680px; }
+.spage[hidden], #setResults[hidden] { display: none; }
+.spage > .overline { margin: 8px 4px 0; }
+.sgroup { border-radius: var(--radius-lg); background: var(--c-surface-2); overflow: hidden; }
+.srow { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 10px 16px; border: 0; width: 100%; background: transparent; color: var(--c-text); text-align: left; font: inherit; }
+.srow + .srow { border-top: 1px solid var(--c-line); }
+label.srow, button.srow { cursor: pointer; }
+button.srow:hover { background: var(--c-surface-3); }
+.srow.col { flex-direction: column; align-items: stretch; gap: 8px; }
+.srow.col input[type="range"] { width: 100%; }
+.srow.big { min-height: 72px; }
+.srow.big .sl b { font: 600 18px/24px var(--font-ui); }
+.sl { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.sl b { font: 500 14px/20px var(--font-ui); }
+.sl small { font: var(--text-caption); color: var(--c-text-3); }
+.srow .meta { font: var(--text-body-sm); color: var(--c-text-2); white-space: nowrap; }
+.srow .seg { flex: none; }
+.srow.flash { animation: row-flash 1.6s var(--ease-out); }
+@keyframes row-flash { 0%, 35% { background: var(--c-accent-soft); } 100% { background: transparent; } }
+.ssel { height: 32px; max-width: 230px; border-radius: var(--radius-sm); border: 1px solid var(--c-line-strong); background: var(--c-surface); color: var(--c-text); font: var(--text-body-sm); padding: 0 8px; }
+.swatches { display: flex; gap: 10px; }
+.swatches button { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--c-surface); box-shadow: var(--clay-1); }
+.swatches [data-v="iris"] { background: #5340d9; } .swatches [data-v="tide"] { background: #066a75; } .swatches [data-v="moss"] { background: #1a6d47; } .swatches [data-v="sun"] { background: #85540e; }
+.swatches [aria-checked="true"] { outline: 2px solid var(--c-text); outline-offset: 2px; }
+.snote { margin: 4px 4px 0; font: var(--text-body-sm); color: var(--c-text-2); }
+.about-hero { display: flex; align-items: center; gap: 16px; padding: 4px 4px 8px; }
+.about-hero h2 { margin: 0; font: var(--text-headline); }
+.about-hero span { color: var(--c-text-2); }
+.avatar.lg { width: 48px; height: 48px; font-size: 18px; flex: none; }
+.avatar.xl { width: 88px; height: 88px; font-size: 34px; }
+.batt.big { width: 56px; height: 26px; }
+#boot { position: absolute; inset: 0; z-index: 2100; background: #050507; color: #f2f1f8; display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; }
+#boot .bar { width: 240px; }
+#boot small { color: #a3a0b5; font: var(--text-caption); }
+
+/* Files */
+.badge { margin-left: auto; min-width: 20px; height: 18px; padding: 0 6px; border-radius: 999px; background: var(--c-surface-3); font: 600 11px/18px var(--font-ui); text-align: center; color: var(--c-text-2); }
+.badge[hidden] { display: none; }
+.eject { margin-left: auto; color: var(--c-text-3); font-size: 12px; }
+.tagdot { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+.navbtn .tagdot { margin: 0 3px; }
+.tg-work { background: #5aa9ff; } .tg-family { background: #3fd29a; } .tg-important { background: #ff6b6b; }
+.toolbar .iconbtn { width: 30px; height: 30px; }
+.toolbar .iconbtn:disabled { opacity: 0.35; }
+.fpath { flex: 1; min-width: 0; display: flex; align-items: center; gap: 2px; overflow: hidden; }
+.fpath button { border: 0; background: transparent; color: var(--c-text-2); font: var(--text-body-sm); padding: 4px 6px; border-radius: 6px; white-space: nowrap; }
+.fpath button:hover { background: var(--c-surface-3); color: var(--c-text); }
+.fpath button[aria-current="page"] { color: var(--c-text); font-weight: 600; }
+.fpath .sep { color: var(--c-text-3); }
+.fsearch { display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px; border-radius: var(--radius-sm); background: var(--c-surface-2); flex: 0 1 150px; min-width: 84px; }
+.fpath button { flex: none; }
+.fsearch input { border: 0; outline: 0; background: transparent; width: 0; min-width: 0; flex: 1; font: var(--text-body-sm); color: var(--c-text); }
+.fsearch:focus-within { outline: 2px solid var(--c-focus); }
+#fView button { height: 26px; padding: 0 8px; }
+.fhead[hidden] { display: none; }
+.fn { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.fn small { font: var(--text-caption); color: var(--c-text-3); }
+.flist.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 6px; align-content: start; padding: 12px; }
+.flist.grid .frow { display: grid; grid-template-columns: 1fr; justify-items: center; min-height: 0; padding: 10px 6px 8px; text-align: center; }
+.flist.grid .frow .r { display: none; }
+.flist.grid .fname { flex-direction: column; gap: 6px; min-width: 0; max-width: 100%; }
+.flist.grid .fn { flex-direction: column; gap: 2px; max-width: 100%; }
+.flist.grid .fn > span { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font: var(--text-body-sm); word-break: break-word; }
+.flist.grid .empty-row { grid-column: 1 / -1; }
+.thumb { width: 26px; height: 22px; border-radius: 4px; flex: none; position: relative; overflow: hidden; background: linear-gradient(170deg, hsl(var(--h) 70% 74%), hsl(calc(var(--h) + 40) 60% 46%)); box-shadow: var(--clay-1); }
+.thumb::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -30%; height: 62%; border-radius: 50%; background: hsl(calc(var(--h) + 140) 45% 36% / 0.85); }
+.thumb.big { width: 64px; height: 50px; border-radius: 8px; border: 2px solid #fff; }
+
+/* Software */
+#swMain { flex: 1; min-width: 0; overflow: auto; padding: 20px 24px 28px; display: grid; align-content: start; gap: 14px; }
+#swMain h2 { margin: 0; font: var(--text-title-lg); }
+#swMain h3 { margin: 6px 0 0; font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-3); }
+.st-hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 24px; border-radius: var(--radius-xl); background: linear-gradient(135deg, var(--c-accent-soft), var(--c-surface-2)); }
+.st-hero p { margin: 6px 0 12px; color: var(--c-text-2); max-width: 46ch; }
+.st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.st-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-lg); background: var(--c-surface-2); }
+.st-t { display: grid; gap: 2px; min-width: 0; }
+.st-t b { font: var(--text-label); }
+.st-t span { font: var(--text-body-sm); color: var(--c-text-2); }
+.st-t small { font: var(--text-caption); color: var(--c-text-3); }
+.st-ic { width: var(--s); height: var(--s); border-radius: 23%; display: grid; place-items: center; flex: none; background: linear-gradient(180deg, color-mix(in srgb, var(--c) 72%, #fff), var(--c)); color: #fff; font: 600 calc(var(--s) * 0.46) / 1 var(--font-ui); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 6px rgba(0, 0, 0, 0.18), 0 4px 10px -4px rgba(0, 0, 0, 0.4); }
+.st-prog { display: grid; gap: 4px; width: 96px; }
+.st-prog small { font: var(--text-caption); color: var(--c-text-3); text-align: right; }
+.st-card .btn { white-space: nowrap; }
+
+/* Calendar */
+.cal-main { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 18px; gap: 12px; }
+.cal-head { display: flex; align-items: center; gap: 6px; }
+.cal-head h2 { margin: 0 auto 0 0; font: var(--text-title-lg); }
+.cal-grid { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 22px; grid-auto-rows: minmax(62px, 1fr); gap: 4px; }
+.cal-dow { font: var(--text-caption); color: var(--c-text-3); text-align: right; padding: 0 8px; align-self: end; }
+.cal-cell { border: 0; border-radius: var(--radius-sm); background: var(--c-surface-2); padding: 5px; display: flex; flex-direction: column; align-items: stretch; gap: 3px; text-align: left; color: var(--c-text); font: var(--text-caption); min-width: 0; overflow: hidden; }
+.cal-cell.out { background: transparent; }
+button.cal-cell:hover { background: var(--c-surface-3); }
+.cal-cell .n { align-self: flex-end; min-width: 22px; height: 22px; border-radius: 50%; text-align: center; font: 600 12px/22px var(--font-ui); font-variant-numeric: tabular-nums; }
+.cal-cell.today .n { background: var(--c-accent); color: var(--c-text-on-accent); }
+.cal-cell.sel { outline: 2px solid var(--c-accent); outline-offset: -2px; }
+.cal-ev { display: block; padding: 1px 6px; border-radius: 4px; border-left: 3px solid var(--c); background: color-mix(in srgb, var(--c) 16%, transparent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-more { color: var(--c-text-3); }
+.cal-day { width: 250px; flex: none; border-left: 1px solid var(--c-line); padding: 18px 16px; display: grid; align-content: start; gap: 10px; overflow: auto; background: var(--c-surface-2); }
+.cal-day h3 { margin: 0; font: var(--text-label); }
+.cal-item { display: grid; grid-template-columns: 54px 1fr; gap: 8px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--c-surface); border-left: 3px solid var(--c); }
+.cal-item time { font: var(--text-caption); color: var(--c-text-2); font-variant-numeric: tabular-nums; }
+.cal-item b { display: block; font: var(--text-label); }
+.cal-item span { font: var(--text-caption); color: var(--c-text-3); }
+.cal-day .btn { justify-self: start; }
+
+/* Lock screen */
+#lock { position: absolute; inset: 0; z-index: 2000; display: grid; grid-template-rows: 1fr auto auto; justify-items: center; padding: 11vh 24px 32px; background: color-mix(in srgb, var(--c-bg) 86%, transparent); -webkit-backdrop-filter: blur(30px) saturate(1.2); backdrop-filter: blur(30px) saturate(1.2); color: var(--c-text); opacity: 0; transition: opacity var(--dur-base); }
+#lock.on { opacity: 1; }
+#lock[hidden] { display: none; }
+.lock-time { display: grid; justify-items: center; align-content: start; gap: 4px; }
+#lockT { font: 400 112px/1 var(--font-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+#lockD { font: var(--text-title-lg); color: var(--c-text-2); }
+.lock-user { display: grid; justify-items: center; gap: 10px; margin-bottom: 28px; }
+.lock-user b { font: 600 18px/24px var(--font-ui); }
+.lock-pw { display: flex; align-items: center; gap: 4px; padding: 4px 4px 4px 16px; border-radius: 999px; background: var(--glass-fill-strong); box-shadow: var(--shadow-1); }
+.lock-pw input { border: 0; outline: 0; background: transparent; color: var(--c-text); font: var(--text-body); width: 200px; height: 36px; }
+.lock-pw:focus-within { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.lock-user small { font: var(--text-caption); color: var(--c-text-2); }
+.lock-foot { display: flex; align-items: center; gap: 10px; max-width: 520px; font: var(--text-caption); color: var(--c-text-2); }
+.lock-foot .dotorb { width: 28px; height: 28px; flex: none; color: var(--c-text); }
+
+@media (max-width: 720px) {
+  .pip-side, .cal-day, .fsearch, #fView, .set-search { display: none; }
+  .set-scroll, #swMain { padding: 14px; }
+  #lockT { font-size: 76px; }
+  .st-card { grid-template-columns: auto 1fr; }
+  .st-card > :last-child { grid-column: 1 / -1; justify-self: start; }
+  .srow { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
@@ -926,6 +1149,120 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   </defs>
 </svg>
 
+<!-- SIX app icons: clay illustrations on squircle tiles. Drawn at 64 × 64, scaled by the tile. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ga-launch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ab9dff"/><stop offset="1" stop-color="#4a31d1"/></linearGradient>
+    <radialGradient id="ga-pearl" cx="0.35" cy="0.3" r="0.85"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d8d1ff"/></radialGradient>
+    <linearGradient id="ga-files" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8fbff"/><stop offset="1" stop-color="#cddff6"/></linearGradient>
+    <linearGradient id="ga-fold-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c98ef"/><stop offset="1" stop-color="#2667cc"/></linearGradient>
+    <linearGradient id="ga-fold-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#82c6ff"/><stop offset="1" stop-color="#2f80e6"/></linearGradient>
+    <linearGradient id="ga-browser" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#35dccb"/><stop offset="1" stop-color="#0b5fbb"/></linearGradient>
+    <radialGradient id="ga-globe" cx="0.38" cy="0.32" r="0.8"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#bfe9f2"/></radialGradient>
+    <linearGradient id="ga-mail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#94d3ff"/><stop offset="1" stop-color="#2a5ee6"/></linearGradient>
+    <linearGradient id="ga-paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2ebfb"/></linearGradient>
+    <linearGradient id="ga-cal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e8e6ef"/></linearGradient>
+    <linearGradient id="ga-cal-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6d5e"/><stop offset="1" stop-color="#e2352a"/></linearGradient>
+    <linearGradient id="ga-music" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff93b0"/><stop offset="1" stop-color="#df1c4b"/></linearGradient>
+    <linearGradient id="ga-white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe3ea"/></linearGradient>
+    <linearGradient id="ga-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78c8fd"/><stop offset="1" stop-color="#e3f5ff"/></linearGradient>
+    <linearGradient id="ga-hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fdca4"/><stop offset="1" stop-color="#2aa56c"/></linearGradient>
+    <linearGradient id="ga-hill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25a59a"/><stop offset="1" stop-color="#11706f"/></linearGradient>
+    <linearGradient id="ga-term" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c3c4a"/><stop offset="1" stop-color="#111117"/></linearGradient>
+    <linearGradient id="ga-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fe9b0"/><stop offset="1" stop-color="#0d9466"/></linearGradient>
+    <linearGradient id="ga-bag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9f7e8"/></linearGradient>
+    <linearGradient id="ga-set" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0f2f6"/><stop offset="1" stop-color="#9fa5b3"/></linearGradient>
+    <linearGradient id="ga-steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#717888"/><stop offset="1" stop-color="#2e323c"/></linearGradient>
+    <linearGradient id="ga-guide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8bbff"/><stop offset="1" stop-color="#7234e0"/></linearGradient>
+    <linearGradient id="ga-pal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eee4ff"/></linearGradient>
+    <linearGradient id="ga-binb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f7fa"/><stop offset="1" stop-color="#bfc3cd"/></linearGradient>
+    <linearGradient id="ga-drive" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eceef3"/><stop offset="1" stop-color="#9ea4b1"/></linearGradient>
+    <linearGradient id="ga-usb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#e8921c"/></linearGradient>
+
+    <symbol id="app-launch" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-launch)"/>
+      <g fill="rgba(25,10,90,.32)"><circle cx="32" cy="19.5" r="5.4"/><circle cx="44.1" cy="26.5" r="5.4"/><circle cx="44.1" cy="40.5" r="5.4"/><circle cx="32" cy="47.5" r="5.4"/><circle cx="19.9" cy="40.5" r="5.4"/><circle cx="19.9" cy="26.5" r="5.4"/></g>
+      <g fill="url(#ga-pearl)"><circle cx="32" cy="18" r="5.4"/><circle cx="44.1" cy="25" r="5.4"/><circle cx="44.1" cy="39" r="5.4"/><circle cx="32" cy="46" r="5.4"/><circle cx="19.9" cy="39" r="5.4"/><circle cx="19.9" cy="25" r="5.4"/></g></symbol>
+
+    <symbol id="app-files" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-files)"/>
+      <ellipse cx="32" cy="54" rx="22" ry="3" fill="rgba(20,50,110,.16)"/>
+      <path d="M10 19a4 4 0 0 1 4-4h11.4c1.3 0 2.5.6 3.3 1.6L31.5 20H50a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4Z" fill="url(#ga-fold-back)"/>
+      <rect x="14" y="22" width="36" height="18" rx="2" fill="#fff" opacity=".95"/>
+      <path d="M9 30a4 4 0 0 1 4-4h38a4 4 0 0 1 4 4l-1.6 18.4A4 4 0 0 1 49.4 52H14.6a4 4 0 0 1-4-3.6Z" fill="url(#ga-fold-front)"/>
+      <path d="M13.5 27.2h37" stroke="rgba(255,255,255,.6)" stroke-width="1.2" stroke-linecap="round"/></symbol>
+
+    <symbol id="app-browser" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-browser)"/>
+      <ellipse cx="32" cy="50" rx="15" ry="2.6" fill="rgba(0,30,70,.25)"/>
+      <circle cx="32" cy="31" r="16" fill="url(#ga-globe)"/>
+      <g fill="none" stroke="#1293b3" stroke-width="1.7" stroke-linecap="round"><ellipse cx="32" cy="31" rx="7" ry="16"/><path d="M16.6 26h30.8M16.6 36h30.8M32 15v32"/></g>
+      <ellipse cx="32" cy="33" rx="26" ry="7.5" transform="rotate(-18 32 33)" fill="none" stroke="#ff8a6b" stroke-width="2.6"/>
+      <circle cx="55" cy="25.5" r="2.8" fill="#ffd36b"/></symbol>
+
+    <symbol id="app-mail" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-mail)"/>
+      <ellipse cx="32" cy="50.5" rx="20" ry="2.6" fill="rgba(10,30,90,.25)"/>
+      <rect x="11" y="18" width="42" height="29" rx="4.5" fill="url(#ga-paper)"/>
+      <path d="M12.5 20.5 32 35l19.5-14.5" fill="none" stroke="#9db6e6" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M13 45.5l14-11M51 45.5l-14-11" stroke="#cbd8f0" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="47" cy="23.5" r="3.4" fill="#ff7a59"/></symbol>
+
+    <symbol id="app-calendar" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-cal)"/><rect width="64" height="19" fill="url(#ga-cal-top)"/></symbol>
+
+    <symbol id="app-music" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-music)"/>
+      <g fill="rgba(110,0,30,.32)" transform="translate(1 1.8)"><ellipse cx="24" cy="44" rx="6.4" ry="4.8" transform="rotate(-20 24 44)"/><ellipse cx="42.5" cy="39.5" rx="6.4" ry="4.8" transform="rotate(-20 42.5 39.5)"/><path d="M27.6 18.5 48.6 14v25h-3V20.5l-15 3.2V44h-3Z"/></g>
+      <g fill="url(#ga-white)"><ellipse cx="24" cy="44" rx="6.4" ry="4.8" transform="rotate(-20 24 44)"/><ellipse cx="42.5" cy="39.5" rx="6.4" ry="4.8" transform="rotate(-20 42.5 39.5)"/><path d="M27.6 18.5 48.6 14v25h-3V20.5l-15 3.2V44h-3Z"/></g></symbol>
+
+    <symbol id="app-photos" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-sky)"/>
+      <circle cx="45" cy="19" r="11" fill="#fff" opacity=".35"/><circle cx="45" cy="19" r="7" fill="#ffd25e"/>
+      <g fill="#fff" opacity=".92"><circle cx="16" cy="24" r="4.5"/><circle cx="21.5" cy="21.5" r="5.5"/><circle cx="27" cy="24.5" r="3.8"/><rect x="12" y="24" width="18" height="4.3" rx="2.1"/></g>
+      <path d="M0 44c12-11 24-12 36-4 8 5.3 18 3.4 28-3v27H0Z" fill="url(#ga-hill)"/>
+      <path d="M0 53c11-6 21-5 31-1.4 10 3.6 22 3 33-1.6V64H0Z" fill="url(#ga-hill2)"/></symbol>
+
+    <symbol id="app-terminal" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-term)"/>
+      <rect x="9" y="12" width="46" height="40" rx="6" fill="#0a0a0e" stroke="rgba(255,255,255,.14)"/>
+      <circle cx="15.5" cy="18" r="1.7" fill="#ff6b5e"/><circle cx="21" cy="18" r="1.7" fill="#ffc24a"/><circle cx="26.5" cy="18" r="1.7" fill="#4ad66d"/>
+      <path d="M17 29l7.5 5.5L17 40" fill="none" stroke="#8affc1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="28" y="38.5" width="11" height="3.2" rx="1.6" fill="#8affc1"/></symbol>
+
+    <symbol id="app-software" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-soft)"/>
+      <ellipse cx="32" cy="53" rx="16" ry="2.6" fill="rgba(0,60,35,.28)"/>
+      <path d="M25 26v-4a7 7 0 0 1 14 0v4" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M17.5 25h29l-2.6 23.4a4 4 0 0 1-4 3.6H24.1a4 4 0 0 1-4-3.6Z" fill="url(#ga-bag)"/>
+      <path d="M32 31.5V43M27 38.5l5 5 5-5" fill="none" stroke="#11a26f" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+
+    <symbol id="app-settings" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-set)"/>
+      <path d="M49.67 26.53 L54.18 28.19 L54.18 35.81 L49.67 37.47 L48.36 40.63 L50.37 44.99 L44.99 50.37 L40.63 48.36 L37.47 49.67 L35.81 54.18 L28.19 54.18 L26.53 49.67 L23.37 48.36 L19.01 50.37 L13.63 44.99 L15.64 40.63 L14.33 37.47 L9.82 35.81 L9.82 28.19 L14.33 26.53 L15.64 23.37 L13.63 19.01 L19.01 13.63 L23.37 15.64 L26.53 14.33 L28.19 9.82 L35.81 9.82 L37.47 14.33 L40.63 15.64 L44.99 13.63 L50.37 19.01 L48.36 23.37Z" fill="rgba(20,22,30,.3)" transform="translate(0 1.6)"/>
+      <path d="M49.67 26.53 L54.18 28.19 L54.18 35.81 L49.67 37.47 L48.36 40.63 L50.37 44.99 L44.99 50.37 L40.63 48.36 L37.47 49.67 L35.81 54.18 L28.19 54.18 L26.53 49.67 L23.37 48.36 L19.01 50.37 L13.63 44.99 L15.64 40.63 L14.33 37.47 L9.82 35.81 L9.82 28.19 L14.33 26.53 L15.64 23.37 L13.63 19.01 L19.01 13.63 L23.37 15.64 L26.53 14.33 L28.19 9.82 L35.81 9.82 L37.47 14.33 L40.63 15.64 L44.99 13.63 L50.37 19.01 L48.36 23.37Z" fill="url(#ga-steel)"/>
+      <circle cx="32" cy="32" r="12.5" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.4"/>
+      <circle cx="32" cy="32" r="7.6" fill="url(#ga-set)"/><circle cx="32" cy="32" r="3.6" fill="#4a4f5c"/></symbol>
+
+    <symbol id="app-guide" viewBox="0 0 64 64"><rect width="64" height="64" fill="url(#ga-guide)"/>
+      <path d="M32 14.5c11 0 20 7.4 20 16.8 0 6-4.4 8.2-9 8.2h-4.3a4 4 0 0 0-2.9 6.8 4.4 4.4 0 0 1-3.1 7.5C20.6 53.8 12 45 12 33.6 12 23 21 14.5 32 14.5Z" fill="rgba(60,10,120,.3)" transform="translate(0 1.6)"/>
+      <path d="M32 14.5c11 0 20 7.4 20 16.8 0 6-4.4 8.2-9 8.2h-4.3a4 4 0 0 0-2.9 6.8 4.4 4.4 0 0 1-3.1 7.5C20.6 53.8 12 45 12 33.6 12 23 21 14.5 32 14.5Z" fill="url(#ga-pal)"/>
+      <circle cx="21.5" cy="31" r="3.8" fill="#ff6b6b"/><circle cx="26.5" cy="22.5" r="3.8" fill="#ffc24a"/><circle cx="36.5" cy="20.5" r="3.8" fill="#3fd29a"/><circle cx="44.5" cy="27" r="3.8" fill="#5aa9ff"/></symbol>
+
+    <symbol id="app-bin" viewBox="0 0 64 64">
+      <rect x="27" y="12.5" width="10" height="5" rx="2.2" fill="none" stroke="#9aa0ad" stroke-width="2"/>
+      <path d="M20 22h24l-2.4 26.4a3.6 3.6 0 0 1-3.6 3.3H26a3.6 3.6 0 0 1-3.6-3.3Z" fill="url(#ga-binb)"/>
+      <path d="M27 27.5v19M32 27.5v19M37 27.5v19" stroke="rgba(60,64,80,.32)" stroke-width="1.7" stroke-linecap="round"/>
+      <rect x="16.5" y="16.5" width="31" height="6" rx="3" fill="url(#ga-binb)" stroke="rgba(60,64,80,.18)"/></symbol>
+
+    <!-- folders, with an embossed emblem per kind -->
+    <symbol id="fold" viewBox="0 0 64 56">
+      <path d="M4 10a4 4 0 0 1 4-4h14.2c1.3 0 2.5.6 3.3 1.6L28.6 12H56a4 4 0 0 1 4 4v32a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" fill="url(#ga-fold-back)"/>
+      <rect x="8" y="14" width="48" height="18" rx="2" fill="#fff" opacity=".96"/>
+      <path d="M4 21a4 4 0 0 1 4-4h48a4 4 0 0 1 4 4v27a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" fill="url(#ga-fold-front)"/>
+      <path d="M8 18.2h48" stroke="rgba(255,255,255,.6)" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="em-documents" viewBox="0 0 64 56"><path d="M27 28.5h7l4 4V43a1 1 0 0 1-1 1H27a1 1 0 0 1-1-1V29.5a1 1 0 0 1 1-1ZM29 36h6M29 39.5h6"/></symbol>
+    <symbol id="em-downloads" viewBox="0 0 64 56"><path d="M32 28.5v11M27 35l5 5 5-5M26 44h12"/></symbol>
+    <symbol id="em-pictures" viewBox="0 0 64 56"><rect x="25" y="29.5" width="14" height="12" rx="2"/><path d="M26 40l4-4 3 3 2-2 3 3"/></symbol>
+    <symbol id="em-music" viewBox="0 0 64 56"><path d="M30 41V30.5l8-2v10"/><circle cx="28.3" cy="41" r="2"/><circle cx="36.3" cy="38.5" r="2"/></symbol>
+    <symbol id="em-videos" viewBox="0 0 64 56"><rect x="25" y="29.5" width="14" height="12" rx="2"/><path d="M30.5 32.8v5.4l4.4-2.7Z"/></symbol>
+    <symbol id="em-desktop" viewBox="0 0 64 56"><rect x="24.5" y="29.5" width="15" height="10" rx="1.6"/><path d="M29.5 43.5h5M32 39.5v4"/></symbol>
+    <symbol id="em-projects" viewBox="0 0 64 56"><path d="M28 31.5l-4 4.5 4 4.5M36 31.5l4 4.5-4 4.5M33.6 30l-3.2 12"/></symbol>
+    <symbol id="drive" viewBox="0 0 64 56"><rect x="6" y="18" width="52" height="24" rx="5" fill="url(#ga-drive)"/><rect x="6" y="32" width="52" height="10" rx="0" fill="rgba(40,44,56,.12)"/><path d="M11 18h42" stroke="rgba(255,255,255,.7)"/><circle cx="51" cy="37" r="2" fill="#3fd27a"/></symbol>
+    <symbol id="usb" viewBox="0 0 64 56"><rect x="24" y="3" width="16" height="11" rx="1.5" fill="#c9ccd5"/><rect x="28" y="6" width="3" height="3" fill="#8b909c"/><rect x="33" y="6" width="3" height="3" fill="#8b909c"/><rect x="18" y="12" width="28" height="40" rx="6" fill="url(#ga-usb)"/><path d="M22 15h20" stroke="rgba(255,255,255,.6)"/></symbol>
+  </defs>
+</svg>
+
 <div id="desktop">
   <canvas id="wall" aria-hidden="true"></canvas>
 
@@ -933,34 +1270,30 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   <!-- Home: the desktop itself is the assistant -->
   <main id="home" aria-label="Home">
-    <div class="center" id="center" data-chat="off">
+    <div class="center" id="center">
       <div class="stage">
-        <div class="pip" id="pipHome" data-state="ready" role="img" aria-label="Pip, ready"></div>
+        <button type="button" class="pip" id="pipHome" data-state="ready" aria-label="Pip, ready. Press to talk"></button>
         <div class="pip-state" id="pipState" aria-live="polite">Pip · ready</div>
         <h1 class="greet" id="greet">Good morning, Nadia.</h1>
-        <p class="greet-sub">Ask anything, or tap the mic and talk.</p>
+        <p class="greet-sub" id="greetSub">Press the mic in the menu bar, or hold Space, and talk.</p>
       </div>
-      <div id="thread" class="liquid compact" data-liquid="1" role="log" aria-label="Conversation with Pip" hidden><div class="thread-head"><button type="button" id="histBtn" aria-expanded="false" hidden></button><button type="button" class="hide" id="threadHide" aria-label="Hide conversation"><svg class="i"><use href="#i-close"/></svg></button></div></div>
-      <form id="composer" class="liquid" data-liquid="1" autocomplete="off">
-        <label class="sr-only" for="ask">Ask Pip</label>
-        <input id="ask" placeholder="Ask Pip anything…" enterkeyhint="send">
-        <div class="voice" id="voice" hidden>
-          <div class="wave" id="wave" aria-hidden="true"></div>
-          <div class="voice-text"><b id="voiceTitle">Listening…</b><span id="voiceLine">Speak now</span></div>
+      <!-- voice only: what you said and what Pip answered, as captions; review cards appear here too -->
+      <div id="vcap" class="vcap liquid" data-liquid="1" hidden>
+        <div class="vwave" id="wave" aria-hidden="true"></div>
+        <p class="vyou" id="vYou"></p>
+        <p class="vpip" id="vPip" aria-live="polite"></p>
+        <div class="vcard" id="vCard"></div>
+      </div>
+      <div class="vtry" id="vTry">
+        <span class="overline">Try saying</span>
+        <div class="chips-row" id="suggest">
+          <button type="button" class="sugg">Open Files and Terminal side by side</button>
+          <button type="button" class="sugg">Add a clock widget</button>
+          <button type="button" class="sugg">Turn on night light</button>
+          <button type="button" class="sugg">Open display settings</button>
         </div>
-        <button type="submit" class="iconbtn send" id="sendBtn" aria-label="Send"><svg class="i"><use href="#i-send"/></svg></button>
-        <button type="button" class="mic" id="micBtn" aria-label="Talk to Pip" aria-pressed="false"><svg class="i"><use href="#i-mic"/></svg></button>
-      </form>
-      <div class="chips-row" id="suggest">
-        <button type="button" class="sugg">Open Files and Terminal side by side</button>
-        <button type="button" class="sugg">Switch to the tidal mood</button>
-        <button type="button" class="sugg">Turn on night light</button>
-        <button type="button" class="sugg">What can you do?</button>
       </div>
-      <div class="hint">
-        <span id="aiNote">Simple commands run on this device.</span><button type="button" class="histlink" id="histShow" hidden></button>
-        <label for="speakToggle"><input class="sw" type="checkbox" id="speakToggle" checked>Speak replies</label>
-      </div>
+      <div class="hint"><span class="vmode" id="vMode"></span><button type="button" class="histlink" id="openChat">Type instead</button></div>
     </div>
 
     <div class="widgets" id="widgets">
@@ -1011,7 +1344,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Design guide -->
   <section class="win" id="w-guide" data-app="guide" aria-label="Design guide window">
     <header class="titlebar">
-      <span class="appicon ai-guide"><svg class="i"><use href="#i-f-palette"/></svg></span>
+      <span class="appicon ai-guide"><svg class="art" viewBox="0 0 64 64"><use href="#app-guide"/></svg></span>
       <span class="title">Design guide · Soft Matter</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
@@ -1037,7 +1370,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
             <div class="mat clay"><span class="overline">Touch it</span><div><b>Clay</b><p>Buttons, toggles, tiles, app icons</p></div></div>
             <div class="mat glassy"><div class="glass"><span class="overline">Float it</span><b>Plasma glass</b><p>Shelf, menus, popovers, search</p></div></div>
             <div class="mat paper"><span class="overline">Read it</span><div><b>Paper</b><p>Window content, documents, lists</p></div></div>
-            <div class="mat glassy" style="background: linear-gradient(135deg, #05262c, #0e4c55 55%, #7b6cff)"><div class="glass"><span class="overline">Melt it</span><b>Plasma clay</b><p>Home cards and the composer. Liquid, fuses when close</p></div></div>
+            <div class="mat glassy" style="background: linear-gradient(135deg, #05262c, #0e4c55 55%, #7b6cff)"><div class="glass"><span class="overline">Melt it</span><b>Plasma clay</b><p>Home widgets and Pip’s captions. Liquid, fuses when close</p></div></div>
           </div>
           <ul class="principles">
             <li><span class="n">1</span><div><b>Familiar map, fresh materials.</b> <span>Start bottom-left, controls top-right, Windows shortcuts. We change how it feels, not where things are.</span></div></li>
@@ -1099,7 +1432,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
             <div class="row"><span class="chip">0 Wallpaper</span><span class="chip">1 Widgets</span><span class="chip">2 Inactive window</span><span class="chip">3 Active window</span><span class="chip">4 Shelf</span><span class="chip">5 Menus</span><span class="chip">6 Toasts</span><span class="chip">7 Dialogs</span><span class="chip">8 Search, Overview</span></div>
           </div>
           <h3>Plasma clay</h3>
-          <p>Home cards and the composer are one liquid: rounded shapes joined with a smooth union, so cards closer than the blend distance (40 px) melt into each other. The surface bends the wallpaper behind it, frosts it, lights it like clay from the top left, and wears an iridescent rim. Viscosity sets how cards follow your hand: water wobbles, honey drags, solid doesn't move at all. Try it in Quick Settings.</p>
+          <p>Home widgets and Pip’s voice captions are one liquid: rounded shapes joined with a smooth union, so cards closer than the blend distance (40 px) melt into each other. The surface bends the wallpaper behind it, frosts it, lights it like clay from the top left, and wears an iridescent rim. Viscosity sets how cards follow your hand: water wobbles, honey drags, solid doesn't move at all. Try it in Settings › Appearance.</p>
           <h3>Rules</h3>
           <div class="comp-grid">
             <div class="banner info"><svg class="i"><use href="#i-info"/></svg><div><b>Do</b> put text on glass only above a 78 % fill; turn on <b>Reduce transparency</b> and check it still works.</div></div>
@@ -1152,7 +1485,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
           <h2>Pip lives on the home screen</h2>
-          <p class="lead">Home is a conversation. Type or talk; Pip answers, opens and arranges windows, and changes settings. Pip is one dotted sphere at every size, rendered with depth and glass on home. Every state moves its light differently. Pick one to set Pip everywhere.</p>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip is one dotted sphere at every size, rendered with depth and glass on home. Every state moves its light differently. Pick one to set Pip everywhere.</p>
           <div class="pips" id="pipStates"></div>
           <h3>The small orb</h3>
           <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
@@ -1160,9 +1493,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
           <ul class="principles">
-            <li><span class="n">1</span><div><b>Tap the mic, or hold Six + Space.</b> <span>No always-on wake word by default. The amber mic pill in the menu bar and Pip's ripples show it is listening.</span></div></li>
-            <li><span class="n">2</span><div><b>See what Pip heard.</b> <span>The live transcript sits in the composer, so a wrong word is caught before anything runs.</span></div></li>
-            <li><span class="n">3</span><div><b>Hear the answer, read it too.</b> <span>Spoken replies always appear in the thread. Tap the mic again to interrupt.</span></div></li>
+            <li><span class="n">1</span><div><b>Press to talk, or say “Hey Pip”.</b> <span>The mic in the menu bar, clicking Pip, holding Space or Six + Space. “Hey Pip” is a choice in Control Center, detected on this device. Amber mic = hearing you; a green dot = waiting for “Hey Pip”.</span></div></li>
+            <li><span class="n">2</span><div><b>See what Pip heard.</b> <span>The live transcript forms in the caption under Pip, so a wrong word is caught before anything runs.</span></div></li>
+            <li><span class="n">3</span><div><b>Hear the answer, read it too.</b> <span>Every spoken reply is also a caption and a message in the Pip app. Changes to files wait for your “yes”.</span></div></li>
           </ul>
         </section>
       </div>
@@ -1173,8 +1506,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Files -->
   <section class="win" id="w-files" data-app="files" aria-label="Files window">
     <header class="titlebar">
-      <span class="appicon ai-files"><svg class="i"><use href="#i-f-folder"/></svg></span>
-      <span class="title">Files · Documents</span>
+      <span class="appicon ai-files"><svg class="art" viewBox="0 0 64 64"><use href="#app-files"/></svg></span>
+      <span class="title" id="fTitle">Documents</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
         <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
@@ -1182,22 +1515,37 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       </div>
     </header>
     <div class="win-body">
-      <nav class="side" aria-label="Places">
-        <button class="navbtn"><svg class="i"><use href="#i-home"/></svg><span>Home</span></button>
-        <button class="navbtn"><svg class="i"><use href="#i-monitor"/></svg><span>Desktop</span></button>
-        <button class="navbtn" aria-selected="true"><svg class="i"><use href="#i-file"/></svg><span>Documents</span></button>
-        <button class="navbtn"><svg class="i"><use href="#i-download"/></svg><span>Downloads</span></button>
-        <button class="navbtn"><svg class="i"><use href="#i-image"/></svg><span>Pictures</span></button>
-        <button class="navbtn"><svg class="i"><use href="#i-monitor"/></svg><span>This PC</span></button>
-        <button class="navbtn"><svg class="i"><use href="#i-trash"/></svg><span>Bin</span></button>
+      <nav class="side" aria-label="Places" id="fSide">
+        <span class="side-h">Favourites</span>
+        <button class="navbtn" data-go="home"><svg class="i"><use href="#i-home"/></svg><span>Home</span></button>
+        <button class="navbtn" data-go="desktop"><svg class="i"><use href="#i-monitor"/></svg><span>Desktop</span></button>
+        <button class="navbtn" data-go="documents"><svg class="i"><use href="#i-file"/></svg><span>Documents</span></button>
+        <button class="navbtn" data-go="downloads"><svg class="i"><use href="#i-download"/></svg><span>Downloads</span></button>
+        <button class="navbtn" data-go="pictures"><svg class="i"><use href="#i-image"/></svg><span>Pictures</span></button>
+        <button class="navbtn" data-go="music"><svg class="i"><use href="#i-music"/></svg><span>Music</span></button>
+        <button class="navbtn" data-go="videos"><svg class="i"><use href="#i-f-play"/></svg><span>Videos</span></button>
+        <span class="side-h">Locations</span>
+        <button class="navbtn" data-go="pc"><svg class="i"><use href="#i-monitor"/></svg><span>This PC</span></button>
+        <button class="navbtn" data-go="usb"><svg class="i"><use href="#i-download"/></svg><span>KINGSTON</span><span class="eject" aria-hidden="true">⏏</span></button>
+        <button class="navbtn" data-go="bin"><svg class="i"><use href="#i-trash"/></svg><span>Bin</span><span class="badge" id="binBadge" hidden>0</span></button>
+        <span class="side-h">Tags</span>
+        <button class="navbtn" data-go="tag:work"><span class="tagdot" style="background: #5aa9ff"></span><span>Work</span></button>
+        <button class="navbtn" data-go="tag:family"><span class="tagdot" style="background: #3fd29a"></span><span>Family</span></button>
+        <button class="navbtn" data-go="tag:important"><span class="tagdot" style="background: #ff6b6b"></span><span>Important</span></button>
       </nav>
       <div class="files">
         <div class="toolbar">
-          <span class="crumb">Home › Documents</span>
-          <button class="btn btn-quiet sm" id="fDelete" disabled><svg class="i sm"><use href="#i-trash"/></svg>Delete</button>
+          <button type="button" class="iconbtn" id="fBack" aria-label="Back"><svg class="i sm" style="transform: scaleX(-1)"><use href="#i-chev"/></svg></button>
+          <button type="button" class="iconbtn" id="fFwd" aria-label="Forward"><svg class="i sm"><use href="#i-chev"/></svg></button>
+          <button type="button" class="iconbtn" id="fUp" aria-label="Up one folder"><svg class="i sm"><use href="#i-chev-up"/></svg></button>
+          <nav class="fpath" id="fPath" aria-label="Path"></nav>
+          <label class="fsearch"><svg class="i sm"><use href="#i-search"/></svg><input id="fQ" type="search" placeholder="Search" aria-label="Search this folder" autocomplete="off"></label>
+          <div class="seg" role="group" aria-label="View" id="fView"><button data-v="grid" aria-pressed="true" aria-label="Icons"><svg class="i sm"><use href="#i-squares-four"/></svg></button><button data-v="list" aria-pressed="false" aria-label="List"><svg class="i sm"><use href="#i-list-checks"/></svg></button></div>
+          <button type="button" class="iconbtn" id="fNew" aria-label="New folder"><svg class="i sm"><use href="#i-plus"/></svg></button>
+          <button type="button" class="iconbtn" id="fDelete" aria-label="Move to Bin" disabled><svg class="i sm"><use href="#i-trash"/></svg></button>
         </div>
         <div class="fhead"><span>Name</span><span style="text-align: right">Modified</span><span style="text-align: right">Size</span></div>
-        <ul class="flist" id="flist" role="listbox" aria-label="Documents" aria-multiselectable="false"></ul>
+        <ul class="flist grid" id="flist" role="listbox" aria-label="Documents" aria-multiselectable="false"></ul>
         <div class="status" id="fstatus"></div>
       </div>
     </div>
@@ -1207,7 +1555,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <!-- Window: Terminal (closed at start) -->
   <section class="win" id="w-terminal" data-app="terminal" aria-label="Terminal window" hidden>
     <header class="titlebar">
-      <span class="appicon ai-terminal"><svg class="i"><use href="#i-f-terminal"/></svg></span>
+      <span class="appicon ai-terminal"><svg class="art" viewBox="0 0 64 64"><use href="#app-terminal"/></svg></span>
       <span class="title">Terminal</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
@@ -1220,12 +1568,389 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 <span class="g">SIX OS</span>      prototype · Soft Matter design language
 <span class="d">shell</span>       menu bar · dock · six search · pip
 <span class="d">fonts</span>       Geist · Instrument Serif · Geist Mono
-<span class="d">home</span>        pip · chat + voice · plasma clay
+<span class="d">home</span>        pip · voice first · widgets · plasma clay
+<span class="d">base</span>        Fedora Linux 44 · image-based updates
 <span class="d">accent</span>      Iris #5340D9 (light) / #9C8FFF (dark)
 <span class="d">targets</span>     32 px pointer · 44 px touch
 <span class="d">baseline</span>    WCAG 2.2 AA
 
 <span class="p">nadia@six ~ $</span> <span class="d">█</span></pre>
+    </div>
+    <div class="grip" aria-hidden="true"></div>
+  </section>
+
+  <!-- Window: Pip, the chat app (the top-right Pip icon opens it) -->
+  <section class="win" id="w-pip" data-app="pip" aria-label="Pip window" hidden>
+    <header class="titlebar">
+      <span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span>
+      <span class="title">Pip</span>
+      <div class="capbtns">
+        <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
+        <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
+        <button class="cap close" aria-label="Close"><svg class="i sm"><use href="#i-close"/></svg></button>
+      </div>
+    </header>
+    <div class="win-body">
+      <nav class="side pip-side" aria-label="Conversations">
+        <button type="button" class="btn btn-secondary sm new-chat" id="newChat"><svg class="i sm"><use href="#i-plus"/></svg>New chat</button>
+        <span class="side-h">Today</span>
+        <div id="convToday"></div>
+        <span class="side-h">Earlier</span>
+        <div id="convOld"></div>
+      </nav>
+      <div class="pip-main">
+        <div class="pip-head"><b id="convTitle">New chat</b><span id="aiNote">Simple commands run on this device.</span></div>
+        <div class="threads" id="threads">
+          <div class="thread" id="thread" role="log" aria-label="Conversation with Pip"></div>
+          <div class="pip-empty" id="pipEmpty">
+            <canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>
+            <b>Ask Pip anything</b>
+            <span>Pip can open and arrange windows, change settings, find files and make widgets. Voice works from anywhere: press the mic in the menu bar.</span>
+            <div class="chips-row" id="chatSuggest">
+              <button type="button" class="sugg">Open Files and Terminal side by side</button>
+              <button type="button" class="sugg">Make a widget: a countdown to my exam on 14 December</button>
+              <button type="button" class="sugg">Switch to the tidal mood</button>
+              <button type="button" class="sugg">What can you do?</button>
+            </div>
+          </div>
+        </div>
+        <form id="composer" autocomplete="off">
+          <label class="sr-only" for="ask">Message Pip</label>
+          <input id="ask" placeholder="Message Pip…" enterkeyhint="send">
+          <button type="button" class="iconbtn" id="micBtn" aria-label="Dictate" aria-pressed="false"><svg class="i"><use href="#i-mic"/></svg></button>
+          <button type="submit" class="iconbtn send" id="sendBtn" aria-label="Send"><svg class="i"><use href="#i-send"/></svg></button>
+        </form>
+      </div>
+    </div>
+    <div class="grip" aria-hidden="true"></div>
+  </section>
+
+  <!-- Window: Settings -->
+  <section class="win" id="w-settings" data-app="settings" aria-label="Settings window" hidden>
+    <header class="titlebar">
+      <span class="appicon ai-settings"><svg class="art" viewBox="0 0 64 64"><use href="#app-settings"/></svg></span>
+      <span class="title">Settings</span>
+      <div class="capbtns">
+        <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
+        <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
+        <button class="cap close" aria-label="Close"><svg class="i sm"><use href="#i-close"/></svg></button>
+      </div>
+    </header>
+    <div class="win-body">
+      <nav class="side set-side" aria-label="Settings sections">
+        <label class="set-search"><svg class="i sm"><use href="#i-search"/></svg><input id="setQ" type="search" placeholder="Search settings" aria-label="Search settings" autocomplete="off"></label>
+        <div id="setNav"></div>
+      </nav>
+      <div class="set-main">
+        <div class="set-head">
+          <button type="button" class="iconbtn" id="setBack" aria-label="Back" disabled><svg class="i sm" style="transform: scaleX(-1)"><use href="#i-chev"/></svg></button>
+          <button type="button" class="iconbtn" id="setFwd" aria-label="Forward" disabled><svg class="i sm"><use href="#i-chev"/></svg></button>
+          <span class="crumb" id="setCrumb">Settings</span>
+        </div>
+        <div class="set-scroll" id="setScroll">
+          <div id="setResults" hidden></div>
+
+          <section class="spage" data-page="wifi" hidden>
+            <div class="sgroup"><label class="srow"><span class="sl"><b>Wi-Fi</b><small>Connected to Home-5G</small></span><input class="sw" type="checkbox" data-bind="wifi" checked></label></div>
+            <span class="overline">Networks</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Home-5G</b><small>Connected · WPA3 · strong signal</small></span><span class="chip ok">Connected</span></div>
+              <div class="srow"><span class="sl"><b>Nadia’s phone</b><small>Hotspot · WPA2</small></span><button type="button" class="btn btn-secondary sm" data-toast="Connecting to Nadia’s phone…">Connect</button></div>
+              <div class="srow"><span class="sl"><b>Café Ruchi</b><small>Open network · not secure</small></span><button type="button" class="btn btn-secondary sm" data-toast="Open networks ask before connecting. Nothing was connected.">Connect</button></div>
+            </div>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Ask to join new networks</b><small>Known networks join on their own</small></span><input class="sw" type="checkbox" checked></label>
+              <label class="srow"><span class="sl"><b>Airplane mode</b><small>Turns off Wi-Fi and Bluetooth</small></span><input class="sw" type="checkbox"></label>
+            </div>
+          </section>
+
+          <section class="spage" data-page="bt" hidden>
+            <div class="sgroup"><label class="srow"><span class="sl"><b>Bluetooth</b><small>Visible as “Nadia’s Laptop” while this page is open</small></span><input class="sw" type="checkbox" data-bind="bt"></label></div>
+            <span class="overline">My devices</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Keychron K3</b><small>Keyboard · Connected · battery 80 %</small></span><span class="chip ok">Connected</span></div>
+              <div class="srow"><span class="sl"><b>Nadia’s earbuds</b><small>Headphones · Not connected</small></span><button type="button" class="btn btn-secondary sm" data-toast="Turn on Bluetooth first.">Connect</button></div>
+              <div class="srow"><span class="sl"><b>Add a device</b><small>Put the device in pairing mode, then choose it here</small></span><button type="button" class="btn btn-secondary sm" data-toast="Looking for devices…">Add…</button></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="display" hidden>
+            <div class="sgroup">
+              <div class="srow col"><span class="sl"><b>Brightness</b></span><input type="range" min="30" max="100" value="100" data-bind="bright" aria-label="Brightness"></div>
+              <label class="srow"><span class="sl"><b>Night light</b><small>Warmer colours after sunset</small></span><input class="sw" type="checkbox" data-bind="night"></label>
+              <div class="srow"><span class="sl"><b>Night light schedule</b></span><select class="ssel" aria-label="Night light schedule"><option>Sunset to sunrise</option><option>22:00 to 07:00</option><option>Manual</option></select></div>
+            </div>
+            <span class="overline">Built-in display</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Scale</b><small>Makes text and controls bigger</small></span><div class="seg" role="group" aria-label="Scale"><button aria-pressed="false">100 %</button><button aria-pressed="true">125 %</button><button aria-pressed="false">150 %</button><button aria-pressed="false">200 %</button></div></div>
+              <div class="srow"><span class="sl"><b>Resolution</b></span><select class="ssel" aria-label="Resolution"><option>2560 × 1600 (recommended)</option><option>1920 × 1200</option><option>1280 × 800</option></select></div>
+              <div class="srow"><span class="sl"><b>Refresh rate</b></span><select class="ssel" aria-label="Refresh rate"><option>120 Hz</option><option>60 Hz</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="sound" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Output</b></span><select class="ssel" aria-label="Output"><option>Speakers (built-in)</option><option>Nadia’s earbuds</option><option>HDMI · Monitor</option></select></div>
+              <div class="srow col"><span class="sl"><b>Volume</b></span><input type="range" min="0" max="100" value="64" data-bind="vol" aria-label="Volume"></div>
+              <div class="srow"><span class="sl"><b>Input</b><small>Pip listens through this microphone</small></span><select class="ssel" aria-label="Input"><option>Built-in microphone</option><option>Nadia’s earbuds</option></select></div>
+              <div class="srow"><span class="sl"><b>Alert sound</b></span><select class="ssel" aria-label="Alert sound"><option>Pebble</option><option>Glass</option><option>None</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="power" hidden>
+            <div class="sgroup"><div class="srow big"><span class="sl"><b>64 %</b><small>3 h 10 min left · not charging</small></span><span class="batt big" aria-hidden="true"><i style="width: 64%"></i></span></div></div>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Power mode</b><small>Balanced suits most days</small></span><div class="seg" role="group" aria-label="Power mode"><button aria-pressed="false">Saver</button><button aria-pressed="true">Balanced</button><button aria-pressed="false">Performance</button></div></div>
+              <label class="srow"><span class="sl"><b>Protect the battery</b><small>Stops charging at 80 % when plugged in for long</small></span><input class="sw" type="checkbox" checked></label>
+              <div class="srow"><span class="sl"><b>Turn the screen off after</b></span><select class="ssel" aria-label="Turn the screen off after"><option>5 minutes</option><option>2 minutes</option><option>15 minutes</option><option>Never</option></select></div>
+              <div class="srow"><span class="sl"><b>Sleep after</b></span><select class="ssel" aria-label="Sleep after"><option>20 minutes</option><option>1 hour</option><option>Never</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="storage" hidden>
+            <div class="sgroup">
+              <div class="srow col"><span class="sl"><b>300 GB of 512 GB used</b><small>212 GB free</small></span><div class="bar" role="progressbar" aria-label="Storage used" aria-valuemin="0" aria-valuemax="512" aria-valuenow="300"><i style="width: 58.6%"></i></div></div>
+              <div class="srow"><span class="sl"><b>Pictures</b></span><span class="meta">118 GB</span></div>
+              <div class="srow"><span class="sl"><b>Apps</b></span><span class="meta">64 GB</span></div>
+              <div class="srow"><span class="sl"><b>System</b><small>Includes the previous version, kept for rollback</small></span><span class="meta">46 GB</span></div>
+              <div class="srow"><span class="sl"><b>Documents and others</b></span><span class="meta">72 GB</span></div>
+            </div>
+            <span class="overline">Free up space</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Empty the Bin</b><small id="binLine">Nothing in the Bin</small></span><button type="button" class="btn btn-secondary sm" data-act="emptybin">Empty…</button></div>
+              <div class="srow"><span class="sl"><b>Clear app caches</b><small>1.4 GB · apps rebuild them as needed</small></span><button type="button" class="btn btn-secondary sm" data-toast="Cleared 1.4 GB of caches.">Clear</button></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="pip" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
+              <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
+              <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
+              <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
+            </div>
+            <span class="overline">Privacy</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Voice</b><small>Wake word, speech and simple commands are processed on this device</small></span><span class="chip ok">On device</span></div>
+              <div class="srow"><span class="sl"><b>Cloud model</b><small>For questions the device can’t answer</small></span><div class="seg" role="group" aria-label="Cloud model"><button aria-pressed="true">Ask each time</button><button aria-pressed="false">Allow</button><button aria-pressed="false">Never</button></div></div>
+              <div class="srow"><span class="sl"><b>Voice history</b><small>Kept on this device for 7 days</small></span><button type="button" class="btn btn-secondary sm" data-toast="Voice history deleted.">Delete…</button></div>
+            </div>
+            <span class="overline">What Pip can do</span>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Open and arrange windows</b></span><input class="sw" type="checkbox" checked></label>
+              <label class="srow"><span class="sl"><b>Change settings</b></span><input class="sw" type="checkbox" checked></label>
+              <div class="srow"><span class="sl"><b>Change files</b><small>Always shows a review card first</small></span><span class="chip">Asks first</span></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="appearance" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Theme</b></span><div class="seg" role="group" aria-label="Theme" id="segTheme"><button data-v="light" aria-pressed="false">Light</button><button data-v="dark" aria-pressed="false">Dark</button><button data-v="auto" aria-pressed="true">Auto</button></div></div>
+              <div class="srow"><span class="sl"><b>Accent colour</b><small>Selection, focus and the main button</small></span><div class="swatches" role="radiogroup" aria-label="Accent colour" id="accents"><button role="radio" data-v="iris" aria-checked="true" aria-label="Iris"></button><button role="radio" data-v="tide" aria-checked="false" aria-label="Tide"></button><button role="radio" data-v="moss" aria-checked="false" aria-label="Moss"></button><button role="radio" data-v="sun" aria-checked="false" aria-label="Sun"></button></div></div>
+            </div>
+            <span class="overline">Wallpaper and plasma clay</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Mood</b></span><div class="seg" id="segMood" role="group" aria-label="Mood"><button data-v="matte" aria-pressed="true">Matte</button><button data-v="tidal" aria-pressed="false">Tidal</button><button data-v="aurora" aria-pressed="false">Aurora</button><button data-v="ember" aria-pressed="false">Ember</button></div></div>
+              <div class="srow"><span class="sl"><b>Viscosity</b><small>How cards move and fuse</small></span><div class="seg" id="segVisc" role="group" aria-label="Viscosity"><button data-v="water" aria-pressed="false">Water</button><button data-v="gel" aria-pressed="true">Gel</button><button data-v="honey" aria-pressed="false">Honey</button><button data-v="solid" aria-pressed="false">Solid</button></div></div>
+              <div class="srow col"><span class="sl"><b><label for="frost">Frost</label></b><small id="frostV" class="tnum">0.55</small></span><input type="range" id="frost" min="0" max="100" value="55"></div>
+              <div class="srow col"><span class="sl"><b><label for="refr">Refraction</label></b><small id="refrV" class="tnum">1.00</small></span><input type="range" id="refr" min="0" max="150" value="100"></div>
+              <div class="srow"><span class="sl"><b>Rim</b></span><div class="seg" id="segRim" role="group" aria-label="Rim"><button data-v="soft" aria-pressed="true">Soft</button><button data-v="iri" aria-pressed="false">Iridescent</button><button data-v="tint" aria-pressed="false">Accent</button><button data-v="off" aria-pressed="false">Off</button></div></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="home" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Widgets</b><small id="wCount">4 on home</small></span><button type="button" class="btn btn-secondary sm" data-act="widgets">Edit widgets…</button></div>
+              <label class="srow"><span class="sl"><b>Greeting</b><small>“Good morning, Nadia.” under Pip</small></span><input class="sw" type="checkbox" data-bind="greet" checked></label>
+              <label class="srow"><span class="sl"><b>“Try saying” examples</b><small>Shown on home until you’ve talked to Pip a few times</small></span><input class="sw" type="checkbox" data-bind="tries" checked></label>
+              <div class="srow"><span class="sl"><b>When home is full</b><small>New cards go into the stack at the foot of their column</small></span><span class="chip">Stack</span></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="dock" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Layout</b><small>Taskbar puts apps, search and tray in one bar at the bottom, like Windows</small></span><div class="seg" role="group" aria-label="Layout" id="segLayout"><button data-v="mac" aria-pressed="true">Menu bar + dock</button><button data-v="taskbar" aria-pressed="false">Taskbar</button></div></div>
+              <label class="srow"><span class="sl"><b>Magnification</b><small>Icons grow under the pointer</small></span><input class="sw" type="checkbox" data-bind="mag" checked></label>
+              <div class="srow"><span class="sl"><b>Hot corner</b></span><select class="ssel" aria-label="Hot corner"><option>Top left · Overview</option><option>Off</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="notif" hidden>
+            <div class="sgroup"><label class="srow"><span class="sl"><b>Focus</b><small>Silences notifications; Pip still answers when you talk</small></span><input class="sw" type="checkbox" data-bind="focus"></label></div>
+            <span class="overline">Allow notifications from</span>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Mail</b></span><input class="sw" type="checkbox" checked></label>
+              <label class="srow"><span class="sl"><b>Calendar</b></span><input class="sw" type="checkbox" checked></label>
+              <label class="srow"><span class="sl"><b>Software</b><small>Updates and finished installs</small></span><input class="sw" type="checkbox" checked></label>
+              <div class="srow"><span class="sl"><b>Previews on the lock screen</b></span><select class="ssel" aria-label="Previews on the lock screen"><option>Never</option><option>When unlocked</option><option>Always</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="apps" hidden>
+            <span class="overline">Default apps</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Web</b></span><select class="ssel" aria-label="Default web browser"><option>Browser</option><option>Firefox</option></select></div>
+              <div class="srow"><span class="sl"><b>Mail</b></span><select class="ssel" aria-label="Default mail app"><option>Mail</option><option>Thunderbird</option></select></div>
+            </div>
+            <span class="overline">Windows apps</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Run Windows programs</b><small>Through Bottles, from Software. Each program gets its own sandbox</small></span><button type="button" class="btn btn-secondary sm" data-act="software">Open Software</button></div>
+            </div>
+            <span class="overline">Permissions</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>App permissions</b><small>Apps ask through the system before using files, camera, mic or location</small></span><span class="chip ok">Sandboxed</span></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="privacy" hidden>
+            <span class="overline">Security</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Disk encryption</b><small>Unlocked with this laptop’s security chip and your password</small></span><span class="chip ok">On</span></div>
+              <div class="srow"><span class="sl"><b>Firewall</b><small>Blocks incoming connections apps didn’t ask for</small></span><span class="chip ok">On</span></div>
+              <div class="srow"><span class="sl"><b>Secure Boot</b></span><span class="chip ok">On</span></div>
+              <div class="srow"><span class="sl"><b>System protection</b><small>SELinux keeps apps and services in their lane</small></span><span class="chip ok">Enforcing</span></div>
+            </div>
+            <span class="overline">Access</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Microphone</b><small>Pip (while listening) · Browser asks</small></span><button type="button" class="btn btn-secondary sm" data-page="pip">Pip settings</button></div>
+              <label class="srow"><span class="sl"><b>Location</b><small>Used for time zone and weather</small></span><input class="sw" type="checkbox"></label>
+              <div class="srow"><span class="sl"><b>Lock the screen after</b></span><select class="ssel" aria-label="Lock the screen after"><option>5 minutes</option><option>1 minute</option><option>15 minutes</option></select></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="access" hidden>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Reduce motion</b><small>Things jump instead of spring; Pip stops turning</small></span><input class="sw" type="checkbox" data-bind="motion"></label>
+              <label class="srow"><span class="sl"><b>Reduce transparency</b><small>Glass and plasma surfaces turn solid</small></span><input class="sw" type="checkbox" data-bind="transp"></label>
+              <label class="srow"><span class="sl"><b>More contrast</b></span><input class="sw" type="checkbox" data-bind="contrast"></label>
+              <label class="srow"><span class="sl"><b>Touch mode</b><small>44 px targets everywhere</small></span><input class="sw" type="checkbox" data-bind="touch"></label>
+            </div>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Screen reader</b><small>Reads everything aloud; <kbd>Six</kbd> <kbd>Alt</kbd> <kbd>S</kbd></small></span><input class="sw" type="checkbox" data-toast-on="The screen reader is part of SIX; this prototype can’t turn it on."></label>
+              <label class="srow"><span class="sl"><b>Captions for Pip</b><small>Every spoken reply is written on screen</small></span><input class="sw" type="checkbox" checked disabled></label>
+              <label class="srow"><span class="sl"><b>Sticky keys</b><small>Press shortcut keys one at a time</small></span><input class="sw" type="checkbox"></label>
+            </div>
+          </section>
+
+          <section class="spage" data-page="users" hidden>
+            <div class="sgroup"><div class="srow big"><span class="avatar lg">N</span><span class="sl"><b>Nadia Rahman</b><small>Administrator · signs in with password or fingerprint</small></span><button type="button" class="btn btn-secondary sm" data-toast="Account details aren’t part of this prototype.">Edit</button></div></div>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Fingerprint</b><small>1 finger set up</small></span><button type="button" class="btn btn-secondary sm" data-toast="Touch the sensor…">Add finger</button></div>
+              <div class="srow"><span class="sl"><b>Other users</b><small>Each person gets their own files, settings and Pip</small></span><button type="button" class="btn btn-secondary sm" data-toast="Adding users isn’t part of this prototype.">Add user…</button></div>
+              <div class="srow"><span class="sl"><b>Online accounts</b><small>Mail, calendar and files from Google, Microsoft or Nextcloud</small></span><button type="button" class="btn btn-secondary sm" data-toast="Online accounts aren’t part of this prototype.">Add…</button></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="lang" hidden>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Language"><option>English (UK)</option><option>বাংলা</option><option>English (US)</option></select></div>
+              <div class="srow"><span class="sl"><b>Formats</b><small>13/10/2026 · 10:42 · ৳1,234.50</small></span><select class="ssel" aria-label="Formats"><option>Bangladesh</option><option>United Kingdom</option></select></div>
+              <div class="srow"><span class="sl"><b>Time zone</b><small>Set automatically</small></span><span class="meta">Asia/Dhaka</span></div>
+              <label class="srow"><span class="sl"><b>24-hour time</b></span><input class="sw" type="checkbox"></label>
+            </div>
+            <span class="overline">Keyboard layouts</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>English (US)</b></span><span class="chip">Current</span></div>
+              <div class="srow"><span class="sl"><b>Bangla (Probhat)</b><small>Switch with <kbd>Six</kbd> <kbd>K</kbd></small></span><button type="button" class="btn btn-secondary sm" data-toast="Layouts can be added in SIX; not in this prototype.">Add layout…</button></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="keyboard" hidden>
+            <span class="overline">Shortcuts</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Talk to Pip</b></span><span class="meta"><kbd>Six</kbd> <kbd>Space</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Six Search</b></span><span class="meta"><kbd>Ctrl</kbd> <kbd>K</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Show home</b></span><span class="meta"><kbd>Six</kbd> <kbd>D</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Snap left or right</b></span><span class="meta"><kbd>Six</kbd> <kbd>←</kbd> <kbd>→</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Lock the screen</b></span><span class="meta"><kbd>Six</kbd> <kbd>L</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Screenshot</b></span><span class="meta"><kbd>PrtSc</kbd></span></div>
+            </div>
+            <span class="overline">Touchpad</span>
+            <div class="sgroup">
+              <label class="srow"><span class="sl"><b>Tap to click</b></span><input class="sw" type="checkbox" checked></label>
+              <label class="srow"><span class="sl"><b>Natural scrolling</b><small>Content follows your fingers</small></span><input class="sw" type="checkbox" checked></label>
+              <div class="srow"><span class="sl"><b>Three fingers up</b></span><span class="meta">Overview</span></div>
+            </div>
+          </section>
+
+          <section class="spage" data-page="updates" hidden>
+            <div class="sgroup">
+              <div class="srow big"><span class="sl"><b>SIX 1.0.3 is ready</b><small>412 MB · security fixes and a faster Pip · prepared in the background</small></span><span class="row-btns"><button type="button" class="btn btn-primary sm" data-act="update">Restart to update</button><button type="button" class="btn btn-secondary sm" data-toast="The update will install tonight at 02:00.">Tonight</button></span></div>
+              <div class="srow"><span class="sl"><b>Running now</b><small>SIX 1.0.2 · built on Fedora Linux 44</small></span><span class="chip ok">Healthy</span></div>
+              <div class="srow"><span class="sl"><b>Previous version</b><small>SIX 1.0.1 is kept so you can go back if something breaks</small></span><button type="button" class="btn btn-secondary sm" data-toast="Rolling back restarts into SIX 1.0.1. Your files and settings stay.">Roll back…</button></div>
+              <label class="srow"><span class="sl"><b>Install updates automatically</b><small>Overnight, only when plugged in</small></span><input class="sw" type="checkbox" checked></label>
+            </div>
+            <span class="overline">Apps and firmware</span>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>App updates</b><small>2 apps have updates</small></span><button type="button" class="btn btn-secondary sm" data-act="software">Open Software</button></div>
+              <div class="srow"><span class="sl"><b>Firmware</b><small>Laptop firmware 1.14 · up to date</small></span><span class="chip ok">Up to date</span></div>
+            </div>
+            <p class="snote">How updates work: the new version is assembled next to the running one and switched to at restart, all at once. If it doesn’t start, SIX goes back to the previous version on its own.</p>
+          </section>
+
+          <section class="spage" data-page="about" hidden>
+            <div class="about-hero"><span class="appicon ai-launch" style="--ic: 72px"><svg class="art" viewBox="0 0 64 64"><use href="#app-launch"/></svg></span><div><h2>SIX 1.0</h2><span>Soft Matter · built on Fedora Linux 44</span></div></div>
+            <div class="sgroup">
+              <div class="srow"><span class="sl"><b>Device name</b></span><span class="meta">Nadia’s Laptop</span></div>
+              <div class="srow"><span class="sl"><b>Processor</b></span><span class="meta">8 cores · 3.8 GHz</span></div>
+              <div class="srow"><span class="sl"><b>Memory</b></span><span class="meta">16 GB</span></div>
+              <div class="srow"><span class="sl"><b>Storage</b></span><span class="meta">512 GB · 212 GB free</span></div>
+              <div class="srow"><span class="sl"><b>Desktop</b></span><span class="meta">SIX Shell 1.0 · Wayland</span></div>
+              <div class="srow"><span class="sl"><b>Base system</b></span><span class="meta">Fedora Linux 44 · image-based</span></div>
+            </div>
+            <p class="snote">SIX is built on Fedora Linux. Fedora is a trademark of Red Hat, Inc.; SIX is not affiliated with or endorsed by the Fedora Project.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="grip" aria-hidden="true"></div>
+  </section>
+
+  <!-- Window: Software (apps from Flathub and Fedora) -->
+  <section class="win" id="w-software" data-app="software" aria-label="Software window" hidden>
+    <header class="titlebar">
+      <span class="appicon ai-software"><svg class="art" viewBox="0 0 64 64"><use href="#app-software"/></svg></span>
+      <span class="title">Software</span>
+      <div class="capbtns">
+        <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
+        <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
+        <button class="cap close" aria-label="Close"><svg class="i sm"><use href="#i-close"/></svg></button>
+      </div>
+    </header>
+    <div class="win-body">
+      <nav class="side" aria-label="Software sections" id="swNav">
+        <label class="set-search"><svg class="i sm"><use href="#i-search"/></svg><input id="swQ" type="search" placeholder="Search apps" aria-label="Search apps" autocomplete="off"></label>
+        <button class="navbtn" data-cat="explore" aria-selected="true"><svg class="i"><use href="#i-spark"/></svg><span>Explore</span></button>
+        <button class="navbtn" data-cat="work" aria-selected="false"><svg class="i"><use href="#i-file"/></svg><span>Work</span></button>
+        <button class="navbtn" data-cat="create" aria-selected="false"><svg class="i"><use href="#i-palette"/></svg><span>Create</span></button>
+        <button class="navbtn" data-cat="dev" aria-selected="false"><svg class="i"><use href="#i-terminal"/></svg><span>Develop</span></button>
+        <button class="navbtn" data-cat="play" aria-selected="false"><svg class="i"><use href="#i-music"/></svg><span>Play</span></button>
+        <button class="navbtn" data-cat="windows" aria-selected="false"><svg class="i"><use href="#i-squares-four"/></svg><span>Windows apps</span></button>
+        <button class="navbtn" data-cat="installed" aria-selected="false"><svg class="i"><use href="#i-check"/></svg><span>Installed</span></button>
+        <button class="navbtn" data-cat="updates" aria-selected="false"><svg class="i"><use href="#i-download"/></svg><span>Updates</span><span class="badge" id="swBadge">2</span></button>
+      </nav>
+      <div class="sw-main" id="swMain"></div>
+    </div>
+    <div class="grip" aria-hidden="true"></div>
+  </section>
+
+  <!-- Window: Calendar -->
+  <section class="win" id="w-calendar" data-app="calendar" aria-label="Calendar window" hidden>
+    <header class="titlebar">
+      <span class="appicon ai-calendar" data-cal-icon></span>
+      <span class="title">Calendar</span>
+      <div class="capbtns">
+        <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
+        <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
+        <button class="cap close" aria-label="Close"><svg class="i sm"><use href="#i-close"/></svg></button>
+      </div>
+    </header>
+    <div class="win-body cal-body">
+      <div class="cal-main">
+        <div class="cal-head"><h2 id="calTitle">October 2026</h2><button type="button" class="iconbtn" id="calPrev" aria-label="Previous month"><svg class="i sm" style="transform: scaleX(-1)"><use href="#i-chev"/></svg></button><button type="button" class="btn btn-secondary sm" id="calToday">Today</button><button type="button" class="iconbtn" id="calNext" aria-label="Next month"><svg class="i sm"><use href="#i-chev"/></svg></button></div>
+        <div class="cal-grid" id="calGrid" role="grid" aria-labelledby="calTitle"></div>
+      </div>
+      <aside class="cal-day" id="calDay" aria-live="polite"></aside>
     </div>
     <div class="grip" aria-hidden="true"></div>
   </section>
@@ -1260,6 +1985,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <button class="qtile" aria-pressed="false" data-qs="dark"><svg class="i"><use href="#i-sun"/></svg><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="touch"><svg class="i"><use href="#i-hand"/></svg><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="focus"><svg class="i"><use href="#i-focus"/></svg><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
+      <button class="qtile wide" aria-pressed="false" data-qs="wake"><svg class="i"><use href="#i-mic"/></svg><div><b>Listen for “Hey Pip”</b><small data-on="Always listening, on this device" data-off="Off · press the mic to talk">Off · press the mic to talk</small></div></button>
     </div>
     <div class="slider-row"><label for="bright" aria-label="Brightness"><svg class="i"><use href="#i-sun"/></svg></label><input type="range" id="bright" min="30" max="100" value="100"></div>
     <div class="slider-row"><label for="vol" aria-label="Volume"><svg class="i"><use href="#i-volume"/></svg></label><input type="range" id="vol" min="0" max="100" value="64"></div>
@@ -1269,15 +1995,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
       <label class="sw-row" for="a11yMotion"><svg class="i"><use href="#i-access"/></svg><span>Reduce motion</span><input class="sw" type="checkbox" id="a11yMotion"></label>
       <label class="sw-row" for="a11yContrast"><svg class="i"><use href="#i-contrast"/></svg><span>More contrast</span><input class="sw" type="checkbox" id="a11yContrast"></label>
     </div>
-    <div class="switch-list" style="gap: 12px; padding: 12px">
-      <span class="overline">Plasma clay</span>
-      <div class="ctl"><span>Mood</span><div class="seg wide" id="segMood" role="group" aria-label="Mood"><button data-v="matte" aria-pressed="true">Matte</button><button data-v="tidal" aria-pressed="false">Tidal</button><button data-v="aurora" aria-pressed="false">Aurora</button><button data-v="ember" aria-pressed="false">Ember</button></div></div>
-      <div class="ctl"><span>Viscosity</span><div class="seg wide" id="segVisc" role="group" aria-label="Viscosity"><button data-v="water" aria-pressed="false">Water</button><button data-v="gel" aria-pressed="true">Gel</button><button data-v="honey" aria-pressed="false">Honey</button><button data-v="solid" aria-pressed="false">Solid</button></div></div>
-      <div class="ctl"><span><label for="frost">Frost</label><b id="frostV" class="tnum">0.55</b></span><input type="range" id="frost" min="0" max="100" value="55"></div>
-      <div class="ctl"><span><label for="refr">Refraction</label><b id="refrV" class="tnum">1.00</b></span><input type="range" id="refr" min="0" max="150" value="100"></div>
-      <div class="ctl"><span>Rim</span><div class="seg wide" id="segRim" role="group" aria-label="Rim"><button data-v="soft" aria-pressed="true">Soft</button><button data-v="iri" aria-pressed="false">Iridescent</button><button data-v="tint" aria-pressed="false">Accent</button><button data-v="off" aria-pressed="false">Off</button></div></div>
-    </div>
-    <div class="qs-foot"><span class="tnum">Battery 64 % · 3 h 10 min left</span><button class="iconbtn" aria-label="All settings"><svg class="i"><use href="#i-sliders"/></svg></button></div>
+    <div class="qs-foot"><span class="tnum">Battery 64 % · 3 h 10 min left</span><button class="iconbtn" id="qsAll" aria-label="All settings"><svg class="i"><use href="#i-sliders"/></svg></button></div>
   </div>
 
   <!-- Six Search -->
@@ -1307,8 +2025,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     <span class="mb-btn mb-app" id="mbApp">Home</span>
     <div class="mb-right">
       <button class="mb-btn" id="mbSearch" aria-label="Search (Ctrl K)"><svg class="i"><use href="#i-search-b"/></svg></button>
-      <span class="mb-mic" id="micInd" role="img" aria-label="Microphone on. Pip is listening" title="Microphone on. Pip is listening" hidden><svg class="i"><use href="#i-mic"/></svg></span><button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
-      <button class="mb-btn" id="pipBtn" aria-label="Pip: Ready. Show home"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
+      <button class="mb-btn mb-micbtn" id="mbMic" data-mode="ptt" aria-pressed="false" aria-label="Talk to Pip (Ctrl Space)" title="Talk to Pip · Ctrl Space"><svg class="i"><use href="#i-mic"/></svg></button><button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
+      <button class="mb-btn" id="pipBtn" aria-label="Pip: Ready. Open Pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
       <button class="mb-btn mb-clock" id="clock" aria-label="Clock"><span id="clockD" class="mb-hide">Mon 12 Oct</span><span id="clockT">10:42</span></button>
     </div>
   </header>
@@ -1333,10 +2051,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   <nav id="dock" class="glass" aria-label="Dock">
     <div class="dock-apps" id="dockApps"></div>
     <span class="dock-sep" aria-hidden="true"></span>
-    <button class="dk running" id="dockPip" aria-label="Pip: show home"><span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span><span class="dot"></span><span class="tip">Pip</span></button>
-    <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="i"><use href="#i-f-trash"/></svg></span><span class="tip">Bin</span></button>
+    <button class="dk" id="dockPip" aria-label="Pip"><span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span><span class="dot"></span><span class="tip">Pip</span></button>
+    <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="art" viewBox="0 0 64 64"><use href="#app-bin"/></svg></span><span class="tip">Bin</span></button>
   </nav>
 
+  <div id="vhud" class="glass" hidden><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><div class="hud-text"><span id="hudYou"></span><b id="hudPip" aria-live="polite"></b><div class="hud-card" id="hudCard"></div></div></div>
+  <div id="lock" hidden>
+    <div class="lock-time"><span id="lockT">10:42</span><span id="lockD">Tuesday 13 October</span></div>
+    <form class="lock-user" id="lockForm"><span class="avatar xl">N</span><b>Nadia Rahman</b><label class="lock-pw"><input type="password" id="lockPw" placeholder="Password" aria-label="Password" autocomplete="off"><button type="submit" class="iconbtn" aria-label="Unlock"><svg class="i"><use href="#i-chev"/></svg></button></label><small>Prototype: any password, or none, unlocks.</small></form>
+    <div class="lock-foot"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><span>“Hey Pip” works here for the time, timers and weather. Everything else waits until you unlock.</span></div>
+  </div>
   <div id="night"></div>
   <div id="dim"></div>
 </div>
@@ -1354,13 +2078,17 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 
   /* ── App registry ───────────────────────────── */
   const APPS = [
-    { id: 'files', name: 'Files', icon: 'folder', glyph: 'f-folder', win: true },
-    { id: 'browser', name: 'Browser', icon: 'compass', glyph: 'f-compass' },
-    { id: 'mail', name: 'Mail', icon: 'mail', glyph: 'f-mail' },
-    { id: 'music', name: 'Music', icon: 'music', glyph: 'f-music' },
-    { id: 'terminal', name: 'Terminal', icon: 'terminal', glyph: 'f-terminal', win: true },
-    { id: 'guide', name: 'Design guide', icon: 'palette', glyph: 'f-palette', win: true },
-    { id: 'settings', name: 'Settings', icon: 'gear', glyph: 'f-gear' },
+    { id: 'files', name: 'Files', icon: 'folder', win: true },
+    { id: 'browser', name: 'Browser', icon: 'compass' },
+    { id: 'mail', name: 'Mail', icon: 'mail' },
+    { id: 'calendar', name: 'Calendar', icon: 'calendar', win: true },
+    { id: 'music', name: 'Music', icon: 'music' },
+    { id: 'photos', name: 'Photos', icon: 'image' },
+    { id: 'terminal', name: 'Terminal', icon: 'terminal', win: true },
+    { id: 'software', name: 'Software', icon: 'download', win: true },
+    { id: 'settings', name: 'Settings', icon: 'gear', win: true },
+    { id: 'guide', name: 'Design guide', icon: 'palette', win: true },
+    { id: 'pip', name: 'Pip', icon: 'spark', win: true, noDock: true },
   ];
   const appById = Object.fromEntries(APPS.map(a => [a.id, a]));
   const FILE_TYPES = { xlsx: ['XLS', '#1d8a4e'], ods: ['ODS', '#1d8a4e'], pdf: ['PDF', '#d93a3a'], jpg: ['JPG', '#7c4ddb'], png: ['PNG', '#7c4ddb'], md: ['MD', '#4a6585'], mp3: ['MP3', '#d9771a'] };
@@ -1368,12 +2096,17 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const [label, c] = FILE_TYPES[(name.split('.').pop() || '').toLowerCase()] || ['DOC', '#3a6fd8'];
     return `<svg class="fico" width="${Math.round(h * 0.8)}" height="${h}" viewBox="0 0 24 30" aria-hidden="true"><path d="M3 1.5h12.5l7 7V27a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 27V3A1.5 1.5 0 0 1 3 1.5Z" fill="var(--fico-page)" stroke="var(--fico-edge)"/><path d="M15.5 1.5V7A1.5 1.5 0 0 0 17 8.5h5.5" fill="var(--fico-fold)" stroke="var(--fico-edge)"/><rect x="1.5" y="17" width="21" height="8" rx="1.5" fill="${c}"/><text x="12" y="23.2" text-anchor="middle" font-family="Geist, system-ui, sans-serif" font-size="6.2" font-weight="700" fill="#fff">${label}</text></svg>`;
   };
-  const appIcon = (id, size) => `<span class="appicon ai-${id}"${size ? ` style="--ic:${size}px"` : ''}>${icon(appById[id].glyph)}</span>`;
+  // app icons are clay illustrations (see the #app-* symbols); Calendar shows today's date, Pip is its live orb
+  const calArt = () => { const d = new Date(); return `<svg class="art" viewBox="0 0 64 64"><use href="#app-calendar"/><text x="32" y="13.6" text-anchor="middle" font-family="Geist, system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="#fff">${d.toLocaleDateString('en', { month: 'short' }).toUpperCase()}</text><text x="32" y="50" text-anchor="middle" font-family="Geist, system-ui, sans-serif" font-size="28" font-weight="300" fill="#1a1923">${d.getDate()}</text></svg>`; };
+  const appIcon = (id, size) => `<span class="appicon ai-${id}"${size ? ` style="--ic:${size}px"` : ''}>${id === 'pip' ? '<canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas>' : id === 'calendar' ? calArt() : `<svg class="art" viewBox="0 0 64 64"><use href="#app-${id}"/></svg>`}</span>`;
+  const folderIcon = (em, size = 56) => `<svg class="fold-ic" width="${size}" height="${Math.round(size * 0.875)}" viewBox="0 0 64 56" aria-hidden="true"><use href="#fold"/>${em ? `<use class="em hi" href="#em-${em}"/><use class="em" href="#em-${em}"/>` : ''}</svg>`;
 
   /* ── Dock & Six Menu grid ───────────────────── */
   const dock = $('#dock'), dockApps = $('#dockApps');
-  dockApps.innerHTML = `<button class="dk" id="launchBtn" aria-label="Six Menu, all apps" aria-expanded="false" aria-controls="sixMenu"><span class="appicon ai-launch">${icon('six')}</span><span class="tip">Six Menu</span></button>`
-    + APPS.map(a => `<button class="dk" data-app="${a.id}" aria-label="${a.name}">${appIcon(a.id)}<span class="dot"></span><span class="tip">${a.name}</span></button>`).join('');
+  dockApps.innerHTML = `<button class="dk" id="launchBtn" aria-label="Six Menu, all apps" aria-expanded="false" aria-controls="sixMenu">${appIcon('launch')}<span class="tip">Six Menu</span></button>`
+    + APPS.filter(a => !a.noDock).map(a => `<button class="dk" data-app="${a.id}" aria-label="${a.name}">${appIcon(a.id)}<span class="dot"></span><span class="tip">${a.name}</span></button>`).join('');
+  appById.launch = { id: 'launch', name: 'Six Menu' };
+  $$('[data-cal-icon]').forEach(el => { el.innerHTML = calArt(); });
   $('#pinned').innerHTML = APPS.map(a => `
     <button class="grid-app" data-app="${a.id}">${appIcon(a.id, 52)}${a.name}</button>`).join('');
   // magnification, as in the macOS Dock: icons near the pointer grow (off with reduced motion and on touch)
@@ -1383,7 +2116,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     dockCenters = $$('.dk', dock).map(b => { const r = b.getBoundingClientRect(); return r.left + r.width / 2; });
   });
   dock.addEventListener('pointermove', e => {
-    if (narrowMQ.matches || e.pointerType === 'touch' || root.dataset.motion === 'reduced' || (rmMQ.matches && root.dataset.motion !== 'full')) return;
+    if (!dockMag || narrowMQ.matches || e.pointerType === 'touch' || root.dataset.motion === 'reduced' || (rmMQ.matches && root.dataset.motion !== 'full')) return;
     $$('.dk', dock).forEach((b, i) => {
       const d = Math.abs(e.clientX - (dockCenters[i] ?? 0)) / 160;
       b.style.setProperty('--s', d < 1 ? (1 + 0.5 * Math.cos(d * Math.PI / 2) ** 2).toFixed(3) : 1);
@@ -1421,6 +2154,13 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const fw = Math.min(560, W.w - 160), fh = Math.min(420, W.h - 120);
     setRect(wins.files.el, { x: Math.max(140, W.w - fw - 40), y: W.y + Math.max(40, W.h - fh - 20), w: fw, h: fh });
     setRect(wins.terminal.el, { x: Math.max(130, W.w * 0.22), y: W.y + Math.max(30, W.h * 0.12), w: Math.min(620, W.w - 160), h: Math.min(380, W.h - 80) });
+    const mid = (w, h, dx = 0, dy = 0) => ({ x: Math.max(8, (W.w - w) / 2 + dx), y: W.y + Math.max(8, (W.h - h) / 2 + dy), w, h });
+    setRect(wins.settings.el, mid(Math.min(880, W.w - 40), Math.min(600, W.h - 24), -20, 0));
+    setRect(wins.pip.el, mid(Math.min(820, W.w - 40), Math.min(600, W.h - 24), 40, 0));
+    setRect(wins.software.el, mid(Math.min(900, W.w - 40), Math.min(600, W.h - 24), 10, 0));
+    setRect(wins.calendar.el, mid(Math.min(860, W.w - 40), Math.min(580, W.h - 24), -30, 0));
+    const fw2 = Math.min(820, W.w - 40), fh2 = Math.min(540, W.h - 24);
+    setRect(wins.files.el, mid(fw2, fh2, 30, 10));
   }
 
   function focusWin(id) {
@@ -1448,8 +2188,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     closeAllPops();
     const app = appById[id];
     if (!app) return;
-    if (id === 'settings') { openPop('qs'); return; }
-    if (!app.win) { toast(`${app.name} isn't part of this prototype yet.`); return; }
+    if (!app.win) { toast(`${app.name} is part of SIX, but not of this prototype yet.`); return; }
     const w = wins[id];
     if (!w.el.hidden && w.el.classList.contains('active')) { minimize(id); return; }
     if (w.el.hidden) {
@@ -1623,15 +2362,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const b = e.target.closest('.mrow'); if (!b) return;
     closeAllPops();
     const k = b.dataset.sys;
-    if (k === 'settings') openPop('qs');
+    if (k === 'settings') openSettings();
     else if (k === 'search') openSearch();
     else if (k === 'widgets') openGallery();
-    else if (k === 'about') toast('SIX · Soft Matter design prototype: Pip, plasma clay, Geist type and Phosphor icons.', null);
+    else if (k === 'about') openSettings('about');
+    else if (k === 'lock') lockScreen();
     else toast(b.textContent.replace(/…|Ctrl K|Six L/g, '').trim() + ' isn’t part of this prototype.', null);
   });
-  $('#dockPip').addEventListener('click', () => { showHome(); setTimeout(() => $('#ask').focus(), 50); });
+  $('#dockPip').addEventListener('click', () => openPip());
   let binCount = 0;
-  $('#dockBin').addEventListener('click', () => toast(binCount ? `${binCount} ${binCount === 1 ? 'file' : 'files'} in the Bin.` : 'The Bin is empty.', null));
+  $('#dockBin').addEventListener('click', () => openFilesAt('bin'));
   $('#trayBtn').addEventListener('click', e => { e.stopPropagation(); openPop('qs'); });
   $('#clock').addEventListener('click', () => toast('Calendar and notifications open here.'));
   document.addEventListener('pointerdown', e => {
@@ -1659,6 +2399,8 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     if (k === 'night') $('#night').classList.toggle('on', on);
     if (k === 'touch') { if (on) root.dataset.density = 'touch'; else delete root.dataset.density; }
     if (k === 'focus') toast(on ? 'Focus is on. Notifications are silenced.' : 'Focus is off.', null);
+    if (k === 'wake') setVoiceMode(on ? 'wake' : 'ptt');
+    if (typeof syncSettings === 'function' && !wins.settings.el.hidden) syncSettings();
   });
   const modeSwitch = (id, attr, val) => $(id).addEventListener('change', e => {
     if (e.target.checked) root.dataset[attr] = val;
@@ -1717,7 +2459,7 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     const c = calc(q.trim());
     if (c !== null) groups.push(['Answer', [{ name: `= ${c.toLocaleString()}`, sub: 'Enter copies the result', icon: 'spark', tile: 't-butter', run: () => { navigator.clipboard?.writeText(String(c)).catch(() => {}); toast(`Copied ${c.toLocaleString()}`, null); } }]]);
     const apps = APPS.filter(a => m(a)).map(a => ({ name: a.name, sub: 'App', app: a.id, run: () => openApp(a.id) }));
-    const files = files_().filter(f => s && m(f)).map(f => ({ name: f.name, sub: `Documents · ${f.size}`, file: f.name, hint: 'Space to preview', run: () => openApp('files') }));
+    const files = files_().filter(f => s && m(f)).map(f => ({ name: f.name, sub: `Documents · ${f.size}`, file: f.name, hint: 'Space to preview', run: () => selectInFiles(f.name) }));
     const sets = SETTINGS.filter(m).map(x => ({ ...x, fx: x.on() ? 'On now · Enter turns it off' : 'Off now · Enter turns it on', icon: 'sliders', tile: 't-lilac' }));
     const acts = ACTIONS.filter(m).map(x => ({ ...x, icon: 'spark', tile: 't-peach' }));
     if (apps.length) groups.push(['Apps', apps]);
@@ -1780,44 +2522,431 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   $('#toast').addEventListener('pointerenter', () => clearTimeout(toastT));
   $('#toast').addEventListener('pointerleave', () => { toastT = setTimeout(() => $('#toast').classList.remove('open'), 2500); });
 
-  /* ── Files app ──────────────────────────────── */
-  let files = FILES.slice(), fsel = -1;
+  /* ── Files: folders you can walk through ───────────────────────
+     Back, forward and up; a path bar where every segment is a button; icons or a list; search in
+     the folder; tags; and a Bin that keeps where each file came from so it can go back. */
+  let files = FILES.slice(), fsel = -1;   // Documents: Pip finds, opens and bins files here
   const files_ = () => files;
+  const escF = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const capF = t => t.replace(/^./, c => c.toUpperCase());
+  const T = (name, mod, size, tag) => ({ name, mod, size, tag });
+  const TAGS = { 'Quarterly report.xlsx': 'work', 'Budget 2026.ods': 'work', 'Interview notes.md': 'work', 'Holiday-2026.jpg': 'family', 'SIX shell spec v3.pdf': 'important' };
+  files.forEach(f => { f.tag = TAGS[f.name]; });
+  const bin = [];
+  const FTREE = {
+    home: { name: 'Home', kids: ['desktop', 'documents', 'downloads', 'pictures', 'music', 'videos', 'projects'], items: [] },
+    desktop: { name: 'Desktop', parent: 'home', em: 'desktop', kids: [], items: [T('Boarding pass.pdf', 'Fri', '220 KB', 'important'), T('Wallpaper idea.png', 'Thu', '2.6 MB')] },
+    documents: { name: 'Documents', parent: 'home', em: 'documents', kids: ['receipts'], get items() { return files; } },
+    receipts: { name: 'Receipts', parent: 'documents', kids: [], items: [T('Invoice 0921.pdf', '21/09/2026', '88 KB', 'work'), T('Laptop warranty.pdf', '03/03/2026', '412 KB', 'important')] },
+    downloads: { name: 'Downloads', parent: 'home', em: 'downloads', kids: [], items: [T('six-1.0.3-x86_64.iso', 'Today', '2.4 GB'), T('Bangla fonts.zip', 'Mon', '18 MB'), T('Thesis draft (Arif).docx', 'Sun', '1.2 MB', 'work')] },
+    pictures: { name: 'Pictures', parent: 'home', em: 'pictures', kids: ['screenshots'], items: [T('Cox’s Bazar sunset.jpg', '02/10/2026', '4.8 MB', 'family'), T('Eid with family.jpg', '12/06/2026', '5.2 MB', 'family'), T('Sundarbans boat.jpg', '30/05/2026', '3.9 MB'), T('Rickshaw art.png', '14/04/2026', '2.2 MB'), T('Tea garden, Sylhet.jpg', '08/03/2026', '6.0 MB', 'family')] },
+    screenshots: { name: 'Screenshots', parent: 'pictures', kids: [], items: [T('Screenshot 2026-10-12 at 09.41.png', 'Yesterday', '1.1 MB')] },
+    music: { name: 'Music', parent: 'home', em: 'music', kids: [], items: [T('Night Drive.mp3', '2025', '8.4 MB'), T('Tidal.mp3', '2025', '7.1 MB'), T('Aurora Hum.mp3', '2026', '9.6 MB')] },
+    videos: { name: 'Videos', parent: 'home', em: 'videos', kids: [], items: [T('Graduation.mp4', '2026', '1.4 GB', 'family'), T('Screen recording.mp4', 'Mon', '220 MB', 'work')] },
+    projects: { name: 'Projects', parent: 'home', em: 'projects', kids: ['six'], items: [] },
+    six: { name: 'six', parent: 'projects', kids: [], items: [T('README.md', 'Today', '4 KB', 'work'), T('index.html', 'Today', '322 KB', 'work'), T('tokens.css', 'Today', '18 KB', 'work')] },
+    pc: { name: 'This PC', drives: true },
+    usb: { name: 'KINGSTON', kids: [], items: [T('Photos backup.zip', '01/09/2026', '12.6 GB'), T('CV, Nadia Rahman.pdf', '20/08/2026', '160 KB', 'important')] },
+    bin: { name: 'Bin', bin: true, kids: [], get items() { return bin; } },
+  };
+  let cur = 'documents', fHist = ['documents'], fPos = 0, fView = 'grid', fFilter = '';
+  const isTag = k => k.startsWith('tag:');
+  const titleOf = k => isTag(k) ? 'Tagged ' + capF(k.slice(4)) : FTREE[k].name;
+  const nameOf = x => x.kind === 'file' ? x.f.name : x.kind === 'drive' ? x.name : FTREE[x.key].name;
+  function entriesOf(k) {
+    if (isTag(k)) {
+      const t = k.slice(4), out = [];
+      Object.entries(FTREE).forEach(([key, n]) => { if (!n.drives && !n.bin) n.items.forEach(f => { if (f.tag === t) out.push({ kind: 'file', f, at: key }); }); });
+      return out;
+    }
+    const n = FTREE[k];
+    if (n.drives) return [{ kind: 'drive', key: 'home', name: 'System', sub: 'Fedora Linux · 212 GB free of 512 GB' }, { kind: 'drive', key: 'usb', name: 'KINGSTON', sub: 'USB drive · 18 GB free of 32 GB', usb: true }];
+    return [...n.kids.map(c => ({ kind: 'folder', key: c })), ...n.items.map(f => ({ kind: 'file', f, at: k }))];
+  }
+  function visible() { const q = fFilter.trim().toLowerCase(), e = entriesOf(cur); return q ? e.filter(x => nameOf(x).toLowerCase().includes(q)) : e; }
+  function pathOf(k) { if (isTag(k)) return [k]; const p = []; for (let x = k; x; x = FTREE[x].parent) p.unshift(x); return p; }
+  function goTo(k, push = true) {
+    if (!FTREE[k] && !isTag(k)) return;
+    cur = k; fsel = -1; fFilter = ''; $('#fQ').value = '';
+    if (push && fHist[fPos] !== k) { fHist = fHist.slice(0, fPos + 1); fHist.push(k); fPos = fHist.length - 1; }
+    renderFiles();
+  }
+  // pictures get a painted thumbnail; everything else its paper icon
+  function thumb(f, big) {
+    if (!/\.(jpe?g|png)$/i.test(f.name)) return fileIcon(f.name, big ? 50 : 26);
+    let h = 0; for (const c of f.name) h = (h * 31 + c.charCodeAt(0)) % 360;
+    return `<span class="thumb${big ? ' big' : ''}" style="--h:${h}" aria-hidden="true"></span>`;
+  }
+  function iconOf(x) {
+    const big = fView === 'grid';
+    if (x.kind === 'folder') return folderIcon(FTREE[x.key].em, big ? 64 : 28);
+    if (x.kind === 'drive') return `<svg class="fold-ic" width="${big ? 64 : 28}" height="${big ? 56 : 25}" viewBox="0 0 64 56" aria-hidden="true"><use href="#${x.usb ? 'usb' : 'drive'}"/></svg>`;
+    return thumb(x.f, big);
+  }
+  function emptyText() {
+    if (fFilter) return `Nothing in ${escF(titleOf(cur))} matches “${escF(fFilter)}”. <button type="button" class="linkbtn" data-act="searchall">Search everywhere</button>`;
+    if (FTREE[cur]?.bin) return 'The Bin is empty. Deleted files wait here for 30 days, then go for good.';
+    if (cur === 'documents') return 'Documents is empty. Files you save or download land here; deleted files wait in the Bin.';
+    if (isTag(cur)) return `Nothing is tagged ${escF(capF(cur.slice(4)))} yet.`;
+    return `${escF(titleOf(cur))} is empty.`;
+  }
   function renderFiles() {
-    $('#flist').innerHTML = !files.length ? '<li class="frow empty-row">Documents is empty. Files you save or download land here; deleted files wait in the Bin.</li>' : files.map((f, i) => `
-      <li class="frow" role="option" tabindex="${i === Math.max(fsel, 0) ? 0 : -1}" data-i="${i}" aria-selected="${i === fsel}">
-        <span class="fname">${fileIcon(f.name, 26)}<span>${f.name}</span></span>
-        <span class="r">${f.mod}</span><span class="r">${f.size}</span></li>`).join('');
-    $('#fDelete').disabled = fsel < 0;
-    $('#fstatus').textContent = `${files.length} items` + (fsel >= 0 ? ` · 1 selected (${files[fsel].size})` : '');
+    const list = visible(), big = fView === 'grid', sel = list[fsel];
+    $('#flist').className = 'flist ' + fView;
+    $('#w-files .fhead').hidden = big;
+    $('#fTitle').textContent = titleOf(cur);
+    $('#flist').setAttribute('aria-label', titleOf(cur));
+    $('#fPath').innerHTML = pathOf(cur).map((k, i, a) => `${i ? '<span class="sep" aria-hidden="true">›</span>' : ''}<button type="button" data-go="${k}"${i === a.length - 1 ? ' aria-current="page"' : ''}>${escF(titleOf(k))}</button>`).join('');
+    $('#fPath').scrollLeft = $('#fPath').scrollWidth;   // when the path is long, the current folder stays in view
+    $('#flist').innerHTML = !list.length ? `<li class="frow empty-row">${emptyText()}</li>` : list.map((x, i) => {
+      const f = x.f, meta = x.kind === 'file' ? [f.mod, f.size] : x.kind === 'folder' ? [`${entriesOf(x.key).length} items`, '—'] : ['', ''];
+      return `<li class="frow" role="option" tabindex="${i === Math.max(fsel, 0) ? 0 : -1}" data-i="${i}" aria-selected="${i === fsel}" title="${escF(nameOf(x))}">
+        <span class="fname">${iconOf(x)}<span class="fn"><span>${escF(nameOf(x))}</span>${f && f.tag ? `<i class="tagdot tg-${f.tag}" title="${f.tag}"></i>` : ''}${x.kind === 'drive' ? `<small>${x.sub}</small>` : ''}${FTREE[cur]?.bin ? `<small>From ${escF(FTREE[f.from].name)}</small>` : ''}</span></span>
+        <span class="r">${meta[0]}</span><span class="r">${meta[1]}</span></li>`;
+    }).join('');
+    $('#fDelete').disabled = !sel || sel.kind !== 'file';
+    $('#fDelete').setAttribute('aria-label', FTREE[cur]?.bin ? 'Delete permanently' : 'Move to Bin');
+    $('#fBack').disabled = fPos <= 0; $('#fFwd').disabled = fPos >= fHist.length - 1; $('#fUp').disabled = isTag(cur) || !FTREE[cur].parent;
+    $$('#fSide .navbtn').forEach(b => b.setAttribute('aria-selected', b.dataset.go === cur));
+    const count = `${list.length} ${list.length === 1 ? 'item' : 'items'}`;
+    $('#fstatus').innerHTML = FTREE[cur]?.bin && bin.length
+      ? `${count} · <button type="button" class="linkbtn" data-act="restore"${sel ? '' : ' disabled'}>Put back</button> · <button type="button" class="linkbtn" data-act="empty">Empty Bin…</button>`
+      : count + (sel ? ` · “${escF(nameOf(sel))}” selected${sel.f ? ' · ' + sel.f.size : ''}` : ' · 212 GB free');
+    $('#binBadge').hidden = !bin.length; $('#binBadge').textContent = bin.length;
+    binCount = bin.length;
+    const bl = $('#binLine'); if (bl) bl.textContent = bin.length ? `${bin.length} ${bin.length === 1 ? 'item' : 'items'} waiting` : 'Nothing in the Bin';
+  }
+  function openEntry(x) {
+    if (!x) return;
+    if (x.kind !== 'file') { goTo(x.key); return; }
+    if (FTREE[cur]?.bin) { toast('Put it back first to open it.', null); return; }
+    const ext = x.f.name.split('.').pop().toLowerCase();
+    toast(`Opening “${x.f.name}” in ${({ mp3: 'Music', jpg: 'Photos', png: 'Photos', mp4: 'Videos', iso: 'Software', md: 'Text Editor' })[ext] || 'Documents'}…`, null);
+  }
+  // the Bin remembers where a file came from, so Put back and Undo return it there
+  function moveToBin(f, from) {
+    const list = FTREE[from].items, at = list.indexOf(f); if (at < 0) return () => {};
+    list.splice(at, 1);
+    const b = { name: f.name, mod: 'Today', size: f.size, f, from, at };
+    bin.unshift(b); renderFiles();
+    return () => restoreFromBin(b);
+  }
+  function restoreFromBin(b) {
+    const i = bin.indexOf(b); if (i < 0) return;
+    bin.splice(i, 1);
+    const list = FTREE[b.from].items; list.splice(Math.min(b.at, list.length), 0, b.f);
+    renderFiles();
   }
   function deleteSel() {
-    if (fsel < 0) return;
-    const [f] = files.splice(fsel, 1), at = fsel;
-    fsel = -1; renderFiles();
-    binCount++;
-    toast(`Moved "${f.name}" to Bin`, () => { files.splice(at, 0, f); fsel = at; binCount--; renderFiles(); });
-  }
-  $('#flist').addEventListener('click', e => { const r = e.target.closest('.frow'); if (!r) return; fsel = +r.dataset.i; renderFiles(); $(`.frow[data-i="${fsel}"]`).focus(); });
-  $('#flist').addEventListener('keydown', e => {
-    if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSel(); }
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault(); fsel = Math.min(files.length - 1, Math.max(0, fsel + (e.key === 'ArrowDown' ? 1 : -1)));
-      renderFiles(); $(`.frow[data-i="${fsel}"]`).focus();
+    const x = visible()[fsel]; if (!x || x.kind !== 'file') return;
+    if (FTREE[cur]?.bin) {
+      toast(`Delete “${x.f.name}” permanently? This can’t be undone.`, () => { bin.splice(bin.indexOf(x.f), 1); fsel = -1; renderFiles(); }, 'Delete');
+      return;
     }
+    const undo = moveToBin(x.f, x.at);
+    fsel = -1; renderFiles();
+    toast(`Moved “${x.f.name}” to Bin`, undo, 'Undo');
+  }
+  function emptyBin() {
+    if (!bin.length) { toast('The Bin is empty.', null); return; }
+    toast(`Delete ${bin.length} ${bin.length === 1 ? 'item' : 'items'} in the Bin permanently? This can’t be undone.`, () => { bin.length = 0; fsel = -1; renderFiles(); }, 'Empty Bin');
+  }
+  function openFilesAt(k) {
+    const w = wins.files;
+    if (w.el.hidden || !w.el.classList.contains('active')) openApp('files');
+    goTo(k);
+  }
+  function selectInFiles(name, folder = 'documents') { openFilesAt(folder); fsel = visible().findIndex(x => x.f && x.f.name === name); renderFiles(); }
+  const focusSel = () => $(`#flist .frow[data-i="${fsel}"]`)?.focus();
+  function selectRow(i) {
+    fsel = i;
+    $$('#flist .frow[data-i]').forEach(r => { const on = +r.dataset.i === i; r.setAttribute('aria-selected', on); r.tabIndex = on ? 0 : -1; });
+    const sel = visible()[i];
+    $('#fDelete').disabled = !sel || sel.kind !== 'file';
+    const st = $('#fstatus [data-act="restore"]'); if (st) st.disabled = !sel;
+    if (!(FTREE[cur]?.bin && bin.length)) $('#fstatus').textContent = `${visible().length} items` + (sel ? ` · “${nameOf(sel)}” selected${sel.f ? ' · ' + sel.f.size : ''}` : ' · 212 GB free');
+    focusSel();
+  }
+  $('#flist').addEventListener('click', e => {
+    if (e.target.closest('[data-act="searchall"]')) { openSearch(fFilter); return; }
+    const r = e.target.closest('.frow[data-i]'); if (!r) return;
+    selectRow(+r.dataset.i);
+  });
+  $('#flist').addEventListener('dblclick', e => { const r = e.target.closest('.frow[data-i]'); if (r) openEntry(visible()[+r.dataset.i]); });
+  $('#flist').addEventListener('keydown', e => {
+    const rows = $$('#flist .frow[data-i]'); if (!rows.length) return;
+    if (e.key === 'Delete') { e.preventDefault(); deleteSel(); return; }
+    if (e.key === 'Enter') { e.preventDefault(); openEntry(visible()[fsel]); return; }
+    if (e.key === 'Backspace' || (e.altKey && e.key === 'ArrowUp')) { e.preventDefault(); $('#fUp').click(); return; }
+    if (e.altKey && e.key === 'ArrowLeft') { e.preventDefault(); $('#fBack').click(); return; }
+    if (e.altKey && e.key === 'ArrowRight') { e.preventDefault(); $('#fFwd').click(); return; }
+    const cols = fView === 'grid' ? rows.filter(r => r.offsetTop === rows[0].offsetTop).length : 1;
+    const d = { ArrowDown: cols, ArrowUp: -cols, ArrowRight: fView === 'grid' ? 1 : 0, ArrowLeft: fView === 'grid' ? -1 : 0 }[e.key];
+    if (d) { e.preventDefault(); selectRow(Math.min(rows.length - 1, Math.max(0, fsel < 0 ? 0 : fsel + d))); }
+  });
+  $('#fSide').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTo(b.dataset.go); });
+  $('#fPath').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTo(b.dataset.go); });
+  $('#fBack').addEventListener('click', () => { if (fPos > 0) goTo(fHist[--fPos], false); });
+  $('#fFwd').addEventListener('click', () => { if (fPos < fHist.length - 1) goTo(fHist[++fPos], false); });
+  $('#fUp').addEventListener('click', () => { const p = !isTag(cur) && FTREE[cur].parent; if (p) goTo(p); });
+  $('#fQ').addEventListener('input', e => { fFilter = e.target.value; fsel = -1; renderFiles(); });
+  $('#fView').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; fView = b.dataset.v; renderFiles(); });
+  $('#fNew').addEventListener('click', () => {
+    const n = FTREE[cur];
+    if (!n || n.drives || n.bin || isTag(cur)) { toast('You can’t make a folder here.', null); return; }
+    let name = 'New folder', k = 2;
+    while (n.kids.some(c => FTREE[c].name === name)) name = `New folder ${k++}`;
+    const key = 'nf' + Date.now();
+    FTREE[key] = { name, parent: cur, kids: [], items: [] }; n.kids.push(key);
+    fsel = visible().findIndex(x => x.key === key); renderFiles(); focusSel();
+    toast(`Made “${name}”`, () => { n.kids.splice(n.kids.indexOf(key), 1); delete FTREE[key]; fsel = -1; renderFiles(); }, 'Undo');
   });
   $('#fDelete').addEventListener('click', deleteSel);
+  $('#fstatus').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    if (b.dataset.act === 'empty') { emptyBin(); return; }
+    const x = visible()[fsel]; if (!x) return;
+    restoreFromBin(x.f); fsel = -1; renderFiles();
+    toast(`Put “${x.f.name}” back in ${FTREE[x.f.from].name}`, null);
+  });
   renderFiles();
+
+  /* ── Settings: one window, a sidebar of sections, search across every row ──
+     Pages are plain markup; controls tied to the system carry data-bind and stay in sync with
+     Control Center. Back and forward walk the pages you visited; other parts of SIX deep-link
+     straight to a page (openSettings('display')). */
+  const SET_PAGES = [
+    ['Connect', [['wifi', 'Wi-Fi', 'wifi', '#2f6fd6'], ['bt', 'Bluetooth', 'bt', '#2f6fd6']]],
+    ['Device', [['display', 'Display', 'monitor', '#c4561f'], ['sound', 'Sound', 'volume', '#d23a55'], ['power', 'Battery & power', 'battery', '#1f8a57'], ['storage', 'Storage', 'layers', '#5b6170']]],
+    ['You', [['pip', 'Pip & voice', 'mic', '#6a4df0'], ['appearance', 'Appearance', 'palette', '#6a4df0'], ['home', 'Home & widgets', 'squares-four', '#a36a12'], ['dock', 'Desktop & dock', 'grid', '#2f6fd6'], ['notif', 'Notifications & Focus', 'bell', '#d23a55']]],
+    ['System', [['apps', 'Apps', 'download', '#0d8a5e'], ['privacy', 'Privacy & security', 'lock', '#475569'], ['access', 'Accessibility', 'access', '#2f6fd6'], ['users', 'Users', 'user', '#5b6170'], ['lang', 'Language & region', 'globe', '#0a7f9c'], ['keyboard', 'Keyboard & touchpad', 'type', '#5b6170'], ['updates', 'Updates', 'download', '#0d8a5e'], ['about', 'About', 'info', '#5b6170']]],
+  ];
+  const SET_ALL = SET_PAGES.flatMap(g => g[1]);
+  const pageName = id => (SET_ALL.find(p => p[0] === id) || [])[1] || 'Settings';
+  const sico = (ic, c) => `<span class="sico" style="--c:${c}" aria-hidden="true">${icon(ic)}</span>`;
+  $('#setNav').innerHTML = SET_PAGES.map(([g, ps]) => `<span class="side-h">${g}</span>` + ps.map(([id, n, ic, c]) => `<button type="button" class="navbtn" data-page="${id}" aria-selected="false">${sico(ic, c)}<span>${n}</span></button>`).join('')).join('');
+  let sHist = [], sPos = -1, sNow = null;
+  function showPage(id, push = true, row) {
+    if (!$(`#w-settings .spage[data-page="${id}"]`)) return;
+    sNow = id; $('#setResults').hidden = true;
+    $$('#w-settings .spage').forEach(p => { p.hidden = p.dataset.page !== id; });
+    $$('#setNav .navbtn').forEach(b => b.setAttribute('aria-selected', b.dataset.page === id));
+    $('#setCrumb').innerHTML = `Settings <span aria-hidden="true">›</span> <b>${pageName(id)}</b>`;
+    if (push && sHist[sPos] !== id) { sHist = sHist.slice(0, sPos + 1); sHist.push(id); sPos = sHist.length - 1; }
+    $('#setBack').disabled = sPos <= 0; $('#setFwd').disabled = sPos >= sHist.length - 1;
+    $('#setScroll').scrollTop = 0;
+    syncSettings();
+    if (row) { row.scrollIntoView({ block: 'center' }); row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
+  }
+  function openSettings(page) {
+    const w = wins.settings;
+    if (w.el.hidden || !w.el.classList.contains('active')) openApp('settings');
+    showPage(page || sNow || 'wifi');
+  }
+  $('#setNav').addEventListener('click', e => { const b = e.target.closest('[data-page]'); if (b) { $('#setQ').value = ''; showPage(b.dataset.page); } });
+  $('#setBack').addEventListener('click', () => { if (sPos > 0) showPage(sHist[--sPos], false); });
+  $('#setFwd').addEventListener('click', () => { if (sPos < sHist.length - 1) showPage(sHist[++sPos], false); });
+  // search every row of every page
+  const SET_INDEX = $$('#w-settings .spage').flatMap(p => [...$$('.srow', p)].map(r => ({ page: p.dataset.page, row: r, title: ($('b', r)?.textContent || '').trim(), sub: ($('small', r)?.textContent || '').trim(), kw: r.textContent.replace(/\s+/g, ' ') + ' ' + [...$$('option', r)].map(o => o.textContent).join(' ') })));
+  $('#setQ').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) { showPage(sNow || 'wifi', false); return; }
+    const hits = SET_INDEX.filter(x => (x.kw + ' ' + pageName(x.page)).toLowerCase().includes(q)).slice(0, 30);
+    $$('#w-settings .spage').forEach(p => { p.hidden = true; });
+    const R = $('#setResults'); R.hidden = false;
+    $('#setCrumb').innerHTML = `Settings <span aria-hidden="true">›</span> <b>Results for “${escF(e.target.value.trim())}”</b>`;
+    R.innerHTML = hits.length ? `<div class="sgroup">${hits.map((x, i) => `<button type="button" class="srow sres" data-hit="${i}"><span class="sl"><b>${escF(x.title)}</b><small>${escF(pageName(x.page))}${x.sub ? ' · ' + escF(x.sub) : ''}</small></span><svg class="i sm"><use href="#i-chev"/></svg></button>`).join('')}</div>`
+      : `<p class="snote">No setting matches “${escF(e.target.value.trim())}”. Try “wifi”, “dark”, “battery” or “Hey Pip”. Or ask Pip.</p>`;
+    R._hits = hits;
+  });
+  $('#setResults').addEventListener('click', e => { const b = e.target.closest('[data-hit]'); if (!b) return; const x = $('#setResults')._hits[+b.dataset.hit]; showPage(x.page, true, x.row); });
+  // controls that mirror Control Center and the accessibility switches
+  const BIND_QS = ['wifi', 'bt', 'night', 'focus', 'touch'], BIND_A11Y = { motion: '#a11yMotion', transp: '#a11yTransp', contrast: '#a11yContrast' };
+  let dockMag = true;
+  function syncSettings() {
+    $$('#w-settings [data-bind]').forEach(el => {
+      const k = el.dataset.bind;
+      if (BIND_QS.includes(k)) el.checked = pressed(k);
+      else if (BIND_A11Y[k]) el.checked = $(BIND_A11Y[k]).checked;
+      else if (k === 'bright' || k === 'vol') el.value = $('#' + k).value;
+    });
+    const th = root.dataset.theme || 'auto';
+    $$('#segTheme button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === th));
+    const ac = root.dataset.accent || 'iris';
+    $$('#accents button').forEach(b => b.setAttribute('aria-checked', b.dataset.v === ac));
+    $$('#segWake button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === voice.mode));
+    $('#wakeNote').textContent = voice.mode === 'wake' ? 'Listens for “Hey Pip” on this device; nothing is recorded until you say it' : 'Pip only hears you after you press the mic';
+    $('#wCount').textContent = `${widgetEls.length} on home`;
+  }
+  $('#w-settings').addEventListener('change', e => {
+    const el = e.target, k = el.dataset.bind;
+    if (el.dataset.toastOn && el.checked) { toast(el.dataset.toastOn, null); el.checked = false; return; }
+    if (!k) return;
+    if (BIND_QS.includes(k)) { if (pressed(k) !== el.checked) qsTile(k).click(); }
+    else if (BIND_A11Y[k]) { const t = $(BIND_A11Y[k]); if (t.checked !== el.checked) t.click(); }
+    else if (k === 'greet') { $('#greet').hidden = $('#greetSub').hidden = !el.checked; }
+    else if (k === 'tries') $('#vTry').hidden = !el.checked;
+    else if (k === 'mag') dockMag = el.checked;
+  });
+  $('#w-settings').addEventListener('input', e => {
+    const k = e.target.dataset.bind;
+    if (k === 'bright' || k === 'vol') { const t = $('#' + k); t.value = e.target.value; t.dispatchEvent(new Event('input')); }
+  });
+  $('#w-settings').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.closest('#segTheme')) { const v = b.dataset.v; if (v === 'auto') delete root.dataset.theme; else root.dataset.theme = v; syncThemeTile(); syncSettings(); }
+    else if (b.closest('#accents')) { if (b.dataset.v === 'iris') delete root.dataset.accent; else root.dataset.accent = b.dataset.v; syncSettings(); paintWall(true); }
+    else if (b.closest('#segWake')) setVoiceMode(b.dataset.v);
+    else if (b.closest('#segLayout') && b.dataset.v === 'taskbar') { toast('The Taskbar layout is specified in the guide (chapter 12). This prototype shows the menu bar and dock.', null); setTimeout(() => $$('#segLayout button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === 'mac')), 0); }
+    else if (b.dataset.toast) toast(b.dataset.toast, null);
+    else if (b.dataset.page && !b.closest('#setNav')) showPage(b.dataset.page);
+    else if (b.dataset.act === 'emptybin') emptyBin();
+    else if (b.dataset.act === 'widgets') openGallery();
+    else if (b.dataset.act === 'software') openApp('software');
+    else if (b.dataset.act === 'update') systemUpdate();
+  });
+  $('#qsAll').addEventListener('click', () => { closeAllPops(); openSettings(); });
+  // an update is a whole new system image, switched to at restart
+  function systemUpdate() {
+    const o = document.createElement('div'); o.id = 'boot';
+    o.innerHTML = `<span class="appicon ai-launch" style="--ic:64px"><svg class="art" viewBox="0 0 64 64"><use href="#app-launch"/></svg></span><b>Restarting into SIX 1.0.3</b><div class="bar"><i style="width:0%"></i></div><small>Your windows will be back where they were.</small>`;
+    $('#desktop').append(o);
+    let p = 0; const t = setInterval(() => {
+      p += 7; $('.bar i', o).style.width = Math.min(100, p) + '%';
+      if (p >= 110) {
+        clearInterval(t); o.remove();
+        const pg = $('#w-settings .spage[data-page="updates"]'), rows = $$('.srow', pg);
+        $('b', rows[0]).textContent = 'SIX is up to date'; $('small', rows[0]).textContent = 'Checked a moment ago'; $('.row-btns', rows[0]).innerHTML = '<span class="chip ok">Up to date</span>';
+        $('small', rows[1]).textContent = 'SIX 1.0.3 · built on Fedora Linux 44'; $('small', rows[2]).textContent = 'SIX 1.0.2 is kept so you can go back if something breaks';
+        toast('Updated to SIX 1.0.3. The previous version is kept for rollback.', null);
+      }
+    }, 120);
+  }
+
+  /* ── Software: apps from Flathub and Fedora, sandboxed ── */
+  const APPSTORE = [
+    { id: 'libreoffice', name: 'LibreOffice', sum: 'Documents, spreadsheets and slides; opens Word, Excel and PowerPoint files', cat: 'work', size: '612 MB', c: '#1d8a4e' },
+    { id: 'thunderbird', name: 'Thunderbird', sum: 'Mail, calendars and contacts', cat: 'work', size: '236 MB', c: '#2a5ee6' },
+    { id: 'telegram', name: 'Telegram', sum: 'Messaging and calls', cat: 'work', size: '110 MB', c: '#1f8fd0' },
+    { id: 'firefox', name: 'Firefox', sum: 'Web browser', cat: 'work', size: '248 MB', c: '#d9531e', installed: true, update: '133.0.2' },
+    { id: 'gimp', name: 'GIMP', sum: 'Photo editing and retouching', cat: 'create', size: '318 MB', c: '#6b5b4b' },
+    { id: 'krita', name: 'Krita', sum: 'Digital painting and illustration', cat: 'create', size: '402 MB', c: '#2f6fd6' },
+    { id: 'inkscape', name: 'Inkscape', sum: 'Vector drawing', cat: 'create', size: '201 MB', c: '#2b2b33' },
+    { id: 'blender', name: 'Blender', sum: '3D modelling, animation and rendering', cat: 'create', size: '1.1 GB', c: '#c4610a' },
+    { id: 'kdenlive', name: 'Kdenlive', sum: 'Video editing', cat: 'create', size: '389 MB', c: '#2563eb' },
+    { id: 'obs', name: 'OBS Studio', sum: 'Screen recording and live streaming', cat: 'create', size: '280 MB', c: '#302e31' },
+    { id: 'vscodium', name: 'VSCodium', sum: 'Code editor', cat: 'dev', size: '412 MB', c: '#2f6fd6' },
+    { id: 'podman', name: 'Podman Desktop', sum: 'Run and manage containers', cat: 'dev', size: '520 MB', c: '#6a4df0' },
+    { id: 'vlc', name: 'VLC', sum: 'Plays almost any video or music file', cat: 'play', size: '96 MB', c: '#c96a00', installed: true, update: '3.0.21' },
+    { id: 'steam', name: 'Steam', sum: 'Games, with Proton to run Windows games', cat: 'play', size: '1.3 GB', c: '#1b2838' },
+    { id: 'bottles', name: 'Bottles', sum: 'Run Windows programs, each in its own bottle', cat: 'windows', size: '210 MB', c: '#9b2f5f' },
+  ];
+  const SW_CATS = { explore: 'Explore', work: 'Work', create: 'Create', dev: 'Develop', play: 'Play', windows: 'Windows apps', installed: 'Installed', updates: 'Updates' };
+  let swCat = 'explore', swQ = '';
+  const swIcon = (a, s = 52) => `<span class="st-ic" style="--c:${a.c};--s:${s}px" aria-hidden="true">${escF(a.name[0])}</span>`;
+  function swBtn(a) {
+    if (a.busy != null) return `<span class="st-prog"><span class="bar"><i style="width:${a.busy}%"></i></span><small>${a.busy} %</small></span>`;
+    return a.installed ? `<button type="button" class="btn btn-secondary sm" data-sw="open" data-id="${a.id}">Open</button>` : `<button type="button" class="btn btn-primary sm" data-sw="install" data-id="${a.id}" aria-label="Install ${escF(a.name)}">Install</button>`;
+  }
+  const swCard = a => `<div class="st-card">${swIcon(a)}<div class="st-t"><b>${escF(a.name)}</b><span>${escF(a.sum)}</span><small>Flathub · verified · ${a.size}</small></div>${swBtn(a)}</div>`;
+  function renderSoftware() {
+    const M = $('#swMain'), ups = APPSTORE.filter(a => a.installed && a.update);
+    $('#swBadge').textContent = ups.length; $('#swBadge').hidden = !ups.length;
+    $$('#swNav .navbtn').forEach(b => b.setAttribute('aria-selected', b.dataset.cat === swCat && !swQ));
+    if (swQ) {
+      const q = swQ.toLowerCase(), hits = APPSTORE.filter(a => (a.name + ' ' + a.sum).toLowerCase().includes(q));
+      M.innerHTML = `<h2>Results for “${escF(swQ)}”</h2>` + (hits.length ? `<div class="st-grid">${hits.map(swCard).join('')}</div>` : `<p class="snote">No app matches “${escF(swQ)}”. Windows programs can often run through <button type="button" class="linkbtn" data-sw="cat" data-id="windows">Bottles</button>.</p>`);
+      return;
+    }
+    if (swCat === 'explore') {
+      M.innerHTML = `<div class="st-hero"><div><span class="overline">Coming from Windows?</span><h2>Run Windows programs with Bottles</h2><p>Most everyday Windows programs run in their own sandboxed bottle. Games run through Steam with Proton.</p><button type="button" class="btn btn-primary sm" data-sw="cat" data-id="windows">See how</button></div>${swIcon(APPSTORE.find(a => a.id === 'bottles'), 88)}</div>
+        <h3>Editors’ picks</h3><div class="st-grid">${['libreoffice', 'gimp', 'krita', 'thunderbird', 'obs', 'steam'].map(id => swCard(APPSTORE.find(a => a.id === id))).join('')}</div>`;
+    } else if (swCat === 'installed') {
+      const ins = APPSTORE.filter(a => a.installed);
+      M.innerHTML = `<h2>Installed</h2><div class="sgroup">${ins.map(a => `<div class="srow">${swIcon(a, 36)}<span class="sl"><b>${escF(a.name)}</b><small>${a.size} · Flathub</small></span><button type="button" class="btn btn-secondary sm" data-sw="remove" data-id="${a.id}">Remove</button></div>`).join('')}</div><p class="snote">Built-in apps (Files, Settings, Pip, Terminal…) are part of the system image and update with it.</p>`;
+    } else if (swCat === 'updates') {
+      M.innerHTML = `<h2>Updates</h2>${ups.length ? `<div class="sgroup">${ups.map(a => `<div class="srow">${swIcon(a, 36)}<span class="sl"><b>${escF(a.name)} ${a.update}</b><small>Security and stability fixes</small></span>${a.busy != null ? swBtn(a) : `<button type="button" class="btn btn-secondary sm" data-sw="update" data-id="${a.id}">Update</button>`}</div>`).join('')}</div><button type="button" class="btn btn-primary sm" data-sw="updateall">Update all</button>` : '<p class="snote">All apps are up to date.</p>'}
+        <div class="sgroup" style="margin-top:16px"><div class="srow"><span class="sl"><b>SIX system update</b><small>The system updates as one piece, from Settings</small></span><button type="button" class="btn btn-secondary sm" data-sw="sysupd">Open Updates</button></div></div>`;
+    } else if (swCat === 'windows') {
+      const b = APPSTORE.find(a => a.id === 'bottles'), st = APPSTORE.find(a => a.id === 'steam');
+      M.innerHTML = `<h2>Windows apps</h2><p class="snote">SIX runs most Windows programs through Bottles: install it, make a bottle, then open the program’s installer (.exe) in it. Each bottle is sandboxed, so a program can’t touch the rest of your files unless you let it. Games run through Steam with Proton. Programs that need kernel drivers (some anti-cheat, some VPNs) won’t run.</p><div class="st-grid">${swCard(b)}${swCard(st)}</div>`;
+    } else {
+      M.innerHTML = `<h2>${SW_CATS[swCat]}</h2><div class="st-grid">${APPSTORE.filter(a => a.cat === swCat).map(swCard).join('')}</div>`;
+    }
+  }
+  function swRun(a, done) {
+    a.busy = 0; renderSoftware();
+    const t = setInterval(() => { a.busy = Math.min(100, a.busy + 9 + Math.round(Math.random() * 8)); if (a.busy >= 100) { clearInterval(t); a.busy = null; done(); } renderSoftware(); }, 160);
+  }
+  $('#swMain').addEventListener('click', e => {
+    const b = e.target.closest('[data-sw]'); if (!b) return;
+    const a = APPSTORE.find(x => x.id === b.dataset.id), act = b.dataset.sw;
+    if (act === 'cat') { swQ = ''; $('#swQ').value = ''; swCat = b.dataset.id; renderSoftware(); }
+    else if (act === 'install') swRun(a, () => { a.installed = true; toast(`${a.name} is installed. It’s in the Six Menu.`, null); });
+    else if (act === 'open') toast(`${a.name} would open here; third-party apps aren’t part of this prototype.`, null);
+    else if (act === 'remove') toast(`Remove ${a.name}? Its settings stay unless you remove them too.`, () => { a.installed = false; delete a.update; renderSoftware(); }, 'Remove');
+    else if (act === 'update') swRun(a, () => { delete a.update; toast(`${a.name} is up to date.`, null); });
+    else if (act === 'updateall') APPSTORE.filter(x => x.installed && x.update).forEach(x => swRun(x, () => { delete x.update; renderSoftware(); }));
+    else if (act === 'sysupd') openSettings('updates');
+  });
+  $('#swNav').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; swCat = b.dataset.cat; swQ = ''; $('#swQ').value = ''; renderSoftware(); });
+  $('#swQ').addEventListener('input', e => { swQ = e.target.value.trim(); renderSoftware(); });
+  renderSoftware();
+
+  /* ── Calendar ── */
+  const dkey = d => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  const dayOff = n => { const d = new Date(); d.setDate(d.getDate() + n); return d; };
+  const EVENTS = {};
+  [[0, '10:00', 'Design review', 'Soft Matter · 30 min', 'var(--c-accent)'], [0, '14:30', 'Call with Arif', 'Shell performance', '#0a7f9c'], [1, '09:30', 'Stand-up', 'SIX team', 'var(--c-accent)'],
+   [2, '16:00', 'Dentist', 'Dhanmondi', '#d23a55'], [4, '18:00', 'Badminton', 'Club', '#1f8a57'], [6, '19:30', 'Family dinner', 'Home', '#a36a12'], [-2, '11:00', 'Shell review', 'Recorded', 'var(--c-accent)'], [-5, 'All day', 'Laptop backup', 'Reminder', '#5b6170']]
+    .forEach(([n, t, x, sub, c]) => { (EVENTS[dkey(dayOff(n))] ||= []).push({ t, x, sub, c }); });
+  let calMonth = new Date(); calMonth.setDate(1);
+  let calSel = new Date();
+  function renderCalendar() {
+    const y = calMonth.getFullYear(), m = calMonth.getMonth(), first = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate(), today = dkey(new Date());
+    $('#calTitle').textContent = calMonth.toLocaleDateString([], { month: 'long', year: 'numeric' });
+    const head = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => `<span class="cal-dow" role="columnheader">${d}</span>`).join('');
+    const cells = Array.from({ length: first }, () => '<span class="cal-cell out" aria-hidden="true"></span>').join('') + Array.from({ length: days }, (_, i) => {
+      const d = new Date(y, m, i + 1), k = dkey(d), ev = EVENTS[k] || [];
+      return `<button type="button" class="cal-cell${k === today ? ' today' : ''}${k === dkey(calSel) ? ' sel' : ''}" data-d="${i + 1}" aria-label="${d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}${ev.length ? `, ${ev.length} ${ev.length === 1 ? 'event' : 'events'}` : ''}"><span class="n">${i + 1}</span>${ev.slice(0, 2).map(e => `<span class="cal-ev" style="--c:${e.c}">${escF(e.x)}</span>`).join('')}${ev.length > 2 ? `<span class="cal-more">+${ev.length - 2}</span>` : ''}</button>`;
+    }).join('');
+    $('#calGrid').innerHTML = head + cells;
+    const ev = EVENTS[dkey(calSel)] || [];
+    $('#calDay').innerHTML = `<h3>${calSel.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}</h3>` + (ev.length ? ev.map(e => `<div class="cal-item" style="--c:${e.c}"><time>${e.t}</time><div><b>${escF(e.x)}</b><span>${escF(e.sub)}</span></div></div>`).join('') : '<p class="snote">Nothing planned.</p>')
+      + `<button type="button" class="btn btn-secondary sm" id="calAdd"><svg class="i sm"><use href="#i-plus"/></svg>Add event</button><p class="snote">Or tell Pip: “Lunch with Arif tomorrow at one.”</p>`;
+  }
+  $('#calGrid').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; calSel = new Date(calMonth.getFullYear(), calMonth.getMonth(), +b.dataset.d); renderCalendar(); });
+  $('#calPrev').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() - 1); renderCalendar(); });
+  $('#calNext').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() + 1); renderCalendar(); });
+  $('#calToday').addEventListener('click', () => { calMonth = new Date(); calMonth.setDate(1); calSel = new Date(); renderCalendar(); });
+  $('#calDay').addEventListener('click', e => { if (e.target.closest('#calAdd')) toast('Adding events is part of SIX, not of this prototype.', null); });
+  renderCalendar();
+
+  /* ── Lock screen ── */
+  function lockScreen() {
+    closeAllPops(); closeSearch();
+    const l = $('#lock'); l.hidden = false;
+    requestAnimationFrame(() => l.classList.add('on'));
+    tickLock(); setTimeout(() => $('#lockPw').focus(), 60);
+  }
+  function tickLock() {
+    const d = new Date();
+    $('#lockT').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    $('#lockD').textContent = d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  setInterval(() => { if (!$('#lock').hidden) tickLock(); }, 15000);
+  $('#lockForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const l = $('#lock'); l.classList.remove('on');
+    setTimeout(() => { l.hidden = true; $('#lockPw').value = ''; }, 260);
+  });
+  document.addEventListener('keydown', e => { if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'l') { e.preventDefault(); lockScreen(); } });
 
   /* ── Guide app ──────────────────────────────── */
   $$('#w-guide .navbtn').forEach(t => t.addEventListener('click', () => {
     $$('#w-guide .navbtn').forEach(x => x.setAttribute('aria-selected', x === t));
     $$('#w-guide [role="tabpanel"]').forEach(p => p.hidden = p.id !== t.getAttribute('aria-controls'));
     $('#w-guide .main').scrollTop = 0;
-  }));
-  $$('#w-files .navbtn').forEach(t => t.addEventListener('click', () => {
-    $$('#w-files .navbtn').forEach(x => x.setAttribute('aria-selected', x === t));
-    $('#w-files .crumb').textContent = 'Home › ' + t.textContent.trim();
   }));
 
   const TYPE = [
@@ -2220,10 +3349,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
     clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
-    pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase() + (label ? ', ' + label : ''));
+    pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase() + (label ? ', ' + label : '') + (state === 'listening' ? '. Press to stop' : '. Press to talk'));
     $('#pipState').textContent = 'Pip · ' + (label || name.toLowerCase());
-    $('#micInd').hidden = state !== 'listening';
-    if (typeof syncTaskOrbs === 'function') syncTaskOrbs(); else $('#pipBtn').setAttribute('aria-label', 'Pip: ' + name + '. Show home');
+    if (typeof syncTaskOrbs === 'function') syncTaskOrbs(); else $('#pipBtn').setAttribute('aria-label', 'Pip: ' + name + '. Open Pip');
     $$('.pip-card').forEach(c => c.setAttribute('aria-pressed', c.dataset.state === state));
     clearInterval(ampTimer);
     if (state === 'speaking') {
@@ -2934,7 +4062,7 @@ Request: ${JSON.stringify(d)}`;
     return spec || { fail: clip(j && j.note, 160) || 'I couldn’t turn that into a widget.' };
   }
   // the preview Pip shows before adding: the real widget, drawn small, with Add / Cancel
-  function previewCard(m, spec) {
+  function previewCard(m, spec, host) {
     return new Promise(res => {
       const box = document.createElement('div');
       box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Widget preview');
@@ -2942,10 +4070,11 @@ Request: ${JSON.stringify(d)}`;
         <div class="rv-btns"><button type="button" class="btn btn-primary sm">Add to home</button><button type="button" class="btn btn-secondary sm">Cancel</button></div>`;
       $('.rv-head span', box).textContent = `Preview · ${spec.title}`;
       renderBlocks(spec, $('.wprev .well', box));
-      m.insertBefore(box, $('.acts', m));
+      host ? host.replaceChildren(box) : m.insertBefore(box, $('.acts', m));
       const [yes, no] = $$('.rv-btns button', box);
-      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; $$('button, input', $('.wprev', box)).forEach(x => { x.disabled = true; }); res(ok); };
+      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; $$('button, input', $('.wprev', box)).forEach(x => { x.disabled = true; }); voice.pending = null; if (host) m.insertBefore(box, $('.acts', m)); res(ok); };
       yes.onclick = () => end(true); no.onclick = () => end(false);
+      if (host) { voice.pending = { yes: () => yes.click(), no: () => no.click() }; $('.rv-head', box).insertAdjacentHTML('beforeend', '<span class="say">Say “yes” or “no”</span>'); }
       thread.scrollTop = thread.scrollHeight;
     });
   }
@@ -2986,11 +4115,11 @@ Request: ${JSON.stringify(d)}`;
     if (taskPct >= 100) {
       $('.widget[data-slot="R0"] .dotorb').dataset.state = 'complete';
       $('#taskStop').hidden = true; $('#taskOut').hidden = false;
-      files.unshift({ name: 'Slides from my notes.pdf', mod: 'Just now', size: '4.2 MB' }); if (fsel >= 0) fsel++; renderFiles();
+      files.unshift({ name: 'Slides from my notes.pdf', mod: 'Just now', size: '4.2 MB', tag: 'work' }); fsel = -1; renderFiles();
       layoutHome();
     }
   }, 2500);
-  const showOutput = () => { openApp('files'); fsel = files.findIndex(f => f.name === 'Slides from my notes.pdf'); renderFiles(); };
+  const showOutput = () => selectInFiles('Slides from my notes.pdf');
   $('#taskOpen').addEventListener('click', () => { showOutput(); toast('Opening "Slides from my notes.pdf"', null); });
   $('#taskShow').addEventListener('click', showOutput);
   // the menu bar and dock orbs carry the running task's progress as a ring
@@ -3002,7 +4131,7 @@ Request: ${JSON.stringify(d)}`;
     $$('.peek').forEach(p => { const l = $('.peek-line', p); if (l) l.textContent = peekLine(p._card); });
     const label = taskLive && taskPct < 100 ? `Slides from my notes, ${taskPct} %` : '';
     $('#pipBtn').title = label ? 'Pip · ' + label : 'Pip';
-    $('#pipBtn').setAttribute('aria-label', `Pip: ${PIP_STATES[pipNow][0]}${label ? '. ' + label : ''}. Show home`);
+    $('#pipBtn').setAttribute('aria-label', `Pip: ${PIP_STATES[pipNow][0]}${label ? '. ' + label : ''}. Open Pip`);
   }
   syncTaskOrbs();
   $('#taskStop').addEventListener('click', () => {
@@ -3240,8 +4369,11 @@ void main(){
   new MutationObserver(() => { paintWall(true); recolorOrbs(); }).observe(root, { attributes: true, attributeFilter: ['data-transparency', 'data-contrast', 'data-theme'] });
   darkMQ.addEventListener('change', recolorOrbs);
 
-  /* ── Pip chat + voice ────────────────────────────────────────── */
-  const center = $('#center'), thread = $('#thread'), ask = $('#ask');
+  /* ── Pip: voice on home, chat in the Pip app ──────────────────────
+     Home has no text box: you talk to Pip. The Pip app (the Pip icon at the top right) is the
+     written conversation: every request, typed or spoken, lands here as history. */
+  const center = $('#center'), ask = $('#ask');
+  let thread = $('#thread');
   let sample = null, sampleTools = false, busy = null, turns = [];
   (async () => {
     try {
@@ -3259,37 +4391,69 @@ void main(){
     $('#todayDate').textContent = new Date().toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
   }
   greet();
-  function addMsg(who, text) {
-    thread.hidden = false; center.dataset.chat = 'on'; $('#suggest').hidden = true;
+  function msgEl(who, text, viaVoice) {
     const m = document.createElement('div');
-    m.className = 'msg latest from-' + who;
-    if (who === 'user') $$('.msg.latest', thread).forEach(x => x.classList.remove('latest'));
+    m.className = 'msg from-' + who + (viaVoice ? ' spoken' : '');
     if (who === 'pip') m.innerHTML = '<span class="who"><canvas class="dotorb" data-state="ready" style="width:16px;height:16px;color:var(--pip-line)" aria-hidden="true"></canvas>PIP</span><p class="txt"></p><div class="acts"></div>';
-    else m.innerHTML = '<p class="txt"></p>';
+    else m.innerHTML = `<p class="txt"></p>${viaVoice ? `<span class="via">${icon('mic', 'i sm')}Said aloud</span>` : ''}`;
     $('.txt', m).textContent = text;
+    return m;
+  }
+  // conversations: today's live one, and earlier ones you can reread
+  const convs = [];
+  let live = { title: 'New chat', when: 'Today', el: thread, voice: false }, shown = live;
+  convs.push(live);
+  [['Slides from my notes', [['user', 'Turn my notes from Monday into slides'], ['pip', 'Started “Slides from my notes”. It’s on the Current task card on home; I’ll say when it’s done.']]],
+   ['Typing in Bangla', [['user', 'How do I type in Bangla?'], ['pip', 'Settings › Language & region › Add layout, then pick Bangla (Probhat). Switch layouts with Six + K.']]],
+   ['Wi-Fi password', [['user', 'What’s the Wi-Fi password?'], ['pip', 'I can’t read saved passwords. Settings › Wi-Fi › Home-5G shows it after you confirm it’s you.']]]]
+    .forEach(([title, msgs]) => {
+      const el = document.createElement('div'); el.className = 'thread'; el.setAttribute('role', 'log'); el.setAttribute('aria-label', title); el.hidden = true;
+      msgs.forEach(([w, x]) => el.append(msgEl(w, x)));
+      $('#threads').insertBefore(el, $('#pipEmpty'));
+      convs.push({ title, when: 'Earlier', el, voice: false });
+    });
+  function renderConvs() {
+    const btn = c => `<button type="button" class="conv" data-c="${convs.indexOf(c)}" aria-current="${c === shown}">${icon(c.voice ? 'mic' : 'spark', 'i sm')}<span>${escF(c.title)}</span></button>`;
+    $('#convToday').innerHTML = convs.filter(c => c.when === 'Today').map(btn).join('');
+    $('#convOld').innerHTML = convs.filter(c => c.when !== 'Today').map(btn).join('');
+  }
+  function showConv(c) {
+    shown = c;
+    convs.forEach(x => { x.el.hidden = x !== c; });
+    $('#pipEmpty').hidden = !(c === live && !$('.msg', live.el));
+    if (!$('#pipEmpty').hidden) c.el.hidden = true;
+    $('#convTitle').textContent = c.title;
+    renderConvs();
+    c.el.scrollTop = c.el.scrollHeight;
+  }
+  $('#w-pip').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) showConv(convs[+b.dataset.c]); });
+  $('#newChat').addEventListener('click', () => {
+    if (!$('.msg', live.el)) { ask.focus(); return; }
+    if (busy) busy.abort();
+    live.el.removeAttribute('id');
+    const el = document.createElement('div'); el.className = 'thread'; el.id = 'thread'; el.setAttribute('role', 'log'); el.setAttribute('aria-label', 'Conversation with Pip');
+    $('#threads').insertBefore(el, $('#pipEmpty'));
+    live = { title: 'New chat', when: 'Today', el, voice: false }; convs.unshift(live);
+    thread = el; turns = [];
+    showConv(live); ask.focus();
+  });
+  showConv(live);
+  function addMsg(who, text, viaVoice) {
+    if (shown !== live) showConv(live);
+    $('#pipEmpty').hidden = true; live.el.hidden = false;
+    const m = msgEl(who, text, viaVoice);
     thread.append(m);
     const o = $('.dotorb', m); if (o) mountOrb(o, true);
-    syncHistory();
+    if (who === 'user' && live.title === 'New chat') { live.title = text.length > 34 ? text.slice(0, 32).trim() + '…' : text; $('#convTitle').textContent = live.title; }
+    if (viaVoice) live.voice = true;
+    renderConvs();
     thread.scrollTop = thread.scrollHeight;
     return m;
   }
   const actChip = (m, text, warn) => { const c = document.createElement('span'); c.className = 'act' + (warn ? ' warn' : ''); c.innerHTML = icon(warn ? 'info' : 'check', 'i sm'); c.append(text); $('.acts', m).append(c); };
 
-  // only the latest exchange shows; the full history is one click away
-  function syncHistory() {
-    const n = $$('.msg', thread).length, compact = thread.classList.contains('compact');
-    $('#histBtn').hidden = n <= 2;
-    $('#histBtn').innerHTML = compact ? `${icon('clock')}History · ${n} messages` : `${icon('chev-up')}Show latest only`;
-    $('#histBtn').setAttribute('aria-expanded', !compact);
-    $('#histShow').hidden = !thread.hidden || n === 0;
-    $('#histShow').textContent = `Show conversation (${n})`;
-  }
-  $('#histBtn').addEventListener('click', () => { thread.classList.toggle('compact'); syncHistory(); thread.scrollTop = thread.scrollHeight; });
-  $('#threadHide').addEventListener('click', () => { thread.hidden = true; center.dataset.chat = 'off'; syncHistory(); });
-  $('#histShow').addEventListener('click', () => { thread.hidden = false; center.dataset.chat = 'on'; syncHistory(); thread.scrollTop = thread.scrollHeight; });
-
   // what Pip can do in the prototype (used by local commands and by Claude's tools)
-  const APP_NAMES = { files: 'files', file: 'files', explorer: 'files', 'file manager': 'files', terminal: 'terminal', guide: 'guide', 'design guide': 'guide' };
+  const APP_NAMES = { files: 'files', file: 'files', explorer: 'files', 'file manager': 'files', terminal: 'terminal', guide: 'guide', 'design guide': 'guide', settings: 'settings', software: 'software', 'app store': 'software', store: 'software', calendar: 'calendar', pip: 'pip', chat: 'pip' };
   const ZONES = { left: 'L50', right: 'R50', maximize: 'MAX', max: 'MAX', 'top-left': 'TL', 'top-right': 'TR', 'bottom-left': 'BL', 'bottom-right': 'BR', 'left-two-thirds': 'L66', 'right-third': 'R33' };
   function ensureOpen(id) { const w = wins[id]; if (w.el.hidden) { w.el.hidden = false; w.min = false; } focusWin(id); }
   const ACT = {
@@ -3329,7 +4493,7 @@ void main(){
   // simple commands understood on-device (instant, no Claude needed)
   function localIntent(raw) {
     const s = raw.toLowerCase().replace(/[.!?,]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(please |pip |hey pip )+/, '').replace(/ please$/, '');
-    const app = '(files?|file manager|explorer|terminal|design guide|guide)';
+    const app = '(files?|file manager|explorer|terminal|design guide|guide|settings|software|app store|calendar)';
     let m;
     const done = (reply, acts) => ({ reply, acts });
     if ((m = s.match(new RegExp(`^(?:open |show |put )?(?:the |my )?${app} and (?:the |my )?${app} side by side$`)))) {
@@ -3347,6 +4511,14 @@ void main(){
     if ((m = s.match(/^(?:switch to |use |change to )?(?:the )?(matte|tidal|aurora|ember)(?: mood)?$/))) return done('Switched. Drag the cards together to see the surfaces fuse.', [ACT.plasma(m[1])]);
     if ((m = s.match(/^(?:make (?:it|the surfaces) |use )?(water|gel|honey|solid)(?: surfaces)?$/))) return done('Changed how the surfaces move.', [ACT.plasma(null, m[1])]);
     if (/^(show )?(home|desktop)$/.test(s)) return done('Home.', [ACT.home()]);
+    // a settings page by name: “open display settings”, “go to wifi settings”, “bluetooth settings”
+    if ((m = s.match(/^(?:open |show(?: me)? |go to |take me to )?(?:the )?(?:settings (?:for |of )?)?([a-z &-]+?)(?: settings| page| options)?$/)) && /settings|page|options/.test(s)) {
+      const PAGE_WORDS = { 'wi-fi': 'wifi', wifi: 'wifi', network: 'wifi', internet: 'wifi', bluetooth: 'bt', display: 'display', screen: 'display', brightness: 'display', sound: 'sound', audio: 'sound', volume: 'sound', battery: 'power', power: 'power', storage: 'storage', disk: 'storage', pip: 'pip', voice: 'pip', 'hey pip': 'pip', appearance: 'appearance', theme: 'appearance', wallpaper: 'appearance', accent: 'appearance', home: 'home', widgets: 'home', dock: 'dock', desktop: 'dock', notifications: 'notif', focus: 'notif', apps: 'apps', privacy: 'privacy', security: 'privacy', accessibility: 'access', users: 'users', account: 'users', language: 'lang', region: 'lang', keyboard: 'keyboard', touchpad: 'keyboard', shortcuts: 'keyboard', updates: 'updates', update: 'updates', about: 'about' };
+      const pg = PAGE_WORDS[m[1].trim()] || (m[1].trim() === 'settings' || !m[1].trim() ? 'wifi' : null);
+      if (pg) { openSettings(pg); return done(`Here are the ${pageName(pg)} settings.`, ['Opened Settings › ' + pageName(pg)]); }
+    }
+    if (/^(?:open |show )?(?:the )?settings$/.test(s)) { openSettings(); return done('Settings is open.', ['Opened Settings']); }
+    if (/^(?:lock|lock (?:the )?screen|lock my (?:pc|computer|laptop))$/.test(s)) { setTimeout(lockScreen, 900); return done('Locking the screen.', ['Locked the screen']); }
     // widgets: add or remove one from the gallery, or describe a new one and Pip designs it
     const rawT = raw.trim().replace(/^(?:please |pip,? |hey pip,? )+/i, '');
     if ((m = rawT.match(/^(?:can you |could you )?(?:make|create|build|design|add)(?: me)?(?: a| an)?(?: new)?(?: custom)? widget(?: that| which| for| to| with| showing|:)?\s+(.+)$/i))) return { widget: m[1] };
@@ -3387,9 +4559,9 @@ For anything else (questions, writing help, explanations), answer helpfully and 
 Current prototype state: ${stateSummary()}`;
   function toolsFor(m) {
     const wrap = (label, fn) => (input) => { setPip('working', label); try { const r = fn(input || {}); actChip(m, r); return r; } catch (e) { actChip(m, String(e.message || e), true); throw e; } };
-    const appEnum = { type: 'string', enum: ['files', 'terminal', 'guide'] };
+    const appEnum = { type: 'string', enum: ['files', 'terminal', 'guide', 'settings', 'software', 'calendar'] };
     return [
-      { name: 'open_app', description: 'Open an app window (files, terminal, guide = the design guide). Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('opening a window', i => ACT.open(String(i.app))) },
+      { name: 'open_app', description: 'Open an app window (files, terminal, guide = the design guide, settings, software = the app store, calendar). Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('opening a window', i => ACT.open(String(i.app))) },
       { name: 'close_app', description: 'Close an app window. Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('closing a window', i => ACT.close(String(i.app))) },
       { name: 'snap_window', description: 'Open if needed and snap an app window to a screen zone.', inputSchema: { type: 'object', properties: { app: appEnum, zone: { type: 'string', enum: Object.keys(ZONES) } }, required: ['app', 'zone'] }, execute: wrap('arranging windows', i => ACT.snap(String(i.app), String(i.zone))) },
       { name: 'set_setting', description: 'Turn a system setting on or off.', inputSchema: { type: 'object', properties: { setting: { type: 'string', enum: ['dark_mode', 'night_light', 'focus', 'touch_mode', 'reduce_motion', 'reduce_transparency', 'more_contrast'] }, on: { type: 'boolean' } }, required: ['setting', 'on'] }, execute: wrap('changing a setting', i => ACT.setting(String(i.setting), !!i.on)) },
@@ -3417,7 +4589,7 @@ Current prototype state: ${stateSummary()}`;
     fixes.forEach(([label, run]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sugg'; b.textContent = label; b.onclick = run; box.append(b); });
     m.insertBefore(box, $('.acts', m).nextSibling);
   }
-  function reviewCard(m, f) {
+  function reviewCard(m, f, host) {
     return new Promise(res => {
       const box = document.createElement('div');
       box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Review before Pip acts');
@@ -3426,10 +4598,11 @@ Current prototype state: ${stateSummary()}`;
         <ul><li>Moves this one file to the Bin. Nothing else changes.</li><li>You can put it back from the Bin for 30 days.</li></ul>
         <div class="rv-btns"><button type="button" class="btn btn-danger sm">Move to Bin</button><button type="button" class="btn btn-secondary sm">Cancel</button></div>`;
       $('b', box).textContent = f.name;
-      m.insertBefore(box, $('.acts', m));
+      host ? host.replaceChildren(box) : m.insertBefore(box, $('.acts', m));
       const [yes, no] = $$('.rv-btns button', box);
-      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; res(ok); };
+      const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; voice.pending = null; if (host) m.insertBefore(box, $('.acts', m)); res(ok); };
       yes.onclick = () => end(true); no.onclick = () => end(false);
+      if (host) { voice.pending = { yes: () => yes.click(), no: () => no.click() }; $('.rv-head', box).insertAdjacentHTML('beforeend', '<span class="say">Say “yes” or “no”</span>'); }
       thread.scrollTop = thread.scrollHeight;
     });
   }
@@ -3437,26 +4610,28 @@ Current prototype state: ${stateSummary()}`;
   async function send(text, viaVoice) {
     text = text.trim(); if (!text) return;
     if (busy) busy.abort();
-    addMsg('user', text);
+    if (voice.pending) voice.pending.no();   // a new request closes an open review
+    const cap = viaVoice ? (voice.cap || capHost()) : null;
+    if (cap) { cap.you.textContent = `“${text}”`; cap.pip.textContent = ''; cap.card.replaceChildren(); }
+    addMsg('user', text, viaVoice);
     const m = addMsg('pip', 'Thinking…');
     const txt = $('.txt', m);
     txt.classList.add('wait');
     let reply = '', local = null, outcome = 'complete', label = '', fixes = null;
     try { local = localIntent(text); } catch (e) { local = { fail: "That didn't work. " + (e.message || ''), label: 'couldn’t do that' }; }
     setPip('thinking', local ? 'on this device' : sample ? 'asking Claude' : '');
-    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; };
+    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; if (cap) cap.pip.textContent = r; };
     if (local && local.review) {
       await wait(300);
       note(m, 'local');
       say('This changes your files, so here is exactly what will happen.');
       setPip('asking', 'waiting for your review');
       const f = local.review;
-      if (await reviewCard(m, f)) {
-        const at = files.indexOf(f);
-        if (at >= 0) { files.splice(at, 1); if (fsel >= at) fsel = -1; binCount++; renderFiles(); }
+      if (await reviewCard(m, f, cap && cap.card)) {
+        const undo = moveToBin(f, 'documents');
         actChip(m, `Moved “${f.name}” to Bin`);
         reply = 'Done. It’s in the Bin if you want it back.';
-        toast(`Moved "${f.name}" to Bin`, () => { files.splice(Math.max(0, at), 0, f); binCount--; renderFiles(); });
+        toast(`Moved "${f.name}" to Bin`, undo, 'Undo');
       } else { reply = 'Cancelled. Nothing was changed.'; outcome = 'cancelled'; }
     } else if (local && local.widget) {
       setPip('working', 'designing a widget');
@@ -3476,7 +4651,7 @@ Current prototype state: ${stateSummary()}`;
         spec = cleanSpec(spec);
         say(`Here’s a preview.${spec.note ? ' ' + spec.note : ''} Add it to home?`);
         setPip('asking', 'waiting for your review');
-        if (await previewCard(m, spec)) {
+        if (await previewCard(m, spec, cap && cap.card)) {
           const el = mkCustom(spec), r = addEl(el);
           renderGallery();
           actChip(m, `Added “${spec.title}” to home`);
@@ -3492,7 +4667,7 @@ Current prototype state: ${stateSummary()}`;
       const hits = files.filter(f => words.some(w => f.name.toLowerCase().includes(w)));
       if (hits.length) {
         reply = `Found ${hits.length} in Documents.`;
-        fixes = hits.slice(0, 4).map(f => [f.name, () => { openApp('files'); fsel = files.indexOf(f); renderFiles(); }]);
+        fixes = hits.slice(0, 4).map(f => [f.name, () => selectInFiles(f.name)]);
       } else {
         reply = `Nothing in Documents matches “${q}”.`;
         fixes = [['Search everywhere', () => openSearch(q)]];
@@ -3548,16 +4723,20 @@ Current prototype state: ${stateSummary()}`;
     }
     say(reply);
     fixChips(m, fixes);
-    if (topVisible() && reply) toast('Pip: ' + reply.slice(0, 120) + (reply.length > 120 ? '…' : ''), null);
-    if (outcome === 'complete' && viaVoice && $('#speakToggle').checked && speak(reply)) return;
+    if (cap) {
+      if (fixes && fixes.length) { const box = document.createElement('div'); box.className = 'fixes'; fixes.forEach(([l, run]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sugg'; b.textContent = l; b.onclick = run; box.append(b); }); cap.card.append(box); }
+      capDone(fixes && fixes.length ? 14000 : 9000);
+    }
+    if (viaVoice && $('#speakToggle').checked) { if (outcome === 'complete' && speak(reply)) return; speak(reply, true); }
     settlePip(outcome, label, { complete: 1400, cancelled: 2200, failed: 4000, waiting: 9000 }[outcome]);
   }
-  function speak(text) {
+  function speak(text, keepState) {
     try {
       if (!('speechSynthesis' in window) || !text) return false;
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
       u.rate = 1.03;
+      if (keepState) { speechSynthesis.speak(u); return true; }
       u.onstart = () => setPip('speaking');
       u.onend = u.onerror = () => { if (pipNow === 'speaking') setPip('ready'); };
       speechSynthesis.speak(u);
@@ -3571,58 +4750,163 @@ Current prototype state: ${stateSummary()}`;
     if (busy) { busy.abort(); return; }
     const v = ask.value; ask.value = ''; send(v, false);
   });
-  $('#suggest').addEventListener('click', e => { const b = e.target.closest('.sugg'); if (b) send(b.textContent, false); });
+  $('#chatSuggest').addEventListener('click', e => { const b = e.target.closest('.sugg'); if (b) send(b.textContent, false); });
 
-  // voice: a designed flow. This preview has no microphone, so Pip "hears" a sample request.
-  const VOICE_SAMPLES = ['Open Files and Terminal side by side', 'What’s on my calendar today?', 'Switch to the aurora mood', 'Turn on night light'];
-  let voiceN = 0, voiceTimers = [], waveTimer = null, voiceOn = false;
+  /* ── Voice: home is voice only; the mic is always one press away ──────────
+     Press to talk (the menu-bar mic, clicking Pip on home, Ctrl + Space, or holding Space on
+     home) or Always listening for “Hey Pip”. Uses the browser's speech recognition when it can;
+     where it can't (most embedded previews), Pip hears sample requests and says so. */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const voice = { mode: 'ptt', on: false, real: !!SR, rec: null, wakeRec: null, pending: null, demoN: 0, timers: [], cap: null, dictate: false, hold: false };
+  const VOICE_SAMPLES = ['Open Files and Terminal side by side', 'What’s on my calendar today?', 'Add a clock widget', 'Turn on night light', 'Open display settings', 'Make a widget that counts down to my exam on 14 December', 'Switch to the aurora mood'];
   const wave = $('#wave');
-  wave.innerHTML = '<i></i>'.repeat(18);
-  function stopVoice() {
-    voiceOn = false; voiceTimers.forEach(clearTimeout); voiceTimers = []; clearInterval(waveTimer);
-    $('#micBtn').setAttribute('aria-pressed', 'false'); $('#micBtn').setAttribute('aria-label', 'Talk to Pip'); $('#micBtn').innerHTML = icon('mic');
-    $('#voice').hidden = true; ask.hidden = false; $('#sendBtn').hidden = false;
-    if (pipNow === 'listening') setPip('ready');
-    $('#aiNote').textContent = sample ? 'Simple commands run on this device. Everything else asks Claude on your account.' : 'Simple commands run on this device.';
+  wave.innerHTML = '<i></i>'.repeat(22);
+  let waveTimer = null, capT = null, waveTalk = false;
+  function waveOn() {
+    clearInterval(waveTimer); let ph = 0;
+    waveTimer = setInterval(() => { ph += 0.5; $$('i', wave).forEach((b, i) => { b.style.height = (waveTalk ? 16 + Math.abs(Math.sin(ph + i * 0.7)) * 72 * Math.random() : 12 + Math.random() * 10) + '%'; }); }, 90);
+    wave.hidden = false;
   }
-  function startVoice() {
+  function waveOff() { clearInterval(waveTimer); waveTalk = false; wave.hidden = true; }
+  // captions go under Pip on home; when windows cover home, into the small voice panel at the top right
+  function capHost() {
+    clearTimeout(capT);
+    if (!topVisible() && $('#lock').hidden) {
+      $('#vhud').hidden = true; $('#vcap').hidden = false; $('#vTry').classList.add('away'); markDirty();
+      return { you: $('#vYou'), pip: $('#vPip'), card: $('#vCard') };
+    }
+    $('#vhud').hidden = false;
+    return { you: $('#hudYou'), pip: $('#hudPip'), card: $('#hudCard') };
+  }
+  function capDone(ms = 9000) {
+    clearTimeout(capT);
+    capT = setTimeout(() => {
+      if (voice.pending || voice.on) { capDone(4000); return; }
+      $('#vcap').hidden = true; $('#vhud').hidden = true; $('#vTry').classList.remove('away');
+      $('#vCard').replaceChildren(); $('#hudCard').replaceChildren(); markDirty();
+    }, ms);
+  }
+  function syncVoiceUI() {
+    const mic = $('#mbMic');
+    mic.dataset.mode = voice.mode; mic.setAttribute('aria-pressed', voice.on && !voice.dictate);
+    mic.setAttribute('aria-label', voice.on ? 'Stop listening' : voice.mode === 'wake' ? 'Talk to Pip. Listening for “Hey Pip”' : 'Talk to Pip (Ctrl Space)');
+    mic.title = voice.on ? 'Pip is listening · click to stop' : voice.mode === 'wake' ? 'Listening for “Hey Pip” on this device' : 'Talk to Pip · Ctrl Space';
+    $('#vMode').innerHTML = (voice.mode === 'wake' ? `${icon('mic', 'i sm')}Listening for “Hey Pip” on this device` : `${icon('mic', 'i sm')}Press to talk · <kbd>Ctrl</kbd> <kbd>Space</kbd>`) + (voice.real ? '' : ' · <span class="demo">demo voice</span>');
+    $('#greetSub').textContent = voice.mode === 'wake' ? 'Say “Hey Pip”, then what you need.' : 'Press the mic in the menu bar, or hold Space, and talk.';
+    setTile(qsTile('wake'), voice.mode === 'wake');
+    $('#micBtn').setAttribute('aria-pressed', voice.on && voice.dictate);
+  }
+  function setVoiceMode(m) {
+    voice.mode = m; syncVoiceUI();
+    if (!wins.settings.el.hidden) syncSettings();
+    if (m === 'wake') { startWake(); toast(voice.real ? 'Pip listens for “Hey Pip” now. The microphone stays on this device until you say it.' : 'Pip listens for “Hey Pip” now. This preview can’t use the microphone, so click Pip or a “Try saying” example to talk.', null); }
+    else stopWake();
+  }
+  const newRec = continuous => { const r = new SR(); r.lang = navigator.language || 'en-US'; r.interimResults = true; r.continuous = continuous; return r; };
+  const FATAL = ['not-allowed', 'service-not-allowed', 'audio-capture', 'network', 'language-not-supported'];
+  function realFail(err) {
+    if (!voice.real) return;
+    voice.real = false; syncVoiceUI();
+    toast(`This preview can’t use your microphone${err ? ` (${err})` : ''}, so Pip hears sample requests instead.`, null);
+  }
+  const clearDemo = () => { voice.timers.forEach(clearTimeout); voice.timers = []; };
+  function startListening(opts = {}) {
+    if (voice.on) { stopListening(); return; }
     try { speechSynthesis.cancel(); } catch {}
-    voiceOn = true;
-    $('#micBtn').setAttribute('aria-pressed', 'true'); $('#micBtn').setAttribute('aria-label', 'Stop listening'); $('#micBtn').innerHTML = icon('stop');
-    $('#voice').hidden = false; ask.hidden = true; $('#sendBtn').hidden = true;
-    $('#voiceTitle').textContent = 'Listening…'; $('#voiceLine').textContent = 'Speak now';
-    $('#aiNote').textContent = 'Demo: this preview can’t use your microphone, so Pip hears a sample request.';
-    setPip('listening');
-    const bars = $$('i', wave);
-    let phase = 0;
-    waveTimer = setInterval(() => { phase += 0.5; bars.forEach((b, i) => { const talk = $('#voiceTitle').textContent !== 'Listening…' || phase > 2; b.style.height = (talk ? 18 + Math.abs(Math.sin(phase + i * 0.7)) * 70 * Math.random() : 14 + Math.random() * 10) + '%'; }); }, 90);
-    const phrase = VOICE_SAMPLES[voiceN++ % VOICE_SAMPLES.length];
-    voiceTimers.push(setTimeout(() => {
-      $('#voiceTitle').textContent = 'Hearing you';
-      let k = 0;
-      const typeOn = () => { if (!voiceOn) return; k += 2; $('#voiceLine').textContent = phrase.slice(0, k); if (k < phrase.length) voiceTimers.push(setTimeout(typeOn, 45)); else voiceTimers.push(setTimeout(() => { stopVoice(); send(phrase, true); }, 650)); };
-      typeOn();
-    }, 1300));
+    stopWake();
+    voice.on = true; voice.dictate = !!opts.dictate; voice.hold = !!opts.hold; syncVoiceUI(); setPip('listening');
+    voice.cap = voice.dictate ? null : capHost();
+    if (voice.cap) { voice.cap.you.textContent = 'Listening…'; voice.cap.pip.textContent = ''; }
+    waveOn();
+    if (voice.real && !opts.phrase) {
+      try {
+        const r = voice.rec = newRec(false); let fin = '';
+        r.onresult = e => { let t = ''; for (const res of e.results) { t += res[0].transcript; if (res.isFinal) fin = t; } heard(t, false); };
+        r.onerror = e => { if (voice.rec !== r) return; if (FATAL.includes(e.error)) { voice.rec = null; realFail(e.error); demoListen(opts); } };
+        r.onend = () => { if (voice.rec !== r) return; voice.rec = null; if (fin) heard(fin, true); else { if (voice.cap) voice.cap.you.textContent = 'I didn’t catch that.'; stopListening(); capDone(3000); } };
+        // no audio within 2.5 s means there's no usable microphone here: switch to the demo
+        let audio = false; r.onaudiostart = () => { audio = true; };
+        voice.timers.push(setTimeout(() => { if (!audio && voice.rec === r) { voice.rec = null; try { r.abort(); } catch {} realFail('no microphone'); demoListen(opts); } }, 2500));
+        r.start();
+      } catch (err) { voice.rec = null; realFail(err.message); demoListen(opts); }
+    } else demoListen(opts);
   }
-  $('#micBtn').addEventListener('click', () => {
-    if (voiceOn) { stopVoice(); return; }
-    if (pipNow === 'speaking') { try { speechSynthesis.cancel(); } catch {} setPip('ready'); return; }
-    startVoice();
+  // the demo types a sample request (or the example you clicked) as if Pip were hearing it
+  function demoListen(opts) {
+    clearDemo();
+    const phrase = opts.phrase || VOICE_SAMPLES[voice.demoN++ % VOICE_SAMPLES.length];
+    voice.timers.push(setTimeout(() => {
+      let k = 0;
+      const typeOn = () => { if (!voice.on) return; k += 2; heard(phrase.slice(0, k), false); if (k < phrase.length) voice.timers.push(setTimeout(typeOn, 42)); else voice.timers.push(setTimeout(() => heard(phrase, true), 450)); };
+      typeOn();
+    }, opts.phrase ? 250 : 1000));
+  }
+  function heard(t, final) {
+    if (voice.dictate) { ask.value = t; if (final) { stopListening(); $('#composer').requestSubmit(); } return; }
+    waveTalk = true;
+    if (voice.cap) voice.cap.you.textContent = `“${t}”`;
+    if (!final) return;
+    stopListening();
+    const s = t.trim().replace(/[.!?]+$/, '');
+    if (voice.pending) {
+      if (/^(yes|yeah|yep|sure|ok(ay)?|do it|go ahead|confirm|move it|add it)\b/i.test(s)) { voice.pending.yes(); return; }
+      if (/^(no|nope|cancel|stop|don'?t|never ?mind)\b/i.test(s)) { voice.pending.no(); return; }
+    }
+    send(s, true);
+  }
+  function stopListening() {
+    clearDemo();
+    if (voice.rec) { const r = voice.rec; voice.rec = null; try { r.abort(); } catch {} }
+    const was = voice.on;
+    voice.on = false; voice.dictate = false; voice.hold = false; waveOff(); syncVoiceUI();
+    if (was && pipNow === 'listening') setPip('ready');
+    if (was && voice.cap && /^Listening/.test(voice.cap.you.textContent)) { voice.cap.you.textContent = ''; capDone(500); }
+    if (voice.mode === 'wake') setTimeout(startWake, 300);
+  }
+  // Always listening: a continuous recogniser waits for “Hey Pip”; what follows is the request
+  function startWake() {
+    if (voice.mode !== 'wake' || voice.on || voice.wakeRec || !voice.real) return;
+    try {
+      const r = voice.wakeRec = newRec(true);
+      r.onresult = e => {
+        const res = e.results[e.results.length - 1]; if (!res.isFinal) return;
+        const m = res[0].transcript.trim().match(/\b(?:hey|hi|okay|ok)[ ,]+pip\b[ ,.!]*(.*)$/i); if (!m) return;
+        stopWake();
+        if (m[1]) { voice.cap = capHost(); voice.on = true; heard(m[1], true); } else startListening();
+      };
+      r.onerror = e => { if (voice.wakeRec !== r) return; if (FATAL.includes(e.error)) { voice.wakeRec = null; realFail(e.error); } };
+      r.onend = () => { if (voice.wakeRec === r) { voice.wakeRec = null; setTimeout(startWake, 400); } };
+      r.start();
+    } catch { voice.wakeRec = null; }
+  }
+  function stopWake() { const r = voice.wakeRec; voice.wakeRec = null; if (r) try { r.abort(); } catch {} }
+
+  $('#mbMic').addEventListener('click', () => startListening());
+  $('#pipHome').addEventListener('click', () => startListening());
+  $('#micBtn').addEventListener('click', () => (voice.on ? stopListening() : startListening({ dictate: true })));
+  $('#suggest').addEventListener('click', e => { const b = e.target.closest('.sugg'); if (b) { if (voice.on) stopListening(); startListening({ phrase: b.textContent }); } });
+  $('#openChat').addEventListener('click', () => openPip());
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.code === 'Space') { e.preventDefault(); startListening(); return; }
+    if (e.key === 'Escape' && voice.on) { stopListening(); return; }
+    // hold Space on home to talk
+    const a = document.activeElement;
+    if (e.code === 'Space' && !e.repeat && !voice.on && !topVisible() && $('#lock').hidden && (!a || a === document.body || a.id === 'pipHome')) { e.preventDefault(); startListening({ hold: true }); }
   });
+  document.addEventListener('keyup', e => { if (e.code === 'Space' && voice.hold && voice.rec) { try { voice.rec.stop(); } catch {} } });
+  syncVoiceUI();
 
   function showHome() {
     Object.keys(wins).forEach(k => { if (!wins[k].el.hidden) { wins[k].el.hidden = true; wins[k].min = true; } });
     focusWin(null); closeAllPops();
   }
-  $('#pipBtn').addEventListener('click', () => { showHome(); setTimeout(() => (voiceOn ? $('#micBtn') : ask).focus(), 50); });
-  function askPip(q) { showHome(); send(q, false); }
-  // typing on the home screen goes straight to Pip
-  document.addEventListener('keydown', e => {
-    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1 || topVisible()) return;
-    const a = document.activeElement;
-    if (a && a !== document.body && a.closest('input, textarea, [contenteditable], .pop, #search')) return;
-    if (!ask.hidden) ask.focus();
-  });
+  function openPip() {
+    const w = wins.pip;
+    if (w.el.hidden || !w.el.classList.contains('active')) openApp('pip');
+    setTimeout(() => { shown.el.scrollTop = shown.el.scrollHeight; ask.focus(); }, 60);
+  }
+  $('#pipBtn').addEventListener('click', () => openPip());
+  function askPip(q) { openPip(); send(q, false); }
 
   /* ── Clock ──────────────────────────────────── */
   function tick() {
@@ -3641,6 +4925,7 @@ Current prototype state: ${stateSummary()}`;
   /* ── Boot ───────────────────────────────────── */
   placeInitial();
   Object.values(wins).forEach(w => { w.el.hidden = true; });
+  showPage('wifi');
   focusWin(null);
   syncThemeTile();
   layoutHome();

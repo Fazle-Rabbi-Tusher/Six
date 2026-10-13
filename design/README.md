@@ -1,10 +1,12 @@
 # SIX OS · Soft Matter design language
 
-The design guide for **SIX**, a desktop operating system built to replace Windows on everyday
-PCs. Soft Matter keeps the layout Windows users already know and renders it in soft materials:
-**clay** you press, **plasma glass** that floats, **paper** you work on, and **plasma clay**, the
-liquid surfaces of the home screen, where **Pip**, the assistant, takes chat and voice. A
-macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is one setting away).
+The design guide and interactive prototype for **SIX**, a desktop operating system built on
+**Fedora Linux** to replace Windows on everyday PCs. Soft Matter keeps the layout Windows users
+already know and renders it in soft materials: **clay** you press, **plasma glass** that floats,
+**paper** you work on, and **plasma clay**, the liquid surfaces of the home screen. Home is
+**voice first**: you talk to **Pip**, the assistant; the written conversation lives in the Pip app
+at the top right. A macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is
+one setting away), with Settings, Files, Software and Calendar as the system apps.
 
 ![SIX home screen with Pip, dark theme](screens/home-dark.png)
 
@@ -12,7 +14,7 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is a chat with Pip: try "open Files and Terminal side by side" or the mic. Click **Add widgets** (or ask Pip to "make a widget that counts down to my exam on 14 December") to add or design widgets. Ask Pip to "delete interview notes" to see a review card, or "open photoshop" to see a failure with recovery. Drag one home card onto another to stack them (Unstack puts them back). Drag windows to edges to snap, `Ctrl + K` for Six Search, Quick Settings for dark mode, accessibility and plasma clay settings |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is voice only: press the mic in the menu bar, click Pip, hold Space or press `Ctrl + Space`, or click a **Try saying** example (in previews without a microphone Pip hears sample requests). Try "delete interview notes" for a review card you can answer by voice. Click the Pip icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Click **Add widgets**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -26,25 +28,27 @@ macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is on
 | [04 · Color](guide/04-color.md) | Neutrals, Iris accent, semantic colours, clay pastels, plasma moods, verified contrast |
 | [05 · Materials](guide/05-materials.md) | Clay, plasma glass, paper, wallpaper, plasma clay (the liquid home surfaces), elevation scale |
 | [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
-| [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, macOS-style app icons, file icons |
+| [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, clay app icons, folder, drive and file icons |
 | [08 · Motion](guide/08-motion.md) | Durations, easing, springs, choreography, reduced motion |
-| [09 · Shell](guide/09-shell.md) | Menu bar and macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, lock screen, first run |
+| [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Pip) and macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, first run |
 | [10 · Components](guide/10-components.md) | Buttons, toggles, inputs, menus, lists, dialogs, toasts… and a checklist for adopting 21st.dev / shadcn components |
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The home screen: Pip, chat, voice, widgets (gallery and widgets Pip makes), stacks, review cards, failures and recovery, Pip's states |
-| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, ten tasks, targets, and the order to build SIX in |
+| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states |
+| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, fifteen tasks, targets, and the order to build SIX in |
+| [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
+| [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
 
 ## Tokens
 
 | File | Use |
 |---|---|
-| [`tokens/tokens.css`](tokens/tokens.css) | **Source of truth.** CSS custom properties for light, dark and the accessibility modes |
+| [`tokens/tokens.css`](tokens/tokens.css) | **Source of truth.** CSS custom properties for light, dark, the accent options and the accessibility modes |
 | [`tokens/tokens.json`](tokens/tokens.json) | W3C Design Tokens format for native toolkits (Qt/QML, GTK, Flutter) or Style Dictionary |
 | [`tokens/tailwind.preset.js`](tokens/tailwind.preset.js) | Tailwind preset so shadcn/ui and 21st.dev components use SIX tokens |
 | [`tokens/build_tokens.py`](tokens/build_tokens.py) | Regenerates `tokens.json` from `tokens.css` |
-| [`tokens/check_contrast.py`](tokens/check_contrast.py) | Verifies every text/background pair passes WCAG 2.2 in both themes |
+| [`tokens/check_contrast.py`](tokens/check_contrast.py) | Verifies every text/background pair passes WCAG 2.2 in both themes, for every accent option |
 
 ```sh
 python3 design/tokens/build_tokens.py     # after editing tokens.css
@@ -53,32 +57,45 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 
 ## Screens
 
-| Home, light theme | Talking to Pip | Pip snapped two windows |
+| Talking to Pip on home | Pip answers in a caption | Review by voice |
 |---|---|---|
-| ![](screens/home-light.png) | ![](screens/home-chat.png) | ![](screens/pip-snap.png) |
+| ![](screens/home-voice.png) | ![](screens/voice-reply.png) | ![](screens/pip-review.png) |
 
-| Voice | Phone width | Design guide app |
+| Voice over windows | The Pip app | A failure with recovery chips |
 |---|---|---|
-| ![](screens/home-voice.png) | ![](screens/phone-dark.png) | ![](screens/guide-pip.png) |
+| ![](screens/voice-hud.png) | ![](screens/pip-app.png) | ![](screens/pip-failed.png) |
+
+| Settings › Display | Settings › Pip & voice | Control Center |
+|---|---|---|
+| ![](screens/settings.png) | ![](screens/settings-pip.png) | ![](screens/control-center.png) |
+
+| Files › Pictures | Files › Home | Software |
+|---|---|---|
+| ![](screens/files.png) | ![](screens/files-home.png) | ![](screens/software.png) |
+
+| Calendar | Lock screen | Home, light theme |
+|---|---|---|
+| ![](screens/calendar.png) | ![](screens/lock.png) | ![](screens/home-light.png) |
+
+| Widget gallery | Clock and Now playing added | Phone width |
+|---|---|---|
+| ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/phone-dark.png) |
 
 | Dragging a card onto another | A stack with previews | Stack opened: cards fan out |
 |---|---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
 
-| Pip asks for review before changing a file | A failure with recovery chips |
-|---|---|
-| ![](screens/pip-review.png) | ![](screens/pip-failed.png) |
-
-| Widget gallery | Clock and Now playing added | Pip designs a widget |
-|---|---|---|
-| ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/widget-pip.png) |
-
-| Pip's small orb, every state and variant |
+| The clay app icons |
 |---|
-| ![](screens/small-orbs.png) |
+| ![](screens/dock-icons.png) |
+
+| Design guide app | Pip's small orb, every state and variant |
+|---|---|
+| ![](screens/guide-pip.png) | ![](screens/small-orbs.png) |
 
 ## Credits
 
 Pip's orb motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh
 ([github.com/yogesharc/thinking-orbs](https://github.com/yogesharc/thinking-orbs), MIT licence).
-System glyphs are [Phosphor](https://phosphoricons.com) (MIT).
+System glyphs are [Phosphor](https://phosphoricons.com) (MIT). SIX is built on Fedora Linux;
+Fedora is a trademark of Red Hat, Inc., and SIX is not affiliated with or endorsed by the Fedora Project.

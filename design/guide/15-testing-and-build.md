@@ -24,7 +24,7 @@ Each task starts from the home screen with no window open. Give the goal, never 
 |---|---|---|---|
 | 1 | "Open your files and the terminal next to each other." | Both windows snapped side by side, by any route (Pip, drag to edge, Snap Layouts, Six Search) | Which route they pick first; hunting for a Start button |
 | 2 | "Turn on night light." | Night light on | Whether they find Control Center in the menu bar |
-| 3 | "Ask Pip to delete *Interview notes*, then change your mind." | Review card read, Cancel pressed, file still in Documents | Whether they read the target and effect lines; whether *Move to Bin* is mistaken for permanent deletion |
+| 3 | "Tell Pip to delete *Interview notes*, then change your mind." (by voice) | Review card read, Cancel pressed, file still in Documents | Whether they read the target and effect lines; whether *Move to Bin* is mistaken for permanent deletion |
 | 4 | "Ask Pip to open Photoshop." | They take a recovery chip, or say what they would do next | Dead ends; blaming themselves |
 | 5 | "The slides Pip is making: stop them." Then: "Where did the half-made outline go?" | Stopped from the task card; they can say what was kept | Whether the stop message answers the second question without help |
 | 6 | "Put the *Today* and *This device* cards together, then see both." | Stacked, then opened with the cards fanned out | Whether the previews under the stack are noticed; drag versus click |
@@ -33,6 +33,10 @@ Each task starts from the home screen with no window open. Give the goal, never 
 | 9 | Keyboard only: tasks 1, 2 and 3 | Same pass criteria | Focus order, visible focus, the review card reachable with `Tab` |
 | 10 | Screen reader: tasks 3 and 5 | Hears the review target and effect, and the stop result | Live region noise (the task line must speak only on change) |
 | 11 | "Put a clock on your home screen, then make one that counts down to your next holiday." | Clock added from the gallery or by asking; countdown previewed and added | Whether they find *Add widgets* or ask Pip; whether the preview is read before adding |
+| 12 | From home, with no instructions: "Ask the computer to open your settings." | They find the mic (menu bar, clicking Pip, or Space) and Settings opens | How long until they try talking; whether "Type instead" is found by people who'd rather not talk |
+| 13 | "Find the photo from Cox's Bazar, then put back the file you deleted earlier." | Files › Pictures found through the sidebar; Bin › *Put back* used | Sidebar versus path bar; whether "From Documents" in the Bin is noticed |
+| 14 | "Turn the screen brightness down and make the accent colour green." | Both done in Settings (or by asking Pip) | Sidebar versus search in Settings; whether the section colours help |
+| 15 | "Install LibreOffice, then find out whether your Windows accounting program will run." | LibreOffice installed; they reach *Windows apps* and can say what Bottles does | Whether "Coming from Windows?" is noticed; trust in sandboxed installs |
 
 ## What to measure
 
@@ -55,14 +59,16 @@ Each step ships behind a flag and is tested with the tasks it unlocks before the
 
 | Step | Build | Unlocks tasks | Done when |
 |---|---|---|---|
-| 1 | Tokens and type: [`tokens.css`](../tokens/tokens.css) → native toolkit, Geist and fallbacks, contrast check in CI | — | `check_contrast.py` passes in CI, both themes |
+| 0 | The SIX image on Fedora: a Containerfile on the Fedora base with branding replaced, building and booting in CI, with rollback (see [17](17-fedora.md)) | — | CI boots the image in a VM; an update and a rollback both work unattended |
+| 1 | Tokens and type: [`tokens.css`](../tokens/tokens.css) → native toolkit, Geist and fallbacks, contrast check in CI | — | `check_contrast.py` passes in CI, both themes and every accent |
 | 2 | Menu bar, dock, windows, Snap Layouts, Six Search (with effect lines) | 1, 7 | Tasks 1 and 7 pass with the mouse and with the keyboard |
 | 3 | Control Center, notifications, toasts with Undo | 2 | Task 2 passes; every destructive toast has Undo |
+| 3b | System apps: Settings (every page backed by its Fedora service), Files with the Bin, Software with Flatpak, Calendar, lock screen | 13, 14, 15 | Tasks 13–15 pass; no Settings page edits a file directly |
 | 4 | Home screen: matte wallpaper, cards, drag, stacks with previews and fan-out, widget gallery | 6, 11 | Task 6 passes; Reduce motion makes it jump, not spring |
 | 5 | Pip's orb engine (one clock per look, every state, small and realistic renderers), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU; task 8 passes |
 | 6 | Pip on device: local commands, review cards, failures with recovery, stop that reports what happened, widget specs | 3, 4, 5, 11 | Tasks 3–5 pass; nothing changes a file without a review |
 | 7 | Cloud model behind consent, provider note on every reply, waiting and retrying states | 3–5 again | No request leaves the device before consent; outages read as *Waiting*, not as broken |
-| 8 | Voice: push to talk, transcript, mic pill, spoken replies | All, by voice | Every voice task can be done by typing too |
+| 8 | Voice-only home: press to talk, "Hey Pip" on the device, captions, review by voice, the voice panel over windows; the Pip app for typing | 12, and 1–7 by voice | Every voice task can be done by typing in the Pip app too |
 | 9 | Accessibility pass: screen reader, magnifier, More contrast, Reduce transparency | 9, 10 | Tasks 9 and 10 pass |
 | 10 | Windows migration: app compatibility labels, Taskbar layout option, shortcut parity | 1, 2 with Windows habits | Long-time Windows users pass tasks 1 and 2 first try |
 

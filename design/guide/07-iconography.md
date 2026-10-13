@@ -1,16 +1,19 @@
 # 07 · Iconography
 
-## Two icon families
+## Three icon families
 
 | Family | Style | Sizes | Where |
 |---|---|---|---|
 | **System glyphs** | [Phosphor](https://phosphoricons.com) *Regular* (MIT), drawn on a 256-unit grid; *Fill* weight for selected states | 16 / 20 / 24 px | Menu bar, menus, toolbars, settings rows |
-| **App icons** | macOS-style squircle with a rich vertical gradient, soft clay depth and one white Phosphor *Fill* symbol | 22 (title bar), 30 (search), 48 (dock), 52 (Six Menu), 256 px | Dock, Six Menu, Six Search, title bars |
+| **App icons** | Clay illustrations on a squircle: a soft gradient tile with one object modelled in two or three tones, a contact shadow and a top gloss | 22 (title bar), 26 (lists), 34 (widgets), 48 (dock), 52 (Six Menu), 72 (About), 256 px | Dock, Six Menu, Six Search, title bars, Settings › About |
+| **Place icons** | Clay folders with an embossed emblem, drives and file sheets | 28 (lists), 64 (icon view) | Files, open and save dialogs, Six Search |
+
+![The dock with the clay app icons](../screens/dock-icons.png)
 
 Phosphor was chosen over Lucide, Tabler and Remix because it has one consistent drawing style in
 six weights (thin to fill, plus duotone), 1,500+ icons that cover OS needs (devices, files,
-media, accessibility), and a fill weight that reads well inside coloured app tiles. Its icons
-ship as plain SVG paths, so the shell embeds only the ones it uses.
+media, accessibility), and a fill weight that reads well inside small tiles. Its icons ship as
+plain SVG paths, so the shell embeds only the ones it uses.
 
 ## System glyph rules
 - Use *Regular* everywhere by default; *Fill* means **active / selected** (filled bell = new
@@ -25,15 +28,44 @@ ship as plain SVG paths, so the shell embeds only the ones it uses.
 
 ## App icon rules
 - Shape: squircle with 23 % corner radius; never a custom silhouette, so the dock reads as one row.
-- Fill: a two-stop vertical gradient, lighter at the top. A 1 px inner top highlight, a soft inner
-  shade at the bottom and a drop shadow give it the clay depth of the rest of SIX.
-- Symbol: one white Phosphor *Fill* glyph, centred, about 58 % of the tile, with a 1 px shadow.
-  No text in icons.
-- Each first-party app owns one hue family: Files blue, Browser teal, Mail sky, Music rose,
-  Terminal graphite (green glyph), Design violet, Settings silver (dark glyph), Six Menu iris.
-- Pip's dock icon is the dotted-sphere orb on a near-black tile (see [14 · Home](14-home-assistant.md#the-small-orb)).
+- Drawn at 64 × 64 and scaled; every shape sits on whole units so 22 px stays crisp.
+- **One object, modelled like clay.** Each icon shows a single real object (a folder, a gear, a
+  shopping bag, an envelope), built from two or three tones of one hue, lit from the top, with a
+  soft contact shadow under it. No outlines, no text except Calendar's date.
+- The tile is a quiet two-stop gradient that sets the app's hue family; the object carries the
+  contrast. A 1 px inner top highlight, a soft inner shade at the bottom and a drop shadow give
+  every tile the clay depth of the rest of SIX.
+
+| App | Tile | Object |
+|---|---|---|
+| Six Menu | Iris | Six pearl dots in a ring |
+| Files | Paper white | A blue folder with a sheet inside |
+| Browser | Teal to blue | A globe with a coral orbit and a small moon |
+| Mail | Sky to blue | An envelope with a coral seal |
+| Calendar | White with a red band | Today's month and date, live |
+| Music | Rose | Two beamed notes |
+| Photos | Sky | Sun, cloud and two hills |
+| Terminal | Graphite | A screen with a green prompt |
+| Software | Mint to green | A shopping bag with a download arrow |
+| Settings | Silver | A steel gear |
+| Design guide | Lilac to violet | A palette with four paints |
+| Pip | Near-black | Pip's live dotted orb, the only animated icon |
+| Bin | Glass | A silver bin |
+
 - Third-party and Windows apps keep their own icon, placed on a neutral squircle so the row stays
-  consistent.
+  consistent. Software shows apps that have no icon as their initial on a tile in their colour.
+- Settings sections use small 24 px tiles in a section colour with a white Phosphor glyph, like
+  the sections of a system settings app (Wi-Fi blue, Display orange, Sound red, Pip violet…). Each
+  colour keeps 3:1 against the white glyph.
+
+## Place icons
+- **Folders** are clay: a darker back panel with a tab, a white sheet peeking out, a lighter front
+  panel. Special folders carry an embossed emblem on the front (a darker stroke with a 1 px light
+  edge below it): Desktop a screen, Documents a page, Downloads an arrow, Pictures a landscape,
+  Music a note, Videos a play mark, Projects code brackets.
+- **Drives**: a silver slab with a green light for internal storage; an amber USB stick for
+  removable drives.
+- **Pictures** show a painted thumbnail instead of a file sheet.
 
 ## Status glyphs in the menu bar
 - Menu bar glyphs use Phosphor *Bold* at 16 px, so they hold up at small size like macOS menu bar
