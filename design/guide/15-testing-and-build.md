@@ -65,7 +65,7 @@ Each step ships behind a flag and is tested with the tasks it unlocks before the
 | 3 | Control Center, notifications, toasts with Undo | 2 | Task 2 passes; every destructive toast has Undo |
 | 3b | System apps: Settings (every page backed by its Fedora service), Files with the Bin, Software with Flatpak, Calendar, lock screen | 13, 14, 15 | Tasks 13–15 pass; no Settings page edits a file directly |
 | 4 | Home screen: matte wallpaper, cards, drag, stacks with previews that stay put and open in place, widget gallery | 6, 11 | Task 6 passes; Reduce motion makes it jump, not spring |
-| 5 | Pip's orb engine (one clock per look, every state, small and realistic renderers, and the ray-marched Turbine), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU, both looks; task 8 passes with either look |
+| 5 | Pip's orb engine (one clock per look, every state, small and realistic renderers, the ray-marched Turbine and the point-cloud Hologram), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU, every look; task 8 passes with every look |
 | 6 | Pip on device: local commands, review cards, failures with recovery, stop that reports what happened, widget specs | 3, 4, 5, 11 | Tasks 3–5 pass; nothing changes a file without a review |
 | 7 | Cloud model behind consent, provider note on every reply, waiting and retrying states | 3–5 again | No request leaves the device before consent; outages read as *Waiting*, not as broken |
 | 8 | Voice-only home: press to talk, "Hey Pip" on the device, captions, review by voice, the voice panel over windows; the Pip app for typing | 12, and 1–7 by voice | Every voice task can be done by typing in the Pip app too |

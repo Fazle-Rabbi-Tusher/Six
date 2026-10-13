@@ -1505,8 +1505,11 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <div class="orb-tiles" id="orbTiles"></div>
           <h3>The Turbine</h3>
           <p>Pip's second look, after the machined, glossy controls of the Ferrari Luce cabin: a ring of twisted blades around a polished hub, drawn in 3D with a key light and a highlight that slides over the blades as they turn. Each state changes how it spins and where its light runs, never its shape, and it eases from one state into the next like a machine spinning up. Choose it in Settings › Pip &amp; voice › Look.</p>
-          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div>
+          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button><button data-v="holo" aria-pressed="false">Hologram</button></div>
           <div class="pips" id="turbStates"></div>
+          <h3>The Hologram</h3>
+          <p>Pip's third look: a gold projection hanging in the air. A sphere drawn in broken, sparking arcs, with circuit-like strokes stepping off it; a bright tilted ring and an inner one around its waist; rings standing on end; spokes running out from a ringed core with a hole through it; dust and soft sparks inside. Every part is a cloud of points of light in 3D, turning on its own axis, and bright places bloom. Thinking sends pulses out along the spokes, searching sweeps a scan line, working lights the sphere round as the task progresses.</p>
+          <div class="pips" id="holoStates"></div>
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
           <ul class="principles">
@@ -1742,7 +1745,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
-              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button><button data-v="holo" aria-pressed="false">Hologram</button></div></div>
               <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
@@ -3356,7 +3359,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
   function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 1500); }
   function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; o._sprites = null; }); }
-  const drawAnyOrb = (el, t) => (formOf(el) === 'turbine' ? drawTurbine(el, t) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t));
+  const drawAnyOrb = (el, t) => { const f = formOf(el); return f === 'turbine' ? drawTurbine(el, t) : f === 'holo' ? drawHolo(el, t) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t); };
   // Complete and Failed take their semantic colour; everything else draws in the orb's own colour
   const colOf = (el, look) => look === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : look === 'failed' ? hex(tok('--c-danger')).map(v => Math.round(v * 255)) : el._col;
   const progressOf = el => (el.dataset.progress !== undefined && el.dataset.progress !== '' ? Math.max(0, Math.min(1, +el.dataset.progress)) : null);
@@ -3704,6 +3707,239 @@ void main() {
     }
     ctx.globalAlpha = 1;
   }
+  /* ── The Hologram: Pip's third look ─────────────────────────────
+     A gold projection hanging in the air: a sphere drawn in broken, sparking arcs (with little
+     circuit-like strokes stepping off it), a bright tilted ring and an inner one around its
+     waist, rings standing on end, spokes running out from a ringed core with a hole through it,
+     and dust and soft sparks floating inside. Every part is a cloud of points of light in 3D,
+     drawn twice on the GPU (a sharp pass and a wide glow pass) and added together, so bright
+     places bloom. Each part turns on its own axis; states change the motion and the light. */
+  function holoGeometry() {
+    let seed = 1234567;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+    const P = [], A = [];
+    const add = (x, y, z, size, b, g) => { P.push(x, y, z); A.push(size, b, g, rnd()); };
+    const clumpy = (s, ph) => 0.5 + 0.3 * Math.sin(s * 7 + ph) + 0.25 * Math.sin(s * 23 + ph * 2.3) + 0.15 * Math.sin(s * 61 + ph * 4.1);
+    // a chain of points along a curve, bright in clumps and broken where the light drops out
+    const arc = (fn, a0, a1, step, size, b, g, jitter = 0) => {
+      const ph = rnd() * TAU;
+      for (let a = a0; a <= a1; a += step) {
+        const n = clumpy(a, ph); if (n < 0.2) continue;
+        let [x, y, z] = fn(a);
+        if (jitter) { const j = 1 + (rnd() - 0.5) * jitter; x *= j; y *= j; z *= j; }
+        const hot = rnd() < 0.035;
+        add(x, y, z, size * (hot ? 2.3 : 0.65 + 0.6 * n), b * (0.25 + 0.95 * n * n) * (hot ? 2.2 : 1), g);
+      }
+    };
+    // 0 · the shell: broken latitude and longitude arcs, and circuit strokes stepping off it
+    for (let i = 0; i < 48; i++) {
+      const lat = Math.asin(rnd() * 2 - 1) * 0.95, r = Math.cos(lat), y = Math.sin(lat), a0 = rnd() * TAU, len = 0.3 + rnd() * 1.7;
+      arc(a => [r * Math.cos(a), y, r * Math.sin(a)], a0, a0 + len, 0.011 / Math.max(0.3, r), 1.1, 0.5 + rnd() * 0.45, 0, 0.03);
+    }
+    for (let i = 0; i < 30; i++) {
+      const lon = rnd() * TAU, a0 = -1.45 + rnd() * 2.2, len = 0.3 + rnd() * 1.4;
+      arc(a => [Math.cos(a) * Math.cos(lon), Math.sin(a), Math.cos(a) * Math.sin(lon)], a0, Math.min(1.5, a0 + len), 0.011, 1.1, 0.45 + rnd() * 0.45, 0, 0.03);
+    }
+    for (let i = 0; i < 70; i++) {   // short zigzags of light running over the surface, like a circuit
+      let u = rnd() * TAU, v = Math.asin(rnd() * 2 - 1) * 0.9, du = (rnd() - 0.5) * 0.02, dv = (rnd() - 0.5) * 0.02;
+      const n = 10 + Math.floor(rnd() * 30), r = 1 + (rnd() - 0.5) * 0.06;
+      for (let j = 0; j < n; j++) {
+        if (rnd() < 0.12) [du, dv] = [dv, -du];
+        u += du / Math.max(0.3, Math.cos(v)); v += dv;
+        add(r * Math.cos(v) * Math.cos(u), r * Math.sin(v), r * Math.cos(v) * Math.sin(u), 1.0, 0.6 + rnd() * 0.5, 0);
+      }
+    }
+    // 1 · the waist rings, lying flat (their group tilts them): a bright band of strands and an inner ring
+    for (const [rad, strands, b, gap] of [[0.98, 4, 1.05, 0.006], [0.63, 3, 0.85, 0.006], [0.8, 1, 0.4, 0.01], [0.43, 1, 0.55, 0.009]])
+      for (let k = 0; k < strands; k++) { const off = (k - (strands - 1) / 2) * 0.016; arc(a => [(rad + off) * Math.cos(a), (rnd() - 0.5) * 0.012, (rad + off) * Math.sin(a)], 0, TAU, gap, 1.35, b, 1); }
+    // 2 · rings standing on end, through the poles
+    for (let i = 0; i < 3; i++) {
+      const lon = i * 1.1 + 0.3, rad = 1.02 + i * 0.03;
+      arc(a => [rad * Math.cos(a) * Math.cos(lon), rad * Math.sin(a), rad * Math.cos(a) * Math.sin(lon)], 0, TAU, 0.008, 1.15, 0.6 - i * 0.12, 2, 0.02);
+    }
+    // 3 · spokes from the core to the shell, mostly across the face
+    const spokes = [Math.PI / 2 + 0.05, -Math.PI / 2 + 0.03, 0.42, 2.7, -0.55, -2.55, 1.2, 1.95, -1.25, -1.9];
+    spokes.forEach((th, i) => {
+      const d = [Math.cos(th), Math.sin(th), (rnd() - 0.5) * 0.7], n = Math.hypot(...d), end = 0.9 + rnd() * 0.22;
+      const twin = i < 4 ? 0.012 : 0;
+      for (const o of twin ? [-twin, twin] : [0]) arc(s => [d[0] / n * s - o * d[1], d[1] / n * s + o * d[0], d[2] / n * s], 0.16, end, 0.006, 1.05, 1.0 * (1 - 0.3 * (i % 3) / 2), 3);
+    });
+    // 4 · the core: a ring with a hole through it, rings around it, and its glow
+    for (let u = 0; u < 110; u++) for (let v = 0; v < 16; v++) {   // a glowing tube, lit on its outer lip
+      const a = u / 110 * TAU, b2 = v / 16 * TAU, R0 = 0.15, r0 = 0.052;
+      add((R0 + r0 * Math.cos(b2)) * Math.cos(a), (R0 + r0 * Math.cos(b2)) * Math.sin(a), r0 * Math.sin(b2), 1.2, 0.5 + 0.9 * Math.max(0, Math.cos(b2 - 0.8)) ** 2, 4);
+    }
+    for (let z = 0; z < 8; z++) arc(a => [0.09 * Math.cos(a), 0.09 * Math.sin(a), -0.03 - z * 0.035], 0, TAU, 0.04, 1.0, 0.55 - z * 0.06, 4);   // the hole, receding
+    for (const [rad, b, a0, a1] of [[0.24, 1.25, 0.3, 4.4], [0.29, 0.9, 2.2, 6.0], [0.34, 0.6, 0, TAU], [0.4, 0.75, 3.6, 5.6]]) for (let k = 0; k < 2; k++) arc(a => [(rad + k * 0.012) * Math.cos(a), (rad + k * 0.012) * Math.sin(a), 0], a0, a1, 0.012, 1.2, b, 4, 0.02);
+    for (let i = 0; i < 10; i++) add((rnd() - 0.5) * 0.3, (rnd() - 0.5) * 0.3, 0, 10 + rnd() * 8, 0.2, 4);
+    // 5 · dust and soft sparks
+    for (let i = 0; i < 950; i++) {
+      const u = rnd() * TAU, v = Math.asin(rnd() * 2 - 1), r = Math.pow(rnd(), 0.35) * 1.06, bokeh = rnd() < 0.05;
+      add(r * Math.cos(v) * Math.cos(u), r * Math.sin(v) * (rnd() < 0.5 ? 0.45 : 1), r * Math.cos(v) * Math.sin(u), bokeh ? 5 + rnd() * 6 : 0.6 + rnd() * 0.9, bokeh ? 0.13 : 0.25 + rnd() * 0.55, 5);
+    }
+    return { P: new Float32Array(P), A: new Float32Array(A), n: P.length / 3 };
+  }
+  const HOLO_VS = `attribute vec3 aP; attribute vec4 aA;
+uniform vec2 uRes; uniform vec3 uC;
+uniform mat3 uR0, uR1, uR2, uR3, uR4, uR5, uView;
+uniform float uT, uPass, uSpark, uComet, uCometA, uBeam, uBeamA, uScan, uScanY, uLit, uSq, uWave, uAmp, uDim, uFlick, uTintK, uLight, uKeep, uBoost;
+uniform vec3 uTint;
+varying float vB; varying vec3 vCol;
+const float TAU = 6.2831853;
+float ang(float a) { return abs(atan(sin(a), cos(a))); }
+void main() {
+  float g = aA.z, r = length(aP);
+  // small sizes keep the structure (rings, spokes, core), a sample of the shell, and no dust
+  float keep = g > 0.5 && g < 4.5 ? 1.0 : g > 4.5 && uKeep < 0.5 ? 0.0 : uKeep;
+  if (aA.w > keep) { gl_Position = vec4(2.0, 2.0, 0.0, 1.0); gl_PointSize = 0.0; vB = 0.0; vCol = vec3(0.0); return; }
+  mat3 R = g < 0.5 ? uR0 : g < 1.5 ? uR1 : g < 2.5 ? uR2 : g < 3.5 ? uR3 : g < 4.5 ? uR4 : uR5;
+  vec3 p = R * aP;
+  float core = step(3.5, g) * step(g, 4.5);
+  p *= 1.0 - uSq * 0.2 * smoothstep(0.2, 1.0, r) + uWave * 0.045 * sin(r * 11.0 - uT * 5.0) + uAmp * 0.07 * core;
+  vec3 v = uView * p;
+  float k = 3.4 / (3.4 - v.z);
+  gl_Position = vec4((uC.xy + v.xy * k * uC.z) / uRes * 2.0 - 1.0, 0.0, 1.0);
+  float b = aA.y * (1.0 - uFlick * 0.5 + uFlick * 0.5 * sin(uT * (2.0 + aA.w * 5.0) + aA.w * 40.0));
+  b *= 0.4 + 0.6 * smoothstep(-1.1, 0.9, v.z);
+  if (g < 0.5 || (g > 1.5 && g < 2.5)) b *= 0.65 + 1.1 * pow(1.0 - min(1.0, abs(v.z) / max(r, 0.01)), 2.0);   // the outline catches the light
+  float lon = atan(aP.z, aP.x);
+  if (g > 2.5 && g < 3.5) b += uSpark * 1.6 * (exp(-pow((r - fract(uT * 0.55) * 1.15) / 0.06, 2.0)) + exp(-pow((r - fract(uT * 0.55 + 0.5) * 1.15) / 0.06, 2.0)));
+  if (g > 0.5 && g < 1.5) b += uComet * 1.4 * exp(-pow(ang(lon - uCometA) / 0.35, 2.0));
+  if (g < 0.5 || g > 4.5) b += uScan * 1.3 * exp(-pow((p.y - uScanY) / 0.07, 2.0));
+  if (g < 0.5) b += uBeam * 0.9 * (1.0 - smoothstep(0.3, 0.5, ang(atan(p.z, p.x) - uBeamA)));
+  if (uLit >= 0.0 && g < 1.5) b *= (lon / TAU + 0.5) < uLit ? 1.5 : 0.35;
+  b *= (1.0 + uAmp * mix(0.35, 1.2, core)) * uDim * uBoost;
+  vB = uPass > 0.5 ? b * mix(0.4, 1.0, uKeep) : b;   // smaller orbs bloom less, or they blow out
+  vec3 c = mix(vec3(1.0, 0.5, 0.1), vec3(1.0, 0.76, 0.32), smoothstep(0.2, 0.9, b));
+  c = mix(c, vec3(1.0, 0.95, 0.82), smoothstep(1.0, 1.8, b));
+  c = mix(c, uTint, uTintK);
+  if (uLight > 0.5) c *= vec3(0.78, 0.5, 0.26);
+  vCol = c;
+  float sz = max(1.0, aA.x * uC.z / 190.0 * k * (1.0 + uAmp * 0.3));
+  gl_PointSize = uPass < 0.5 ? sz : sz * 5.5 + 3.0;
+}`;
+  const HOLO_FS = `precision highp float;
+uniform float uPass, uLight;
+varying float vB; varying vec3 vCol;
+void main() {
+  vec2 d = gl_PointCoord - 0.5; float r2 = dot(d, d) * 4.0;
+  float f = uPass < 0.5 ? (1.0 - r2) * (1.0 - r2) : exp(-r2 * 3.5) * (1.0 - r2);
+  if (r2 >= 1.0) discard;
+  float a = vB * f * (uPass < 0.5 ? 1.0 : 0.22);
+  gl_FragColor = vec4(vCol * a, a * (uLight > 0.5 ? 1.25 : 0.8));
+}`;
+  let HGL = null;
+  function holoGL() {
+    if (HGL !== null) return HGL;
+    HGL = false;
+    try {
+      const cv = document.createElement('canvas'); cv.width = cv.height = 256;
+      const g = cv.getContext('webgl', { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false, alpha: true });
+      if (!g) return HGL;
+      const sh = (type, src) => { const s = g.createShader(type); g.shaderSource(s, src); g.compileShader(s); if (!g.getShaderParameter(s, g.COMPILE_STATUS)) throw new Error(g.getShaderInfoLog(s)); return s; };
+      const pr = g.createProgram();
+      g.attachShader(pr, sh(g.VERTEX_SHADER, HOLO_VS)); g.attachShader(pr, sh(g.FRAGMENT_SHADER, HOLO_FS));
+      g.linkProgram(pr); if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw new Error(g.getProgramInfoLog(pr));
+      g.useProgram(pr);
+      const geo = holoGeometry();
+      const buf = (data, name, n) => { const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, data, g.STATIC_DRAW); const l = g.getAttribLocation(pr, name); g.enableVertexAttribArray(l); g.vertexAttribPointer(l, n, g.FLOAT, false, 0, 0); };
+      buf(geo.P, 'aP', 3); buf(geo.A, 'aA', 4);
+      const U = {};
+      ['uRes', 'uC', 'uR0', 'uR1', 'uR2', 'uR3', 'uR4', 'uR5', 'uView', 'uT', 'uPass', 'uSpark', 'uComet', 'uCometA', 'uBeam', 'uBeamA', 'uScan', 'uScanY', 'uLit', 'uSq', 'uWave', 'uAmp', 'uDim', 'uFlick', 'uTintK', 'uLight', 'uKeep', 'uBoost', 'uTint']
+        .forEach(n => { U[n] = g.getUniformLocation(pr, n); });
+      g.enable(g.BLEND); g.blendFunc(g.ONE, g.ONE); g.clearColor(0, 0, 0, 0);
+      cv.addEventListener('webglcontextlost', () => { HGL = false; });
+      HGL = { cv, g, U, n: geo.n, geo };
+    } catch (e) { console.warn('Hologram: WebGL unavailable, drawing on a 2D canvas', e); HGL = false; }
+    return HGL;
+  }
+  // 3×3 rotations, row-major
+  const rX = a => [1, 0, 0, 0, Math.cos(a), -Math.sin(a), 0, Math.sin(a), Math.cos(a)];
+  const rY = a => [Math.cos(a), 0, Math.sin(a), 0, 1, 0, -Math.sin(a), 0, Math.cos(a)];
+  const rZ = a => [Math.cos(a), -Math.sin(a), 0, Math.sin(a), Math.cos(a), 0, 0, 0, 1];
+  const mm = (A, B) => { const C = []; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) C.push(A[i * 3] * B[j] + A[i * 3 + 1] * B[3 + j] + A[i * 3 + 2] * B[6 + j]); return C; };
+  const colMajor = M => [M[0], M[3], M[6], M[1], M[4], M[7], M[2], M[5], M[8]];
+  function holoTarget(look, T) {
+    const base = look.split('-')[0];
+    const tg = { spd: 0.5, flick: 0.25, spark: 0, comet: 0, beam: 0, scan: 0, sq: 0, wave: 0, dim: 1, tg: 0, tr: 0, glow: 0.16 };
+    switch (base) {
+      case 'listen': Object.assign(tg, { spd: 0.6, wave: 1, glow: 0.24 }); break;
+      case 'reasoning': Object.assign(tg, { spd: 1.4, spark: 1, flick: 0.5, glow: 0.22 }); break;
+      case 'speak': Object.assign(tg, { spd: 0.7, glow: 0.2 }); break;
+      case 'searching': Object.assign(tg, look === 'searching-lighthouse' ? { spd: 0.4, beam: 1 } : { spd: 0.8, scan: 1 }); break;
+      case 'working': Object.assign(tg, { spd: 1.8, glow: 0.24 }); break;
+      case 'waiting': Object.assign(tg, { spd: 0.4, comet: 1 }); break;
+      case 'retrying': Object.assign(tg, { spd: Math.sin(T / 3200 * TAU) > -0.35 ? 1.6 : -0.8, flick: 0.45 }); break;
+      case 'compacting': Object.assign(tg, { spd: 0.7, sq: 1 }); break;
+      case 'done': Object.assign(tg, { spd: 0.8, tg: 1, glow: 0.3 }); break;
+      case 'failed': Object.assign(tg, { spd: 0.2, tr: 1, dim: 0.8, flick: 0.6 }); break;
+      case 'cancelled': Object.assign(tg, { spd: 0.1, dim: 0.45, glow: 0.04 }); break;
+      case 'rest': Object.assign(tg, { spd: 0.06, dim: 0.4, glow: 0.04 }); break;
+      case 'background': Object.assign(tg, { spd: 0.35, dim: 0.75 }); break;
+    }
+    return tg;
+  }
+  function drawHolo(el, t) {
+    const s = setupCanvas(el); if (!s) return;
+    const [ctx, size] = s;
+    const hi = el._hi, dark = isDark(), look = lookOf(el), still = reducedMotion();
+    const now = performance.now(), T = still ? 0 : now, dt = el._tt && !still ? Math.min(0.1, (now - el._tt) / 1000) : 0; el._tt = now;
+    const amp = look === 'speak' ? parseFloat(el.style.getPropertyValue('--amp')) || 0 : 0;
+    const prog = progressOf(el), ring = !hi && prog !== null && prog < 1, lit = look.startsWith('working') && prog !== null ? prog : null;
+    const tg = holoTarget(look, T);
+    const p = el._hp || (el._hp = { ...tg }), ease = still || !dt ? 1 : 1 - Math.exp(-dt / 0.4);
+    for (const k in tg) p[k] += (tg[k] - p[k]) * ease;
+    el._hspin = still ? 0.8 : (el._hspin || 0) + dt * p.spd * TAU / 14;
+    const body = ring ? size * 0.75 : size, cx = size / 2, cy = size / 2, R = body * (hi ? 0.4 : 0.46), sp = el._hspin;
+    const done = look === 'done' ? Math.max(0, 1 - t / 1600) : 0, tint = p.tr > p.tg ? [255, 70, 60] : [70, 230, 140];
+    if (!dark) {   // light is added, so on a light background the projection sits in a dark lens
+      const LR = R * (hi ? 1.2 : 1.1), lg = ctx.createRadialGradient(cx, cy, 0, cx, cy, LR);
+      lg.addColorStop(0, 'rgba(22,15,10,0.96)'); lg.addColorStop(0.9, 'rgba(14,10,8,0.94)'); lg.addColorStop(1, 'rgba(14,10,8,0)');
+      ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(cx, cy, LR, 0, TAU); ctx.fill();
+    }
+    if (hi) {   // the projection lights the air around it
+      const hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.3);
+      hg.addColorStop(0, `rgba(255,150,40,${((p.glow + done * 0.3) * p.dim).toFixed(3)})`); hg.addColorStop(1, 'rgba(255,150,40,0)');
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(cx, cy, R * 1.3, 0, TAU); ctx.fill();
+    }
+    // each part turns on its own axis; the camera drifts a little
+    const M = [rY(sp * 0.6), mm(rZ(-0.1), mm(rX(0.36), rY(sp * 1.5))), mm(rZ(0.25), rY(-sp * 0.9 + 0.4)), rZ(sp * 0.12), mm(rY(0.6), mm(rX(-0.15), rZ(sp * 2.6))), rY(sp * 0.4)];
+    const view = mm(rX(0.12 + 0.04 * Math.sin(T / 2900)), rY(-0.18 + 0.06 * Math.sin(T / 4100)));
+    const G = holoGL();
+    if (G) {
+      const { cv, g, U } = G, px = el.width, dpr = px / size;
+      if (cv.width < px) cv.width = cv.height = Math.min(2048, 2 ** Math.ceil(Math.log2(px)));
+      g.viewport(0, 0, px, px); g.enable(g.SCISSOR_TEST); g.scissor(0, 0, px, px); g.clear(g.COLOR_BUFFER_BIT);
+      g.uniform2f(U.uRes, px, px); g.uniform3f(U.uC, cx * dpr, px - cy * dpr, R * dpr);
+      M.forEach((m, i) => g.uniformMatrix3fv(U['uR' + i], false, colMajor(m)));
+      g.uniformMatrix3fv(U.uView, false, colMajor(view));
+      const scanY = Math.sin(T / 900) * 0.95, cometA = T * 0.0012, beamA = T * 0.0016;
+      [['uT', T / 1000], ['uSpark', p.spark], ['uComet', p.comet], ['uCometA', cometA], ['uBeam', p.beam], ['uBeamA', beamA], ['uScan', p.scan], ['uScanY', scanY],
+        ['uLit', lit === null ? -1 : lit], ['uSq', p.sq * (0.5 + 0.5 * Math.sin(T / 520))], ['uWave', p.wave], ['uAmp', amp], ['uDim', p.dim * (1 + done * 0.6)], ['uFlick', p.flick],
+        ['uTintK', Math.max(p.tg * 0.7, p.tr * 0.7)], ['uLight', 0], ['uKeep', Math.max(0.1, Math.min(1, (R * 2 / 230) ** 1.3))], ['uBoost', size < 48 ? 1.7 : 1]].forEach(([n, v]) => g.uniform1f(U[n], v));
+      g.uniform3f(U.uTint, tint[0] / 255, tint[1] / 255, tint[2] / 255);
+      if (size >= 48) { g.uniform1f(U.uPass, 1); g.drawArrays(g.POINTS, 0, G.n); }   // the glow pass would blur a small orb into a blob
+      g.uniform1f(U.uPass, 0); g.drawArrays(g.POINTS, 0, G.n);
+      ctx.drawImage(cv, 0, cv.height - px, px, px, 0, 0, size, size);
+    } else drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size });
+    if (ring) drawRing(ctx, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, el._col);
+    else if (hi && lit !== null && lit < 1) drawRing(ctx, cx, cy, R * 1.22, 2, lit, [255, 170, 60]);
+  }
+  // without WebGL: every third point, added together on a 2D canvas
+  let holoGeo2D = null;
+  function drawHoloPoints(ctx, { M, view, cx, cy, R, p, dark, size }) {
+    const geo = holoGeo2D || (holoGeo2D = holoGeometry()), Mv = M.map(m => mm(view, m));
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    const sc = R / 190;
+    for (let i = 0; i < geo.n; i += 3) {
+      const x = geo.P[i * 3], y = geo.P[i * 3 + 1], z = geo.P[i * 3 + 2], sz = geo.A[i * 4], b = geo.A[i * 4 + 1] * p.dim, m = Mv[Math.round(geo.A[i * 4 + 2])];
+      const vx = m[0] * x + m[1] * y + m[2] * z, vy = m[3] * x + m[4] * y + m[5] * z, vz = m[6] * x + m[7] * y + m[8] * z, k = 3.4 / (3.4 - vz);
+      const a = Math.min(1, b * (0.4 + 0.6 * (vz + 1) / 2)), r = Math.max(0.6, sz * sc * k * 1.4);
+      ctx.fillStyle = `rgba(255,${Math.round(150 + 80 * Math.min(1, b))},70,${(a * 0.8).toFixed(3)})`;
+      ctx.fillRect(cx + vx * k * R - r / 2, cy - vy * k * R - r / 2, r, r);
+    }
+    ctx.restore();
+  }
   const formOf = el => el.dataset.form || root.dataset.orbForm || 'dots';
   let lastOrb = 0, orbsShown = 0;
   function tickOrbs(now) {
@@ -3787,16 +4023,18 @@ void main() {
     $('#turbStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="turbine" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b></button>`).join('');
     $$('#turbStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
+    $('#holoStates').innerHTML = $('#turbStates').innerHTML.replaceAll('data-form="turbine"', 'data-form="holo"');
+    $$('#holoStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#orbTiles').innerHTML = ORB_GALLERY
       .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
-  $('#turbStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
+  ['#turbStates', '#holoStates'].forEach(id => $(id).addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); }));
   // Pip's look, everywhere at once: the dotted sphere or the turbine
   function setOrbForm(v) {
-    if (v === 'turbine') root.dataset.orbForm = 'turbine'; else delete root.dataset.orbForm;
-    $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === (v === 'turbine' ? 'turbine' : 'dots')));
+    if (v === 'turbine' || v === 'holo') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'dots'; }
+    $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   }
   $('#segOrbGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setOrbForm(b.dataset.v); });
   $('#t-pip').addEventListener('click', buildPipCards);

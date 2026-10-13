@@ -286,7 +286,7 @@ look is replaced by the dotted orb in the OS.
 
 ## Pip's second look: the Turbine
 
-*Settings › Pip & voice › Look: Dotted / Turbine* swaps the dotted sphere for the **Turbine**
+*Settings › Pip & voice › Look: Dotted / Turbine / Hologram* swaps the dotted sphere for the **Turbine**
 everywhere at once (home, the menu bar, the dock, the task card). It takes its feel from the
 machined, glossy controls of the Ferrari Luce cabin: a ring of 32 twisted, swept blades around a
 polished hub, drawn in real 3D.
@@ -321,6 +321,48 @@ spinning up, instead of crossfading:
 | Cancelled, Resting | Dims and almost stops |
 
 Under Reduce motion the turbine is drawn still, on a fixed frame, and changes state at once.
+
+## Pip's third look: the Hologram
+
+The **Hologram** is a gold projection hanging in the air, made only of light: every part is a
+cloud of points in 3D (about 12,000 of them), drawn twice on the GPU, once sharp and once as a
+wide glow, and added together so the bright places bloom.
+
+![Home with Pip as the Hologram](../screens/home-hologram.png)
+
+| Part | What it is |
+|---|---|
+| Shell | A sphere drawn in broken, sparking arcs of latitude and longitude, bright in clumps, with little zigzags of light running over it like a circuit. Its outline catches the most light, as a glass shell would |
+| Waist rings | A bright band of four strands, tilted so it reads as a wide ellipse, an inner ring around the core, and two fainter ones |
+| Standing rings | Three rings through the poles, turning the other way |
+| Spokes | Ten long, thin rays from the core to the shell, mostly across the face |
+| Core | A glowing tube with a hole through it (the hole recedes into the sphere), ringed by bright partial arcs and a soft glow |
+| Dust | Specks and a few large soft sparks floating inside |
+
+Each part turns on its own axis at its own speed, so the projection always has depth. In light
+mode the projection sits in a dark lens, because light added to a white page disappears. At
+small sizes (the menu bar, the dock, task cards) it keeps the structure (rings, spokes, core and
+part of the shell) and drops the dust and most of the glow, so it stays legible instead of
+blurring into a blob.
+
+| State | Hologram |
+|---|---|
+| Ready | Turns slowly; the arcs twinkle |
+| Listening | Ripples run out through the sphere from the core |
+| Thinking | Spins up; pulses of light run out along the spokes, and the arcs flicker |
+| Speaking | The core swells and brightens with the voice |
+| Searching | A scan line sweeps up and down through the shell |
+| Working | The shell and rings light up around the sphere as the task progresses, with the progress ring |
+| Asking | A beam turns, lighting a sector of the shell |
+| Waiting | A comet of light circles the waist ring |
+| Retrying | Spins, brakes, turns back, then spins up again, flickering |
+| Compacting | The sphere draws in toward the core and back |
+| Complete | Turns green and flares once |
+| Failed | Turns red, slows and flickers |
+| Cancelled, Resting | Dims and almost stops |
+
+Like the Turbine it eases its speed and light from one state into the next, and it is drawn still
+under Reduce motion. Without WebGL it draws a sample of its points on a 2D canvas.
 
 ## The current task card
 

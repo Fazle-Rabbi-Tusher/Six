@@ -35,7 +35,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and its second look, the 3D Turbine |
+| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and its two other looks, the 3D Turbine and the gold Hologram |
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, fifteen tasks, targets, and the order to build SIX in |
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
@@ -96,6 +96,10 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 | Pip as the Turbine on home | The Turbine in every state |
 |---|---|
 | ![](screens/home-turbine.png) | ![](screens/turbine-states.png) |
+
+| Pip as the Hologram on home | The Hologram in every state |
+|---|---|
+| ![](screens/home-hologram.png) | ![](screens/hologram-states.png) |
 
 ## Credits
 
