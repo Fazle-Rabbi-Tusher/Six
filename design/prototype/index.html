@@ -245,17 +245,18 @@ svg.i.sm { width: 16px; height: 16px; }
 .dock-apps { display: flex; align-items: flex-end; height: 100%; }
 .dk {
   --s: 1; position: relative; width: calc(56px * var(--s)); height: 100%; border: 0; background: transparent; padding: 0 0 10px;
-  display: flex; align-items: flex-end; justify-content: center; flex: none; transition: width 180ms var(--ease-out);
+  display: flex; align-items: flex-end; justify-content: center; flex: none;
 }
-.dk .appicon { --ic: calc(48px * var(--s)); transition: width 180ms var(--ease-out), height 180ms var(--ease-out); }
+.dk .appicon { --ic: calc(48px * var(--s)); transition: filter var(--dur-fast) var(--ease-standard); }   /* size follows --s, which a spring drives */
 .dk .dot { position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--c-text); opacity: 0; transition: opacity var(--dur-fast); }
 .dk.running .dot { opacity: 0.7; }
 .dk .tip {
   position: absolute; left: 50%; bottom: calc(48px * var(--s) + 22px); transform: translateX(-50%); padding: 5px 10px; border-radius: 7px;
   background: var(--glass-fill-strong); border: 1px solid var(--glass-edge); box-shadow: var(--shadow-2); color: var(--c-text);
-  font: 500 13px/16px var(--font-ui); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity var(--dur-fast);
+  font: 500 13px/16px var(--font-ui); white-space: nowrap; pointer-events: none; opacity: 0; transform: translateX(-50%) translateY(5px) scale(0.96);
+  transition: opacity 120ms var(--ease-in), transform 140ms var(--ease-in);
 }
-.dk:hover .tip, .dk:focus-visible .tip { opacity: 1; }
+.dk:hover .tip, .dk:focus-visible .tip { opacity: 1; transform: translateX(-50%); transition: opacity 220ms var(--ease-out) 40ms, transform 460ms var(--ease-spring) 40ms; }
 .dk:focus-visible { outline: none; }
 .dk:focus-visible .appicon { outline: 2px solid var(--c-focus); outline-offset: 3px; }
 .dk:active .appicon { filter: brightness(0.82); }
@@ -304,13 +305,17 @@ kbd { font: 600 11px/1 var(--font-ui); padding: 3px 6px; border-radius: 6px; bac
 /* ── Popovers ─────────────────────────────────────────── */
 .pop {
   position: absolute; z-index: 960; bottom: calc(var(--dock-h) + 20px + env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-xl);
-  opacity: 0; visibility: hidden; transform: translateY(6px) scale(0.985); transform-origin: bottom left;
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+  opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.96); transform-origin: bottom left;
+  /* menus unfold out of what opened them, like a blind drawn from its rail, on the precise spring;
+     closing is a quick ease-in fade (leaving is faster than arriving) */
+  clip-path: inset(calc(100% - 56px) -40px -40px -40px);
+  transition: opacity 150ms var(--ease-in), transform 180ms var(--ease-in), clip-path 180ms var(--ease-in), visibility 0s linear 180ms;
   max-height: calc(100% - var(--dock-h) - var(--menubar-h) - 44px); overflow: auto;
 }
 #qs, #sysMenu { top: calc(var(--menubar-h) + 6px + env(safe-area-inset-top, 0px)); bottom: auto; }
-#qs:not(.open), #sysMenu:not(.open) { transform: translateY(-6px) scale(0.985); }
-.pop.open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+#qs:not(.open), #sysMenu:not(.open) { transform: translateY(-10px) scale(0.96); clip-path: inset(-40px -40px calc(100% - 56px) -40px); }
+.pop.open { opacity: 1; visibility: visible; transform: none; clip-path: inset(-40px -40px -40px -40px);
+  transition: opacity 200ms var(--ease-out), transform 520ms var(--ease-spring), clip-path 560ms var(--ease-spring), visibility 0s; }
 .overline { font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-3); }
 
 #sixMenu { left: max(8px, calc(50% - 300px)); width: min(600px, calc(100% - 16px)); padding: 20px; display: grid; gap: 16px; transform-origin: bottom center; }
@@ -471,31 +476,33 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .peek[data-depth="2"] { z-index: 1; padding-bottom: 6px; background: color-mix(in srgb, var(--c-surface-2) 78%, transparent); }
 .peek[data-depth="2"] b { font-size: 10px; }
 .peek[data-depth="2"] .peek-line { opacity: 0.85; }
-.stack-bar { display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid var(--c-line); }
+.stack-tab { position: absolute; z-index: 21; display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 0 0 4px; }
+.stack-tab .stack-btn { background: var(--glass-fill-strong); box-shadow: inset 0 0 0 1px var(--glass-edge), var(--shadow-1); }
+.stack-tab .stack-btn:hover { background: var(--c-surface-3); }
+.widget.stack-hidden.leaving { visibility: visible; z-index: 19; pointer-events: none; }
 .stack-count { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; font: var(--text-caption); color: var(--c-text-2); white-space: nowrap; }
 .stack-count svg.i { width: 14px; height: 14px; color: var(--c-accent); }
 .stack-btn { border: 0; height: 28px; padding: 0 10px; white-space: nowrap; flex: none; border-radius: 999px; background: color-mix(in srgb, var(--c-surface-3) 70%, transparent); color: var(--c-text); font: 600 12px/1 var(--font-ui); }
 .stack-btn:hover { background: var(--c-surface-3); }
-.widget.stack-top { cursor: pointer; }
-.widget.stack-top.drag { cursor: grabbing; }
 /* stack pop-up: cards fan out from under the top card, like a notification stack */
-#stackScrim { position: absolute; inset: 0; z-index: 30; background: color-mix(in srgb, var(--c-bg) 58%, transparent);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+#stackScrim { position: absolute; inset: 0; z-index: 30; background: color-mix(in srgb, var(--c-bg) 42%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; transition: opacity 360ms var(--ease-out); }
 #stackScrim.open { opacity: 1; }
-#stackPop { position: absolute; z-index: 31; width: var(--side-w); display: flex; flex-direction: column; gap: 8px; overflow-y: auto; overscroll-behavior: contain; padding: 0 2px 12px; scrollbar-width: thin; }
-.stack-pop-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 6px; padding: 6px 0 8px; }
+#stackPop { position: absolute; z-index: 31; width: calc(var(--side-w) + 12px); display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; padding: 0 6px 12px; scrollbar-width: none; }
+#stackPop::-webkit-scrollbar { display: none; }
+#stackPop:focus { outline: none; }
+.stack-pop-head { position: sticky; top: 0; z-index: 120; display: flex; align-items: center; gap: 6px; padding: 6px 0 8px; }
 .stack-pop-head b { margin-right: auto; font: var(--text-title-sm); color: var(--c-text); }
 .stack-pop-list { display: flex; flex-direction: column; gap: 10px; }
-.widget.in-pop { position: relative; left: auto !important; top: auto !important; width: auto; flex: none; cursor: pointer; z-index: auto;
-  background: var(--glass-fill-strong) !important; border: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-3);
+.widget.in-pop { position: relative; left: auto !important; top: auto !important; width: var(--side-w); flex: none; cursor: pointer;
+  background: var(--glass-fill-strong) !important; box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-rim), var(--shadow-3);
   -webkit-backdrop-filter: blur(var(--glass-blur)); backdrop-filter: blur(var(--glass-blur));
 }
-.widget.in-pop .stack-bar { display: none; }
-.widget.in-pop:hover { box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-4); }
+.widget.in-pop:hover { box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-rim), var(--shadow-4); }
 :root[data-motion="reduced"] .widget.in-pop { animation: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .widget.in-pop { animation: none; } }
 #home.stack .widget.stack-hidden { visibility: visible; pointer-events: auto; }
-#home.stack .peek { display: none; }
+#home.stack .peek, #home.stack .stack-tab { display: none; }
 .widget:focus-visible { outline-offset: 4px; border-radius: var(--radius-xl); }
 .widget h3 { margin: 0; font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-2); display: flex; justify-content: space-between; align-items: center; }
 .widget h3 small { font: var(--text-caption); text-transform: none; letter-spacing: 0; color: var(--c-text-3); white-space: nowrap; flex: none; margin-left: 8px; }
@@ -572,9 +579,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 #galScrim { position: absolute; inset: 0; z-index: 970; background: var(--scrim); opacity: 0; transition: opacity var(--dur-base); }
 #galScrim.open { opacity: 1; }
 #gallery { position: absolute; z-index: 971; left: 50%; top: calc(var(--menubar-h) + 24px); width: min(780px, calc(100% - 32px)); max-height: calc(100% - var(--menubar-h) - var(--dock-h) - 72px); overflow: auto;
-  border-radius: var(--radius-2xl); padding: 20px; display: grid; gap: 14px; transform: translateX(-50%) translateY(-8px) scale(0.98); opacity: 0;
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
-#gallery.open { opacity: 1; transform: translateX(-50%); }
+  border-radius: var(--radius-2xl); padding: 20px; display: grid; gap: 14px; transform: translateX(-50%) translateY(-10px) scale(0.97); opacity: 0;
+  transition: opacity 160ms var(--ease-in), transform 180ms var(--ease-in); }
+#gallery.open { opacity: 1; transform: translateX(-50%); transition: opacity 220ms var(--ease-out), transform 560ms var(--ease-spring); }
 .gal-head { display: flex; align-items: flex-start; gap: 12px; }
 .gal-head h2 { margin: 0; font: var(--text-title-lg); }
 .gal-head p { margin: 2px 0 0; font: var(--text-body-sm); color: var(--c-text-2); }
@@ -646,10 +653,10 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 #searchScrim.open { opacity: 1; visibility: visible; transition-delay: 0s; }
 #search {
   position: absolute; z-index: 971; left: 50%; top: 14%; width: min(680px, calc(100% - 32px)); border-radius: var(--radius-2xl);
-  transform: translateX(-50%) translateY(-8px) scale(0.98); opacity: 0; visibility: hidden; padding: 10px;
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+  transform: translateX(-50%) translateY(-10px) scale(0.97); opacity: 0; visibility: hidden; padding: 10px;
+  transition: opacity 150ms var(--ease-in), transform 170ms var(--ease-in), visibility 0s linear 170ms;
 }
-#search.open { opacity: 1; visibility: visible; transform: translateX(-50%); transition-delay: 0s; }
+#search.open { opacity: 1; visibility: visible; transform: translateX(-50%); transition: opacity 200ms var(--ease-out), transform 520ms var(--ease-spring), visibility 0s; }
 #search .menu-search { height: 52px; font-size: 16px; border: 0; background: transparent; }
 #search .menu-search:focus-within { outline: none; }
 #search .menu-search input { font: var(--text-body-lg); font-size: 18px; }
@@ -672,9 +679,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   position: absolute; z-index: 975; left: 50%; bottom: calc(var(--dock-h) + 24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(10px);
   display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 16px; border-radius: var(--radius-md); max-width: calc(100% - 32px);
   background: var(--glass-fill-strong); opacity: 0; visibility: hidden;
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+  transition: opacity 160ms var(--ease-in), transform 180ms var(--ease-in), visibility 0s linear 180ms;
 }
-#toast.open { opacity: 1; visibility: visible; transform: translateX(-50%); transition-delay: 0s; }
+#toast.open { opacity: 1; visibility: visible; transform: translateX(-50%); transition: opacity 220ms var(--ease-out), transform 520ms var(--ease-spring), visibility 0s; }
 
 /* ── Buttons & controls ──────────────────────────────── */
 .btn {
@@ -1341,7 +1348,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
       </section>
     </div>
     <div id="stackScrim" hidden></div>
-    <div id="stackPop" role="dialog" aria-label="Stack" hidden>
+    <div id="stackPop" role="dialog" aria-label="Stack" tabindex="-1" hidden>
       <div class="stack-pop-head"><b id="stackPopCount">Stack</b><button type="button" class="stack-btn" id="stackPopLess">Show less</button><button type="button" class="stack-btn" id="stackPopUnstack">Unstack</button></div>
       <div class="stack-pop-list" id="stackPopList"></div>
     </div>
@@ -1496,6 +1503,10 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <h3>The small orb</h3>
           <p>In the menu bar, the dock, task cards and message labels Pip becomes a dotted sphere. Each state moves its light differently, so it reads at 18 px and in grayscale.</p>
           <div class="orb-tiles" id="orbTiles"></div>
+          <h3>The Turbine</h3>
+          <p>Pip's second look, after the machined, glossy controls of the Ferrari Luce cabin: a ring of twisted blades around a polished hub, drawn in 3D with a key light and a highlight that slides over the blades as they turn. Each state changes how it spins and where its light runs, never its shape, and it eases from one state into the next like a machine spinning up. Choose it in Settings › Pip &amp; voice › Look.</p>
+          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div>
+          <div class="pips" id="turbStates"></div>
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
           <ul class="principles">
@@ -1731,6 +1742,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="dots" aria-pressed="true">Dotted</button><button data-v="turbine" aria-pressed="false">Turbine</button></div></div>
               <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
@@ -2096,6 +2108,10 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   };
   const anim = (el, frames, opts) => (calm() || !el || !el.animate) ? null : el.animate(frames, { easing: EASE.precise, duration: 480, fill: 'backwards', ...opts });
   const settled = a => (a ? a.finished.then(() => a, () => a) : Promise.resolve(null));
+  // move focus for keyboard users only, so a mouse click never leaves a focus ring behind
+  let kbdNav = false;
+  addEventListener('keydown', () => { kbdNav = true; }, true);
+  addEventListener('pointerdown', () => { kbdNav = false; }, true);
   // move an element from a rectangle it used to occupy (or unfold it from a preview strip) to where it is now
   function flipFrom(el, from, opts = {}) {
     if (!from || calm()) return null;
@@ -2202,20 +2218,40 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   $$('[data-cal-icon]').forEach(el => { el.innerHTML = calArt(); });
   $('#pinned').innerHTML = APPS.map(a => `
     <button class="grid-app" data-app="${a.id}">${appIcon(a.id, 52)}${a.name}</button>`).join('');
-  // magnification, as in the macOS Dock: icons near the pointer grow (off with reduced motion and on touch)
-  let dockCenters = [];
-  dock.addEventListener('pointerenter', () => {
-    $$('.dk', dock).forEach(b => b.style.setProperty('--s', 1));
-    dockCenters = $$('.dk', dock).map(b => { const r = b.getBoundingClientRect(); return r.left + r.width / 2; });
-  });
-  dock.addEventListener('pointermove', e => {
-    if (!dockMag || narrowMQ.matches || e.pointerType === 'touch' || root.dataset.motion === 'reduced' || (rmMQ.matches && root.dataset.motion !== 'full')) return;
-    $$('.dk', dock).forEach((b, i) => {
-      const d = Math.abs(e.clientX - (dockCenters[i] ?? 0)) / 160;
-      b.style.setProperty('--s', d < 1 ? (1 + 0.5 * Math.cos(d * Math.PI / 2) ** 2).toFixed(3) : 1);
+  // magnification, as in the macOS Dock: icons near the pointer grow (off with reduced motion and on
+  // touch). Each icon's size rides its own spring toward the size the pointer asks for, so the dock
+  // flows as the pointer sweeps across it and glides back when it leaves, instead of snapping.
+  let dockCenters = [], dockPtr = null, dockRaf = 0, dockLast = 0;
+  const DOCK_SPRING = { k: 320, c: 31 };   // damping ratio 0.87: no wobble
+  const dockSz = new WeakMap();
+  const restCenters = () => {   // where each icon's centre is with nothing magnified
+    let x = dock.getBoundingClientRect().left + parseFloat(getComputedStyle(dock).paddingLeft);
+    return $$('.dock-apps > *, #dock > :not(.dock-apps)', dock).filter(b => b.offsetParent).map(b => {
+      const w = b.classList.contains('dk') ? 56 : b.offsetWidth + parseFloat(getComputedStyle(b).marginLeft) + parseFloat(getComputedStyle(b).marginRight);
+      const c = b.classList.contains('dk') ? [b, x + w / 2] : null; x += w; return c;
+    }).filter(Boolean);
+  };
+  function dockTick(now) {
+    const dt = dockLast ? Math.min(0.033, (now - dockLast) / 1000) : 1 / 60; dockLast = now;
+    let busy = false;
+    dockCenters.forEach(([b, cx]) => {
+      const st = dockSz.get(b) || { s: 1, v: 0 }; dockSz.set(b, st);
+      const d = dockPtr == null ? 1 : Math.abs(dockPtr - cx) / 160, to = d < 1 ? 1 + 0.5 * Math.cos(d * Math.PI / 2) ** 2 : 1;
+      st.v += (DOCK_SPRING.k * (to - st.s) - DOCK_SPRING.c * st.v) * dt; st.s += st.v * dt;
+      if (Math.abs(to - st.s) < 0.002 && Math.abs(st.v) < 0.02) { st.s = to; st.v = 0; } else busy = true;
+      b.style.setProperty('--s', st.s.toFixed(4));
     });
+    dockRaf = busy ? requestAnimationFrame(dockTick) : 0;
+    if (!busy) dockLast = 0;
+  }
+  const kickDock = () => { if (!dockRaf) dockRaf = requestAnimationFrame(dockTick); };
+  dock.addEventListener('pointerenter', () => { if (!dockRaf) dockCenters = restCenters(); });
+  dock.addEventListener('pointermove', e => {
+    if (!dockMag || narrowMQ.matches || e.pointerType === 'touch' || calm()) { if (dockPtr != null) { dockPtr = null; kickDock(); } return; }
+    if (!dockCenters.length) dockCenters = restCenters();
+    dockPtr = e.clientX; kickDock();
   });
-  dock.addEventListener('pointerleave', () => $$('.dk', dock).forEach(b => b.style.setProperty('--s', 1)));
+  dock.addEventListener('pointerleave', () => { dockPtr = null; kickDock(); });
 
   const FILES = [
     { name: 'Quarterly report.xlsx', mod: 'Yesterday', size: '248 KB', icon: 'file', tile: 't-mint' },
@@ -2437,10 +2473,16 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   function openPop(key) {
     Object.entries(POPS).forEach(([k, [p, b]]) => {
       const on = k === key && !$(p).classList.contains('open');
+      if (on) rowsIn($(p), k === 'six' ? 1 : -1);
       $(p).classList.toggle('open', on);
       $(b).setAttribute('aria-expanded', on);
     });
     if (key === 'six' && $('#sixMenu').classList.contains('open')) setTimeout(() => $('#menuQ').focus(), 60);
+  }
+  // a menu's rows follow it out, a few milliseconds apart, from the side it opens from
+  function rowsIn(pop, dir) {
+    [...pop.children].filter(c => c.offsetParent !== null || !pop.classList.contains('open')).slice(0, 14).forEach((c, i) =>
+      anim(c, [{ opacity: 0, transform: `translateY(${dir * 6}px)` }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 50 + i * 18, easing: EASE.out }));
   }
   function closeAllPops() {
     Object.values(POPS).forEach(([p, b]) => { $(p).classList.remove('open'); $(b).setAttribute('aria-expanded', 'false'); });
@@ -2888,6 +2930,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (b.closest('#segTheme')) { const v = b.dataset.v; if (v === 'auto') delete root.dataset.theme; else root.dataset.theme = v; syncThemeTile(); syncSettings(); }
     else if (b.closest('#accents')) { if (b.dataset.v === 'iris') delete root.dataset.accent; else root.dataset.accent = b.dataset.v; syncSettings(); paintWall(true); }
     else if (b.closest('#segWake')) setVoiceMode(b.dataset.v);
+    else if (b.closest('#segOrb')) setOrbForm(b.dataset.v);
     else if (b.closest('#segLayout') && b.dataset.v === 'taskbar') { toast('The Taskbar layout is specified in the guide (chapter 12). This prototype shows the menu bar and dock.', null); setTimeout(() => $$('#segLayout button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === 'mac')), 0); }
     else if (b.dataset.toast) toast(b.dataset.toast, null);
     else if (b.dataset.page && !b.closest('#setNav')) showPage(b.dataset.page);
@@ -3313,7 +3356,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
   function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 1500); }
   function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; o._sprites = null; }); }
-  const drawAnyOrb = (el, t) => (el._hi ? drawHiOrb(el, t) : drawOrb(el, t));
+  const drawAnyOrb = (el, t) => (formOf(el) === 'turbine' ? drawTurbine(el, t) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t));
   // Complete and Failed take their semantic colour; everything else draws in the orb's own colour
   const colOf = (el, look) => look === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : look === 'failed' ? hex(tok('--c-danger')).map(v => Math.round(v * 255)) : el._col;
   const progressOf = el => (el.dataset.progress !== undefined && el.dataset.progress !== '' ? Math.max(0, Math.min(1, +el.dataset.progress)) : null);
@@ -3404,19 +3447,281 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, R * 0.6, 0, TAU); ctx.fill();
     if (prog !== null && prog < 1) drawRing(ctx, cx, cy, R * 1.24, 2, prog, col);
   }
-  let lastOrb = 0;
+  /* ── The Turbine: Pip's second look ─────────────────────────────
+     After the Ferrari Luce cabin: machined, glossy and exact. A ring of twisted blades around a
+     polished hub, drawn in 3D: perspective, a key light from the top left, a specular highlight
+     that slides over the blades as they turn, and colour from the room (blue on the left, violet
+     on the right) rather than painted on. A state changes how the turbine moves and where its
+     light runs, never its shape, and every change eases in like a machine spinning up or down. */
+  const TURB = { blue: [64, 104, 255], violet: [150, 82, 255], ice: [120, 205, 255], green: [40, 200, 120], red: [240, 72, 72] };
+  const L_KEY = (() => { const v = [-0.45, 0.72, 0.52], n = Math.hypot(...v); return v.map(x => x / n); })();
+  const H_KEY = (() => { const v = [L_KEY[0], L_KEY[1], L_KEY[2] + 1], n = Math.hypot(...v); return v.map(x => x / n); })();
+  // what each state asks of the turbine; the drawn values ease toward these
+  function turbTarget(look, T, t, amp) {
+    const base = look.split('-')[0];
+    const tg = { spd: 0.5, flare: 0, chase: 0, beam: 0, precess: 0, squeeze: 0, dim: 1, tg: 0, tr: 0, glow: 0.18 };
+    switch (base) {
+      case 'listen': Object.assign(tg, { spd: 0.7, flare: 0.22, glow: 0.26 }); break;
+      case 'reasoning': Object.assign(tg, { spd: 1.6, chase: 1, glow: 0.26 }); break;
+      case 'speak': Object.assign(tg, { spd: 0.8, flare: amp * 0.35, glow: 0.2 + amp * 0.3 }); break;
+      case 'searching': Object.assign(tg, look === 'searching-lighthouse' ? { spd: 0.4, beam: 1 } : { spd: 0.9, precess: 1, glow: 0.2 }); break;
+      case 'working': Object.assign(tg, { spd: 2.2, glow: 0.28 }); break;
+      case 'waiting': Object.assign(tg, { spd: 0.45, chase: 0.7, glow: 0.14 }); break;
+      case 'retrying': Object.assign(tg, { spd: Math.sin(T / 3200 * TAU) > -0.35 ? 1.8 : -0.9 }); break;
+      case 'compacting': Object.assign(tg, { spd: 0.8, squeeze: 1 }); break;
+      case 'done': Object.assign(tg, { spd: 0.9, tg: 1, glow: 0.38 }); break;
+      case 'failed': Object.assign(tg, { spd: 0.22, tr: 1, dim: 0.85 }); break;
+      case 'cancelled': Object.assign(tg, { spd: 0.12, dim: 0.5, glow: 0.05 }); break;
+      case 'rest': Object.assign(tg, { spd: 0.06, dim: 0.45, glow: 0.05 }); break;
+      case 'background': Object.assign(tg, { spd: 0.35, dim: 0.8 }); break;
+    }
+    return tg;
+  }
+  // The turbine is ray-marched on the GPU: one shared WebGL canvas renders each turbine in turn and
+  // its pixels are copied into that turbine's own canvas. Without WebGL it falls back to polygons.
+  const TURB_FS = `precision highp float;
+uniform vec3 uC; uniform mat3 uToObj, uToView;
+uniform float uSpin, uN, uWave, uWaveT, uSq, uTh, uChase, uChaseA, uBeam, uBeamA, uLit, uGlowAll, uDim, uTintK;
+uniform vec3 uTint;
+const float TAU = 6.2831853, D = 3.4;
+float gK, gR;
+float ang(float a) { return abs(atan(sin(a), cos(a))); }
+vec2 map(vec3 p) {
+  float r = length(p.xz), th = atan(p.z, p.x), seg = TAU / uN;
+  float tw = th - uSpin - 0.95 * (r - 0.3) - 0.6 * p.y;
+  float k = floor(tw / seg + 0.5), a = tw - k * seg;
+  gK = k; gR = r;
+  float plate = (abs(r * sin(a)) - uTh) / sqrt(1.0 + r * r * 1.26);
+  float wave = uWave * pow(max(0.0, sin((k * seg + uSpin) * 2.0 - uWaveT)), 2.0);
+  float env = length(vec2(r - (0.66 - 0.08 * uSq), p.y * 1.08)) - (0.35 - 0.06 * uSq) * (1.0 + wave);
+  float blade = max(plate, env);
+  vec2 d = vec2(r - 0.22, abs(p.y) - 0.31);
+  float hub = min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - 0.095;
+  return blade < hub ? vec2(blade, 0.0) : vec2(hub, 1.0);
+}
+vec3 nrm(vec3 p) {
+  const vec2 e = vec2(0.0012, -0.0012);
+  return normalize(e.xyy * map(p + e.xyy).x + e.yyx * map(p + e.yyx).x + e.yxy * map(p + e.yxy).x + e.xxx * map(p + e.xxx).x);
+}
+void main() {
+  vec2 uv = (gl_FragCoord.xy - uC.xy) / uC.z;
+  if (dot(uv, uv) > 2.4) { gl_FragColor = vec4(0.0); return; }
+  vec3 rdv = normalize(vec3(uv, -D)), ro = uToObj * vec3(0.0, 0.0, D), rd = uToObj * rdv;
+  float t = D - 1.45, dm = 1e9, tb = t; vec2 h = vec2(1.0); bool hit = false;
+  for (int i = 0; i < 110; i++) {
+    h = map(ro + rd * t);
+    if (h.x < dm) { dm = h.x; tb = t; }
+    if (h.x < 0.0007) { hit = true; break; }
+    t += h.x * 0.6;
+    if (t > D + 1.45) break;
+  }
+  float alpha = hit ? 1.0 : 1.0 - smoothstep(0.0, 1.3 / uC.z, dm);
+  if (alpha <= 0.0) { gl_FragColor = vec4(0.0); return; }
+  vec3 p = ro + rd * tb; h = map(p); float k = gK, r = gR;
+  vec3 n = uToView * nrm(p), V = -rdv, pv = uToView * p;
+  if (dot(n, V) < 0.0) n = -n;
+  vec3 L = normalize(vec3(-0.45, 0.72, 0.52)), Hh = normalize(L + V);
+  float diff = max(dot(n, L), 0.0), nh = max(dot(n, Hh), 0.0), fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
+  vec3 Rf = reflect(-V, n);
+  vec3 env = mix(vec3(0.04, 0.05, 0.16), vec3(0.78, 0.8, 1.0), smoothstep(-0.3, 0.8, Rf.y))
+    + vec3(0.9) * smoothstep(0.86, 0.98, dot(Rf, normalize(vec3(-0.5, 0.6, 0.6))));
+  vec3 base = mix(vec3(0.2, 0.36, 1.0), vec3(0.6, 0.3, 1.0), smoothstep(-0.8, 0.8, pv.x));
+  if (h.y > 0.5) base = mix(vec3(0.16, 0.2, 0.62), vec3(0.42, 0.22, 0.85), smoothstep(-0.3, 0.3, pv.x + pv.y * 0.5));   // the hub: deeper, like anodised metal
+  base = mix(base, uTint, uTintK);
+  float ao = h.y > 0.5 ? 1.0 : 0.5 + 0.5 * smoothstep(0.3, 0.75, r);
+  vec3 col = base * (0.24 + 1.05 * diff) * ao
+    + env * mix(0.16 + 0.6 * fres, 0.42 + 0.55 * fres, h.y) * ao
+    + vec3(1.0) * (pow(nh, 90.0) * 1.4 + pow(nh, 16.0) * 0.22);
+  if (h.y < 0.5) {
+    float ba = k * TAU / uN + uSpin;
+    float e = uChase * exp(-pow(ang(ba - uChaseA) / 0.4, 2.0)) + uBeam * 0.7 * (1.0 - smoothstep(0.35, 0.55, ang(ba - uBeamA))) + uGlowAll;
+    if (uLit >= 0.0) e += mod(k, uN) / uN < uLit ? 0.3 : -0.12;
+    col += vec3(0.5, 0.62, 1.0) * e * (0.35 + 0.65 * smoothstep(0.4, 0.9, r));
+  }
+  col = 1.0 - exp(-col * 1.25);
+  alpha *= uDim;
+  gl_FragColor = vec4(col * alpha, alpha);
+}`;
+  let TGL = null;
+  function turbGL() {
+    if (TGL !== null) return TGL;
+    TGL = false;
+    try {
+      const cv = document.createElement('canvas'); cv.width = cv.height = 256;
+      const g = cv.getContext('webgl', { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false, alpha: true });
+      if (!g) return TGL;
+      const sh = (type, src) => { const s = g.createShader(type); g.shaderSource(s, src); g.compileShader(s); if (!g.getShaderParameter(s, g.COMPILE_STATUS)) throw new Error(g.getShaderInfoLog(s)); return s; };
+      const pr = g.createProgram();
+      g.attachShader(pr, sh(g.VERTEX_SHADER, 'attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }'));
+      g.attachShader(pr, sh(g.FRAGMENT_SHADER, TURB_FS));
+      g.linkProgram(pr); if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw new Error(g.getProgramInfoLog(pr));
+      g.useProgram(pr);
+      const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), g.STATIC_DRAW);
+      const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
+      const U = {};
+      ['uC', 'uToObj', 'uToView', 'uSpin', 'uN', 'uWave', 'uWaveT', 'uSq', 'uTh', 'uChase', 'uChaseA', 'uBeam', 'uBeamA', 'uLit', 'uGlowAll', 'uDim', 'uTintK', 'uTint'].forEach(n => { U[n] = g.getUniformLocation(pr, n); });
+      g.clearColor(0, 0, 0, 0);
+      cv.addEventListener('webglcontextlost', () => { TGL = false; });
+      TGL = { cv, g, U };
+    } catch (e) { console.warn('Turbine: WebGL unavailable, drawing polygons', e); TGL = false; }
+    return TGL;
+  }
+  function turbRender(G, px, o) {
+    const { cv, g, U } = G;
+    if (cv.width < px) { cv.width = cv.height = Math.min(2048, 2 ** Math.ceil(Math.log2(px))); }
+    g.viewport(0, 0, px, px); g.enable(g.SCISSOR_TEST); g.scissor(0, 0, px, px); g.clear(g.COLOR_BUFFER_BIT);
+    const ca = Math.cos(o.tilt), sa = Math.sin(o.tilt), cr = Math.cos(o.roll), sr = Math.sin(o.roll);
+    const M = [cr, -sr * ca, sr * sa, sr, cr * ca, -cr * sa, 0, sa, ca];   // object → view, rows
+    const Mt = [M[0], M[3], M[6], M[1], M[4], M[7], M[2], M[5], M[8]];
+    g.uniformMatrix3fv(U.uToObj, false, M); g.uniformMatrix3fv(U.uToView, false, Mt);   // column-major: rows of M are columns of Mᵀ
+    g.uniform3f(U.uC, o.cx, o.cy, o.R);
+    [['uSpin', o.spin], ['uN', o.N], ['uWave', o.wave], ['uWaveT', o.waveT], ['uSq', o.sq], ['uTh', o.th], ['uChase', o.chase], ['uChaseA', o.chaseA],
+      ['uBeam', o.beam], ['uBeamA', o.beamA], ['uLit', o.lit], ['uGlowAll', o.glowAll], ['uDim', o.dim], ['uTintK', o.tintK]].forEach(([n, v]) => g.uniform1f(U[n], v));
+    g.uniform3f(U.uTint, o.tint[0] / 255, o.tint[1] / 255, o.tint[2] / 255);
+    g.drawArrays(g.TRIANGLES, 0, 3);
+    return cv;
+  }
+  const angDist = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  const mix3 = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+  function drawTurbine(el, t) {
+    const s = setupCanvas(el); if (!s) return;
+    const [ctx, size] = s;
+    const hi = el._hi, dark = isDark(), look = lookOf(el), still = reducedMotion();
+    const now = performance.now(), T = still ? 0 : now, dt = el._tt && !still ? Math.min(0.1, (now - el._tt) / 1000) : 0; el._tt = now;
+    const amp = parseFloat(el.style.getPropertyValue('--amp')) || 0;
+    const prog = progressOf(el), ring = !hi && prog !== null && prog < 1, lit = look.startsWith('working') && prog !== null ? prog : null;
+    const tg = turbTarget(look, T, t, amp);
+    const p = el._tp || (el._tp = { ...tg }), ease = still || !dt ? 1 : 1 - Math.exp(-dt / 0.4);
+    for (const k in tg) p[k] += (tg[k] - p[k]) * ease;
+    el._spin = still ? 0.6 : (el._spin || 0) + dt * p.spd * TAU / 10;
+    const body = ring ? size * 0.75 : size;
+    const cx = size / 2, cy = hi ? size * 0.46 : size / 2, R = body * (hi ? 0.36 : 0.45), f = 3.4;
+    const big = size >= 200;
+    // the camera looks down on the ring at about 45°, drifting a little (and sweeping while searching)
+    const tilt = 0.78 + 0.05 * Math.sin(T / 2600) + p.precess * 0.2 * Math.sin(T / 1100);
+    const roll = -0.12 + 0.06 * Math.sin(T / 3700) + p.precess * 0.2 * Math.cos(T / 1100);
+    if (hi) {   // floor shadow (light) or reflection (dark), and the light inside the ring
+      const fy = cy + R * 1.05, fg = ctx.createRadialGradient(cx, fy, 0, cx, fy, R * 1.05);
+      fg.addColorStop(0, dark ? rgba(TURB.violet, 0.16) : 'rgba(0,0,0,0.16)'); fg.addColorStop(1, dark ? rgba(TURB.violet, 0) : 'rgba(0,0,0,0)');
+      ctx.save(); ctx.translate(cx, fy); ctx.scale(1, 0.18); ctx.translate(-cx, -fy); ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(cx, fy, R * 1.05, 0, TAU); ctx.fill(); ctx.restore();
+      const gc = p.tg > 0.5 ? TURB.green : p.tr > 0.5 ? TURB.red : TURB.violet;
+      const glow = (p.glow + (look === 'done' ? 0.4 * Math.max(0, 1 - t / 1600) : 0)) * (dark ? 1 : 0.5) * p.dim;
+      const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.25);
+      cg.addColorStop(0, rgba(gc, glow)); cg.addColorStop(1, rgba(gc, 0));
+      ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, R * 1.25, 0, TAU); ctx.fill();
+    }
+    const sqz = p.squeeze * (0.5 + 0.5 * Math.sin(T / 520));
+    const chaseA = T * 0.0042, beamA = T * 0.0016, cometA = T * 0.0011;
+    const doneGlow = look === 'done' ? 0.5 * Math.max(0, 1 - t / 1600) : 0;
+    const G = turbGL();
+    if (G) {
+      const px = el.width, dpr = px / size, tint = p.tr > p.tg ? TURB.red : TURB.green;
+      turbRender(G, px, {
+        cx: cx * dpr, cy: px - cy * dpr, R: R * dpr, tilt, roll, spin: el._spin, N: big ? 32 : size < 30 ? 14 : 24,
+        wave: p.flare, waveT: T * 0.006, sq: sqz, th: Math.max(0.026, 0.8 / (R * dpr)),
+        chase: p.chase, chaseA: look.startsWith('waiting') ? cometA : chaseA, beam: p.beam, beamA, lit: lit === null ? -1 : lit,
+        glowAll: doneGlow + (look === 'speak' ? amp * 0.25 : 0), dim: p.dim, tintK: Math.max(p.tg * 0.75, p.tr * 0.7), tint,
+      });
+      ctx.drawImage(G.cv, 0, G.cv.height - px, px, px, 0, 0, size, size);
+    } else drawTurbinePolys(el, ctx, { p, look, t, T, amp, lit, big, size, cx, cy, R, f, tilt, roll, sqz, chaseA, beamA, cometA, hi });
+    if (ring) drawRing(ctx, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, el._col);
+    else if (hi && lit !== null && lit < 1) drawRing(ctx, cx, cy, R * 1.28, 2, lit, TURB.violet);
+  }
+  // the fallback without WebGL: the same turbine as shaded polygons, back to front
+  function drawTurbinePolys(el, ctx, { p, look, t, T, amp, lit, big, size, cx, cy, R, f, tilt, roll, sqz, chaseA, beamA, cometA, hi }) {
+    const N = big ? 30 : size < 30 ? 12 : size < 90 ? 18 : 24, NU = big ? 6 : size < 30 ? 2 : 4, NV = big ? 3 : size < 30 ? 1 : 2;
+    const ct = Math.cos(tilt), st = Math.sin(tilt), cr = Math.cos(roll), sr = Math.sin(roll);
+    const proj = (x, y, z) => {
+      const y1 = y * ct - z * st, z1 = y * st + z * ct;
+      const x2 = x * cr - y1 * sr, y2 = x * sr + y1 * cr, k = f / (f - z1);
+      return [x2, y2, z1, cx + x2 * R * k, cy - y2 * R * k];
+    };
+    const quads = [], r0 = 0.34, r1 = 1 - 0.18 * sqz, H = 0.32;
+    const shade = (P, emit, metal) => {   // P: four projected corners
+      const ax = P[1][0] - P[0][0], ay = P[1][1] - P[0][1], az = P[1][2] - P[0][2];
+      const bx = P[3][0] - P[0][0], by = P[3][1] - P[0][1], bz = P[3][2] - P[0][2];
+      let nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx;
+      const nl = Math.hypot(nx, ny, nz) || 1; nx /= nl; ny /= nl; nz /= nl;
+      if (nz < 0) { nx = -nx; ny = -ny; nz = -nz; }
+      const mx = (P[0][0] + P[2][0]) / 2, diff = Math.max(0, nx * L_KEY[0] + ny * L_KEY[1] + nz * L_KEY[2]);
+      const spec = Math.max(0, nx * H_KEY[0] + ny * H_KEY[1] + nz * H_KEY[2]) ** (metal ? 22 : 34), fres = (1 - nz) ** 3;
+      let c = mix3(TURB.blue, TURB.violet, Math.max(0, Math.min(1, 0.5 + mx * 0.65)));
+      if (p.tg > 0.01) c = mix3(c, TURB.green, p.tg * 0.75);
+      if (p.tr > 0.01) c = mix3(c, TURB.red, p.tr * 0.7);
+      const lum = (metal ? 0.3 : 0.16) + 0.95 * diff, sp = (metal ? 0.6 : 0.95) * spec * 255;
+      const e = Math.min(1, emit);
+      return `rgb(${Math.round(c[0] * lum + sp + TURB.ice[0] * 0.35 * fres + 255 * e * 0.55)},${Math.round(c[1] * lum + sp + TURB.ice[1] * 0.35 * fres + 225 * e * 0.55)},${Math.round(c[2] * lum + sp + TURB.ice[2] * 0.35 * fres + 255 * e * 0.5)})`;
+    };
+    for (let j = 0; j < N; j++) {
+      const phi = el._spin + j * TAU / N, front = phi - el._spin;
+      const wave = p.flare * Math.max(0, Math.sin(phi * 2 - T * 0.006)) ** 2;
+      let emit = p.chase * (base => Math.exp(-((angDist(phi, base) / 0.42) ** 2)))(look.startsWith('waiting') ? cometA : chaseA)
+        + p.beam * (angDist(front + Math.PI / 2, beamA) < 0.5 ? 0.6 : 0)
+        + (look === 'done' ? 0.5 * Math.max(0, 1 - t / 1600) : 0) + amp * 0.25 * (look === 'speak' ? 1 : 0);
+      if (lit !== null) emit += j / N < lit ? 0.35 : -0.12;
+      const g = [];
+      for (let u = 0; u <= NU; u++) {
+        const uu = u / NU, row = [];
+        const prof = uu < 0.35 ? 1 : Math.sqrt(Math.max(0, 1 - ((uu - 0.35) / 0.68) ** 2));
+        const r = r0 + (r1 - r0) * uu, h = H * (0.2 + 0.8 * prof) * (1 + wave);
+        for (let v = 0; v <= NV; v++) {
+          const vv = -1 + 2 * v / NV, th = phi + 0.55 * uu + 0.38 * vv;   // swept back, twisted top to bottom
+          row.push(proj(r * Math.cos(th), h * vv, r * Math.sin(th)));
+        }
+        g.push(row);
+      }
+      for (let u = 0; u < NU; u++) for (let v = 0; v < NV; v++) {
+        const P = [g[u][v], g[u + 1][v], g[u + 1][v + 1], g[u][v + 1]];
+        quads.push([(P[0][2] + P[1][2] + P[2][2] + P[3][2]) / 4, P, shade(P, emit, false)]);
+      }
+    }
+    // the hub: a polished cylinder with a domed cap
+    const M = big ? 28 : 14, rh = 0.3, hh = 0.36, side = [], top = [];
+    for (let i = 0; i <= M; i++) { const a = el._spin * 0.5 + i * TAU / M; side.push([proj(rh * Math.cos(a), -hh, rh * Math.sin(a)), proj(rh * Math.cos(a), hh, rh * Math.sin(a))]); top.push(side[i][1]); }
+    for (let i = 0; i < M; i++) {
+      const P = [side[i][0], side[i + 1][0], side[i + 1][1], side[i][1]];
+      quads.push([(P[0][2] + P[2][2]) / 2, P, shade(P, 0, true)]);
+    }
+    const capC = proj(0, hh, 0);
+    quads.push([capC[2] + 0.02, null, null]);   // the cap, drawn in depth order
+    quads.sort((a, b) => a[0] - b[0]);
+    ctx.globalAlpha = p.dim;
+    ctx.lineJoin = 'round'; ctx.lineWidth = hi ? 0.7 : 0.4;
+    for (const [, P, col] of quads) {
+      if (!P) {
+        const cg = ctx.createRadialGradient(capC[3] - R * 0.08, capC[4] - R * 0.06, 0, capC[3], capC[4], R * rh * 1.2);
+        const cc = mix3(mix3(TURB.violet, TURB.green, p.tg * 0.75), TURB.red, p.tr * 0.7);
+        cg.addColorStop(0, `rgb(${mix3(cc, [255, 255, 255], 0.55).map(Math.round)})`); cg.addColorStop(0.6, `rgb(${cc.map(x => Math.round(x * 0.75))})`); cg.addColorStop(1, `rgb(${cc.map(x => Math.round(x * 0.4))})`);
+        ctx.fillStyle = cg; ctx.beginPath(); top.forEach((q, i) => (i ? ctx.lineTo(q[3], q[4]) : ctx.moveTo(q[3], q[4]))); ctx.closePath(); ctx.fill();
+        if (hi) {   // a glint on the cap
+          ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.ellipse(capC[3] - R * 0.1, capC[4] - R * 0.06, R * 0.08, R * 0.035, -0.4, 0, TAU); ctx.fill();
+        }
+        continue;
+      }
+      ctx.fillStyle = col; ctx.strokeStyle = col;
+      ctx.beginPath(); ctx.moveTo(P[0][3], P[0][4]); ctx.lineTo(P[1][3], P[1][4]); ctx.lineTo(P[2][3], P[2][4]); ctx.lineTo(P[3][3], P[3][4]); ctx.closePath();
+      ctx.fill(); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  const formOf = el => el.dataset.form || root.dataset.orbForm || 'dots';
+  let lastOrb = 0, orbsShown = 0;
   function tickOrbs(now) {
-    const still = reducedMotion(), small = now - lastOrb >= 33, ts = new Map();
-    if (small) lastOrb = now;
+    // small orbs draw every frame while only a few are on screen (the menu bar, dock and a card),
+    // and at 30 fps when a gallery of them is showing
+    const still = reducedMotion(), small = now - lastOrb >= (orbsShown > 8 ? 33 : 0), ts = new Map();
+    if (small) { lastOrb = now; orbsShown = 0; }
     orbs.forEach(o => {
       if (!o.isConnected) { orbs.delete(o); return; }
       if (o.offsetParent === null || ((!o._hi || o.clientWidth < 200) && !small)) return;
-      const look = lookOf(o), key = look + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth;
+      if (small) orbsShown++;
+      const form = formOf(o), look = lookOf(o), key = form + look + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth + (root.dataset.theme || '');
       // a state just entered starts its own clock from zero (Complete glows once on entry)
-      if (o._look !== look) {
+      if (o._look !== look || o._form !== form) {
         // a change of state crossfades: the last frame of the old look fades out over the new one
-        if (o._look && !still && o.width) { const g = o._ghost || (o._ghost = document.createElement('canvas')); g.width = o.width; g.height = o.height; g.getContext('2d').drawImage(o, 0, 0); o._ghostAt = now; }
-        o._look = look; if (look === 'done' || look === 'failed') clocks.delete(look);
+        // (the turbine needs none: it eases its own speed and light from one state into the next)
+        if (o._look && !still && o.width && (form === 'dots' || o._form !== form)) { const g = o._ghost || (o._ghost = document.createElement('canvas')); g.width = o.width; g.height = o.height; g.getContext('2d').drawImage(o, 0, 0); o._ghostAt = now; }
+        o._look = look; o._form = form; if (look === 'done' || look === 'failed') clocks.delete(look);
       }
       if (still && o._key === key) return;   // reduced motion: draw only on change, on a fixed frame
       o._key = key;
@@ -3479,11 +3784,21 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     $('#pipStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n, d]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b><small>${d}</small></button>`).join('');
     $$('#pipStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
+    $('#turbStates').innerHTML = Object.entries(PIP_STATES).map(([k, [n]]) => `
+      <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="turbine" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b></button>`).join('');
+    $$('#turbStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#orbTiles').innerHTML = ORB_GALLERY
       .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
+  $('#turbStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
+  // Pip's look, everywhere at once: the dotted sphere or the turbine
+  function setOrbForm(v) {
+    if (v === 'turbine') root.dataset.orbForm = 'turbine'; else delete root.dataset.orbForm;
+    $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === (v === 'turbine' ? 'turbine' : 'dots')));
+  }
+  $('#segOrbGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setOrbForm(b.dataset.v); });
   $('#t-pip').addEventListener('click', buildPipCards);
 
   /* ── Home layout + draggable plasma-clay widgets ─────────────── */
@@ -3507,8 +3822,8 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     const H = desk.clientHeight - dockSpace() - 8;
     // cards the user placed (or stacked) stay put; the rest flow down their column around them
     const taken = widgetEls.filter(c => phys.get(c).moved && !c.classList.contains('stack-hidden')).map(c => {
-      const p = phys.get(c), st = stackOf(c), plates = st && st.cards[0] === c ? peekSpace(st) : 0;
-      return [p.tx, p.ty, c.offsetWidth, c.offsetHeight + plates];
+      const p = phys.get(c), st = stackOf(c);
+      return st && st.cards[0] === c ? [st.x, st.y, c.offsetWidth, st.H + peekSpace(st)] : [p.tx, p.ty, c.offsetWidth, c.offsetHeight];
     });
     widgetEls.forEach(el => {
       const ph = phys.get(el), left = el.dataset.slot[0] === 'L';
@@ -3566,20 +3881,19 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     }) || null;
   }
   function renderStacks() {
-    $$('.peek').forEach(p => p.remove());
-    widgetEls.forEach(c => { c.classList.remove('stack-hidden', 'stack-top'); $('.stack-bar', c)?.remove(); });
+    stacks.forEach(endSwap);
+    $$('.peek, .stack-tab').forEach(p => p.remove());
+    widgetEls.forEach(c => { c.classList.remove('stack-hidden', 'stack-top'); });
     stacks.forEach(st => {
       const top = st.cards[0];
       top.classList.add('stack-top');
-      const bar = document.createElement('div');
-      bar.className = 'stack-bar';
-      bar.innerHTML = `<span class="stack-count">${icon('layers')}${st.cards.length} stacked</span>`
-        + `<button type="button" class="stack-btn" data-act="toggle" aria-haspopup="dialog">Show all</button>`
-        + `<button type="button" class="stack-btn" data-act="unstack">Unstack</button>`;
-      top.append(bar);
+      // a stack keeps the height of its tallest card and the top card sits at the foot of that
+      // space, so switching cards never moves the previews out from under the pointer
+      st.H = Math.max(...st.cards.map(c => c.offsetHeight));
+      const ty = st.y + st.H - top.offsetHeight;
       st.cards.forEach((c, i) => {
         const ph = phys.get(c);
-        ph.moved = true; ph.tx = st.x; ph.ty = st.y;
+        ph.moved = true; ph.tx = st.x; ph.ty = ty;
         if (i) c.classList.add('stack-hidden');
       });
       const shown = Math.min(PEEK_MAX, st.cards.length - 1);
@@ -3592,18 +3906,34 @@ button.cal-cell:hover { background: var(--c-surface-3); }
         p.innerHTML = `<b>${cardName(c)}</b><span class="peek-line">${peekLine(c)}</span>` + (d === shown && more > 0 ? `<span class="peek-more">+${more} more</span>` : '');
         $('#widgets').append(p);
       }
+      // the stack's own controls sit under its previews, so no card changes shape when it's on top
+      const tab = document.createElement('div');
+      tab.className = 'stack-tab'; tab._top = top; tab._st = st;
+      tab.innerHTML = `<span class="stack-count">${icon('layers')}${st.cards.length} stacked</span>`
+        + `<button type="button" class="stack-btn" data-act="toggle" aria-haspopup="dialog">Show all</button>`
+        + `<button type="button" class="stack-btn" data-act="unstack">Unstack</button>`;
+      $('#widgets').append(tab);
     });
     updatePlates(); layoutHome(); markDirty();
   }
   function updatePlates() {
-    $$('.peek').forEach(p => {
-      const ph = phys.get(p._top), d = +p.dataset.depth, w = p._top.offsetWidth, h = p._top.offsetHeight;
-      const inset = Math.min(10 * d, 40);
-      Object.assign(p.style, { left: ph.x + inset + 'px', top: ph.y + h - 2 + (d > 1 ? 30 + (d - 2) * 26 : 0) + 'px', width: w - inset * 2 + 'px', height: (d === 1 ? 34 : 30) + 'px' });
+    $$('.peek, .stack-tab').forEach(p => {
+      const top = p._top, ph = phys.get(top); if (!ph) return;
+      const st = stackOf(top), sw = st && st.swap, w = top.offsetWidth;
+      const h = sw ? sw.h : top.offsetHeight, y = sw ? sw.bottom - sw.h : ph.y;
+      if (p.classList.contains('stack-tab')) {
+        const n = Math.min(PEEK_MAX, st ? st.cards.length - 1 : 1);
+        Object.assign(p.style, { left: ph.x + 'px', top: y + h + 38 + (n - 1) * 26 + 'px', width: w + 'px' });
+        return;
+      }
+      const d = +p.dataset.depth, inset = Math.min(10 * d, 40);
+      Object.assign(p.style, { left: ph.x + inset + 'px', top: y + h - 2 + (d > 1 ? 30 + (d - 2) * 26 : 0) + 'px', width: w - inset * 2 + 'px', height: (d === 1 ? 34 : 30) + 'px' });
     });
   }
   const PEEK_MAX = 5;
-  const peekSpace = st => { const n = Math.min(PEEK_MAX, st.cards.length - 1); return n ? 34 + (n - 1) * 26 : 0; };
+  const peekSpace = st => { const n = Math.min(PEEK_MAX, st.cards.length - 1); return n ? 68 + (n - 1) * 26 : 0; };
+  const tabOf = st => $$('.stack-tab').find(t => t._st === st) || null;
+  const snapStack = st => st.cards.forEach(c => { const ph = phys.get(c); ph.x = ph.tx; ph.y = ph.ty; ph.vx = ph.vy = 0; c.style.left = ph.x + 'px'; c.style.top = ph.y + 'px'; });
   function pullOut(el) {
     const st = stackOf(el); if (!st) return;
     st.cards.splice(st.cards.indexOf(el), 1);
@@ -3613,16 +3943,59 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const peekOf = c => $$('.peek').find(p => p._card === c) || null;
   // previews slide out from under the top card one after another
   function peeksIn(st, skip = 0) {
-    $$('.peek').filter(p => st.cards.includes(p._card)).forEach((p, i) => { if (i >= skip) anim(p, [{ opacity: 0, transform: 'translateY(-14px) scaleX(0.94)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 70 + i * 50 }); });
+    $$('.peek, .stack-tab').filter(p => p._top === st.cards[0]).forEach((p, i) => { if (i >= skip) anim(p, [{ opacity: 0, transform: 'translateY(-10px)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 70 + i * 50 }); });
   }
+  // the previews' labels change in place: a quick fade, nothing moves
+  const peekLabelsIn = st => $$('.peek').filter(p => p._top === st.cards[0]).forEach((p, i) =>
+    $$('b, .peek-line, .peek-more', p).forEach(t => anim(t, [{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 60 + i * 30, easing: EASE.out })));
+  /* Bringing a card to the top: one surface, one motion. The stack's surface changes height on the
+     precise spring with its foot fixed (the previews never move), the old card's content fades out
+     and the new card's fades in on top of the same surface. Clicking again mid-way retargets
+     from wherever the surface is. */
+  const SPRING = { k: 177, c: 23 };   // the precise spring (damping ratio 0.86)
   function bringToFront(el) {
     const st = stackOf(el); if (!st || st.cards[0] === el) return;
-    const from = peekOf(el)?.getBoundingClientRect();
+    const old = st.cards[0], prev = st.swap, depth = +(peekOf(el)?.dataset.depth || 1);
+    const h0 = prev ? prev.h : old.offsetHeight, v0 = prev ? prev.v : 0;
+    const o0 = +getComputedStyle(old).opacity;
     st.cards.splice(st.cards.indexOf(el), 1); st.cards.unshift(el);
-    renderStacks();
-    flipFrom(el, from, { unfold: true, duration: 600 });
-    peeksIn(st); glint(el, 160);
-    $('.stack-btn', el)?.focus();
+    renderStacks(); snapStack(st);
+    if (kbdNav) $$('.peek').find(p => p._top === el && +p.dataset.depth === depth)?.focus({ preventScroll: true });
+    if (calm()) return;
+    const r = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 16;
+    st.swap = { h: h0, v: v0, to: el.offsetHeight, bottom: st.y + st.H, old, r };
+    old.classList.add('leaving');
+    old.getAnimations().forEach(a => a.cancel()); el.getAnimations().forEach(a => a.cancel());
+    old.animate([{ opacity: o0 }, { opacity: 0 }], { duration: 200, easing: EASE.in, fill: 'forwards' });
+    el.animate([{ opacity: 0, filter: 'blur(4px)' }, { opacity: 1, filter: 'blur(0px)' }], { duration: 420, delay: 70, easing: EASE.out, fill: 'backwards' });
+    applySwap(st); updatePlates(); peekLabelsIn(st);
+    glint(el, 220);
+  }
+  function applySwap(st) {
+    const sw = st.swap, y = sw.bottom - sw.h;
+    [st.cards[0], sw.old].forEach(c => {
+      const ph = phys.get(c); if (!ph) return;
+      c.style.transform = `translateY(${(y - ph.y).toFixed(1)}px)`;
+      c.style.clipPath = `inset(0 0 ${Math.max(0, c.offsetHeight - sw.h).toFixed(1)}px 0 round ${sw.r}px)`;
+    });
+  }
+  function endSwap(st) {
+    const sw = st && st.swap; if (!sw) return;
+    st.swap = null;
+    [st.cards[0], sw.old].forEach(c => { if (c) { c.style.transform = ''; c.style.clipPath = ''; } });
+    sw.old.classList.remove('leaving');
+    sw.old.getAnimations().forEach(a => a.cancel());
+    markDirty();
+  }
+  function stepSwaps(dt) {
+    let busy = false;
+    stacks.forEach(st => {
+      const sw = st.swap; if (!sw) return;
+      sw.v += (SPRING.k * (sw.to - sw.h) - SPRING.c * sw.v) * dt; sw.h += sw.v * dt;
+      if (Math.abs(sw.to - sw.h) < 0.3 && Math.abs(sw.v) < 2) { endSwap(st); updatePlates(); }
+      else { applySwap(st); busy = true; }
+    });
+    return busy;
   }
   function mergeInto(el, target) {
     let st = stackOf(target);
@@ -3634,57 +4007,98 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   }
   function unstack(st) {
     const i = stacks.indexOf(st); if (i < 0) return;
+    endSwap(st);
     stacks.splice(i, 1);
     st.cards.forEach(c => { phys.get(c).moved = false; });
     renderStacks();
   }
+  /* Show all: the stack opens in place. The top card stays exactly where it is (it only moves if
+     the column has to clear the dock) and the others slide down out from behind it. Show less
+     slides them back behind it. Choosing a card is one motion: it travels to the top of the stack
+     while the rest tuck in behind it. No card changes shape on the way. */
   const stackPop = $('#stackPop'), stackScrim = $('#stackScrim');
-  let popStack = null;
+  let popStack = null, closing = null;
+  const POP_PAD = 6;
+  // a card tucked d deep behind the card whose foot is at `foot`: a hair smaller, only its edge showing
+  const tucked = (r, foot, d, dx = 0) => {
+    const k = Math.min(d, 3), s = 1 - 0.04 * k;
+    return { transformOrigin: '50% 0', transform: `translate(${dx.toFixed(1)}px, ${(foot + k * 9 - r.height * s - r.top).toFixed(1)}px) scale(${s})` };
+  };
+  function moveFrom(el, f, opts) {
+    const t = el.getBoundingClientRect(), dx = f.left - t.left, dy = f.top - t.top;
+    return Math.abs(dx) + Math.abs(dy) < 1 ? null : anim(el, [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], opts);
+  }
   function openStack(st) {
     if (!st || !isWide()) return;
+    if (closing) closing();
     if (popStack) closeStack(true);
+    endSwap(st);
     popStack = st;
-    const topR = st.cards[0].getBoundingClientRect();
-    const fromR = st.cards.map((c, i) => (i && peekOf(c)?.getBoundingClientRect()) || topR);
-    $$('.peek').forEach(p => { p.style.visibility = 'hidden'; });
-    $('#stackPopCount').textContent = `${st.cards.length} cards`;
+    const homeR = st.cards[0].getBoundingClientRect(), n = st.cards.length;
+    $$('.peek, .stack-tab').filter(p => p._top === st.cards[0]).forEach(p => { p.style.visibility = 'hidden'; });
+    $('#stackPopCount').textContent = `${n} cards`;
     const list = $('#stackPopList');
-    st.cards.forEach((c, i) => { c.classList.remove('stack-hidden', 'fan-out'); c.classList.add('in-pop'); c.style.setProperty('--i', i); list.append(c); });
-    // anchor the column at the stack; lift it if it would run into the dock
-    const top = mbH() + 8, bottom = desk.clientHeight - dockSpace() - 8;
-    stackPop.hidden = false; stackScrim.hidden = false;
-    stackPop.style.left = st.x + 'px';
+    st.cards.forEach((c, i) => { c.classList.remove('stack-hidden'); c.classList.add('in-pop'); c.style.zIndex = n - i; list.append(c); });
+    const top = mbH() + 8, bottom = desk.clientHeight - dockSpace() - 8, dr = desk.getBoundingClientRect(), head = $('.stack-pop-head', stackPop);
+    stackPop.hidden = false; stackScrim.hidden = false; stackPop.scrollTop = 0;
+    stackPop.style.left = st.x - POP_PAD + 'px';
     stackPop.style.maxHeight = bottom - top + 'px';
     const h = Math.min(stackPop.scrollHeight, bottom - top);
-    stackPop.style.top = Math.max(top, Math.min(st.y - 44, bottom - h)) + 'px';
-    st.cards.forEach((c, i) => flipFrom(c, fromR[i], { unfold: i > 0, delay: i * 42, duration: 620, fromOpacity: i && fromR[i] === topR ? 0 : 1 }));
-    anim($('.stack-pop-head', stackPop), [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 160 });
-    requestAnimationFrame(() => { stackScrim.classList.add('open'); });
+    stackPop.style.top = Math.max(top, Math.min(homeR.top - dr.top - head.offsetHeight, bottom - h)) + 'px';
+    const R = st.cards.map(c => c.getBoundingClientRect());
+    moveFrom(st.cards[0], homeR, { duration: 560 });
+    st.cards.forEach((c, i) => {
+      if (!i) return;
+      anim(c, [{ ...tucked(R[i], R[0].bottom, i), opacity: i > 3 ? 0 : 1 }, { transformOrigin: '50% 0', transform: 'none', opacity: 1 }], { duration: 620, delay: Math.min(i, 6) * 34 });
+    });
+    anim(head, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 140, easing: EASE.out });
+    requestAnimationFrame(() => stackScrim.classList.add('open'));
     markDirty();
-    $('#stackPopLess').focus();
+    (kbdNav ? $('#stackPopLess') : stackPop).focus({ preventScroll: true });
   }
-  function closeStack(instant, after) {
+  function closeStack(instant, after, chosen) {
+    if (closing) closing();
     const st = popStack; if (!st) return;
     popStack = null;
+    const order = chosen && st.cards.includes(chosen) ? [chosen, ...st.cards.filter(c => c !== chosen)] : st.cards.slice();
+    const head = $('.stack-pop-head', stackPop);
+    let done = false;
     const finish = () => {
-      st.cards.forEach(c => { c.classList.remove('in-pop', 'fan-out'); c.style.removeProperty('--i'); $('#widgets').append(c); });
+      if (done) return; done = true; closing = null;
+      st.cards.splice(0, st.cards.length, ...order);
+      st.cards.forEach(c => { c.classList.remove('in-pop'); c.style.zIndex = ''; $('#widgets').append(c); c.getAnimations().forEach(a => a.cancel()); });
       stackPop.hidden = true; stackScrim.hidden = true;
-      renderStacks();
-      if (after) after(); else $('.stack-btn', st.cards[0])?.focus();
+      head.getAnimations().forEach(a => a.cancel());
+      renderStacks(); snapStack(st);
+      if (!instant && !calm()) {
+        $$('.peek, .stack-tab').filter(p => p._top === st.cards[0]).forEach((p, i) => anim(p, [{ opacity: 0 }, { opacity: 1 }], { duration: 280, delay: i * 30, easing: EASE.out }));
+        if (chosen) glint(st.cards[0], 40);
+      }
+      if (after) after(); else if (!instant && kbdNav) $('.stack-btn', tabOf(st))?.focus({ preventScroll: true });
     };
     stackScrim.classList.remove('open');
     if (instant || calm()) { finish(); return; }
-    const d = desk.getBoundingClientRect(), c0 = st.cards[0];
-    const topR = { left: d.left + st.x, top: d.top + st.y, width: c0.getBoundingClientRect().width, height: c0.offsetHeight };
-    const runs = st.cards.map((c, i) => { const pk = i && peekOf(c); return flipTo(c, pk ? pk.getBoundingClientRect() : topR, { fold: i > 0, toOpacity: i && !pk ? 0 : 1, duration: 420, delay: (st.cards.length - 1 - i) * 26 }); });
-    anim($('.stack-pop-head', stackPop), [{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
-    Promise.all(runs.map(settled)).then(r => { finish(); r.forEach(a => a && a.cancel()); const h = $('.stack-pop-head', stackPop); h.getAnimations().forEach(a => a.cancel()); });
+    closing = finish;
+    const dr = desk.getBoundingClientRect(), t = order[0];
+    const H = Math.max(...order.map(c => c.offsetHeight)), homeTop = dr.top + st.y + H - t.offsetHeight, foot = homeTop + t.offsetHeight;
+    const tr = t.getBoundingClientRect(), homeLeft = dr.left + st.x;
+    t.style.zIndex = 99;
+    const runs = [anim(t, [{ transform: 'none' }, { transform: `translate(${(homeLeft - tr.left).toFixed(1)}px, ${(homeTop - tr.top).toFixed(1)}px)` }], { duration: 540, fill: 'forwards' })];
+    order.forEach((c, j) => {
+      if (!j) return;
+      const r = c.getBoundingClientRect();
+      c.style.zIndex = order.length - j;
+      runs.push(anim(c, [{ transformOrigin: '50% 0', transform: 'none', opacity: 1 }, { opacity: 1, offset: 0.55 }, { ...tucked(r, foot, j, homeLeft - r.left), opacity: 0 }],
+        { duration: 500, delay: Math.min(order.length - 1 - j, 6) * 18, fill: 'forwards' }));
+    });
+    anim(head, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(4px)' }], { duration: 180, easing: EASE.in, fill: 'forwards' });
+    Promise.all(runs.map(settled)).then(finish);
   }
   stackScrim.addEventListener('click', () => closeStack());
   $('#stackPopLess').addEventListener('click', () => closeStack());
   $('#stackPopUnstack').addEventListener('click', () => { const st = popStack; closeStack(true, () => unstack(st)); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && popStack) closeStack(); });
-  // in the pop-up: click a card to bring it to the front; drag a card to pull just that one out
+  // in the pop-up: click a card to bring it to the top; drag a card to pull just that one out
   stackPop.addEventListener('pointerdown', e => {
     const card = e.target.closest('.widget');
     if (!card || e.button !== 0 || e.target.closest('button, a, input, textarea')) return;
@@ -3692,8 +4106,12 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     const sx = e.clientX, sy = e.clientY;
     const done = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
     const mv = ev => { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return; done(); closeStack(true, () => {}); beginDrag(card, e, true); };
-    const up = () => { done(); closeStack(false, () => bringToFront(card)); };
+    const up = () => { done(); closeStack(false, null, card); };
     addEventListener('pointermove', mv); addEventListener('pointerup', up);
+  });
+  stackPop.addEventListener('keydown', e => {   // Enter on a card in the pop-up does the same as a click
+    const card = e.target.closest('.widget.in-pop');
+    if (card && e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); closeStack(false, null, card); }
   });
   stackPop.addEventListener('click', e => {   // buttons inside a card (open a file, stop a task) close the pop-up first
     if (e.target.closest('.wrow, #taskStop')) closeStack(true, () => {});
@@ -3701,8 +4119,8 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   $('#widgets').addEventListener('click', e => {
     const p = e.target.closest('.peek');
     if (p) { bringToFront(p._card); return; }   // a preview's card comes to the top; Show all opens the stack
-    const b = e.target.closest('.stack-btn'); if (!b) return;
-    const st = stackOf(b.closest('.widget')); if (!st) return;
+    const b = e.target.closest('.stack-tab .stack-btn'); if (!b) return;
+    const st = b.closest('.stack-tab')._st; if (!stacks.includes(st)) return;
     if (b.dataset.act === 'toggle') openStack(st); else unstack(st);
   });
   let dragging = null, dropTarget = null;
@@ -4116,6 +4534,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     wMenu._k = k;
     const dr = desk.getBoundingClientRect();
     wMenu.hidden = false;
+    anim(wMenu, [{ opacity: 0, transform: 'scale(0.94)', transformOrigin: '0 0' }, { opacity: 1, transform: 'none', transformOrigin: '0 0' }], { duration: 420 });
     wMenu.style.left = Math.min(e.clientX - dr.left, desk.clientWidth - wMenu.offsetWidth - 8) + 'px';
     wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
     $('.mrow', wMenu).focus();
@@ -4221,6 +4640,7 @@ Request: ${JSON.stringify(d)}`;
       }
       el.style.left = ph.x.toFixed(1) + 'px'; el.style.top = ph.y.toFixed(1) + 'px';
     });
+    if (stepSwaps(dt)) busy = true;
     updatePlates();
     return busy;
   }
@@ -4410,7 +4830,10 @@ void main(){
     let n = 0, key = '';
     $$('[data-liquid]').forEach(el => {
       if (n >= MAXR || el.offsetParent === null || el.classList.contains('stack-hidden') || el.classList.contains('in-pop')) return;
-      const r = el.getBoundingClientRect();
+      let r = el.getBoundingClientRect();
+      // a stack switching cards draws one surface at the height it has reached so far
+      const sw = el.classList.contains('stack-top') && stackOf(el)?.swap;
+      if (sw) r = { left: r.left, top: r.top, width: r.width, height: sw.h, bottom: r.top + sw.h };
       if (r.width < 2 || r.bottom < cr.top || r.top > cr.bottom) return;
       rectBuf.set([r.left - cr.left, r.top - cr.top, r.width, r.height], n * 4);
       radBuf[n] = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 16;

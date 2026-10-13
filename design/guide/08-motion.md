@@ -16,7 +16,7 @@ yellow spreads through the interface. SIX borrows the feel, not the look or the 
 |---|---|
 | Controls that move like machined parts: they stop exactly where they should | **Precise springs.** Everything settles with a damping ratio of 0.86, overshooting by 0.5 %. Nothing wobbles or bounces like rubber |
 | Physical switches with a click at the end of their travel | **One detent.** Only something that *lands* (a card dropped into a stack) uses the detent spring: it lifts a hair, overshoots 5 % and clicks into place |
-| Two display planes give real depth; needles move with the wheel | **Continuity.** Things move from where they are: a stacked card unfolds out of its own preview strip, a window grows out of its dock icon and folds back into it, a page slides in the direction you travelled |
+| Two display planes give real depth; needles move with the wheel | **Continuity.** Things move from where they are: a stack opens in place with its cards sliding out from behind the top card, a window grows out of its dock icon and folds back into it, a menu unfolds from what opened it, a page slides in the direction you travelled |
 | The start-up ceremony: colour spreads through the interface | **Light as feedback.** A band of light crosses a card when it lands or is added; unlocking sends a ring of accent light out from the password field; Pip's words arrive with a short focus pull, like a display waking |
 | Glass and aluminium, little decoration | **Restraint.** One thing moves big at a time; no confetti, no shaking, no rubber-ball bounces anywhere in the system |
 
@@ -55,19 +55,20 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Close | A short fade to 97 % (200 ms, ease-in). Leaving is quicker than arriving |
 | Maximise / snap | The frame moves on the precise spring; content re-lays out once at the end |
 | Stack: drop a card | The card lands on a detent (lifts 6 px, scales 1.035, settles), light crosses it, and the previews slide out from under it one after another (50 ms apart) |
-| Stack: open | Every card **unfolds out of its own preview strip** into the column: it starts at the strip's place and width, clipped to the strip's height, and opens to full size, 42 ms after the card above it (620 ms). Cards without a strip rise from under the top card. Home dims and blurs behind |
-| Stack: close | The reverse: each card folds back into its strip, bottom card first (420 ms) |
-| Stack: bring a card to the top | The card rises out of its preview to the top; the previews slide into their new order; light crosses the new top card |
+| Stack: bring a card to the top | **One surface, one motion, no card changes shape.** The stack's surface changes height on the precise spring with its foot fixed, so the previews and the pointer never move; the old content fades out (200 ms, ease-in) while the new content fades in with a 4 px focus pull; the previews' labels change in place; light crosses the new top card. A second click mid-way picks up from where the surface is |
+| Stack: open | In place: the top card stays where it is; the other cards slide down out from behind it, starting a hair smaller with only their edge showing, 34 ms apart (620 ms). Home dims a little and blurs |
+| Stack: close | The reverse: the cards slide back behind the top card and fade as the previews come back (500 ms) |
+| Stack: choose a card in the open stack | One motion: the chosen card travels to the top of the stack while the others tuck in behind it; nothing plays twice |
 | Widget added | It slides up into its column on the card spring and light crosses it |
 | Pages (Settings, Files) | The new page slides 18 px in from the side you travelled toward; back and up come from the left |
 | Pip's caption and voice panel | Rise 10 px and scale from 97 %; Pip's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
-| Pip changes state | The old look crossfades into the new one over 420 ms, so the orb never jumps |
+| Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; the Turbine instead eases its speed and light into the new state over about 0.4 s, like a machine spinning up. The orb never jumps |
 | Unlock | A ring of accent light spreads from the password field across the screen while the lock lifts away (scales to 104 %, blurs and fades); light then crosses each widget in turn |
 | System update applied | The update screen fades and the same ring spreads from the centre |
-| Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff, 180 ms); off under Reduce motion |
-| Menu / popover | Fades in and moves 4–6 px from its anchor (`dur-base`, ease-out) |
+| Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff). Each icon's size rides its own spring (damping ratio 0.87) toward the size the pointer asks for, so the dock flows as the pointer sweeps across and glides back when it leaves; off under Reduce motion. The label rises 5 px into place on the precise spring |
+| Menu / popover | Unfolds out of what opened it, like a blind drawn from its rail: it grows from its anchor's corner (scale 0.96 → 1, 10 px) while a clip opens away from the anchor, on the precise spring (520 ms); its rows follow 18 ms apart. Closing is a quick fade (150–180 ms, ease-in). Six Search, the widget gallery, toasts and context menus open the same way |
 | Toggle | Thumb slides on the precise spring; tile fill crossfades |
 | Clay press | Pushes in 1 px, scale 0.98 (`dur-instant`); springs back on release |
 | Notification | Slides in 16 px, stays, slides out; never bounces |
@@ -75,7 +76,10 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 
 ## Rules
 - **Only transform and opacity move** (plus clip and blur for unfolding and focus pulls), so motion
-  runs on the compositor at the display's full refresh rate. Never animate layout.
+  runs on the compositor at the display's full refresh rate. Never animate layout; the one
+  exception is the dock's icon sizes, a single short row.
+- **Shapes don't change to make an animation work.** A card keeps its size in a stack, in the open
+  stack and on its way back; what moves is the card, its content or the light on it.
 - **Continuity over decoration.** If something has a place on screen, it moves from there. Nothing
   appears from nowhere except notifications.
 - **Leaving is faster than arriving**, and uses an ease-in, never a spring.

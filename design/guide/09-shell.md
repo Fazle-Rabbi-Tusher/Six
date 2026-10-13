@@ -45,7 +45,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **Separator** | Thin line before Pip and the Bin |
 | **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |
 | **Bin** | Deleted files; shows a count |
-| **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius). Off under Reduce motion, on touch, and on narrow screens |
+| **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius), each on its own spring, so the dock flows rather than snaps (see [08](08-motion.md#choreography)). Off under Reduce motion, on touch, and on narrow screens |
 | **Launch lift** | An opening app's icon lifts once, 12 px, while its window grows out of it; never repeatedly for attention (a badge does that) |
 | **Labels** | A small glass label above the hovered icon |
 

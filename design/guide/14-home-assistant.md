@@ -53,16 +53,17 @@ Like notification stacks on a phone: drag one card onto another and they become 
 | Moment | What the person sees |
 |---|---|
 | Dragging over a card | The target gets a dashed accent outline and a "Release to stack" label |
-| Dropped | The dragged card lands on top with a small pop; the top card gains a bar: ⧉ *4 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
+| Dropped | The dragged card lands on top on a detent and catches the light; under the previews the stack's own controls appear: ⧉ *4 stacked* · **Show all** · **Unstack**; a toast says what was stacked, with **Unstack** |
 | Preview | Under the top card, **every** card in the stack peeks out as a slim preview (up to five, then "+N more"): its title and one live line, for example "TODAY · Next: 10:00 Design review", "CURRENT TASK · Slides from my notes · 64 %" |
-| Bring one to the top | Click a preview: that card slides up to the top of the stack with a small pop, and the card that was on top becomes a preview. Clicking the top card itself does nothing to the stack |
-| Open the stack | Click **Show all** on the stack bar. Nothing else on home moves: the home dims and blurs behind, and each card **unfolds out of its own preview strip** into a column, 42 ms after the one above it, on the precise spring (see [08 · Motion](08-motion.md#choreography)). The column scrolls if it is taller than the screen. **Show less**, a click outside or `Esc` folds every card back into its strip |
-| In the open stack | Click a card to bring it to the front and close; drag a card to pull **just that one** out onto home; buttons inside cards (open a file, stop a task) work as usual |
+| Shape | **No card changes shape in a stack.** The stack keeps the height of its tallest card and the top card sits at the foot of that space, so the previews and the stack's controls stay in exactly the same place whichever card is on top. The controls belong to the stack, not to a card, so a card never grows a bar when it reaches the top |
+| Bring one to the top | Click a preview. One surface, one motion: the stack's surface changes height on the precise spring with its foot fixed, the old card's content fades out and the new card's fades in with a short focus pull, and the previews' labels change in place. Nothing under the pointer moves, so you can click the same preview again and again to flip through the stack. Clicking mid-way picks up from wherever the surface is |
+| Open the stack | Click **Show all**. The stack opens in place: the top card stays exactly where it is (it only moves if the column has to clear the dock) and the other cards slide down out from behind it, a hair smaller at first, 34 ms apart, on the precise spring. Home dims a little and blurs behind. The column scrolls if it is taller than the screen. **Show less**, a click outside or `Esc` slides them back behind the top card |
+| In the open stack | Click a card (or focus it and press `Enter`) to bring it to the top: it travels to the top of the stack while the others tuck in behind it, in one motion. Drag a card to pull **just that one** out onto home; buttons inside cards (open a file, stop a task) work as usual |
 | Pull one out | From the closed stack, drag the top card or grab its preview: a drag always moves exactly one card, and the rest of the stack stays put |
 | Put things back | **Unstack** sends every card in the stack back to its original place; double-click any moved card to return it alone |
 
 Other cards flow around stacks and moved cards, so nothing overlaps. Keyboard: previews and the
-stack bar's buttons are normal buttons; `Alt + arrows` on the focused top card moves it out of
+stack's buttons are normal buttons, and focus stays on the preview you pressed; `Alt + arrows` on the focused top card moves it out of
 the stack one grid step at a time.
 
 ## Widgets
@@ -282,6 +283,44 @@ to 9 s; the reply in the thread keeps the record.
 
 Pip's personality and voice still come from the character canvas; its earlier globe-of-rings
 look is replaced by the dotted orb in the OS.
+
+## Pip's second look: the Turbine
+
+*Settings › Pip & voice › Look: Dotted / Turbine* swaps the dotted sphere for the **Turbine**
+everywhere at once (home, the menu bar, the dock, the task card). It takes its feel from the
+machined, glossy controls of the Ferrari Luce cabin: a ring of 32 twisted, swept blades around a
+polished hub, drawn in real 3D.
+
+![Home with Pip as the Turbine](../screens/home-turbine.png)
+
+| Part | How it's drawn |
+|---|---|
+| Shape | Blades swept back along their length and twisted top to bottom, inside a torus-shaped envelope, around a rounded cylinder hub |
+| Light | A key light from the top left, a tight specular highlight that slides over the blades as they turn, a soft reflection of the room, and a cool edge light. Colour comes from the room (blue on the left, violet on the right), not from the blades, so it stays put while they spin |
+| Depth | Seen from about 45° above, with a slow camera drift; a soft floor shadow in light mode, a faint violet reflection in dark mode; inner blades darker where they meet the hub |
+| Rendering | Ray-marched on the GPU at the display's resolution (one shared renderer copies into each orb), with anti-aliased edges; shaded polygons where WebGL isn't available |
+
+Every state keeps the shape and changes only the motion and the light, and the turbine **eases
+from one state into the next** (its speed and light change over about 0.4 s), like a machine
+spinning up, instead of crossfading:
+
+| State | Turbine |
+|---|---|
+| Ready | Turns slowly |
+| Listening | A wave runs round the ring, lifting the blades |
+| Thinking | Spins up; a band of light chases round the blades |
+| Speaking | The blades swell and glow with the voice |
+| Searching | The camera sweeps round the turbine, looking it over |
+| Working | Spins fastest; blades light up one after another to show progress, with the thin progress ring |
+| Asking | A lighthouse sector of blades lights as the beam turns |
+| Waiting | A slow comet of light circles the ring |
+| Retrying | Spins, brakes, turns back a little, then spins up again |
+| Compacting | The ring draws in toward the hub and back |
+| Complete | Turns green and glows once |
+| Failed | Turns red and slows |
+| Cancelled, Resting | Dims and almost stops |
+
+Under Reduce motion the turbine is drawn still, on a fixed frame, and changes state at once.
 
 ## The current task card
 

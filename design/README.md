@@ -29,13 +29,13 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [05 · Materials](guide/05-materials.md) | Clay, plasma glass, paper, wallpaper, plasma clay (the liquid home surfaces), elevation scale |
 | [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
 | [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, clay app icons, folder, drive and file icons |
-| [08 · Motion](guide/08-motion.md) | The feel (precise, continuous, lit; after the Ferrari Luce interior by LoveFrom), durations, precise and detent springs, choreography for windows, stacks, voice and unlock, reduced motion |
+| [08 · Motion](guide/08-motion.md) | The feel (precise, continuous, lit; after the Ferrari Luce interior by LoveFrom), durations, precise and detent springs, choreography for windows, stacks, the dock, menus, voice and unlock, reduced motion |
 | [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Pip) and macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, first run |
 | [10 · Components](guide/10-components.md) | Buttons, toggles, inputs, menus, lists, dialogs, toasts… and a checklist for adopting 21st.dev / shadcn components |
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states |
+| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and its second look, the 3D Turbine |
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, fifteen tasks, targets, and the order to build SIX in |
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
@@ -81,7 +81,7 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/phone-dark.png) |
 
-| Dragging a card onto another | A stack with previews | Stack opened: cards unfold from their previews |
+| Dragging a card onto another | A stack with previews | Stack opened in place |
 |---|---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
 
@@ -92,6 +92,10 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 | Design guide app | Pip's small orb, every state and variant |
 |---|---|
 | ![](screens/guide-pip.png) | ![](screens/small-orbs.png) |
+
+| Pip as the Turbine on home | The Turbine in every state |
+|---|---|
+| ![](screens/home-turbine.png) | ![](screens/turbine-states.png) |
 
 ## Credits
 
