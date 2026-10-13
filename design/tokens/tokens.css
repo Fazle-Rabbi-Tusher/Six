@@ -80,14 +80,21 @@
   /* ── Motion ───────────────────────────────────────────── */
   --dur-instant: 80ms;    /* press feedback */
   --dur-fast: 140ms;      /* hover, toggles */
-  --dur-base: 220ms;      /* popovers, menus */
-  --dur-slow: 360ms;      /* windows open/close, overview */
+  --dur-base: 240ms;      /* popovers, menus */
+  --dur-slow: 420ms;      /* windows, stacks, overview */
   --dur-ambient: 9s;      /* wallpaper / orb idle loops */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%,
-    1.067, 1.089 25.3%, 1.085 28.3%, 1.024 37.2%, 1.002 43.4%, 0.996 51.1%, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* precise: a spring with damping ratio 0.86, overshoots 0.5 %; reads as a machined part, not a ball */
+  --ease-spring: linear(0, 0.021, 0.075, 0.148, 0.232, 0.321, 0.408, 0.492, 0.57, 0.64, 0.703, 0.757,
+    0.805, 0.845, 0.879, 0.907, 0.93, 0.948, 0.963, 0.974, 0.983, 0.99, 0.995, 0.999, 1.002, 1.003, 1.004,
+    1.005, 1.005, 1.005, 1.005, 1.004, 1.004, 1.003, 1);
+  /* detent: damping ratio 0.68, overshoots 5 %; only where something lands (a card into a stack) */
+  --ease-detent: linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985,
+    1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002,
+    1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1);
 
   /* ── Color: light ─────────────────────────────────────── */
   color-scheme: light;

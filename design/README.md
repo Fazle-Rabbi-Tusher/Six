@@ -29,7 +29,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [05 · Materials](guide/05-materials.md) | Clay, plasma glass, paper, wallpaper, plasma clay (the liquid home surfaces), elevation scale |
 | [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
 | [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, clay app icons, folder, drive and file icons |
-| [08 · Motion](guide/08-motion.md) | Durations, easing, springs, choreography, reduced motion |
+| [08 · Motion](guide/08-motion.md) | The feel (precise, continuous, lit; after the Ferrari Luce interior by LoveFrom), durations, precise and detent springs, choreography for windows, stacks, voice and unlock, reduced motion |
 | [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Pip) and macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, first run |
 | [10 · Components](guide/10-components.md) | Buttons, toggles, inputs, menus, lists, dialogs, toasts… and a checklist for adopting 21st.dev / shadcn components |
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
@@ -81,7 +81,7 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/phone-dark.png) |
 
-| Dragging a card onto another | A stack with previews | Stack opened: cards fan out |
+| Dragging a card onto another | A stack with previews | Stack opened: cards unfold from their previews |
 |---|---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
 

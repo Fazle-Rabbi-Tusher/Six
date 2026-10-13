@@ -46,7 +46,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |
 | **Bin** | Deleted files; shows a count |
 | **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius). Off under Reduce motion, on touch, and on narrow screens |
-| **Launch bounce** | An opening app's icon bounces once; never repeatedly for attention (a badge does that) |
+| **Launch lift** | An opening app's icon lifts once, 12 px, while its window grows out of it; never repeatedly for attention (a badge does that) |
 | **Labels** | A small glass label above the hovered icon |
 
 Maximized windows fill the space between menu bar and dock; the dock can be set to auto-hide.

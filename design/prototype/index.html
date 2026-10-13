@@ -32,10 +32,13 @@
   --control-sm: 28px; --control-md: 36px; --control-lg: 44px; --target-min: 32px;
   --titlebar-h: 44px; --menubar-h: 32px; --dock-h: 68px;
 
-  --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 220ms; --dur-slow: 360ms;
+  --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 240ms; --dur-slow: 420ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%, 1.067, 1.089 25.3%, 1.085 28.3%, 1.024 37.2%, 1.002 43.4%, 0.996 51.1%, 1);
+  --ease-spring: linear(0, 0.021, 0.075, 0.148, 0.232, 0.321, 0.408, 0.492, 0.57, 0.64, 0.703, 0.757, 0.805, 0.845, 0.879, 0.907, 0.93, 0.948, 0.963, 0.974, 0.983, 0.99, 0.995, 0.999, 1.002, 1.003, 1.004, 1.005, 1.005, 1.005, 1.005, 1.004, 1.004, 1.003, 1);
+  --ease-detent: linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985, 1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002, 1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   --c-bg: #eceaf2; --c-surface: #faf9fc; --c-surface-2: #e2dfeb; --c-surface-3: #d6d2e2;
   --c-line: #cfcbdc; --c-line-strong: #8f8ba3;
@@ -242,9 +245,9 @@ svg.i.sm { width: 16px; height: 16px; }
 .dock-apps { display: flex; align-items: flex-end; height: 100%; }
 .dk {
   --s: 1; position: relative; width: calc(56px * var(--s)); height: 100%; border: 0; background: transparent; padding: 0 0 10px;
-  display: flex; align-items: flex-end; justify-content: center; flex: none; transition: width 110ms var(--ease-out);
+  display: flex; align-items: flex-end; justify-content: center; flex: none; transition: width 180ms var(--ease-out);
 }
-.dk .appicon { --ic: calc(48px * var(--s)); transition: width 110ms var(--ease-out), height 110ms var(--ease-out); }
+.dk .appicon { --ic: calc(48px * var(--s)); transition: width 180ms var(--ease-out), height 180ms var(--ease-out); }
 .dk .dot { position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--c-text); opacity: 0; transition: opacity var(--dur-fast); }
 .dk.running .dot { opacity: 0.7; }
 .dk .tip {
@@ -256,8 +259,8 @@ svg.i.sm { width: 16px; height: 16px; }
 .dk:focus-visible { outline: none; }
 .dk:focus-visible .appicon { outline: 2px solid var(--c-focus); outline-offset: 3px; }
 .dk:active .appicon { filter: brightness(0.82); }
-.dk.bounce .appicon { animation: dock-bounce 0.9s var(--ease-out) 1; }
-@keyframes dock-bounce { 0%, 100% { translate: 0 0; } 22% { translate: 0 -20px; } 48% { translate: 0 0; } 68% { translate: 0 -8px; } }
+.dk.bounce .appicon { animation: dock-bounce 0.72s var(--ease-in-out) 1; }
+@keyframes dock-bounce { 0%, 100% { translate: 0 0; } 38% { translate: 0 -12px; } }   /* one lift, no rubber-ball bounce */
 .dock-sep { width: 1px; align-self: stretch; margin: 12px 6px 14px; background: color-mix(in srgb, var(--c-text) 22%, transparent); flex: none; }
 
 /* app icons: macOS-style squircles with clay depth */
@@ -453,8 +456,6 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .widget.stack-hidden { visibility: hidden; pointer-events: none; }
 .widget.drop-target { outline: 2px dashed var(--c-focus); outline-offset: 6px; border-radius: var(--radius-xl); }
 .widget.drop-target::after { content: "Release to stack"; position: absolute; z-index: 6; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 5px 12px; border-radius: 999px; background: var(--c-accent); color: var(--c-text-on-accent); font: var(--text-label); white-space: nowrap; box-shadow: var(--shadow-2); }
-.widget.merged { animation: merge-pop 0.45s var(--ease-out); }
-@keyframes merge-pop { 0% { scale: 0.97; } 40% { scale: 1.03; } 100% { scale: 1; } }
 .peek {
   position: absolute; z-index: 2; display: flex; align-items: flex-end; gap: 8px; padding: 0 14px 8px; overflow: hidden; white-space: nowrap;
   border: 1px solid var(--glass-edge); border-top: 0; border-radius: 0 0 16px 16px; cursor: grab; touch-action: none; text-align: left;
@@ -488,12 +489,9 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .widget.in-pop { position: relative; left: auto !important; top: auto !important; width: auto; flex: none; cursor: pointer; z-index: auto;
   background: var(--glass-fill-strong) !important; border: 1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-3);
   -webkit-backdrop-filter: blur(var(--glass-blur)); backdrop-filter: blur(var(--glass-blur));
-  animation: fan-in 0.46s var(--ease-out) both; animation-delay: calc(var(--i) * 55ms); }
+}
 .widget.in-pop .stack-bar { display: none; }
 .widget.in-pop:hover { box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-4); }
-.widget.in-pop.fan-out { animation: fan-out 0.22s var(--ease-in) both; animation-delay: calc(var(--i) * 18ms); }
-@keyframes fan-in { from { opacity: 0; transform: translateY(calc(var(--i) * -72px)) scale(0.9); } 60% { opacity: 1; } to { opacity: 1; transform: none; } }
-@keyframes fan-out { to { opacity: 0; transform: translateY(calc(var(--i) * -72px)) scale(0.9); } }
 :root[data-motion="reduced"] .widget.in-pop { animation: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .widget.in-pop { animation: none; } }
 #home.stack .widget.stack-hidden { visibility: visible; pointer-events: auto; }
@@ -1053,6 +1051,14 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   .st-card > :last-child { grid-column: 1 / -1; justify-self: start; }
   .srow { flex-wrap: wrap; }
 }
+
+/* motion: light as feedback */
+.glint { position: absolute; inset: 0; z-index: 6; border-radius: 16px; overflow: hidden; pointer-events: none; }
+.glint i { position: absolute; top: -20%; bottom: -20%; left: 0; width: 38%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24) 45%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0.24) 55%, transparent); mix-blend-mode: soft-light; }
+:root[data-theme="dark"] .glint i { mix-blend-mode: plus-lighter; opacity: 0.55; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .glint i { mix-blend-mode: plus-lighter; opacity: 0.55; } }
+.ceremony { position: absolute; z-index: 2050; width: 260vmax; height: 260vmax; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, transparent 60%, color-mix(in srgb, var(--c-accent) 50%, transparent) 66%, color-mix(in srgb, var(--c-accent) 18%, transparent) 69%, transparent 72%); }
 </style>
 </head>
 <body>
@@ -2076,6 +2082,93 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const rmMQ = matchMedia('(prefers-reduced-motion: reduce)');
   const icon = (id, cls = 'i') => `<svg class="${cls}"><use href="#i-${id}"/></svg>`;
 
+  /* ── Motion: precise, continuous, lit ──────────────────────────────
+     After the Ferrari Luce interior by LoveFrom: controls that move like machined parts. Springs
+     settle without wobble (a detent spring only where something lands); things move from where
+     they are, never from nowhere; light, not bounce, says something happened. Everything here
+     is skipped under Reduce motion. */
+  const calm = () => root.dataset.motion === 'reduced' || (rmMQ.matches && root.dataset.motion !== 'full');
+  const LINEAR_OK = typeof CSS !== 'undefined' && CSS.supports('transition-timing-function', 'linear(0, 1)');
+  const EASE = {
+    precise: LINEAR_OK ? 'linear(0, 0.021, 0.075, 0.148, 0.232, 0.321, 0.408, 0.492, 0.57, 0.64, 0.703, 0.757, 0.805, 0.845, 0.879, 0.907, 0.93, 0.948, 0.963, 0.974, 0.983, 0.99, 0.995, 0.999, 1.002, 1.003, 1.004, 1.005, 1.005, 1.005, 1.005, 1.004, 1.004, 1.003, 1)' : 'cubic-bezier(0.22, 1, 0.36, 1)',
+    detent: LINEAR_OK ? 'linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985, 1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002, 1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1)' : 'cubic-bezier(0.34, 1.3, 0.64, 1)',
+    out: 'cubic-bezier(0.16, 1, 0.3, 1)', in: 'cubic-bezier(0.55, 0, 0.75, 0.2)', inOut: 'cubic-bezier(0.65, 0, 0.35, 1)',
+  };
+  const anim = (el, frames, opts) => (calm() || !el || !el.animate) ? null : el.animate(frames, { easing: EASE.precise, duration: 480, fill: 'backwards', ...opts });
+  const settled = a => (a ? a.finished.then(() => a, () => a) : Promise.resolve(null));
+  // move an element from a rectangle it used to occupy (or unfold it from a preview strip) to where it is now
+  function flipFrom(el, from, opts = {}) {
+    if (!from || calm()) return null;
+    const to = el.getBoundingClientRect(); if (!to.width) return null;
+    const s = from.width / to.width, r = opts.radius ?? 16;
+    const clip = opts.unfold ? Math.max(0, to.height - from.height / s) : 0;
+    return anim(el, [
+      { transformOrigin: '0 0', transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${s})`, clipPath: `inset(0 0 ${clip}px 0 round ${r}px)`, opacity: opts.fromOpacity ?? 1 },
+      { transformOrigin: '0 0', transform: 'none', clipPath: `inset(0 0 0 0 round ${r}px)`, opacity: 1 },
+    ], { duration: opts.duration || 560, delay: opts.delay || 0, easing: opts.easing || EASE.precise });
+  }
+  // and back: fold it into a target rectangle, then let the caller put it there for real
+  function flipTo(el, to, opts = {}) {
+    if (!to || calm()) return null;
+    const from = el.getBoundingClientRect(); if (!from.width) return null;
+    const s = to.width / from.width, r = opts.radius ?? 16;
+    const clip = opts.fold ? Math.max(0, from.height - to.height / s) : 0;
+    return anim(el, [
+      { transformOrigin: '0 0', transform: 'none', clipPath: `inset(0 0 0 0 round ${r}px)`, opacity: 1 },
+      { transformOrigin: '0 0', transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${s})`, clipPath: `inset(0 0 ${clip}px 0 round ${r}px)`, opacity: opts.toOpacity ?? 1 },
+    ], { duration: opts.duration || 380, delay: opts.delay || 0, easing: opts.easing || EASE.precise, fill: 'forwards' });
+  }
+  // a band of light crosses a surface: how SIX says "this landed" or "this is ready"
+  function glint(el, delay = 0) {
+    if (calm() || !el || !el.isConnected) return;
+    const g = document.createElement('span'); g.className = 'glint'; g.setAttribute('aria-hidden', 'true'); g.innerHTML = '<i></i>';
+    el.append(g);
+    $('i', g).animate([{ transform: 'translateX(-130%) skewX(-16deg)' }, { transform: 'translateX(330%) skewX(-16deg)' }], { duration: 1000, delay, easing: EASE.inOut, fill: 'backwards' })
+      .finished.then(() => g.remove(), () => g.remove());
+  }
+  // a card that lands lifts a hair, settles on a detent, and catches the light
+  function settle(el) {
+    anim(el, [{ transform: 'translateY(-6px) scale(1.035)' }, { transform: 'none' }], { duration: 560, easing: EASE.detent });
+    glint(el, 90);
+  }
+  // text arrives like a display waking: a short focus pull, not a slide
+  const textIn = (el, delay = 0) => anim(el, [{ opacity: 0, filter: 'blur(6px)', transform: 'translateY(4px)' }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }], { duration: 560, delay, easing: EASE.out });
+  const surfaceIn = (el, dy = 10) => anim(el, [{ opacity: 0, transform: `translateY(${dy}px) scale(0.97)` }, { opacity: 1, transform: 'none' }], { duration: 520 });
+  const pageIn = (el, dir = 1) => anim(el, [{ opacity: 0, transform: `translateX(${dir * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 420 });
+  // the dock icon an app lives in, so windows open from it and minimise back into it
+  function dockRect(id) {
+    const dk = id === 'pip' ? $('#dockPip') : $(`.dk[data-app="${id}"]`);
+    const r = dk && $('.appicon', dk)?.getBoundingClientRect();
+    return r && r.width ? r : null;
+  }
+  function windowIn(el, id) {
+    const from = dockRect(id), to = el.getBoundingClientRect();
+    if (!from || !to.width) return surfaceIn(el, 14);
+    return anim(el, [
+      { transformOrigin: '0 0', transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width})`, opacity: 0, borderRadius: '30px' },
+      { opacity: 1, offset: 0.3 },
+      { transformOrigin: '0 0', transform: 'none', opacity: 1, borderRadius: getComputedStyle(el).borderRadius },
+    ], { duration: 600 });
+  }
+  function windowOut(el, id, toDock) {
+    const to = toDock && dockRect(id), from = el.getBoundingClientRect();
+    if (to && from.width) return anim(el, [
+      { transformOrigin: '0 0', transform: 'none', opacity: 1 },
+      { opacity: 1, offset: 0.6 },
+      { transformOrigin: '0 0', transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width})`, opacity: 0 },
+    ], { duration: 460, easing: EASE.inOut, fill: 'forwards' });
+    return anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.97)' }], { duration: 200, easing: EASE.in, fill: 'forwards' });
+  }
+  // the unlock ceremony: a ring of accent light spreads from where you signed in
+  function ceremony(x, y, delay = 0) {
+    if (calm()) return;
+    const d = desk.getBoundingClientRect(), c = document.createElement('div');
+    c.className = 'ceremony'; c.style.left = (x - d.left) + 'px'; c.style.top = (y - d.top) + 'px';
+    desk.append(c);
+    c.animate([{ transform: 'translate(-50%, -50%) scale(0.02)', opacity: 0.9 }, { opacity: 0.75, offset: 0.5 }, { transform: 'translate(-50%, -50%) scale(1)', opacity: 0 }], { duration: 1400, delay, easing: EASE.out, fill: 'backwards' })
+      .finished.then(() => c.remove(), () => c.remove());
+  }
+
   /* ── App registry ───────────────────────────── */
   const APPS = [
     { id: 'files', name: 'Files', icon: 'folder', win: true },
@@ -2193,9 +2286,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (!w.el.hidden && w.el.classList.contains('active')) { minimize(id); return; }
     if (w.el.hidden) {
       w.el.hidden = false; w.min = false;
-      w.el.classList.add('opening');
-      void w.el.offsetWidth; // commit the start state, then animate in (no frame dependency)
-      w.el.classList.remove('opening');
+      windowIn(w.el, id);   // grows out of its dock icon
       const dk = $(`.dk[data-app="${id}"]`);
       if (dk && root.dataset.motion !== 'reduced' && !(rmMQ.matches && root.dataset.motion !== 'full')) {
         dk.classList.remove('bounce'); void dk.offsetWidth; dk.classList.add('bounce'); setTimeout(() => dk.classList.remove('bounce'), 950);
@@ -2203,16 +2294,14 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     }
     focusWin(id);
   }
-  function minimize(id) {
+  // minimise folds the window back into its dock icon; close is a short, quiet fade
+  function hideWin(id, min) {
     const w = wins[id];
-    w.el.classList.add('closing');
-    setTimeout(() => { w.el.hidden = true; w.min = true; w.el.classList.remove('closing'); focusWin(topVisible()); }, 140);
+    if (w.leaving) return; w.leaving = true;
+    settled(windowOut(w.el, id, min)).then(a => { w.el.hidden = true; w.min = min; w.leaving = false; if (a) a.cancel(); focusWin(topVisible()); });
   }
-  function closeWin(id) {
-    const w = wins[id];
-    w.el.classList.add('closing');
-    setTimeout(() => { w.el.hidden = true; w.min = false; w.el.classList.remove('closing'); focusWin(topVisible()); }, 140);
-  }
+  const minimize = id => hideWin(id, true);
+  const closeWin = id => hideWin(id, false);
   function zoneRect(zone) {
     const W = work(), hw = W.w / 2, hh = W.h / 2;
     const r = {
@@ -2549,7 +2638,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     usb: { name: 'KINGSTON', kids: [], items: [T('Photos backup.zip', '01/09/2026', '12.6 GB'), T('CV, Nadia Rahman.pdf', '20/08/2026', '160 KB', 'important')] },
     bin: { name: 'Bin', bin: true, kids: [], get items() { return bin; } },
   };
-  let cur = 'documents', fHist = ['documents'], fPos = 0, fView = 'grid', fFilter = '';
+  let cur = 'documents', fHist = ['documents'], fPos = 0, fView = 'grid', fFilter = '', fDir = 0;
   const isTag = k => k.startsWith('tag:');
   const titleOf = k => isTag(k) ? 'Tagged ' + capF(k.slice(4)) : FTREE[k].name;
   const nameOf = x => x.kind === 'file' ? x.f.name : x.kind === 'drive' ? x.name : FTREE[x.key].name;
@@ -2570,6 +2659,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     cur = k; fsel = -1; fFilter = ''; $('#fQ').value = '';
     if (push && fHist[fPos] !== k) { fHist = fHist.slice(0, fPos + 1); fHist.push(k); fPos = fHist.length - 1; }
     renderFiles();
+    if (!wins.files.el.hidden) pageIn($('#flist'), fDir || 1); fDir = 0;
   }
   // pictures get a painted thumbnail; everything else its paper icon
   function thumb(f, big) {
@@ -2686,9 +2776,9 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   });
   $('#fSide').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTo(b.dataset.go); });
   $('#fPath').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) goTo(b.dataset.go); });
-  $('#fBack').addEventListener('click', () => { if (fPos > 0) goTo(fHist[--fPos], false); });
+  $('#fBack').addEventListener('click', () => { if (fPos > 0) { fDir = -1; goTo(fHist[--fPos], false); } });
   $('#fFwd').addEventListener('click', () => { if (fPos < fHist.length - 1) goTo(fHist[++fPos], false); });
-  $('#fUp').addEventListener('click', () => { const p = !isTag(cur) && FTREE[cur].parent; if (p) goTo(p); });
+  $('#fUp').addEventListener('click', () => { const p = !isTag(cur) && FTREE[cur].parent; if (p) { fDir = -1; goTo(p); } });
   $('#fQ').addEventListener('input', e => { fFilter = e.target.value; fsel = -1; renderFiles(); });
   $('#fView').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; fView = b.dataset.v; renderFiles(); });
   $('#fNew').addEventListener('click', () => {
@@ -2725,7 +2815,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const pageName = id => (SET_ALL.find(p => p[0] === id) || [])[1] || 'Settings';
   const sico = (ic, c) => `<span class="sico" style="--c:${c}" aria-hidden="true">${icon(ic)}</span>`;
   $('#setNav').innerHTML = SET_PAGES.map(([g, ps]) => `<span class="side-h">${g}</span>` + ps.map(([id, n, ic, c]) => `<button type="button" class="navbtn" data-page="${id}" aria-selected="false">${sico(ic, c)}<span>${n}</span></button>`).join('')).join('');
-  let sHist = [], sPos = -1, sNow = null;
+  let sHist = [], sPos = -1, sNow = null, sDir = 1;
   function showPage(id, push = true, row) {
     if (!$(`#w-settings .spage[data-page="${id}"]`)) return;
     sNow = id; $('#setResults').hidden = true;
@@ -2736,6 +2826,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     $('#setBack').disabled = sPos <= 0; $('#setFwd').disabled = sPos >= sHist.length - 1;
     $('#setScroll').scrollTop = 0;
     syncSettings();
+    pageIn($(`#w-settings .spage[data-page="${id}"]`), sDir); sDir = 1;
     if (row) { row.scrollIntoView({ block: 'center' }); row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
   }
   function openSettings(page) {
@@ -2744,7 +2835,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     showPage(page || sNow || 'wifi');
   }
   $('#setNav').addEventListener('click', e => { const b = e.target.closest('[data-page]'); if (b) { $('#setQ').value = ''; showPage(b.dataset.page); } });
-  $('#setBack').addEventListener('click', () => { if (sPos > 0) showPage(sHist[--sPos], false); });
+  $('#setBack').addEventListener('click', () => { if (sPos > 0) { sDir = -1; showPage(sHist[--sPos], false); } });
   $('#setFwd').addEventListener('click', () => { if (sPos < sHist.length - 1) showPage(sHist[++sPos], false); });
   // search every row of every page
   const SET_INDEX = $$('#w-settings .spage').flatMap(p => [...$$('.srow', p)].map(r => ({ page: p.dataset.page, row: r, title: ($('b', r)?.textContent || '').trim(), sub: ($('small', r)?.textContent || '').trim(), kw: r.textContent.replace(/\s+/g, ' ') + ' ' + [...$$('option', r)].map(o => o.textContent).join(' ') })));
@@ -2814,7 +2905,9 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     let p = 0; const t = setInterval(() => {
       p += 7; $('.bar i', o).style.width = Math.min(100, p) + '%';
       if (p >= 110) {
-        clearInterval(t); o.remove();
+        clearInterval(t);
+        const a = anim(o, [{ opacity: 1 }, { opacity: 0 }], { duration: 520, fill: 'forwards' }); settled(a).then(() => o.remove());
+        const d = desk.getBoundingClientRect(); ceremony(d.left + d.width / 2, d.top + d.height / 2, 120);
         const pg = $('#w-settings .spage[data-page="updates"]'), rows = $$('.srow', pg);
         $('b', rows[0]).textContent = 'SIX is up to date'; $('small', rows[0]).textContent = 'Checked a moment ago'; $('.row-btns', rows[0]).innerHTML = '<span class="chip ok">Up to date</span>';
         $('small', rows[1]).textContent = 'SIX 1.0.3 · built on Fedora Linux 44'; $('small', rows[2]).textContent = 'SIX 1.0.2 is kept so you can go back if something breaks';
@@ -2937,8 +3030,14 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   setInterval(() => { if (!$('#lock').hidden) tickLock(); }, 15000);
   $('#lockForm').addEventListener('submit', e => {
     e.preventDefault();
-    const l = $('#lock'); l.classList.remove('on');
-    setTimeout(() => { l.hidden = true; $('#lockPw').value = ''; }, 260);
+    const l = $('#lock'), r = $('.lock-pw').getBoundingClientRect();
+    const gone = () => { l.hidden = true; l.classList.remove('on'); $('#lockPw').value = ''; };
+    if (calm()) { gone(); return; }
+    // the unlock ceremony: a ring of accent light spreads from the password field as the lock lifts away
+    ceremony(r.left + r.width / 2, r.top + r.height / 2);
+    const a = anim(l, [{ opacity: 1, transform: 'none', filter: 'blur(0px)' }, { opacity: 0, transform: 'scale(1.04)', filter: 'blur(10px)' }], { duration: 640, easing: EASE.out, fill: 'forwards' });
+    settled(a).then(() => { gone(); if (a) a.cancel(); });
+    widgetEls.filter(w => w.offsetParent && !w.classList.contains('stack-hidden')).forEach((w, i) => glint(w, 380 + i * 80));
   });
   document.addEventListener('keydown', e => { if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'l') { e.preventDefault(); lockScreen(); } });
 
@@ -3314,11 +3413,20 @@ button.cal-cell:hover { background: var(--c-surface-3); }
       if (o.offsetParent === null || ((!o._hi || o.clientWidth < 200) && !small)) return;
       const look = lookOf(o), key = look + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth;
       // a state just entered starts its own clock from zero (Complete glows once on entry)
-      if (o._look !== look) { o._look = look; if (look === 'done' || look === 'failed') clocks.delete(look); }
+      if (o._look !== look) {
+        // a change of state crossfades: the last frame of the old look fades out over the new one
+        if (o._look && !still && o.width) { const g = o._ghost || (o._ghost = document.createElement('canvas')); g.width = o.width; g.height = o.height; g.getContext('2d').drawImage(o, 0, 0); o._ghostAt = now; }
+        o._look = look; if (look === 'done' || look === 'failed') clocks.delete(look);
+      }
       if (still && o._key === key) return;   // reduced motion: draw only on change, on a fixed frame
       o._key = key;
       if (!ts.has(look)) ts.set(look, still ? 1500 : orbClock(look, now));
       drawAnyOrb(o, ts.get(look));
+      if (o._ghostAt) {
+        const k = (now - o._ghostAt) / 420;
+        if (k >= 1 || still) o._ghostAt = 0;
+        else { const c = o.getContext('2d'); c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = (1 - k) * (1 - k); c.drawImage(o._ghost, 0, 0); c.restore(); }
+      }
     });
   }
 
@@ -3384,7 +3492,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const phys = new Map(widgetEls.map(el => [el, { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, moved: false }]));
   const VISC = {
     water: { k: 54, stiff: 320, damp: 13 },
-    gel: { k: 40, stiff: 210, damp: 21 },
+    gel: { k: 40, stiff: 260, damp: 27 },   // damping ratio ≈ 0.84: settles without wobble
     honey: { k: 32, stiff: 70, damp: 17 },
     solid: { k: 1, stiff: 0, damp: 0 },
   };
@@ -3502,11 +3610,18 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (st.cards.length < 2) stacks.splice(stacks.indexOf(st), 1);
     renderStacks();
   }
+  const peekOf = c => $$('.peek').find(p => p._card === c) || null;
+  // previews slide out from under the top card one after another
+  function peeksIn(st, skip = 0) {
+    $$('.peek').filter(p => st.cards.includes(p._card)).forEach((p, i) => { if (i >= skip) anim(p, [{ opacity: 0, transform: 'translateY(-14px) scaleX(0.94)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 70 + i * 50 }); });
+  }
   function bringToFront(el) {
     const st = stackOf(el); if (!st || st.cards[0] === el) return;
+    const from = peekOf(el)?.getBoundingClientRect();
     st.cards.splice(st.cards.indexOf(el), 1); st.cards.unshift(el);
     renderStacks();
-    el.classList.remove('merged'); void el.offsetWidth; el.classList.add('merged');
+    flipFrom(el, from, { unfold: true, duration: 600 });
+    peeksIn(st); glint(el, 160);
     $('.stack-btn', el)?.focus();
   }
   function mergeInto(el, target) {
@@ -3514,7 +3629,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (!st) { const tp = phys.get(target); st = { cards: [target], x: tp.tx, y: tp.ty, open: false }; stacks.push(st); }
     st.cards.unshift(el); st.open = false;
     renderStacks();
-    el.classList.remove('merged'); void el.offsetWidth; el.classList.add('merged');
+    settle(el); peeksIn(st);
     toast(`Stacked “${cardName(el)}” on “${cardName(target)}”`, () => unstack(st), 'Unstack');
   }
   function unstack(st) {
@@ -3529,6 +3644,8 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (!st || !isWide()) return;
     if (popStack) closeStack(true);
     popStack = st;
+    const topR = st.cards[0].getBoundingClientRect();
+    const fromR = st.cards.map((c, i) => (i && peekOf(c)?.getBoundingClientRect()) || topR);
     $$('.peek').forEach(p => { p.style.visibility = 'hidden'; });
     $('#stackPopCount').textContent = `${st.cards.length} cards`;
     const list = $('#stackPopList');
@@ -3540,6 +3657,8 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     stackPop.style.maxHeight = bottom - top + 'px';
     const h = Math.min(stackPop.scrollHeight, bottom - top);
     stackPop.style.top = Math.max(top, Math.min(st.y - 44, bottom - h)) + 'px';
+    st.cards.forEach((c, i) => flipFrom(c, fromR[i], { unfold: i > 0, delay: i * 42, duration: 620, fromOpacity: i && fromR[i] === topR ? 0 : 1 }));
+    anim($('.stack-pop-head', stackPop), [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 160 });
     requestAnimationFrame(() => { stackScrim.classList.add('open'); });
     markDirty();
     $('#stackPopLess').focus();
@@ -3554,8 +3673,12 @@ button.cal-cell:hover { background: var(--c-surface-3); }
       if (after) after(); else $('.stack-btn', st.cards[0])?.focus();
     };
     stackScrim.classList.remove('open');
-    if (instant || reducedMotion()) finish();
-    else { st.cards.forEach(c => c.classList.add('fan-out')); setTimeout(finish, 240); }
+    if (instant || calm()) { finish(); return; }
+    const d = desk.getBoundingClientRect(), c0 = st.cards[0];
+    const topR = { left: d.left + st.x, top: d.top + st.y, width: c0.getBoundingClientRect().width, height: c0.offsetHeight };
+    const runs = st.cards.map((c, i) => { const pk = i && peekOf(c); return flipTo(c, pk ? pk.getBoundingClientRect() : topR, { fold: i > 0, toOpacity: i && !pk ? 0 : 1, duration: 420, delay: (st.cards.length - 1 - i) * 26 }); });
+    anim($('.stack-pop-head', stackPop), [{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+    Promise.all(runs.map(settled)).then(r => { finish(); r.forEach(a => a && a.cancel()); const h = $('.stack-pop-head', stackPop); h.getAnimations().forEach(a => a.cancel()); });
   }
   stackScrim.addEventListener('click', () => closeStack());
   $('#stackPopLess').addEventListener('click', () => closeStack());
@@ -3897,7 +4020,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     fitting = false;
     const ph = phys.get(el);
     ph.x = ph.tx; ph.y = ph.ty + 28; ph.init = true;
-    el.classList.remove('merged'); void el.offsetWidth; el.classList.add('merged');
+    glint(el, 220);
     markDirty();
     if (!best) {
       const foot = footOf(col, el);
@@ -3917,7 +4040,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (!st) { const tp = phys.get(target); st = { cards: [target], x: tp.tx, y: tp.ty, open: false }; stacks.push(st); }
     st.cards.splice(1, 0, el);
     const ph = phys.get(el); ph.x = st.x; ph.y = st.y;
-    renderStacks();
+    renderStacks(); peeksIn(st);
   }
   function removeEl(el) {
     if (!widgetEls.includes(el)) return false;
@@ -4071,6 +4194,7 @@ Request: ${JSON.stringify(d)}`;
       $('.rv-head span', box).textContent = `Preview · ${spec.title}`;
       renderBlocks(spec, $('.wprev .well', box));
       host ? host.replaceChildren(box) : m.insertBefore(box, $('.acts', m));
+      surfaceIn(box, 8);
       const [yes, no] = $$('.rv-btns button', box);
       const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; $$('button, input', $('.wprev', box)).forEach(x => { x.disabled = true; }); voice.pending = null; if (host) m.insertBefore(box, $('.acts', m)); res(ok); };
       yes.onclick = () => end(true); no.onclick = () => end(false);
@@ -4443,6 +4567,7 @@ void main(){
     $('#pipEmpty').hidden = true; live.el.hidden = false;
     const m = msgEl(who, text, viaVoice);
     thread.append(m);
+    anim(m, [{ opacity: 0, transform: `translateY(10px)${who === 'user' ? ' scale(0.98)' : ''}` }, { opacity: 1, transform: 'none' }], { duration: 460 });
     const o = $('.dotorb', m); if (o) mountOrb(o, true);
     if (who === 'user' && live.title === 'New chat') { live.title = text.length > 34 ? text.slice(0, 32).trim() + '…' : text; $('#convTitle').textContent = live.title; }
     if (viaVoice) live.voice = true;
@@ -4599,6 +4724,7 @@ Current prototype state: ${stateSummary()}`;
         <div class="rv-btns"><button type="button" class="btn btn-danger sm">Move to Bin</button><button type="button" class="btn btn-secondary sm">Cancel</button></div>`;
       $('b', box).textContent = f.name;
       host ? host.replaceChildren(box) : m.insertBefore(box, $('.acts', m));
+      surfaceIn(box, 8);
       const [yes, no] = $$('.rv-btns button', box);
       const end = ok => { box.classList.add('done'); yes.disabled = no.disabled = true; voice.pending = null; if (host) m.insertBefore(box, $('.acts', m)); res(ok); };
       yes.onclick = () => end(true); no.onclick = () => end(false);
@@ -4620,7 +4746,7 @@ Current prototype state: ${stateSummary()}`;
     let reply = '', local = null, outcome = 'complete', label = '', fixes = null;
     try { local = localIntent(text); } catch (e) { local = { fail: "That didn't work. " + (e.message || ''), label: 'couldn’t do that' }; }
     setPip('thinking', local ? 'on this device' : sample ? 'asking Claude' : '');
-    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; if (cap) cap.pip.textContent = r; };
+    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; if (cap) { const first = !cap.pip.textContent; cap.pip.textContent = r; if (first) textIn(cap.pip); } };
     if (local && local.review) {
       await wait(300);
       note(m, 'local');
@@ -4772,18 +4898,26 @@ Current prototype state: ${stateSummary()}`;
   function capHost() {
     clearTimeout(capT);
     if (!topVisible() && $('#lock').hidden) {
+      const was = $('#vcap').hidden;
       $('#vhud').hidden = true; $('#vcap').hidden = false; $('#vTry').classList.add('away'); markDirty();
+      if (was) surfaceIn($('#vcap'));
       return { you: $('#vYou'), pip: $('#vPip'), card: $('#vCard') };
     }
-    $('#vhud').hidden = false;
+    if ($('#vhud').hidden) { $('#vhud').hidden = false; surfaceIn($('#vhud'), -10); }
     return { you: $('#hudYou'), pip: $('#hudPip'), card: $('#hudCard') };
   }
   function capDone(ms = 9000) {
     clearTimeout(capT);
     capT = setTimeout(() => {
       if (voice.pending || voice.on) { capDone(4000); return; }
-      $('#vcap').hidden = true; $('#vhud').hidden = true; $('#vTry').classList.remove('away');
-      $('#vCard').replaceChildren(); $('#hudCard').replaceChildren(); markDirty();
+      const out = el => el.hidden ? null : anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6px) scale(0.98)' }], { duration: 320, easing: EASE.in, fill: 'forwards' });
+      const a = out($('#vcap')), b = out($('#vhud'));
+      Promise.all([settled(a), settled(b)]).then(() => {
+        if (voice.on) { a && a.cancel(); b && b.cancel(); return; }
+        $('#vcap').hidden = true; $('#vhud').hidden = true; a && a.cancel(); b && b.cancel();
+        $('#vTry').classList.remove('away'); anim($('#vTry'), [{ opacity: 0 }, { opacity: 1 }], { duration: 420 });
+        $('#vCard').replaceChildren(); $('#hudCard').replaceChildren(); markDirty();
+      });
     }, ms);
   }
   function syncVoiceUI() {

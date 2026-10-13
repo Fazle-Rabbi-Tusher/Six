@@ -48,13 +48,15 @@ tokens = {
     },
     "liquid": {k: {"$type": "number" if "px" not in v else "dimension", "$value": v.split("/*")[0].strip()} for k, v in re.findall(r"--liquid-([a-z-]+):\s*([^;]+);", root)},
     "duration": vals("dur", "duration"),
-    "easing": {k: {"$type": "cubicBezier", "$value": v.strip()} for k, v in re.findall(r"--ease-([a-z]+):\s*(cubic-bezier\([^)]*\))", root)},
+    "easing": {k: {"$type": "cubicBezier", "$value": v.strip()} for k, v in re.findall(r"--ease-([a-z-]+):\s*(cubic-bezier\([^)]*\))", root)},
     "spring": {
         "snappy": {"$type": "spring", "$value": {"stiffness": 420, "damping": 34, "mass": 1}, "$description": "menus, toggles, window snap"},
         "gentle": {"$type": "spring", "$value": {"stiffness": 220, "damping": 26, "mass": 1}, "$description": "window open, overview, orb"},
         "liquid": {"$type": "spring", "$value": {"stiffness": 140, "damping": 14, "mass": 1}, "$description": "plasma surfaces fusing; decorative only"},
         "viscosity-water": {"$type": "spring", "$value": {"stiffness": 320, "damping": 13, "mass": 1}, "$description": "home cards, blend 54 px"},
-        "viscosity-gel": {"$type": "spring", "$value": {"stiffness": 210, "damping": 21, "mass": 1}, "$description": "home cards (default), blend 40 px"},
+        "precise": {"$type": "spring", "$value": {"stiffness": 177, "damping": 23, "mass": 1}, "$description": "damping ratio 0.86: windows, stacks, pages; the default"},
+        "detent": {"$type": "spring", "$value": {"stiffness": 282, "damping": 23, "mass": 1}, "$description": "damping ratio 0.68: a card landing in a stack; nothing else"},
+        "viscosity-gel": {"$type": "spring", "$value": {"stiffness": 260, "damping": 27, "mass": 1}, "$description": "home cards (default), damping ratio 0.84, blend 40 px"},
         "viscosity-honey": {"$type": "spring", "$value": {"stiffness": 70, "damping": 17, "mass": 1}, "$description": "home cards, blend 32 px"},
     },
     "color": {
