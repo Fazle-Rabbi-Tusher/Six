@@ -40,7 +40,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 
 | Part | Behaviour |
 |---|---|
-| **Six Menu** | First icon (iris squircle with the six-dot mark); opens the Six Menu above the dock |
+| **Six Menu** | First icon (graphite squircle with the six-dot mark); opens the Six Menu above the dock |
 | **Apps** | Pinned and running apps. Running = a 4 px dot under the icon |
 | **Separator** | Thin line before Pip and the Bin |
 | **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |

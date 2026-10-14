@@ -19,6 +19,7 @@ yellow spreads through the interface. SIX borrows the feel, not the look or the 
 | Two display planes give real depth; needles move with the wheel | **Continuity.** Things move from where they are: a stack opens in place with its cards sliding out from behind the top card, a window grows out of its dock icon and folds back into it, a menu unfolds from what opened it, a page slides in the direction you travelled |
 | The start-up ceremony: colour spreads through the interface | **Light as feedback.** A band of light crosses a card when it lands or is added; unlocking sends a ring of accent light out from the password field; Pip's words arrive with a short focus pull, like a display waking |
 | Glass and aluminium, little decoration | **Restraint.** One thing moves big at a time; no confetti, no shaking, no rubber-ball bounces anywhere in the system |
+| (SIX's own) Water held in a hand | **Tension.** Things you touch behave like water: a control squashes when pressed and stretches toward the pointer when pulled; past a point it lets go and springs back with one small wobble. That wobble, the **water** spring, is the only one in the system, and it only follows a release |
 
 Sources: [Dezeen · Ferrari Luce interior by LoveFrom](https://www.dezeen.com/?p=2296493),
 [Domus · Jony Ive designed Ferrari's first electric car](https://www.domusweb.it/en/news/gallery/2026/02/10/jony-ive-Ferrari-luce-electric-car-design-apple.html),
@@ -41,9 +42,10 @@ Sources: [Dezeen · Ferrari Luce interior by LoveFrom](https://www.dezeen.com/?p
 | `--ease-in-out` | `cubic-bezier(.65,0,.35,1)` | Minimising into the dock; light sweeps |
 | `--ease-spring` | `linear()` spring, damping ratio 0.86 | **Precise**: everything that moves position or size |
 | `--ease-detent` | `linear()` spring, damping ratio 0.68 | **Detent**: a card landing in a stack, nothing else |
+| `--ease-water` | `linear()` spring, damping ratio 0.36 (overshoots about 30 %) | **Water**: a control let go after a press or a pull (tension), nothing else |
 
 Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 23) by default,
-**detent** (282 / 23) for landings, and the viscosity springs for home cards (gel, the default, is
+**detent** (282 / 23) for landings, **water** (300 / 12.5) for tension, and the viscosity springs for home cards (gel, the default, is
 260 / 27: damping ratio 0.84, so dragged cards settle without wobble).
 
 ## Choreography
@@ -67,14 +69,18 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Pip's caption | Rise 10 px and scale from 97 %; Pip's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
-| Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; the Turbine and the Hologram instead ease their speed and light into the new state over about 0.4 s, like a machine spinning up. The orb never jumps |
+| Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; Bloom and Halo instead ease their colour, speed and light into the new state over about 0.5 s. The orb never jumps |
+| Pip's personality | Bloom and Halo turn toward the pointer (0.35 s lag); while idle, Pip blinks (a 0.2 s squash) every 4.5–10 s; a poke squashes it and it springs back; dragged or flung, it stretches the way it moves and wobbles to a stop like a drop of water. All off under Reduce motion |
 | Moving Pip | Pip follows the pointer exactly, lifted 4 %; on release it lands on a detent; the greeting and examples slide to close (or open) the space in the middle (520 ms). *Move back to the middle* glides it home (620 ms); hiding it fades and shrinks it (220 ms, ease-in) |
 | Unlock | A ring of accent light spreads from the password field across the screen while the lock lifts away (scales to 104 %, blurs and fades); light then crosses each widget in turn |
 | System update applied | The update screen fades and the same ring spreads from the centre |
 | Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff). Each icon's size rides its own spring (damping ratio 0.87) toward the size the pointer asks for, so the dock flows as the pointer sweeps across and glides back when it leaves; off under Reduce motion. The label rises 5 px into place on the precise spring |
 | Menu / popover | Unfolds out of what opened it, like a blind drawn from its rail: it grows from its anchor's corner (scale 0.96 → 1, 10 px) while a clip opens away from the anchor, on the precise spring (520 ms); its rows follow 18 ms apart. Closing is a quick fade (150–180 ms, ease-in). Six Search, the widget gallery, toasts and context menus open the same way |
-| Toggle | Thumb slides on the precise spring; tile fill crossfades |
-| Clay press | Pushes in 1 px, scale 0.98 (`dur-instant`); springs back on release |
+| Toggle | Thumb slides on the precise spring and stretches to 24 px mid-travel, like a drop; tile fill crossfades |
+| Segmented control | One drop of selection flows from the old option to the new: it reaches across both, then lets go of the old one (560 ms) |
+| Slider | The thumb stretches with the speed it is dragged at and relaxes when it stops |
+| Press (tension) | A button squashes to 104 × 92 % (140 ms). Held and pulled, it leans and stretches toward the pointer; past 64 px it lets go (the press is cancelled). On release it springs back on the water spring (720 ms). Not for menu rows, the dock or large surfaces |
+| Stack pull (tension) | The top card follows reluctantly, joined to its slot by a thinning neck of water; past 150 px it lets go with a small wobble; released before that it springs back into the stack. See [05](05-materials.md#5-plasma-clay-the-homes-living-surfaces) |
 | Notification | Slides in 16 px, stays, slides out; never bounces |
 | Home cards dragged | Follow the pointer on a spring set by viscosity; fuse with cards closer than 40 px; settle on the 24 px grid |
 
@@ -106,3 +112,5 @@ When *Reduce motion* is on (system setting or `prefers-reduced-motion`):
 - Wallpaper becomes a still image; Pip changes state without a crossfade and draws a static shape;
   home cards jump to place.
 - Progress indicators still move (they carry information) but without decorative easing.
+- Tension keeps its rules (a pulled stack card still lets go only past 150 px) but nothing
+  squashes, stretches or wobbles; Pip neither blinks nor follows the pointer.

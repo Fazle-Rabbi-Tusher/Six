@@ -38,7 +38,7 @@ This chapter covers how Pip works inside the OS.
 
 | Part | Spec |
 |---|---|
-| **Pip** | 260 px realistic orb centred above the greeting, drawn as the blue Hologram by default (see [Pip's looks](#pips-third-look-the-hologram)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
+| **Pip** | 260 px realistic orb centred above the greeting, drawn as Bloom by default (see [Pip's looks](#pips-looks)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
 | **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."), and one line saying how to talk: "Press the mic in the menu bar, or hold Space, and talk." or, with Hey Pip on, "Say "Hey Pip", then what you need." |
 | **Moving Pip** | Pip starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move Pip back to the middle* or *Hide Pip from home*; `Alt + arrows` moves it from the keyboard. Hidden, Pip still listens through the menu bar mic; *Settings › Home & widgets › Pip on home* brings it back. Its place is remembered |
 | **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Instrument Serif. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
@@ -298,87 +298,67 @@ to 9 s; the reply in the thread keeps the record.
 Pip's personality and voice still come from the character canvas; its earlier globe-of-rings
 look is replaced by the dotted orb in the OS.
 
-## Pip's second look: the Turbine
+## Pip's looks
 
-*Settings › Pip & voice › Look: Dotted / Turbine / Hologram* swaps the dotted sphere for the **Turbine**
-everywhere at once (home, the menu bar, the dock, the task card). It takes its feel from the
-machined, glossy controls of the Ferrari Luce cabin: a ring of 32 twisted, swept blades around a
-polished hub, drawn in real 3D.
+*Settings › Pip & voice › Look: Bloom / Halo / Dotted* sets Pip everywhere at once (home, the
+menu bar, the dock, the notch, the task card). **Bloom** is the default. On a graphite and silver
+screen Pip is the one thing with colour, so it can be found at a glance and has a character of its
+own.
 
-![Home with Pip as the Turbine](../screens/home-turbine.png)
+### Bloom (the default)
+
+A soft ball of warm colour: orange and red flowing over violet, a pink haze lighting the air
+around it, and a fine film grain, so it reads as a material rather than a gradient.
+
+![Home with Pip as Bloom](../screens/home-dark.png)
 
 | Part | How it's drawn |
 |---|---|
-| Shape | Blades swept back along their length and twisted top to bottom, inside a torus-shaped envelope, around a rounded cylinder hub |
-| Light | A key light from the top left, a tight specular highlight that slides over the blades as they turn, a soft reflection of the room, and a cool edge light. Colour comes from the room (blue on the left, violet on the right), not from the blades, so it stays put while they spin |
-| Depth | Seen from about 45° above, with a slow camera drift; a soft floor shadow in light mode, a faint violet reflection in dark mode; inner blades darker where they meet the hub |
-| Rendering | Ray-marched on the GPU at the display's resolution (one shared renderer copies into each orb), with anti-aliased edges; shaded polygons where WebGL isn't available |
+| Colour | Slow, domain-warped noise on the surface of a turning ball: warm low on the left, cooling to violet up and to the right; the flow never repeats |
+| Form | Shaded as a matte ball (velvet, not gloss): lit from the side Pip is looking at, the far side sinking into violet, a pink rim where the light wraps round, and a soft sheen |
+| Haze | The ball's colour lighting the air around it: pink above, amber below. Reduced at small sizes so the shape stays crisp |
+| Grain | Animated film grain over the ball and its haze (lighter below 30 px) |
+| Rendering | One fragment shader on a shared WebGL canvas copies into each orb; gradients without WebGL |
 
-Every state keeps the shape and changes only the motion and the light, and the turbine **eases
-from one state into the next** (its speed and light change over about 0.4 s), like a machine
-spinning up, instead of crossfading:
+### Halo
 
-| State | Turbine |
-|---|---|
-| Ready | Turns slowly |
-| Listening | A wave runs round the ring, lifting the blades |
-| Thinking | Spins up; a band of light chases round the blades |
-| Speaking | The blades swell and glow with the voice |
-| Searching | The camera sweeps round the turbine, looking it over |
-| Working | Spins fastest; blades light up one after another to show progress, with the thin progress ring |
-| Asking | A lighthouse sector of blades lights as the beam turns |
-| Waiting | A slow comet of light circles the ring |
-| Retrying | Spins, brakes, turns back a little, then spins up again |
-| Compacting | The ring draws in toward the hub and back |
-| Complete | Turns green and glows once |
-| Failed | Turns red and slows |
-| Cancelled, Resting | Dims and almost stops |
+A ring of cold light turning in the dark, from the long-exposure light rings it is modelled on:
+brightest at the top and bottom, where you see the ring edge-on, with streaks running through the
+light and a soft glow around it. On a light page it sits in a small dark pool so the light can be
+seen.
 
-Under Reduce motion the turbine is drawn still, on a fixed frame, and changes state at once.
+![Home with Pip as Halo](../screens/home-halo.png)
 
-## Pip's third look: the Hologram
+### What each state does
 
-The **Hologram** is Pip's **default look**: a projection hanging in the air, made only of light, in
-**blue** by default, or gold, violet or silver (*Settings › Pip & voice › Hologram colour*;
-Complete and Failed still turn it green and red). It is every part is a
-cloud of points in 3D (about 12,000 of them), drawn twice on the GPU, once sharp and once as a
-wide glow, and added together so the bright places bloom.
+A state changes how the colour or light moves, never the shape, and every change eases in over
+about half a second.
 
-![Home with Pip as the Hologram](../screens/home-hologram.png)
+| State | Bloom | Halo |
+|---|---|---|
+| Ready | The colour drifts slowly | Turns slowly |
+| Listening | Ripples run out from the centre; it swells a little | The ring breathes with your voice |
+| Thinking | The colour stirs into a swirl and a spark crosses it | Spins up; a bright knot runs round the ring |
+| Speaking | Swells and brightens with each word | Brightens with each word |
+| Searching | A bright spot roams across the face | A bright knot circles the ring |
+| Working | Fills like a glass of water as the task progresses, its surface rocking | The ring lights up round as the task progresses |
+| Asking | A beam turns round the rim until you answer | A beam of light circles the ring |
+| Waiting | A slower beam circles | A slow comet circles |
+| Retrying | Wobbles, settles, then tries again | Wobbles, then tries again |
+| Compacting | The colour winds tightly in on itself | Spins tighter |
+| Complete | Warms green once, then settles | Turns green once |
+| Failed | Cools red and slows | Turns red and slows |
+| Cancelled, Resting | Fades to grey, dim and almost still | Fades to grey, dim |
 
-| Part | What it is |
-|---|---|
-| Shell | A sphere drawn in broken, sparking arcs of latitude and longitude, bright in clumps, with little zigzags of light running over it like a circuit. Its outline catches the most light, as a glass shell would |
-| Waist rings | A bright band of four strands, tilted so it reads as a wide ellipse, an inner ring around the core, and two fainter ones |
-| Standing rings | Three rings through the poles, turning the other way |
-| Spokes | Ten long, thin rays from the core to the shell, mostly across the face |
-| Core | A glowing hexagonal frame with a hexagonal well through it (the well recedes into the sphere), braced by six struts to broken hexagons around it, and a soft glow |
-| Dust | Specks and a few large soft sparks floating inside |
+### Personality
 
-Each part turns on its own axis at its own speed, so the projection always has depth. In light
-mode the projection sits in a dark lens, because light added to a white page disappears. At
-small sizes (the menu bar, the dock, task cards) it keeps the structure (rings, spokes, core and
-part of the shell) and drops the dust and most of the glow, so it stays legible instead of
-blurring into a blob.
+- **Pip looks at you.** The light on Bloom, and the tilt of Halo, turn toward the pointer.
+- **Pip blinks.** While idle, Pip squashes for a moment every few seconds and springs back.
+- **Pip is water.** Poke it and it squashes; drag it across home (or fling it) and it stretches
+  the way it moves and wobbles to a stop.
 
-| State | Hologram |
-|---|---|
-| Ready | Turns slowly; the arcs twinkle |
-| Listening | Ripples run out through the sphere from the core |
-| Thinking | Spins up; pulses of light run out along the spokes, and the arcs flicker |
-| Speaking | The core swells and brightens with the voice |
-| Searching | A scan line sweeps up and down through the shell |
-| Working | The shell and rings light up around the sphere as the task progresses, with the progress ring |
-| Asking | A beam turns, lighting a sector of the shell |
-| Waiting | A comet of light circles the waist ring |
-| Retrying | Spins, brakes, turns back, then spins up again, flickering |
-| Compacting | The sphere draws in toward the core and back |
-| Complete | Turns green and flares once |
-| Failed | Turns red, slows and flickers |
-| Cancelled, Resting | Dims and almost stops |
-
-Like the Turbine it eases its speed and light from one state into the next, and it is drawn still
-under Reduce motion. Without WebGL it draws a sample of its points on a 2D canvas.
+All three are off under Reduce motion, where Pip is drawn still on a fixed frame and changes state
+at once.
 
 ## The current task card
 

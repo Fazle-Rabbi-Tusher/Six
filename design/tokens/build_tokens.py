@@ -56,6 +56,7 @@ tokens = {
         "viscosity-water": {"$type": "spring", "$value": {"stiffness": 320, "damping": 13, "mass": 1}, "$description": "home cards, blend 54 px"},
         "precise": {"$type": "spring", "$value": {"stiffness": 177, "damping": 23, "mass": 1}, "$description": "damping ratio 0.86: windows, stacks, pages; the default"},
         "detent": {"$type": "spring", "$value": {"stiffness": 282, "damping": 23, "mass": 1}, "$description": "damping ratio 0.68: a card landing in a stack; nothing else"},
+        "water": {"$type": "spring", "$value": {"stiffness": 300, "damping": 12.5, "mass": 1}, "$description": "damping ratio 0.36: tension, a control let go after being pulled or pressed; nothing else"},
         "viscosity-gel": {"$type": "spring", "$value": {"stiffness": 260, "damping": 27, "mass": 1}, "$description": "home cards (default), damping ratio 0.84, blend 40 px"},
         "viscosity-honey": {"$type": "spring", "$value": {"stiffness": 70, "damping": 17, "mass": 1}, "$description": "home cards, blend 32 px"},
     },

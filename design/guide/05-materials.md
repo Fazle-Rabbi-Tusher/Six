@@ -96,9 +96,11 @@ to the 24 px grid). Functional UI never stretches or wobbles.
 
 ## 5. Plasma clay: the home's living surfaces
 
-Clay's soft volume plus plasma glass's liquid optics, inspired by plasma-ui's liquid panels.
-Used **only** on the home screen and desktop widgets: home cards, Pip's conversation thread and
-composer. Never inside windows, menus or dialogs.
+Water, not glass. The home's cards are drawn as clear, shallow water standing on the wallpaper:
+you see the floor through them, bent at the edge and wavering a little in the middle, light
+caught in caustics underneath, a thin meniscus line inside the edge and a bright lip on the side
+facing the light. Used **only** on the home screen and desktop widgets: home cards, Pip's
+conversation thread and composer. Never inside windows, menus or dialogs.
 
 ![Plasma clay on the home screen](../screens/home-dark.png)
 
@@ -108,13 +110,16 @@ plasma clay surface together:
 | Layer | What happens | Default |
 |---|---|---|
 | Shape | Each surface is a rounded rectangle as a signed distance field; surfaces in the same group are joined with a **smooth union**, so two cards closer than the blend distance melt into one body | blend 40 px |
-| Refraction | Inside the surface the wallpaper is sampled with an offset that grows toward the edge, like a thick lens | 1.0 |
-| Dispersion | Red, green and blue are sampled at slightly different offsets near the edge | on |
-| Frost | The refracted wallpaper is taken from a smoother (fewer-octave) version of itself, which reads as blur at no extra cost | 0.55 |
+| Depth | The water's height is a rounded bevel 26 px wide, flat on top. Its slope, taken over a few pixels, gives the surface normal, so a thin neck between two cards has a smooth ridge, never a crease | bevel 26 px |
+| Ripples | The surface is never quite still: slow noise tilts the normal a little, and rings run out from the pointer while it is over the water | on (off under Reduce motion) |
+| Refraction | The wallpaper is seen through the water along the normal: strongly bent at the edge, wavering in the middle | 1.0 |
+| Dispersion | Red, green and blue are sampled at slightly different offsets | on |
+| Caustics | Light focused by the moving surface dances on the floor, strongest where the water is deep | on, scales with refraction |
+| Frost | The refracted wallpaper is taken from a smoother (fewer-octave) version of itself | 0.55 |
 | Fill | The surface colour is laid over the refracted image | 78 % light / 72 % dark, 100 % with Reduce transparency or More contrast |
-| Clay light | A normal from the distance field's slope gives the bevel; lit from the top left with a soft highlight, darker bottom right | bevel 24 px |
-| Rim | A 2 px edge plus a faint inner glow, brightest where the light hits. Options: Soft (neutral highlight), Iridescent (hue follows the edge angle), Accent, Off | Soft |
-| Shadow + glow | A soft offset shadow under the body and a faint coloured glow on the wallpaper around it | on |
+| Light | Lit from the top left; a glint where the key light catches the curve of the edge | on |
+| Meniscus and lip | A dark line 3.6 px inside the edge, then a bright 1 px lip, brightest on the side facing the light. Lip colour: Soft (silver), Iridescent (hue follows the edge angle), Accent, Off | Soft |
+| Shadow | A soft offset shadow under the body and a faint glow from the rim | on |
 
 **Groups.** Surfaces only fuse within their group: *cards* fuse with cards, *conversation*
 (thread + composer) with itself. Chrome (menu bar, dock, menus) is never plasma clay.
@@ -130,6 +135,12 @@ surfaces reach for each other (blend distance):
 | Solid | none (moves 1:1) | off | No fusing, no spring |
 
 Dropped cards settle on the 24 px grid.
+
+**Tension.** The top card of a stack holds on when you pull it. It follows the pointer
+reluctantly (it moves about 0.8 × as far, less the further it goes) while the water left in its
+slot shrinks and a neck joins the two, thinning as they part. Past **150 px** the neck breaks:
+the card lets go of the stack with a small wobble and follows the pointer normally. Let go before
+that and it springs back into the stack with nothing changed. A click is never a pull.
 
 **Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark
 mode and white fading to soft gray in light mode, with a faint grain and no colour, so content and

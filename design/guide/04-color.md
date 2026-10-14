@@ -1,45 +1,58 @@
 # 04 · Color
 
-SIX uses **one accent hue (Iris)**, a set of cool, slightly violet neutrals, four semantic
-colours, and a pastel clay set for tiles and icons. All values live in
+SIX is **graphite and silver**: neutral greys with no colour cast, and a graphite accent that
+turns silver in the dark. The colour in the system comes from Pip (Bloom's ember and violet), from
+the four semantic colours, and from the pastel clay set for tiles and icons. All values live in
 [`tokens/tokens.css`](../tokens/tokens.css). Never use a hex value in a component; use the token.
 
 ## Neutrals ("Porcelain" / "Ink")
 
-Neutrals carry a slight violet bias toward the accent, so greys look intentional next to Iris.
+Neutral, cool greys. They carry no hue of their own, so the only colour on screen is the colour
+that means something.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `--c-bg` | `#ECEAF2` | `#111017` | App background, desktop fallback |
-| `--c-surface` | `#FAF9FC` | `#1B1A23` | Windows, cards, menus (solid) |
-| `--c-surface-2` | `#E2DFEB` | `#262431` | Sidebars, inputs, sunken wells |
-| `--c-surface-3` | `#D6D2E2` | `#312F3E` | Hovered / pressed rows |
-| `--c-line` | `#CFCBDC` | `#34323F` | Dividers (decorative) |
-| `--c-line-strong` | `#8F8BA3` | `#6E6A83` | Input borders, meaningful outlines (≥ 3:1) |
-| `--c-text` | `#1A1923` | `#F2F1F8` | Primary text |
-| `--c-text-2` | `#474556` | `#BCB9CC` | Secondary text |
-| `--c-text-3` | `#5F5C70` | `#9693A9` | Tertiary text, placeholders (lightest allowed) |
+| `--c-bg` | `#EBECEE` | `#0C0C0E` | App background, desktop fallback |
+| `--c-surface` | `#F9F9FA` | `#18191C` | Windows, cards, menus (solid) |
+| `--c-surface-2` | `#E2E3E6` | `#222327` | Sidebars, inputs, sunken wells |
+| `--c-surface-3` | `#D5D7DB` | `#2D2F33` | Hovered / pressed rows |
+| `--c-line` | `#CDD0D5` | `#303236` | Dividers (decorative) |
+| `--c-line-strong` | `#868A93` | `#6B6E75` | Input borders, meaningful outlines (≥ 3:1) |
+| `--c-text` | `#16171A` | `#F3F4F6` | Primary text |
+| `--c-text-2` | `#43464D` | `#BFC2C8` | Secondary text |
+| `--c-text-3` | `#5A5E66` | `#979BA3` | Tertiary text, placeholders (lightest allowed) |
 
-## Accent: Iris
+## Accent: Graphite (silver in the dark)
 
 | Token | Light | Dark |
 |---|---|---|
-| `--c-accent` | `#5340D9` | `#9C8FFF` |
-| `--c-accent-hover` | `#4733C9` | `#B0A6FF` |
-| `--c-accent-soft` | `#E3DFFF` | `#2E2A55` |
-| `--c-text-on-accent` | `#FFFFFF` | `#111017` |
+| `--c-accent` | `#34373E` | `#D4D7DD` |
+| `--c-accent-hover` | `#1F2126` | `#E8EAEE` |
+| `--c-accent-soft` | `#DFE1E5` | `#2C2E33` |
+| `--c-text-on-accent` | `#FFFFFF` | `#111214` |
 
-The accent marks **the primary action, selection, focus and links**, and nothing else.
+The accent marks **the primary action, selection, focus and links**, and nothing else. In light
+the primary button is a graphite pill with white text; in dark it is a silver pill with near-black
+text (11.9:1 and 13.0:1).
 
-People pick the accent in Settings › Appearance. Besides Iris there are three options, each
-borrowing a semantic hue and checked against the same pairs as Iris (`check_contrast.py`):
+People pick the accent in Settings › Appearance. Besides Graphite there are four options; Iris
+(SIX's original violet) and three that borrow a semantic hue. Each is checked against the same
+pairs as Graphite (`check_contrast.py`):
 
 | Option | Light | Dark | Accent on surface (light / dark) |
 |---|---|---|---|
-| Iris (default) | `#5340D9` | `#9C8FFF` | 6.5 / 6.4:1 |
-| Tide | `#066A75` | `#4FD1DC` | 6.0 / 9.4:1 |
-| Moss | `#1A6D47` | `#5FD49A` | 6.0 / 9.3:1 |
-| Sun | `#85540E` | `#F2B95A` | 6.1 / 9.7:1 |
+| Graphite (default) | `#34373E` | `#D4D7DD` | 11.3 / 12.2:1 |
+| Iris | `#5340D9` | `#9C8FFF` | 6.4 / 6.5:1 |
+| Tide | `#066A75` | `#4FD1DC` | 6.0 / 9.6:1 |
+| Moss | `#1A6D47` | `#5FD49A` | 6.0 / 9.5:1 |
+| Sun | `#85540E` | `#F2B95A` | 6.1 / 9.9:1 |
+
+## Pip's colour
+
+Pip is the one warm thing on a graphite screen. `--pip-line` is Bloom's ember, used for Pip's
+state label, its progress bars and the notch's progress ring: `#9A3C1C` in light (5.9:1 on the
+background) and `#FFA064` in dark (9.7:1). The orb itself is drawn, not tokenised; see
+[14 · Home](14-home-assistant.md#pips-looks).
 
 Any other user accent is auto-adjusted in lightness until it passes 4.5:1 on `--c-surface` and
 with `--c-text-on-accent`.

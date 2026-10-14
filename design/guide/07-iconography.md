@@ -38,7 +38,7 @@ plain SVG paths, so the shell embeds only the ones it uses.
 
 | App | Tile | Object |
 |---|---|---|
-| Six Menu | Iris | Six pearl dots in a ring |
+| Six Menu | Graphite | Six pearl dots in a ring |
 | Files | Paper white | A blue folder with a sheet inside |
 | Browser | Teal to blue | A globe with a coral orbit and a small moon |
 | Mail | Sky to blue | An envelope with a coral seal |

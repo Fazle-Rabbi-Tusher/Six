@@ -10,34 +10,37 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
 /* Layout: one reading column for the argument, opening onto a two-up grid of live studies.
-   Each study is a stage (the elastic surface, drawn as SIX plasma clay) above a caption that
+   Each study is a stage (the elastic surface, drawn as SIX liquid glass) above a caption that
    says what the tension means and where it would live in SIX. */
 :root {
-  --bg: #ecebf2; --paper: #f7f6fb; --ink: #16141f; --muted: #5b586c; --line: rgba(22, 20, 31, 0.1);
-  --accent: #5b47e0; --stage-a: #dedaec; --stage-b: #bdb6d6;
-  --blob-a: #ffffff; --blob-b: #dad6e8; --on-a: #a596ff; --on-b: #5b47e0; --warm-a: #ffcfae; --warm-b: #ee8550;
-  --on-ink: #ffffff; --thread: rgba(91, 71, 224, 0.45); --win: rgba(255, 255, 255, 0.72); --win-edge: rgba(22, 20, 31, 0.12);
-  --glow-a: #9d8cf2; --glow-b: #f2ad8a; --frost: #f1eefb; --glass-tint: #ffffff;
+  --bg: #ececee; --paper: #f7f7f8; --ink: #111214; --muted: #5c6068; --line: rgba(17, 18, 20, 0.1);
+  --accent: #2b2e34; --stage-a: #e3e5e9; --stage-b: #b9bdc5; --key-light: #ffffff; --frost: #f4f5f7; --glass-fill: #eef0f3;
+  --env-lo: #8f949c; --env-hi: #ffffff; --mat-on: #2b2e34; --mat-smoke: #6b7079; --mat-clear: #e9ebef;
+  --on-ink: #ffffff; --on-muted: rgba(255, 255, 255, 0.72); --on-shadow: rgba(0, 0, 0, 0.35);
+  --thread: rgba(17, 18, 20, 0.35); --win: rgba(255, 255, 255, 0.72); --win-edge: rgba(17, 18, 20, 0.12); --hover: rgba(17, 18, 20, 0.07);
+  --act-bg: linear-gradient(180deg, #3d4048, #1b1d21); --act-ink: #ffffff; --act-edge: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -8px rgba(0, 0, 0, 0.6);
   --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
   --font-ui: Geist, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0b0a10; --paper: #121119; --ink: #f1f0f7; --muted: #a29fb5; --line: rgba(255, 255, 255, 0.08);
-    --accent: #a99cff; --stage-a: #15141d; --stage-b: #0d0c13;
-    --blob-a: #34314a; --blob-b: #17161f; --on-a: #ad9fff; --on-b: #4b32d4; --warm-a: #ffb48a; --warm-b: #b8481f;
-    --on-ink: #ffffff; --thread: rgba(169, 156, 255, 0.5); --win: rgba(30, 28, 42, 0.78); --win-edge: rgba(255, 255, 255, 0.1);
-    --glow-a: #4a2fb8; --glow-b: #7a3a22; --frost: #2a2740; --glass-tint: #c9c2ff;
+    --bg: #08080a; --paper: #121316; --ink: #f2f3f5; --muted: #9ea2aa; --line: rgba(255, 255, 255, 0.08);
+    --accent: #d4d7dd; --stage-a: #141518; --stage-b: #050506; --key-light: #6d7178; --frost: #24262b; --glass-fill: #2a2c31;
+    --env-lo: #050506; --env-hi: #c9ccd2; --mat-on: #d4d7dd; --mat-smoke: #2f3238; --mat-clear: #3a3d44;
+    --on-ink: #0d0e10; --on-muted: rgba(13, 14, 16, 0.66); --on-shadow: rgba(255, 255, 255, 0.35);
+    --thread: rgba(212, 215, 221, 0.4); --win: rgba(22, 23, 26, 0.8); --win-edge: rgba(255, 255, 255, 0.1); --hover: rgba(255, 255, 255, 0.08);
+    --act-bg: linear-gradient(180deg, #f4f5f7, #b4b8bf); --act-ink: #0d0e10; --act-edge: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.8);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0b0a10; --paper: #121119; --ink: #f1f0f7; --muted: #a29fb5; --line: rgba(255, 255, 255, 0.08);
-  --accent: #a99cff; --stage-a: #15141d; --stage-b: #0d0c13;
-  --blob-a: #34314a; --blob-b: #17161f; --on-a: #ad9fff; --on-b: #4b32d4; --warm-a: #ffb48a; --warm-b: #b8481f;
-  --on-ink: #ffffff; --thread: rgba(169, 156, 255, 0.5); --win: rgba(30, 28, 42, 0.78); --win-edge: rgba(255, 255, 255, 0.1);
-  --glow-a: #4a2fb8; --glow-b: #7a3a22; --frost: #2a2740; --glass-tint: #c9c2ff;
+  --bg: #08080a; --paper: #121316; --ink: #f2f3f5; --muted: #9ea2aa; --line: rgba(255, 255, 255, 0.08);
+  --accent: #d4d7dd; --stage-a: #141518; --stage-b: #050506; --key-light: #6d7178; --frost: #24262b; --glass-fill: #2a2c31;
+  --env-lo: #050506; --env-hi: #c9ccd2; --mat-on: #d4d7dd; --mat-smoke: #2f3238; --mat-clear: #3a3d44;
+  --on-ink: #0d0e10; --on-muted: rgba(13, 14, 16, 0.66); --on-shadow: rgba(255, 255, 255, 0.35);
+  --thread: rgba(212, 215, 221, 0.4); --win: rgba(22, 23, 26, 0.8); --win-edge: rgba(255, 255, 255, 0.1); --hover: rgba(255, 255, 255, 0.08);
+  --act-bg: linear-gradient(180deg, #f4f5f7, #b4b8bf); --act-ink: #0d0e10; --act-edge: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.8);
     color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -50,7 +53,7 @@ p { margin: 0; }
 /* opener: the argument on the left, the six-dot mark holding itself together on the right */
 .open { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center; }
 .open h1 { font: 400 clamp(64px, 11vw, 132px)/0.88 var(--font-display); letter-spacing: -0.02em; margin-top: 14px; }
-.open h1 em { font-style: italic; color: var(--accent); }
+.open h1 em { font-style: italic; color: var(--muted); }
 .dek { margin-top: 22px; max-width: 34em; font-size: 18px; color: var(--muted); }
 .dek b { color: var(--ink); font-weight: 600; }
 .legend { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; max-width: 34em; }
@@ -70,10 +73,10 @@ p { margin: 0; }
 .ui svg.threads path { fill: none; stroke: var(--thread); stroke-width: 1.5; stroke-linecap: round; }
 .lab { font: 500 13px/1.3 var(--font-ui); color: var(--ink); white-space: nowrap; will-change: transform; }
 .lab small { display: block; font: 500 10.5px/1.3 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.lab.on { color: var(--on-ink); text-shadow: 0 1px 2px rgba(36, 18, 110, 0.45); }
-.lab.on small { color: rgba(255, 255, 255, 0.75); }
+.lab.on { color: var(--on-ink); text-shadow: 0 1px 1px var(--on-shadow); }
+.lab.on small { color: var(--on-muted); }
 .note { left: 0; right: 0; top: auto !important; bottom: 14px; text-align: center; font: 500 12px/1.4 var(--font-mono); color: var(--muted); letter-spacing: 0.02em; }
-.act { pointer-events: auto; border: 0; border-radius: 999px; padding: 8px 14px; font: 600 13px/1 var(--font-ui); color: var(--on-ink); background: linear-gradient(160deg, var(--on-a), var(--on-b)); cursor: pointer; box-shadow: 0 6px 18px -8px var(--on-b); }
+.act { pointer-events: auto; border: 0; border-radius: 999px; padding: 8px 14px; font: 600 13px/1 var(--font-ui); color: var(--act-ink); background: var(--act-bg); cursor: pointer; box-shadow: var(--act-edge); }
 .act:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .act.quiet { color: var(--ink); background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
 .win { border-radius: 14px; background: var(--win); box-shadow: inset 0 0 0 1px var(--win-edge), 0 18px 40px -22px rgba(0, 0, 0, 0.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); overflow: hidden; will-change: transform; }
@@ -84,7 +87,7 @@ p { margin: 0; }
 .ico.on { color: var(--on-ink); }
 .ico svg { width: 22px; height: 22px; }
 .mrow { pointer-events: auto; font: 500 13px/1 var(--font-ui); color: var(--ink); padding: 0 12px; height: 32px; display: flex; align-items: center; justify-content: space-between; border-radius: 9px; cursor: pointer; }
-.mrow:hover { background: rgba(127, 110, 255, 0.16); }
+.mrow:hover { background: var(--hover); }
 
 /* studies */
 .studies { display: grid; gap: 22px; }
@@ -132,9 +135,6 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
 }
 @media (prefers-reduced-motion: reduce) { .act { transition: none; } }
 </style>
-
-
-
 </head>
 <body>
 <main class="wrap">
@@ -226,7 +226,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
       <ol>
         <li><b>Tension means a real relationship.</b><span>A neck only ever joins things that belong together (a card and its stack, Pip and what it's changing, a reply and its question). Nothing stretches for decoration.</span></li>
         <li><b>Necks thin with distance, then snap.</b><span>Thickness falls off as the gap grows; at the snap distance it lets go. The snap is the commit: before it, letting go cancels.</span></li>
-        <li><b>Content never stretches.</b><span>Text, icons and images stay rigid on top of the surface. Only the clay bends.</span></li>
+        <li><b>Content never stretches.</b><span>Text, icons and images stay rigid on top of the surface. Only the glass bends.</span></li>
         <li><b>Springs, not wobble.</b><span>Moves use SIX's precise spring; a snap or a landing gets one detent, with a recoil under 4 %. Nothing jiggles on its own.</span></li>
         <li><b>One tether per thing.</b><span>An object is joined to at most one other at a time, and budding goes at most two levels deep (menu, submenu).</span></li>
         <li><b>Every stretch has a plain alternative.</b><span>Each gesture is also a menu item, a button or a key. Under Reduce motion, necks are drawn still and a snap is instant.</span></li>
@@ -243,7 +243,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
             <tr><td><code>--tension-snap-sm</code></td><td><code>100px</code></td><td>Files, chips, toggles</td></tr>
             <tr><td><code>--neck-max</code></td><td><code>0.7 × short side</code></td><td>The thickest a neck gets</td></tr>
             <tr><td><code>--neck-falloff</code></td><td><code>(1 − d / snap)<sup>0.8</sup></code></td><td>How a neck thins with distance</td></tr>
-            <tr><td><code>--neck-min</code></td><td><code>8px</code></td><td>Below this the clay can't hold; a hairline thread takes over</td></tr>
+            <tr><td><code>--neck-min</code></td><td><code>8px</code></td><td>Below this the glass can't hold; a hairline thread takes over</td></tr>
             <tr><td><code>--spring-precise</code></td><td><code>177 / 23</code></td><td>Springing back, settling</td></tr>
             <tr><td><code>--spring-detent</code></td><td><code>282 / 23</code></td><td>The snap and the landing</td></tr>
             <tr><td><code>--spring-membrane</code></td><td><code>120 / 14</code></td><td>Cards behind leaning, the Bin bulging</td></tr>
@@ -327,7 +327,8 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
 uniform vec2 uSize; uniform float uDpr, uTime, uDark, uK;
 uniform int uN;
 uniform vec4 uA[${MAXP}]; uniform vec4 uB[${MAXP}]; uniform vec3 uC[${MAXP}];
-uniform vec3 uBg0, uBg1, uGlow0, uGlow1, uFrost;
+uniform vec3 uBg0, uBg1, uKey, uFill, uFrost, uEnvLo, uEnvHi, uGrid;
+float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float sdBox(vec2 p, vec2 b, float r) { vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
 float sdSeg(vec2 p, vec2 a, vec2 b, float r) { vec2 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-4), 0.0, 1.0); return length(pa - ba * h) - r; }
 float smin(float a, float b, float k) { float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
@@ -336,8 +337,7 @@ float sceneD(vec2 p) {
   for (int i = 0; i < ${MAXP}; i++) {
     if (i >= uN) break;
     vec4 A = uA[i]; vec4 B = uB[i];
-    float di = B.y < 0.5 ? sdBox(p - A.xy, A.zw, B.x) : sdSeg(p, A.xy, A.zw, B.x);
-    d = smin(d, di, uK);
+    d = smin(d, B.y < 0.5 ? sdBox(p - A.xy, A.zw, B.x) : sdSeg(p, A.xy, A.zw, B.x), uK);
   }
   return d;
 }
@@ -348,20 +348,28 @@ float sceneC(vec2 p, out vec3 tint, out float ta) {
     vec4 A = uA[i]; vec4 B = uB[i];
     float di = B.y < 0.5 ? sdBox(p - A.xy, A.zw, B.x) : sdSeg(p, A.xy, A.zw, B.x);
     d = smin(d, di, uK);
-    float w = exp(-max(di + 6.0, 0.0) / 16.0); w *= w * (1.0 + B.w * 6.0);   // coloured glass outweighs clear glass around it
+    float w = exp(-max(di + 6.0, 0.0) / 16.0); w *= w * (1.0 + B.w * 6.0);
     cs += uC[i] * w; as += B.z * w; ws += w;
   }
   tint = cs / max(ws, 1e-4); ta = as / max(ws, 1e-4);
   return d;
 }
+float slab(vec2 p) { float e = clamp(1.0 + sceneD(p) / 26.0, 0.0, 1.0); return sqrt(max(1.0 - e * e, 0.0)); }
+// the room: a graded studio sweep, a soft key light overhead, and a fine etched grid to look through
 vec3 backdrop(vec2 p) {
   vec2 q = p / uSize;
-  vec3 c = mix(uBg0, uBg1, clamp(q.y * 0.85 + q.x * 0.15, 0.0, 1.0));
-  vec2 g0 = uSize * vec2(0.28 + 0.06 * sin(uTime * 0.21), 0.3 + 0.05 * cos(uTime * 0.17));
-  vec2 g1 = uSize * vec2(0.78 + 0.05 * cos(uTime * 0.19), 0.72 + 0.06 * sin(uTime * 0.23));
-  float s0 = uSize.x * 0.32, s1 = uSize.x * 0.3;
-  c = mix(c, uGlow0, 0.85 * exp(-dot(p - g0, p - g0) / (2.0 * s0 * s0)));   // coloured light in the room
-  c = mix(c, uGlow1, 0.85 * exp(-dot(p - g1, p - g1) / (2.0 * s1 * s1)));
+  vec3 c = mix(uBg0, uBg1, smoothstep(0.0, 1.0, q.y * 0.9 + abs(q.x - 0.5) * 0.25));
+  vec2 k = uSize * vec2(0.4 + 0.03 * sin(uTime * 0.13), -0.25);
+  c = mix(c, uKey, 0.55 * exp(-dot(p - k, p - k) / (2.0 * pow(uSize.x * 0.42, 2.0))));
+  vec2 cell = mod(p, 24.0) - 12.0;
+  c += uGrid * (1.0 - smoothstep(0.55, 1.3, length(cell)));
+  return c;
+}
+// what the glass reflects: a tall softbox up and to the left, a thin strip light on the right, a dark floor
+vec3 env(vec3 R) {
+  vec3 c = mix(uEnvLo, uEnvHi, smoothstep(-0.35, 0.85, -R.y));
+  c += vec3(1.0) * smoothstep(0.82, 0.97, dot(R, normalize(vec3(-0.5, -0.7, 0.5)))) * 0.85;
+  c += vec3(1.0) * smoothstep(0.93, 0.99, dot(R, normalize(vec3(0.9, -0.15, 0.4)))) * 0.45;
   return c;
 }
 void main() {
@@ -369,30 +377,39 @@ void main() {
   vec3 tint; float ta;
   float d = sceneC(p, tint, ta);
   vec3 col = backdrop(p);
-  // the body's shadow, soft and a little below it
-  float sd = sceneD(p - vec2(0.0, 12.0));
-  col *= 1.0 - (1.0 - smoothstep(-14.0, 30.0, sd)) * mix(0.22, 0.42, uDark);
+  // a wide soft shadow and a tight contact shadow where the glass meets the floor
+  float sd = sceneD(p - vec2(0.0, 16.0)), sc = sceneD(p - vec2(0.0, 3.0));
+  col *= 1.0 - (1.0 - smoothstep(-18.0, 40.0, sd)) * mix(0.2, 0.5, uDark) - (1.0 - smoothstep(-1.0, 7.0, sc)) * mix(0.1, 0.25, uDark);
   if (d < 2.0) {
-    float e = 0.8;
-    vec2 g = vec2(sceneD(p + vec2(e, 0.0)) - d, sceneD(p + vec2(0.0, e)) - d);
-    g = g / max(length(g), 1e-4);                       // outward
-    float t = clamp(-d / 26.0, 0.0, 1.0), edge = 1.0 - t;   // 1 at the edge, 0 deep inside
-    float slope = edge * edge;
-    vec3 n = normalize(vec3(g * edge * 1.35, sqrt(max(1.0 - edge * edge, 0.0)) + 0.18));
-    // the background bends through the glass, more at the edge
-    vec3 seen = backdrop(p - g * slope * 30.0 + vec2(0.0, -6.0) * slope);
-    vec3 glass = mix(seen, uFrost, mix(0.34, 0.1, uDark));   // frosted
-    glass = mix(glass, tint, ta * mix(0.72, 0.55, uDark));     // the body's own colour
-    glass += tint * ta * (0.18 + 0.55 * slope);                // colour glowing inside, brighter at the rim
-    vec3 L = normalize(vec3(-0.45, -0.7, 0.55)), H = normalize(L + vec3(0.0, 0.0, 1.0));
-    float nh = max(dot(n, H), 0.0);
-    glass += vec3(1.0) * (pow(nh, 70.0) * 0.9 + pow(nh, 9.0) * 0.1);       // the highlight on its shoulder
-    glass += vec3(1.0) * pow(1.0 - n.z, 2.2) * mix(0.25, 0.32, uDark);    // fresnel: the edge goes bright
-    glass *= 1.0 - 0.22 * max(dot(g, vec2(0.0, 1.0)), 0.0) * slope;       // the underside sits in shade
-    float rim = 1.0 - smoothstep(0.0, 1.4, abs(d + 0.9));                   // a hairline of light on the lip
-    glass += rim * (0.18 + 0.55 * max(dot(-g, normalize(vec2(-0.6, -0.8))), 0.0));
-    col = mix(col, glass, 1.0 - smoothstep(-1.0, 0.8, d));
+    // the slab's height: a rounded bevel 26 px wide. Its slope, taken over a few pixels, gives the
+    // surface normal, which keeps the ridge down the middle of a thin neck or star smooth, not creased
+    float e = 2.5;
+    vec2 gh = vec2(slab(p + vec2(e, 0.0)) - slab(p - vec2(e, 0.0)), slab(p + vec2(0.0, e)) - slab(p - vec2(0.0, e))) * (26.0 / (2.0 * e));
+    vec3 n = normalize(vec3(-gh * 0.75, 1.0));
+    vec2 g = -gh / max(length(gh), 1e-4);                           // outward
+    float edge = clamp(1.0 + d / 26.0, 0.0, 1.0);                   // 1 at the lip, 0 where the glass is full thickness
+    float thick = sqrt(max(1.0 - edge * edge, 0.0));
+    // the room seen through the glass, bent at the rim, with a trace of dispersion
+    vec2 off = -n.xy * 30.0;
+    vec3 seen = vec3(backdrop(p + off * 1.07).r, backdrop(p + off).g, backdrop(p + off * 0.93).b);
+    vec3 body = mix(seen, uFrost, mix(0.38, 0.16, uDark) * thick);  // frosted where it's thick
+    body = mix(body, tint, ta * (0.45 + 0.4 * thick));             // the material's own colour
+    body = mix(body, uFill, 0.08 * thick);
+    // reflections, strongest at grazing angles
+    vec3 R = reflect(vec3(0.0, 0.0, -1.0), n);
+    float fres = 0.05 + 0.95 * pow(1.0 - n.z, 3.5);
+    vec3 glass = mix(body, env(R), clamp(fres, 0.0, 0.85));
+    // the key light's highlight on the shoulder, and light gathering in the lower inside edge
+    vec3 L = normalize(vec3(-0.45, -0.75, 0.25)), Hh = normalize(L + vec3(0.0, 0.0, 1.0));
+    float nh = max(dot(n, Hh), 0.0);
+    glass += vec3(1.0) * (pow(nh, 140.0) * 1.25 + pow(nh, 16.0) * 0.05);
+    glass += uKey * smoothstep(0.45, 1.0, edge) * max(dot(g, normalize(vec2(0.25, 1.0))), 0.0) * mix(0.18, 0.3, uDark);
+    // a dark line just inside the lip, then the bright lip itself
+    glass *= 1.0 - (1.0 - smoothstep(0.0, 1.6, abs(d + 3.4))) * 0.35;
+    glass += (1.0 - smoothstep(0.0, 1.1, abs(d + 0.7))) * (0.22 + 0.6 * max(dot(-g, normalize(vec2(-0.55, -0.83))), 0.0));
+    col = mix(col, glass, 1.0 - smoothstep(-0.9, 0.7, d));
   }
+  col += (hash(p * uDpr + fract(uTime)) - 0.5) * 0.012;   // grain, so gradients don't band
   gl_FragColor = vec4(col, 1.0);
 }`;
   function glassGL(cv) {
@@ -407,7 +424,7 @@ void main() {
       gl.useProgram(pr);
       const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
       const l = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 2, gl.FLOAT, false, 0, 0);
-      const U = {}; ['uSize', 'uDpr', 'uTime', 'uDark', 'uK', 'uN', 'uA', 'uB', 'uC', 'uBg0', 'uBg1', 'uGlow0', 'uGlow1', 'uFrost'].forEach(n => { U[n] = gl.getUniformLocation(pr, n); });
+      const U = {}; ['uSize', 'uDpr', 'uTime', 'uDark', 'uK', 'uN', 'uA', 'uB', 'uC', 'uBg0', 'uBg1', 'uKey', 'uFill', 'uFrost', 'uEnvLo', 'uEnvHi', 'uGrid'].forEach(n => { U[n] = gl.getUniformLocation(pr, n); });
       return { gl, U, A: new Float32Array(MAXP * 4), B: new Float32Array(MAXP * 4), C: new Float32Array(MAXP * 3) };
     } catch (e) { console.warn('Tension studies: drawing without WebGL', e); return null; }
   }
@@ -416,12 +433,14 @@ void main() {
   const rgb = v => { v = v.trim(); if (v[0] === '#') { const n = parseInt(v.length === 4 ? v.slice(1).split('').map(c => c + c).join('') : v.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; } const m = v.match(/[\d.]+/g) || [0, 0, 0]; return m.slice(0, 3).map(x => +x / 255); };
   function readTheme() {
     const cs = getComputedStyle(document.documentElement), g = n => rgb(cs.getPropertyValue(n));
-    THEME = { dark: matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.dataset.theme !== 'light' || document.documentElement.dataset.theme === 'dark',
-      bg0: g('--stage-a'), bg1: g('--stage-b'), glow0: g('--glow-a'), glow1: g('--glow-b'), frost: g('--frost'), on: g('--on-b'), onHi: g('--on-a'), warm: g('--warm-b'), neutral: g('--glass-tint') };
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.dataset.theme !== 'light' || document.documentElement.dataset.theme === 'dark';
+    THEME = { dark, bg0: g('--stage-a'), bg1: g('--stage-b'), key: g('--key-light'), frost: g('--frost'), fill: g('--glass-fill'),
+      envLo: g('--env-lo'), envHi: g('--env-hi'), grid: dark ? [0.05, 0.05, 0.055] : [-0.045, -0.045, -0.04],
+      on: g('--mat-on'), smoke: g('--mat-smoke'), neutral: g('--mat-clear') };
   }
   // what each kind of shape is made of: its colour and how strongly it's tinted
-  // (coloured glass is tinted harder in light mode, so white text on it stays readable)
-  const KIND = cls => /\bink\b/.test(cls) ? [[0.015, 0.015, 0.02], 0.97] : /\bon\b/.test(cls) ? [THEME.on, THEME.dark ? 0.62 : 0.95] : /\bwarm\b/.test(cls) ? [THEME.warm, THEME.dark ? 0.6 : 0.95] : [THEME.neutral, 0.1];
+  // three materials: clear glass, the lit state (silver on black, graphite on light) and smoked glass
+  const KIND = cls => /\bink\b/.test(cls) ? [[0.012, 0.012, 0.014], 0.97] : /\bon\b/.test(cls) ? [THEME.on, 0.92] : /\bwarm\b/.test(cls) ? [THEME.smoke, 0.8] : [THEME.neutral, 0.22];
   function drawGlass(s, t) {
     const G = s.gl, list = s.goo.prims.filter(h => h.vis).slice(0, MAXP);
     const dpr = Math.min(2, devicePixelRatio || 1), W = Math.round(s.W * dpr), H = Math.round(s.H * dpr);
@@ -436,7 +455,8 @@ void main() {
     gl.uniform2f(U.uSize, s.W, s.H); gl.uniform1f(U.uDpr, dpr); gl.uniform1f(U.uTime, still() ? 0 : t); gl.uniform1f(U.uDark, THEME.dark ? 1 : 0);
     gl.uniform1f(U.uK, s.k || 16); gl.uniform1i(U.uN, list.length);
     gl.uniform4fv(U.uA, A); gl.uniform4fv(U.uB, B); gl.uniform3fv(U.uC, C);
-    gl.uniform3fv(U.uBg0, THEME.bg0); gl.uniform3fv(U.uBg1, THEME.bg1); gl.uniform3fv(U.uGlow0, THEME.glow0); gl.uniform3fv(U.uGlow1, THEME.glow1); gl.uniform3fv(U.uFrost, THEME.frost);
+    gl.uniform3fv(U.uBg0, THEME.bg0); gl.uniform3fv(U.uBg1, THEME.bg1); gl.uniform3fv(U.uKey, THEME.key); gl.uniform3fv(U.uFill, THEME.fill); gl.uniform3fv(U.uFrost, THEME.frost);
+    gl.uniform3fv(U.uEnvLo, THEME.envLo); gl.uniform3fv(U.uEnvHi, THEME.envHi); gl.uniform3fv(U.uGrid, THEME.grid);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   // without WebGL: the same shapes as flat translucent glass (they don't melt together)
@@ -579,7 +599,7 @@ void main() {
         neck(nk, hx, hy + 14, c.x.v, c.y.v, attached ? Math.min(CH * 0.7, neckT(d, SNAP, 96)) : 0);
         place(lab, c.x.v - w / 2 + 20, c.y.v - CH / 2 + 18);
         place(peek, b2.x.v - (w - 40) / 2 + 22, b2.y.v + (CH - 20) / 2 + 8);
-        peek.style.opacity = attached ? 1 : 0.6;
+        peek.style.opacity = clamp(1 - d / 40, 0, 1);
         place(put, s.W - 130, 16);
       },
     };
@@ -892,6 +912,5 @@ void main() {
   requestAnimationFrame(frame);
 })();
 </script>
-
 </body>
 </html>

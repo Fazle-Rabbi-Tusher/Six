@@ -95,24 +95,29 @@
   --ease-detent: linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985,
     1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002,
     1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1);
+  /* water: damping ratio 0.36, overshoots about 30 %; only a control let go after being pulled (tension) */
+  --ease-water: linear(0, 0.028, 0.103, 0.215, 0.351, 0.5, 0.652, 0.799, 0.932, 1.048, 1.143,
+    1.215, 1.264, 1.291, 1.297, 1.287, 1.263, 1.229, 1.188, 1.143, 1.098, 1.055, 1.015, 0.982,
+    0.954, 0.934, 0.92, 0.913, 0.912, 0.915, 0.923, 0.933, 0.946, 0.959, 0.973, 0.985, 0.997,
+    1.007, 1.015, 1.02, 1.024, 1.026, 1.026, 1.025, 1);
 
   /* ── Color: light ─────────────────────────────────────── */
   color-scheme: light;
-  --c-bg: #eceaf2;            /* "Porcelain" — app background, desktop fallback */
-  --c-surface: #faf9fc;       /* windows, cards */
-  --c-surface-2: #e2dfeb;     /* sunken wells, sidebars, inputs */
-  --c-surface-3: #d6d2e2;     /* hovered rows, pressed wells */
-  --c-line: #cfcbdc;          /* hairlines, dividers */
-  --c-line-strong: #8f8ba3;   /* input borders (3:1 non-text contrast) */
-  --c-text: #1a1923;
-  --c-text-2: #474556;
-  --c-text-3: #5f5c70;
+  --c-bg: #ebecee;            /* "Porcelain" — app background, desktop fallback */
+  --c-surface: #f9f9fa;       /* windows, cards */
+  --c-surface-2: #e2e3e6;     /* sunken wells, sidebars, inputs */
+  --c-surface-3: #d5d7db;     /* hovered rows, pressed wells */
+  --c-line: #cdd0d5;          /* hairlines, dividers */
+  --c-line-strong: #868a93;   /* input borders (3:1 non-text contrast) */
+  --c-text: #16171a;
+  --c-text-2: #43464d;
+  --c-text-3: #5a5e66;
   --c-text-on-accent: #ffffff;
 
-  --c-accent: #5340d9;        /* "Iris" — the one brand hue */
-  --c-accent-hover: #4733c9;
-  --c-accent-soft: #e3dfff;
-  --c-focus: #5340d9;
+  --c-accent: #34373e;        /* "Graphite" — the default; silver in dark. Colour comes from Pip and the accent options */
+  --c-accent-hover: #1f2126;
+  --c-accent-soft: #dfe1e5;
+  --c-focus: #34373e;
 
   --c-info: #066a75;          /* Tide */
   --c-success: #1a6d47;       /* Moss */
@@ -144,16 +149,16 @@
   --mood-ember-1: #240c18; --mood-ember-2: #6b2236; --mood-ember-3: #ffb86b; --mood-ember-4: #ff6b4a;
 
   /* Pip, the assistant (from the SIX assistant character canvas) */
-  --pip-line: #1a64b5;
-  --pip-deep: #1d5fd0;
-  --pip-glow: #75ddff;
-  --pip-core: #d8fcff;
+  --pip-line: #9a3c1c;        /* Bloom's ember, as text */
+  --pip-deep: #e0402a;
+  --pip-glow: #ff9a3c;
+  --pip-core: #ffd9b0;
 
   /* ── Materials ────────────────────────────────────────── */
   /* Clay: things you touch */
   --clay-highlight: rgba(255, 255, 255, 0.75);
-  --clay-shade: rgba(40, 30, 90, 0.16);
-  --clay-drop: rgba(60, 45, 140, 0.22);
+  --clay-shade: rgba(20, 22, 28, 0.14);
+  --clay-drop: rgba(20, 22, 28, 0.2);
   --clay-1: 0 2px 4px -1px var(--clay-drop), inset 0 1px 0 var(--clay-highlight),
     inset 0 -2px 3px var(--clay-shade);
   --clay-2: 0 8px 16px -6px var(--clay-drop), inset 2px 3px 4px var(--clay-highlight),
@@ -163,18 +168,18 @@
   --clay-pressed: inset 2px 3px 6px var(--clay-shade), inset -1px -1px 2px var(--clay-highlight);
 
   /* Plasma glass: things that float over content */
-  --glass-fill: rgba(250, 249, 252, 0.78);
-  --glass-fill-strong: rgba(250, 249, 252, 0.9);
+  --glass-fill: rgba(249, 249, 250, 0.78);
+  --glass-fill-strong: rgba(249, 249, 250, 0.9);
   --glass-blur: 28px;
   --glass-saturate: 1.6;
   --glass-rim: rgba(255, 255, 255, 0.7);
-  --glass-edge: rgba(30, 25, 70, 0.12);
+  --glass-edge: rgba(20, 22, 28, 0.12);
 
   /* Elevation shadows for flat surfaces (windows, cards) */
-  --shadow-1: 0 1px 2px rgba(25, 20, 60, 0.08), 0 1px 1px rgba(25, 20, 60, 0.04);
-  --shadow-2: 0 4px 12px -2px rgba(25, 20, 60, 0.12), 0 2px 4px rgba(25, 20, 60, 0.06);
-  --shadow-3: 0 18px 40px -12px rgba(25, 20, 60, 0.28), 0 4px 10px rgba(25, 20, 60, 0.08);
-  --shadow-4: 0 32px 64px -16px rgba(25, 20, 60, 0.38), 0 8px 18px rgba(25, 20, 60, 0.12);
+  --shadow-1: 0 1px 2px rgba(16, 18, 22, 0.08), 0 1px 1px rgba(16, 18, 22, 0.04);
+  --shadow-2: 0 4px 12px -2px rgba(16, 18, 22, 0.12), 0 2px 4px rgba(16, 18, 22, 0.06);
+  --shadow-3: 0 18px 40px -12px rgba(16, 18, 22, 0.28), 0 4px 10px rgba(16, 18, 22, 0.08);
+  --shadow-4: 0 32px 64px -16px rgba(16, 18, 22, 0.38), 0 8px 18px rgba(16, 18, 22, 0.12);
 
   /* Plasma clay: home surfaces drawn by one shader (guide/05-materials.md §5) */
   --liquid-blend: 40px;      /* smooth-union distance; viscosity presets 54 / 40 / 32 / off */
@@ -186,30 +191,30 @@
   --liquid-grid: 24px;
 
   --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--c-focus);
-  --scrim: rgba(17, 16, 23, 0.4);
+  --scrim: rgba(12, 12, 14, 0.4);
 }
 
 /* ── Color: dark (system preference, unless forced light) ── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --pip-line: #75ddff;
-    --pip-deep: #287bff;
+    --pip-line: #ffa064;
+    --pip-deep: #e0402a;
     --liquid-fill: 0.72;
-    --c-bg: #111017;
-    --c-surface: #1b1a23;
-    --c-surface-2: #262431;
-    --c-surface-3: #312f3e;
-    --c-line: #34323f;
-    --c-line-strong: #6e6a83;
-    --c-text: #f2f1f8;
-    --c-text-2: #bcb9cc;
-    --c-text-3: #9693a9;
-    --c-text-on-accent: #111017;
-    --c-accent: #9c8fff;
-    --c-accent-hover: #b0a6ff;
-    --c-accent-soft: #2e2a55;
-    --c-focus: #b0a6ff;
+    --c-bg: #0c0c0e;
+    --c-surface: #18191c;
+    --c-surface-2: #222327;
+    --c-surface-3: #2d2f33;
+    --c-line: #303236;
+    --c-line-strong: #6b6e75;
+    --c-text: #f3f4f6;
+    --c-text-2: #bfc2c8;
+    --c-text-3: #979ba3;
+    --c-text-on-accent: #111214;
+    --c-accent: #d4d7dd;
+    --c-accent-hover: #e8eaee;
+    --c-accent-soft: #2c2e33;
+    --c-focus: #e8eaee;
     --c-info: #4fd1dc;
     --c-success: #5fd49a;
     --c-warning: #f2b95a;
@@ -227,8 +232,8 @@
     --clay-highlight: rgba(255, 255, 255, 0.14);
     --clay-shade: rgba(0, 0, 0, 0.35);
     --clay-drop: rgba(0, 0, 0, 0.5);
-    --glass-fill: rgba(27, 26, 35, 0.72);
-    --glass-fill-strong: rgba(27, 26, 35, 0.88);
+    --glass-fill: rgba(24, 25, 28, 0.72);
+    --glass-fill-strong: rgba(24, 25, 28, 0.88);
     --glass-rim: rgba(255, 255, 255, 0.12);
     --glass-edge: rgba(0, 0, 0, 0.4);
     --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -240,23 +245,23 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --pip-line: #75ddff;
-  --pip-deep: #287bff;
+  --pip-line: #ffa064;
+  --pip-deep: #e0402a;
   --liquid-fill: 0.72;
-  --c-bg: #111017;
-  --c-surface: #1b1a23;
-  --c-surface-2: #262431;
-  --c-surface-3: #312f3e;
-  --c-line: #34323f;
-  --c-line-strong: #6e6a83;
-  --c-text: #f2f1f8;
-  --c-text-2: #bcb9cc;
-  --c-text-3: #9693a9;
-  --c-text-on-accent: #111017;
-  --c-accent: #9c8fff;
-  --c-accent-hover: #b0a6ff;
-  --c-accent-soft: #2e2a55;
-  --c-focus: #b0a6ff;
+  --c-bg: #0c0c0e;
+  --c-surface: #18191c;
+  --c-surface-2: #222327;
+  --c-surface-3: #2d2f33;
+  --c-line: #303236;
+  --c-line-strong: #6b6e75;
+  --c-text: #f3f4f6;
+  --c-text-2: #bfc2c8;
+  --c-text-3: #979ba3;
+  --c-text-on-accent: #111214;
+  --c-accent: #d4d7dd;
+  --c-accent-hover: #e8eaee;
+  --c-accent-soft: #2c2e33;
+  --c-focus: #e8eaee;
   --c-info: #4fd1dc;
   --c-success: #5fd49a;
   --c-warning: #f2b95a;
@@ -274,8 +279,8 @@
   --clay-highlight: rgba(255, 255, 255, 0.14);
   --clay-shade: rgba(0, 0, 0, 0.35);
   --clay-drop: rgba(0, 0, 0, 0.5);
-  --glass-fill: rgba(27, 26, 35, 0.72);
-  --glass-fill-strong: rgba(27, 26, 35, 0.88);
+  --glass-fill: rgba(24, 25, 28, 0.72);
+  --glass-fill-strong: rgba(24, 25, 28, 0.88);
   --glass-rim: rgba(255, 255, 255, 0.12);
   --glass-edge: rgba(0, 0, 0, 0.4);
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -284,14 +289,16 @@
   --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* ── Accent options (Settings › Appearance). Iris is the default; each option keeps the same
-   contrast as Iris (checked by check_contrast.py) and borrows its hue from a semantic colour. ── */
+/* ── Accent options (Settings › Appearance). Graphite is the default; each option keeps the same
+   contrast as Graphite (checked by check_contrast.py) and borrows its hue from a semantic colour. ── */
+:root[data-accent="iris"] { --c-accent: #5340d9; --c-accent-hover: #4733c9; --c-accent-soft: #e3dfff; --c-focus: #5340d9; --c-text-on-accent: #ffffff; }
 :root[data-accent="tide"] { --c-accent: #066a75; --c-accent-hover: #05555e; --c-accent-soft: #cdeef1; --c-focus: #066a75; --c-text-on-accent: #ffffff; }
 :root[data-accent="moss"] { --c-accent: #1a6d47; --c-accent-hover: #145a3a; --c-accent-soft: #cfeedd; --c-focus: #1a6d47; --c-text-on-accent: #ffffff; }
 :root[data-accent="sun"] { --c-accent: #85540e; --c-accent-hover: #6e450b; --c-accent-soft: #fbeac6; --c-focus: #85540e; --c-text-on-accent: #ffffff; }
-:root[data-accent="tide"][data-theme="dark"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111017; }
-:root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111017; }
-:root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111017; }
+:root[data-accent="iris"][data-theme="dark"] { --c-accent: #9c8fff; --c-accent-hover: #b0a6ff; --c-accent-soft: #2e2a55; --c-focus: #b0a6ff; --c-text-on-accent: #111214; }
+:root[data-accent="tide"][data-theme="dark"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111214; }
+:root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
+:root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
 /* follow the system theme too: dark values apply under prefers-color-scheme: dark unless the person chose light */
 
 /* ── Accessibility modes (user settings, not decoration) ── */
@@ -317,6 +324,7 @@
   --dur-base: 120ms; /* cross-fades only, no movement */
   --dur-slow: 160ms;
   --ease-spring: var(--ease-standard);
+  --ease-water: var(--ease-standard);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -325,6 +333,7 @@
     --dur-base: 120ms;
     --dur-slow: 160ms;
     --ease-spring: var(--ease-standard);
+    --ease-water: var(--ease-standard);
   }
 }
 
