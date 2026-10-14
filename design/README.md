@@ -40,6 +40,12 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
 
+## Concepts
+
+| File | What it is |
+|---|---|
+| [`concepts/tension.html`](concepts/tension.html) | **Tension studies**: live concepts for elastic surfaces in SIX (after the *Tensionmorphism* reference): a card stretching out of a stack, Pip's notch reaching for the window it's moving, Control Center radios that merge, answers growing out of questions, Files and the Bin, menus budding from the click. With rules, tokens and a recommended build order. Not in the prototype yet |
+
 ## Tokens
 
 | File | Use |

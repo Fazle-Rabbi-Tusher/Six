@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIX Tension Studies</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: one reading column for the argument, opening onto a two-up grid of live studies.
+   Each study is a stage (the elastic surface, drawn as SIX plasma clay) above a caption that
+   says what the tension means and where it would live in SIX. */
+:root {
+  --bg: #ecebf2; --paper: #f7f6fb; --ink: #16141f; --muted: #5b586c; --line: rgba(22, 20, 31, 0.1);
+  --accent: #5b47e0; --stage-a: #e4e2ee; --stage-b: #d6d3e3;
+  --blob-a: #ffffff; --blob-b: #dad6e8; --on-a: #a596ff; --on-b: #5b47e0; --warm-a: #ffcfae; --warm-b: #ee8550;
+  --on-ink: #ffffff; --thread: rgba(91, 71, 224, 0.45); --win: rgba(255, 255, 255, 0.72); --win-edge: rgba(22, 20, 31, 0.12);
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-ui: Geist, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0a10; --paper: #121119; --ink: #f1f0f7; --muted: #a29fb5; --line: rgba(255, 255, 255, 0.08);
+    --accent: #a99cff; --stage-a: #15141d; --stage-b: #0d0c13;
+    --blob-a: #34314a; --blob-b: #17161f; --on-a: #ad9fff; --on-b: #4b32d4; --warm-a: #ffb48a; --warm-b: #b8481f;
+    --on-ink: #ffffff; --thread: rgba(169, 156, 255, 0.5); --win: rgba(30, 28, 42, 0.78); --win-edge: rgba(255, 255, 255, 0.1);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0a10; --paper: #121119; --ink: #f1f0f7; --muted: #a29fb5; --line: rgba(255, 255, 255, 0.08);
+  --accent: #a99cff; --stage-a: #15141d; --stage-b: #0d0c13;
+  --blob-a: #34314a; --blob-b: #17161f; --on-a: #ad9fff; --on-b: #4b32d4; --warm-a: #ffb48a; --warm-b: #b8481f;
+  --on-ink: #ffffff; --thread: rgba(169, 156, 255, 0.5); --win: rgba(30, 28, 42, 0.78); --win-edge: rgba(255, 255, 255, 0.1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-ui); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 72px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 400; }
+p { margin: 0; }
+.eyebrow { font: 500 12px/1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* opener: the argument on the left, the six-dot mark holding itself together on the right */
+.open { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.open h1 { font: 400 clamp(64px, 11vw, 132px)/0.88 var(--font-display); letter-spacing: -0.02em; margin-top: 14px; }
+.open h1 em { font-style: italic; color: var(--accent); }
+.dek { margin-top: 22px; max-width: 34em; font-size: 18px; color: var(--muted); }
+.dek b { color: var(--ink); font-weight: 600; }
+.legend { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; max-width: 34em; }
+.legend div { display: grid; gap: 2px; }
+.legend b { font-weight: 600; font-size: 15px; }
+.legend span { font-size: 14px; color: var(--muted); }
+
+/* stages: the elastic surfaces */
+.stage { position: relative; height: 380px; border-radius: 28px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  background: radial-gradient(120% 90% at 30% 0%, var(--stage-a), var(--stage-b)); box-shadow: inset 0 0 0 1px var(--line); cursor: grab; }
+.stage.hero { height: 420px; }
+.stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.goo { position: absolute; inset: 0; filter: url(#tension); }
+.b { position: absolute; left: 0; top: 0; width: 10px; height: 10px; background: linear-gradient(160deg, var(--blob-a), var(--blob-b)); will-change: transform; }
+.b.on { background: linear-gradient(160deg, var(--on-a), var(--on-b)); }
+.b.warm { background: linear-gradient(160deg, var(--warm-a), var(--warm-b)); }
+.b.ink { background: #000; }
+.ui { position: absolute; inset: 0; pointer-events: none; }
+.ui > * { position: absolute; left: 0; top: 0; }
+.ui svg.threads { width: 100%; height: 100%; overflow: visible; }
+.ui svg.threads path { fill: none; stroke: var(--thread); stroke-width: 1.5; stroke-linecap: round; }
+.lab { font: 500 13px/1.3 var(--font-ui); color: var(--ink); white-space: nowrap; will-change: transform; }
+.lab small { display: block; font: 500 10.5px/1.3 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.lab.on { color: var(--on-ink); }
+.lab.on small { color: rgba(255, 255, 255, 0.75); }
+.note { left: 0; right: 0; top: auto !important; bottom: 14px; text-align: center; font: 500 12px/1.4 var(--font-mono); color: var(--muted); letter-spacing: 0.02em; }
+.act { pointer-events: auto; border: 0; border-radius: 999px; padding: 8px 14px; font: 600 13px/1 var(--font-ui); color: var(--on-ink); background: linear-gradient(160deg, var(--on-a), var(--on-b)); cursor: pointer; box-shadow: 0 6px 18px -8px var(--on-b); }
+.act:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.act.quiet { color: var(--ink); background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+.win { border-radius: 14px; background: var(--win); box-shadow: inset 0 0 0 1px var(--win-edge), 0 18px 40px -22px rgba(0, 0, 0, 0.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); overflow: hidden; will-change: transform; }
+.win i { display: block; height: 26px; border-bottom: 1px solid var(--win-edge); font: 600 11px/26px var(--font-ui); font-style: normal; padding-left: 12px; color: var(--muted); }
+.win s { display: block; margin: 10px 12px 0; height: 8px; border-radius: 4px; background: var(--line); text-decoration: none; }
+.win s + s { width: 60%; }
+.ico { width: 22px; height: 22px; display: grid; place-items: center; color: var(--ink); }
+.ico.on { color: var(--on-ink); }
+.ico svg { width: 22px; height: 22px; }
+.mrow { pointer-events: auto; font: 500 13px/1 var(--font-ui); color: var(--ink); padding: 0 12px; height: 32px; display: flex; align-items: center; justify-content: space-between; border-radius: 9px; cursor: pointer; }
+.mrow:hover { background: rgba(127, 110, 255, 0.16); }
+
+/* studies */
+.studies { display: grid; gap: 22px; }
+.studies-head { display: grid; gap: 10px; max-width: 46em; }
+.studies-head h2, .rules h2, .first h2 { font: 400 clamp(36px, 5vw, 52px)/1 var(--font-display); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.study { display: grid; gap: 16px; align-content: start; }
+.study h3 { font: 400 30px/1.05 var(--font-display); }
+.study p { color: var(--muted); max-width: 40em; }
+.study dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: 14px; }
+.study dt { font: 500 11px/1.9 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.study dd { margin: 0; }
+.cap { display: grid; gap: 10px; }
+
+/* rules and tokens */
+.rules { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.rules ol { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 16px; counter-reset: r; }
+.rules li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 10px; counter-increment: r; }
+.rules li::before { content: counter(r); grid-row: span 2; font: 400 30px/1 var(--font-display); color: var(--accent); }
+.rules li b { font-weight: 600; }
+.rules li span { color: var(--muted); font-size: 15px; }
+.tok { background: var(--paper); border-radius: 22px; padding: 22px 24px; box-shadow: inset 0 0 0 1px var(--line); display: grid; gap: 14px; }
+.tok h3 { font: 400 26px/1.1 var(--font-display); }
+.tbl { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px/1.4 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+td code { font: 500 13px/1.4 var(--font-mono); color: var(--ink); white-space: nowrap; }
+td:last-child { color: var(--muted); }
+.first { display: grid; gap: 18px; max-width: 52em; }
+.first ol { margin: 0; padding-left: 1.3em; display: grid; gap: 12px; }
+.first li::marker { font: 400 20px var(--font-display); color: var(--accent); }
+.first li b { font-weight: 600; }
+.first li span { color: var(--muted); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+
+@media (max-width: 900px) {
+  .open, .rules { grid-template-columns: minmax(0, 1fr); }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .stage.hero { height: 340px; }
+}
+@media (max-width: 520px) {
+  .legend { grid-template-columns: minmax(0, 1fr); }
+  .wrap { gap: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .act { transition: none; } }
+</style>
+
+<!-- the surface: blur + threshold makes nearby shapes flow into one body (with the necks between
+     them), and a soft specular rim gives it SIX's plasma-clay light -->
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="tension" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11" result="body"/>
+      <feGaussianBlur in="body" stdDeviation="3.2" result="soft"/>
+      <feSpecularLighting in="soft" surfaceScale="3.2" specularConstant="0.75" specularExponent="26" lighting-color="#ffffff" result="spec">
+        <feDistantLight azimuth="235" elevation="48"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="body" operator="in" result="rim"/>
+      <feComposite in="rim" in2="body" operator="arithmetic" k1="0" k2="0.5" k3="1" k4="0"/>
+    </filter>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <header class="open">
+    <div>
+      <span class="eyebrow">SIX · design concepts · October 2026</span>
+      <h1>Tension<em>.</em></h1>
+      <p class="dek">SIX's home already uses <b>plasma clay</b>: cards closer than 40 px flow into one surface. These studies add what happens <b>in between</b>: surfaces that stretch, pull and let go, so the link between two things, and the moment it breaks, is something you can see. Every stage on this page is live. Drag, click and pull.</p>
+      <div class="legend">
+        <div><b>Stretch</b><span>A neck forms between related things and thins as they move apart.</span></div>
+        <div><b>Snap</b><span>Past a set distance it lets go. That release is the commit.</span></div>
+        <div><b>Bud</b><span>New things grow out of what made them: a menu from the click, an answer from the question.</span></div>
+        <div><b>Merge</b><span>Related controls that are both on become one body.</span></div>
+      </div>
+    </div>
+    <div class="stage hero" id="hero" tabindex="0" aria-label="The SIX mark: six dots held to the centre. Drag a dot to stretch it until it lets go.">
+      <div class="goo"></div><div class="ui"><span class="note">Drag a dot. It holds on, stretches, then lets go.</span></div>
+    </div>
+  </header>
+
+  <section class="studies" aria-labelledby="studiesH">
+    <div class="studies-head">
+      <span class="eyebrow">Six studies</span>
+      <h2 id="studiesH">Where tension would earn its place in SIX</h2>
+      <p class="dek" style="margin-top:0">Each study takes one SIX surface where a relationship is currently invisible, or a moment of commitment happens too abruptly, and shows it with an elastic surface instead.</p>
+    </div>
+    <div class="grid">
+      <article class="study">
+        <div class="stage" id="sStack" tabindex="0" aria-label="A widget stack. Pull the top card out."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">Home · stacks</span>
+          <h3>Pull a card out of a stack</h3>
+          <p>The top card stays joined to the stack by a neck that thins as you pull. Past 150 px it lets go with a small recoil, and that release is the moment the card leaves the stack. Let go sooner and it springs back in.</p>
+          <dl><dt>In SIX</dt><dd>Replaces today's instant pull-out on home stacks; the cards behind lean after the one you're pulling.</dd><dt>Try</dt><dd>Pull the top card slowly, then quickly; drop it inside and outside the snap distance.</dd></dl>
+        </div>
+      </article>
+      <article class="study">
+        <div class="stage" id="sPip" tabindex="0" aria-label="Pip's notch reaching for a window it is moving."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">Pip · the notch</span>
+          <h3>Pip reaches for what it changes</h3>
+          <p>When Pip acts on a window, the notch drops a tendril to it and holds on while the window moves, so you see exactly what Pip is touching. When it's done, the tendril thins, lets go and draws back into the notch, and the notch leaves.</p>
+          <dl><dt>In SIX</dt><dd>The notch while Pip opens, snaps or closes windows, or edits a widget. One tether at a time.</dd><dt>Try</dt><dd>Ask Pip to snap Files to the left.</dd></dl>
+        </div>
+      </article>
+      <article class="study">
+        <div class="stage" id="sCC" tabindex="0" aria-label="Control Center: radios merge when both are on; sliders stretch."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">Control Center</span>
+          <h3>Related controls fuse</h3>
+          <p>Wi-Fi and Bluetooth are both radios, so when both are on they flow into one body. Airplane mode pulls them apart. Pull a slider's thumb off its track and the track stretches after it like a membrane, then snaps back.</p>
+          <dl><dt>In SIX</dt><dd>Control Center tiles and sliders; the same rule fuses Do Not Disturb with Focus.</dd><dt>Try</dt><dd>Turn on Wi-Fi and Bluetooth, then Airplane mode. Drag a slider up or down as well as along.</dd></dl>
+        </div>
+      </article>
+      <article class="study">
+        <div class="stage" id="sChat" tabindex="0" aria-label="The Pip app: answers grow out of questions."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">The Pip app</span>
+          <h3>Answers grow out of questions</h3>
+          <p>Your message buds off the composer and rises into place. While Pip works, a drop travels out of your message; it swells into Pip's answer, which stays linked to the question by a hairline while it's the latest exchange.</p>
+          <dl><dt>In SIX</dt><dd>The Pip app and the notch's voice panel; review cards hang from the answer that raised them.</dd><dt>Try</dt><dd>Ask Pip a few times and watch older exchanges let go.</dd></dl>
+        </div>
+      </article>
+      <article class="study">
+        <div class="stage" id="sFiles" tabindex="0" aria-label="Files: a file holds on to its folder; the Bin reaches out."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">Files · the Bin</span>
+          <h3>Files hold on, the Bin reaches out</h3>
+          <p>A file stays tethered to its folder until you clearly mean to move it. Near the Bin, the Bin bulges toward it; drop it in and it's swallowed with a gulp. <i>Put back</i> buds it out of the Bin and carries it home.</p>
+          <dl><dt>In SIX</dt><dd>Dragging in Files and to the dock's Bin. The tether makes an accidental drag obviously harmless.</dd><dt>Try</dt><dd>Drag a file to the Bin, then put it back.</dd></dl>
+        </div>
+      </article>
+      <article class="study">
+        <div class="stage" id="sMenu" tabindex="0" aria-label="Menus bud from where you click. Click or right-click anywhere."><div class="goo"></div><div class="ui"></div></div>
+        <div class="cap">
+          <span class="eyebrow">Right-click menus</span>
+          <h3>Menus bud from where you click</h3>
+          <p>A menu grows out of the pointer, joined to it until it settles; a submenu buds from its row. Choosing an item draws the menu back into the point it came from, so it's clear what you dismissed and where.</p>
+          <dl><dt>In SIX</dt><dd>Every right-click menu and the dock's menus (which bud upward).</dd><dt>Try</dt><dd>Click anywhere, hover Wallpaper, choose something.</dd></dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="rules" aria-labelledby="rulesH">
+    <div>
+      <span class="eyebrow">Rules</span>
+      <h2 id="rulesH">How tension behaves in SIX</h2>
+      <ol>
+        <li><b>Tension means a real relationship.</b><span>A neck only ever joins things that belong together (a card and its stack, Pip and what it's changing, a reply and its question). Nothing stretches for decoration.</span></li>
+        <li><b>Necks thin with distance, then snap.</b><span>Thickness falls off as the gap grows; at the snap distance it lets go. The snap is the commit: before it, letting go cancels.</span></li>
+        <li><b>Content never stretches.</b><span>Text, icons and images stay rigid on top of the surface. Only the clay bends.</span></li>
+        <li><b>Springs, not wobble.</b><span>Moves use SIX's precise spring; a snap or a landing gets one detent, with a recoil under 4 %. Nothing jiggles on its own.</span></li>
+        <li><b>One tether per thing.</b><span>An object is joined to at most one other at a time, and budding goes at most two levels deep (menu, submenu).</span></li>
+        <li><b>Every stretch has a plain alternative.</b><span>Each gesture is also a menu item, a button or a key. Under Reduce motion, necks are drawn still and a snap is instant.</span></li>
+      </ol>
+    </div>
+    <div class="tok">
+      <span class="eyebrow">Tokens</span>
+      <h3>The numbers behind the studies</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><code>--tension-snap</code></td><td><code>150px</code></td><td>Cards leaving a stack</td></tr>
+            <tr><td><code>--tension-snap-sm</code></td><td><code>100px</code></td><td>Files, chips, toggles</td></tr>
+            <tr><td><code>--neck-max</code></td><td><code>0.7 × short side</code></td><td>The thickest a neck gets</td></tr>
+            <tr><td><code>--neck-falloff</code></td><td><code>(1 − d / snap)<sup>0.8</sup></code></td><td>How a neck thins with distance</td></tr>
+            <tr><td><code>--neck-min</code></td><td><code>8px</code></td><td>Below this the clay can't hold; a hairline thread takes over</td></tr>
+            <tr><td><code>--spring-precise</code></td><td><code>177 / 23</code></td><td>Springing back, settling</td></tr>
+            <tr><td><code>--spring-detent</code></td><td><code>282 / 23</code></td><td>The snap and the landing</td></tr>
+            <tr><td><code>--spring-membrane</code></td><td><code>120 / 14</code></td><td>Cards behind leaning, the Bin bulging</td></tr>
+            <tr><td><code>--merge-gap</code></td><td><code>40px</code></td><td>Plasma clay's existing fusing distance</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="first" aria-labelledby="firstH">
+    <span class="eyebrow">Recommendation</span>
+    <h2 id="firstH">What to build into the prototype first</h2>
+    <ol>
+      <li><b>Pull a card out of a stack.</b> <span>It fixes a real problem (pulling a card out today is instant and easy to do by accident) and it extends the plasma clay home already has, so it costs little.</span></li>
+      <li><b>Pip reaches for what it changes.</b> <span>It makes Pip's actions legible: you see which window Pip is touching before it moves it. That's a trust feature, not decoration.</span></li>
+      <li><b>Related controls fuse.</b> <span>A small, contained place to prove the merge rule with real state.</span></li>
+      <li><b>Files hold on, the Bin reaches out.</b> <span>Valuable, but it needs drag and drop between Files and the dock first.</span></li>
+      <li><b>Answers grow out of questions, and menus bud.</b> <span>Polish once the first three have been tested with people; both run often, so they need to stay quick.</span></li>
+    </ol>
+  </section>
+
+  <footer>Concept studies for SIX's Soft Matter design language, after the <i>Tensionmorphism</i> reference (stretchable surfaces, visual relationships, dynamic feedback). Surfaces are drawn with SIX's plasma clay, springs and tokens; nothing here is in the prototype yet.</footer>
+</main>
+
+<script>
+(() => {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  const still = () => RM.matches;
+  // a spring-driven number: k stiffness, c damping (SIX's precise spring by default)
+  class Sp {
+    constructor(v) { this.v = v; this.t = v; this.u = 0; }
+    to(t) { this.t = t; return this; }
+    jump(v) { this.v = this.t = v; this.u = 0; return this; }
+    kick(u) { if (!still()) this.u += u; return this; }
+    step(dt, k = 177, c = 23) {
+      if (still()) { this.v = this.t; this.u = 0; return; }
+      this.u += (k * (this.t - this.v) - c * this.u) * dt; this.v += this.u * dt;
+    }
+  }
+  const PRE = [177, 23], DET = [282, 23], MEM = [120, 14];
+  const el = (parent, cls, html = '', tag = 'div') => { const e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; parent.append(e); return e; };
+  // a rounded shape centred on (x, y)
+  function shape(e, x, y, w, h, r) {
+    if (w < 0.5 || h < 0.5) { e.style.opacity = 0; return; }
+    e.style.opacity = 1; e.style.width = w + 'px'; e.style.height = h + 'px';
+    e.style.borderRadius = (r ?? Math.min(w, h) / 2) + 'px';
+    e.style.transform = `translate(${(x - w / 2).toFixed(1)}px, ${(y - h / 2).toFixed(1)}px)`;
+  }
+  // a capsule from a to b, t thick: through the surface it becomes the neck between them
+  function neck(e, ax, ay, bx, by, t) {
+    const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy);
+    if (t < 1 || L < 1) { e.style.opacity = 0; return; }
+    e.style.opacity = 1; e.style.width = L + 'px'; e.style.height = t + 'px'; e.style.borderRadius = t / 2 + 'px';
+    e.style.transformOrigin = `0 ${t / 2}px`;
+    e.style.transform = `translate(${ax.toFixed(1)}px, ${(ay - t / 2).toFixed(1)}px) rotate(${Math.atan2(dy, dx)}rad)`;
+  }
+  const neckT = (d, snap, t0) => (d >= snap ? 0 : t0 * Math.pow(1 - d / snap, 0.8));
+  const place = (e, x, y) => { e.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const ICON = {
+    wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9.5a14 14 0 0 1 18 0"/><path d="M6 13a9 9 0 0 1 12 0"/><path d="M9 16.5a4 4 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>',
+    bt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></svg>',
+    plane: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>',
+    bin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+  };
+
+  // every study registers here; only the ones on screen run
+  const studies = [];
+  function study(id, setup) {
+    const stage = document.getElementById(id); if (!stage) return;
+    const s = { stage, goo: stage.querySelector('.goo'), ui: stage.querySelector('.ui'), on: false, W: 0, H: 0 };
+    s.size = () => { s.W = stage.clientWidth; s.H = stage.clientHeight; };
+    s.size();
+    s.pos = e => { const r = stage.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    Object.assign(s, setup(s));
+    studies.push(s); io.observe(stage);
+    s.step(1 / 60, 0);   // a complete first frame, before it scrolls into view
+  }
+  const io = new IntersectionObserver(es => es.forEach(e => { const s = studies.find(x => x.stage === e.target); if (s) { s.on = e.isIntersecting; if (s.on && s.wake) s.wake(); } }), { rootMargin: '80px' });
+  addEventListener('resize', () => studies.forEach(s => { s.size(); s.step(1 / 60, performance.now() / 1000); }));
+  let last = 0;
+  function frame(now) {
+    const dt = last ? Math.min(0.033, (now - last) / 1000) : 1 / 60; last = now;
+    for (const s of studies) if (s.on) s.step(dt, now / 1000);
+    requestAnimationFrame(frame);
+  }
+  // pointer helper: down/move/up in stage coordinates
+  function drag(s, down, move, up) {
+    s.stage.addEventListener('pointerdown', e => {
+      const p = s.pos(e); if (!down(p, e)) return;
+      e.preventDefault(); s.stage.setPointerCapture(e.pointerId); s.stage.style.cursor = 'grabbing';
+      const mv = ev => move(s.pos(ev), ev);
+      const fin = ev => { s.stage.removeEventListener('pointermove', mv); s.stage.removeEventListener('pointerup', fin); s.stage.removeEventListener('pointercancel', fin); s.stage.style.cursor = ''; up(s.pos(ev), ev); };
+      s.stage.addEventListener('pointermove', mv); s.stage.addEventListener('pointerup', fin); s.stage.addEventListener('pointercancel', fin);
+    });
+  }
+
+  /* ── The SIX mark: six dots held to the centre ── */
+  study('hero', s => {
+    const core = el(s.goo, 'b'), dots = [], necks = [];
+    for (let i = 0; i < 6; i++) {
+      necks.push(el(s.goo, 'b on'));
+      dots.push({ e: el(s.goo, 'b ' + (i % 2 ? 'warm' : 'on')), x: new Sp(0), y: new Sp(0), held: false, free: false, back: 0 });
+    }
+    const R = () => Math.min(92, s.W * 0.2), home = i => { const a = -Math.PI / 2 + i * Math.PI / 3; return [s.W / 2 + Math.cos(a) * R(), s.H / 2 - 18 + Math.sin(a) * R()]; };
+    dots.forEach((d, i) => { const [x, y] = home(i); d.x.jump(x); d.y.jump(y); });
+    const SNAP = 190; let held = null, off = [0, 0];
+    drag(s, p => {
+      held = dots.find(d => Math.hypot(d.x.v - p[0], d.y.v - p[1]) < 36) || null; if (!held) return false;
+      held.held = true; off = [held.x.v - p[0], held.y.v - p[1]]; return true;
+    }, p => { held.x.jump(p[0] + off[0]); held.y.jump(p[1] + off[1]); }, () => {
+      const i = dots.indexOf(held), [hx, hy] = home(i);
+      held.held = false;
+      if (held.free) held.back = 1.1; else { held.x.to(hx); held.y.to(hy); }
+      held = null;
+    });
+    s.stage.addEventListener('keydown', e => {   // keyboard: arrows pull the top dot, Escape lets it spring home
+      const d = dots[0], k = { ArrowUp: [0, -24], ArrowDown: [0, 24], ArrowLeft: [-24, 0], ArrowRight: [24, 0] }[e.key];
+      if (k) { e.preventDefault(); d.x.to(d.x.t + k[0]); d.y.to(d.y.t + k[1]); }
+      if (e.key === 'Escape') { const [x, y] = home(0); d.x.to(x); d.y.to(y); }
+    });
+    return {
+      size() { s.W = s.stage.clientWidth; s.H = s.stage.clientHeight; dots.forEach((d, i) => { if (!d.held && !d.free) { const [x, y] = home(i); d.x.to(x); d.y.to(y); } }); },
+      step(dt, t) {
+        const cx = s.W / 2, cy = s.H / 2 - 18, br = still() ? 0 : Math.sin(t * 1.4) * 2;
+        shape(core, cx, cy, 64 + br, 64 + br);
+        dots.forEach((d, i) => {
+          const [hx, hy] = home(i);
+          if (d.free && !d.held) { d.back -= dt; if (d.back <= 0) { d.x.to(hx); d.y.to(hy); } }
+          d.x.step(dt, ...(d.free ? MEM : PRE)); d.y.step(dt, ...(d.free ? MEM : PRE));
+          const dist = Math.hypot(d.x.v - cx, d.y.v - cy);
+          if (!d.free && dist > SNAP) { d.free = true; d.x.kick((d.x.v - cx) * 0.8); d.y.kick((d.y.v - cy) * 0.8); }
+          if (d.free && dist < R() * 1.15 && !d.held) d.free = false;   // close enough to rejoin
+          const r = 46 + (still() ? 0 : Math.sin(t * 2 + i) * 1.5);
+          shape(d.e, d.x.v, d.y.v, r, r);
+          neck(necks[i], cx, cy, d.x.v, d.y.v, d.free ? 0 : Math.min(30, neckT(dist, SNAP, 40)));
+        });
+      },
+    };
+  });
+
+  /* ── Home · stacks: pull a card out ── */
+  study('sStack', s => {
+    const back2 = el(s.goo, 'b'), back1 = el(s.goo, 'b'), nk = el(s.goo, 'b'), top = el(s.goo, 'b');
+    const lab = el(s.ui, 'lab', '<small>Today · Tue 14 Oct</small>10:00 · Design review<br>14:30 · Call with Arif');
+    const peek = el(s.ui, 'lab', '<small>2 more in this stack</small>');
+    const note = el(s.ui, 'lab note', 'Pull the top card. It stretches, then lets go.');
+    const put = el(s.ui, 'act quiet', 'Put it back', 'button'); put.hidden = true;
+    const home = () => [s.W / 2, s.H / 2 - 30];
+    const c = { x: new Sp(home()[0]), y: new Sp(home()[1]) }, b1 = { x: new Sp(0), y: new Sp(0), w: new Sp(0) }, b2 = { x: new Sp(0), y: new Sp(0) };
+    const SNAP = 150; let attached = true, held = false, off = [0, 0];
+    const CW = () => Math.min(250, s.W - 60), CH = 104;
+    { const [hx, hy] = home(); b1.x.jump(hx); b1.y.jump(hy + 24); b2.x.jump(hx); b2.y.jump(hy + 44); }
+    drag(s, p => {
+      if (Math.abs(p[0] - c.x.v) > CW() / 2 || Math.abs(p[1] - c.y.v) > CH / 2) return false;
+      held = true; off = [c.x.v - p[0], c.y.v - p[1]]; return true;
+    }, p => {
+      c.x.jump(p[0] + off[0]); c.y.jump(p[1] + off[1]);
+      const [hx, hy] = home(), d = Math.hypot(c.x.v - hx, c.y.v - hy);
+      if (attached && d > SNAP) {   // let go: the commit, with a recoil through the stack
+        attached = false; b1.y.kick(-260); b2.y.kick(-180); b1.w.kick(220);
+        note.textContent = 'Let go. Drop it anywhere: it has left the stack.';
+      } else if (attached) note.textContent = d > SNAP * 0.6 ? 'Nearly… pull a little further, or let go to cancel.' : 'Holding on.';
+    }, () => {
+      held = false;
+      if (attached) { c.x.to(home()[0]); c.y.to(home()[1]); note.textContent = 'Back in the stack. Nothing changed.'; }
+      else { put.hidden = false; note.textContent = 'Out of the stack, on its own.'; }
+    });
+    put.addEventListener('click', () => { c.x.to(home()[0]); c.y.to(home()[1]); put.hidden = true; note.textContent = 'Going home…'; });
+    return {
+      step(dt) {
+        const [hx, hy] = home(), w = CW();
+        if (!held) { c.x.step(dt, ...PRE); c.y.step(dt, ...PRE); }
+        const dx = c.x.v - hx, dy = c.y.v - hy, d = Math.hypot(dx, dy);
+        if (!attached && !held && d < 40) { attached = true; b1.y.kick(120); note.textContent = 'Back in the stack.'; }
+        // the cards behind lean after the one being pulled, on a softer spring
+        const lean = attached ? 0.14 : 0;
+        b1.x.to(hx + dx * lean); b1.y.to(hy + 24 + dy * lean); b2.x.to(hx + dx * lean * 0.45); b2.y.to(hy + 44 + dy * lean * 0.45); b1.w.to(0);
+        [b1.x, b1.y, b2.x, b2.y, b1.w].forEach(v => v.step(dt, ...MEM));
+        shape(back2, b2.x.v, b2.y.v, w - 40, CH - 20, 26);
+        shape(back1, b1.x.v, b1.y.v, w - 20 + b1.w.v * 0.05, CH - 10, 28);
+        shape(top, c.x.v, c.y.v, w, CH, 30);
+        neck(nk, hx, hy + 14, c.x.v, c.y.v, attached ? Math.min(CH * 0.7, neckT(d, SNAP, 96)) : 0);
+        place(lab, c.x.v - w / 2 + 20, c.y.v - CH / 2 + 18);
+        place(peek, b2.x.v - (w - 40) / 2 + 22, b2.y.v + (CH - 20) / 2 + 8);
+        peek.style.opacity = attached ? 1 : 0.6;
+        place(put, s.W - 130, 16);
+      },
+    };
+  });
+
+  /* ── Pip · the notch reaches for the window it's moving ── */
+  study('sPip', s => {
+    const notch = el(s.goo, 'b ink'), grip = el(s.goo, 'b ink'), tendril = el(s.goo, 'b ink');
+    const term = el(s.ui, 'win', '<i>Terminal</i><s></s><s></s>'), files = el(s.ui, 'win', '<i>Files</i><s></s><s></s><s></s>');
+    const said = el(s.ui, 'lab', ''); said.style.color = '#fff'; said.style.fontSize = '12px';
+    const note = el(s.ui, 'lab note', 'Pip only shows the notch while it works.');
+    const go = el(s.ui, 'act', 'Ask Pip: snap Files to the left', 'button');
+    const nw = new Sp(0), nh = new Sp(0), ext = new Sp(0), thick = new Sp(0);
+    const F = { x: new Sp(0), y: new Sp(0), w: new Sp(0), h: new Sp(0) };
+    const start = () => ({ x: s.W * 0.4, y: s.H * 0.36, w: Math.min(260, s.W * 0.5), h: 150 });
+    const snapped = () => ({ x: 14, y: 52, w: s.W / 2 - 22, h: s.H - 120 });
+    const setF = (r, jump) => Object.keys(r).forEach(k => (jump ? F[k].jump(r[k]) : F[k].to(r[k])));
+    setF(start(), true);
+    let timers = [], running = false;
+    const later = (ms, fn) => timers.push(setTimeout(fn, still() ? Math.min(ms, 50) : ms));
+    function run() {
+      if (running) return; running = true; timers.forEach(clearTimeout); timers = [];
+      setF(start(), false);
+      go.disabled = true; note.textContent = '“Snap Files to the left.”';
+      later(300, () => { nw.to(186); nh.to(44); said.textContent = 'Snapping Files to the left'; });
+      later(800, () => { thick.to(18); ext.to(1); note.textContent = 'Pip takes hold of the window it is about to move.'; });
+      later(1500, () => setF(snapped(), false));
+      later(2600, () => { said.textContent = 'Done · Files on the left'; thick.to(6); note.textContent = 'Done. It lets go and draws back.'; });
+      later(2900, () => ext.to(0));
+      later(3500, () => { nw.to(0); nh.to(0); thick.to(0); });
+      later(4300, () => { running = false; go.disabled = false; go.textContent = 'Again'; note.textContent = 'The notch has gone: Pip is idle.'; });
+      later(5200, () => { if (!running) setF(start(), false); });
+    }
+    go.addEventListener('click', run);
+    let woke = false;
+    return {
+      wake() { if (!woke) { woke = true; setTimeout(run, 600); } },
+      size() { s.W = s.stage.clientWidth; s.H = s.stage.clientHeight; if (!running) setF(start(), true); },
+      step(dt) {
+        [nw, nh].forEach(v => v.step(dt, ...DET)); ext.step(dt, ...PRE); thick.step(dt, ...PRE);
+        Object.values(F).forEach(v => v.step(dt, ...PRE));
+        const cx = s.W / 2;
+        shape(notch, cx, 0, nw.v, nh.v, 18);
+        const gx = F.x.v + F.w.v / 2, gy = F.y.v - 4, k = clamp(ext.v, 0, 1.05);
+        const ex = lerp(cx, gx, k), ey = lerp(nh.v / 2 - 4, gy, k);
+        neck(tendril, cx, Math.max(0, nh.v / 2 - 8), ex, ey, thick.v > 1 && k > 0.02 ? thick.v : 0);
+        shape(grip, ex, ey, k > 0.6 ? 26 * Math.min(1, (k - 0.6) / 0.4) : 0, k > 0.6 ? 22 * Math.min(1, (k - 0.6) / 0.4) : 0);
+        Object.assign(files.style, { width: F.w.v + 'px', height: F.h.v + 'px' }); place(files, F.x.v, F.y.v);
+        const tw = Math.min(220, s.W * 0.42); Object.assign(term.style, { width: tw + 'px', height: '120px' }); place(term, s.W - tw - 16, s.H - 196);
+        said.style.opacity = nw.v > 150 ? Math.min(1, (nw.v - 150) / 30) : 0;
+        place(said, cx - said.offsetWidth / 2, 6);
+        place(go, 16, s.H - 84);
+      },
+    };
+  });
+
+  /* ── Control Center: related radios fuse, sliders stretch ── */
+  study('sCC', s => {
+    const names = ['wifi', 'bt', 'plane', 'moon'], labels = ['Wi-Fi', 'Bluetooth', 'Airplane mode', 'Focus'];
+    const T = names.map((n, i) => ({ n, on: i === 0, r: new Sp(30), e: el(s.goo, 'b' + (i === 0 ? ' on' : '')), ic: el(s.ui, 'ico' + (i === 0 ? ' on' : ''), ICON[n]) }));
+    const fuse = el(s.goo, 'b on'), fuseW = new Sp(0);
+    const sliders = [['sun', 0.62, 'Brightness'], ['vol', 0.35, 'Volume']].map(([ic, v, n]) => ({ n, v: new Sp(v), dy: new Sp(0), track: el(s.goo, 'b'), fill: el(s.goo, 'b on'), thumb: el(s.goo, 'b'), stem: el(s.goo, 'b'), ic: el(s.ui, 'ico', ICON[ic]), val: el(s.ui, 'lab') }));
+    const note = el(s.ui, 'lab note', 'Turn on Wi-Fi and Bluetooth. Then Airplane mode.');
+    const xs = () => { const g = Math.min(78, (s.W - 40) / 4); return names.map((_, i) => s.W / 2 + (i - 1.5) * g); };
+    const tx = () => [34, s.W - 34];
+    const sy = i => 172 + i * 88;
+    function toggle(i) {
+      const t = T[i]; t.on = !t.on;
+      if (i === 2 && t.on) { T[0].on = false; T[1].on = false; note.textContent = 'Airplane mode pulls the radios apart.'; }
+      if ((i === 0 || i === 1) && t.on && T[2].on) T[2].on = false;
+      if (T[0].on && T[1].on) note.textContent = 'Both radios on: they flow into one.';
+      else if (i < 2) note.textContent = t.on ? `${labels[i]} on.` : `${labels[i]} off.`;
+      if (i === 3) note.textContent = t.on ? 'Focus on. It has nothing to fuse with here.' : 'Focus off.';
+      T.forEach(x => { x.e.className = 'b' + (x.on ? ' on' : ''); x.ic.className = 'ico' + (x.on ? ' on' : ''); });
+      t.r.kick(t.on ? 120 : -80);
+    }
+    let held = null, start = null;
+    drag(s, p => {
+      const X = xs();
+      const i = T.findIndex((t, k) => Math.hypot(p[0] - X[k], p[1] - 74) < 34);
+      if (i >= 0) { toggle(i); return false; }
+      const j = sliders.findIndex((sl, k) => Math.abs(p[1] - sy(k)) < 34 && p[0] > 16 && p[0] < s.W - 16);
+      if (j < 0) return false;
+      held = sliders[j]; start = p; return true;
+    }, p => {
+      const [a, b] = tx();
+      held.v.jump(clamp((p[0] - a) / (b - a), 0, 1));
+      held.dy.jump(clamp((p[1] - start[1]) * 0.45, -46, 46));   // pulling off the track stretches it
+      note.textContent = Math.abs(held.dy.v) > 10 ? 'The track stretches after the thumb, and springs back.' : `${held.n} ${Math.round(held.v.v * 100)} %`;
+    }, () => { held.dy.to(0); held = null; });
+    s.stage.addEventListener('keydown', e => { const i = { '1': 0, '2': 1, '3': 2, '4': 3 }[e.key]; if (i !== undefined) toggle(i); });
+    return {
+      step(dt) {
+        const X = xs();
+        T.forEach((t, i) => { t.r.to(t.on ? 33 : 29); t.r.step(dt, ...MEM); shape(t.e, X[i], 74, t.r.v * 2, t.r.v * 2); place(t.ic, X[i] - 11, 63); });
+        fuseW.to(T[0].on && T[1].on ? 44 : 0); fuseW.step(dt, ...MEM);
+        neck(fuse, X[0], 74, X[1], 74, fuseW.v);
+        const [a, b] = tx();
+        sliders.forEach((sl, i) => {
+          const y = sy(i); sl.dy.step(dt, ...DET); sl.v.step(dt, ...PRE);
+          const x = lerp(a, b, sl.v.v), ty = y + sl.dy.v;
+          shape(sl.track, s.W / 2, y, s.W - 32, 56, 28);
+          neck(sl.fill, a - 6, y, x, y, 56);
+          shape(sl.thumb, x, ty, 44, 44);
+          neck(sl.stem, x, y, x, ty, Math.abs(sl.dy.v) > 6 ? Math.max(0, 34 - Math.abs(sl.dy.v) * 0.3) : 0);
+          place(sl.ic, a - 12, y - 11); sl.ic.className = 'ico on';
+          sl.val.textContent = Math.round(sl.v.v * 100) + ' %'; place(sl.val, b - 46, y - 9); sl.val.style.opacity = sl.v.v < 0.82 ? 1 : 0;
+        });
+      },
+    };
+  });
+
+  /* ── The Pip app: answers grow out of questions ── */
+  study('sChat', s => {
+    const comp = el(s.goo, 'b'), compLab = el(s.ui, 'lab', 'Ask Pip…'); compLab.style.color = 'var(--muted)';
+    const threads = el(s.ui, '', '', 'div'); threads.innerHTML = '<svg class="threads"></svg>'; const svg = threads.firstChild; threads.style.inset = '0';
+    const ask = el(s.ui, 'act', 'Ask', 'button');
+    const PAIRS = [
+      ['Open Files and Terminal side by side', 'Done. Files on the left, Terminal on the right.'],
+      ['What’s on my calendar today?', 'Design review at 10:00, a call with Arif at 14:30.'],
+      ['Turn on night light', 'Night light is on until 7:00.'],
+      ['Delete interview notes', 'That changes your files, so here is exactly what will happen.'],
+    ];
+    let n = 0, busy = false;
+    const msgs = [], drop = { e: el(s.goo, 'b on'), x: new Sp(0), y: new Sp(0), r: new Sp(0) }, dropNeck = el(s.goo, 'b on');
+    const compY = () => s.H - 40;
+    function bubble(me, text) {
+      const lab = el(s.ui, 'lab' + (me ? ' on' : ''), ''); lab.textContent = text;
+      lab.style.whiteSpace = 'normal'; lab.style.maxWidth = Math.min(230, s.W * 0.62) + 'px'; lab.style.opacity = 0;
+      const m = { me, lab, e: el(s.goo, 'b' + (me ? ' on' : '')), nk: el(s.goo, 'b' + (me ? ' on' : '')), x: new Sp(0), y: new Sp(0), w: new Sp(36), h: new Sp(36), born: true, parent: null };
+      msgs.push(m); return m;
+    }
+    function layout() {   // newest at the bottom, above the composer; older ones rise and leave
+      let y = compY() - 46;
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        const m = msgs[i], w = m.lab.offsetWidth + 28, h = m.lab.offsetHeight + 20;
+        m.tw = w; m.th = h; y -= h / 2; m.w.to(w); m.h.to(h);
+        m.x.to(m.me ? s.W - 16 - w / 2 : 16 + w / 2); m.y.to(y); y -= h / 2 + 12;
+      }
+      while (msgs.length && msgs[0].y.t < -60) { const m = msgs.shift(); m.e.remove(); m.nk.remove(); m.lab.remove(); }
+    }
+    function askNext() {
+      if (busy) return; busy = true; ask.disabled = true;
+      const [q, a] = PAIRS[n++ % PAIRS.length];
+      const me = bubble(true, q);
+      me.x.jump(s.W - 60); me.y.jump(compY()); me.w.jump(30); me.h.jump(30); me.fromComp = true;
+      layout(); setTimeout(() => (me.lab.style.opacity = 1), still() ? 0 : 260);
+      setTimeout(() => {   // Pip works: a drop leaves the question
+        drop.x.jump(me.x.t - me.tw / 2 + 10); drop.y.jump(me.y.t + me.th / 2 - 6); drop.r.jump(0); drop.r.to(20); drop.host = me;
+        drop.x.to(56); drop.y.to(me.y.t + me.th / 2 + 36);
+      }, still() ? 0 : 700);
+      setTimeout(() => {   // …and swells into the answer
+        const pip = bubble(false, a); pip.parent = me;
+        pip.x.jump(drop.x.v); pip.y.jump(drop.y.v); pip.w.jump(drop.r.v * 2); pip.h.jump(drop.r.v * 2); drop.r.jump(0);
+        layout(); setTimeout(() => (pip.lab.style.opacity = 1), still() ? 0 : 220);
+        busy = false; ask.disabled = false;
+      }, still() ? 0 : 1700);
+    }
+    ask.addEventListener('click', askNext);
+    s.stage.addEventListener('keydown', e => { if (e.key === 'Enter') askNext(); });
+    let woke = false;
+    return {
+      wake() { if (!woke) { woke = true; setTimeout(askNext, 500); } },
+      step(dt, t) {
+        shape(comp, s.W / 2, compY(), s.W - 32, 48, 24); place(compLab, 34, compY() - 9); place(ask, s.W - 84, compY() - 16);
+        let d = '';
+        msgs.forEach((m, i) => {
+          [m.x, m.y, m.w, m.h].forEach(v => v.step(dt, ...PRE));
+          shape(m.e, m.x.v, m.y.v, m.w.v, m.h.v, Math.min(22, m.h.v / 2));
+          place(m.lab, m.x.v - m.w.v / 2 + 14, m.y.v - m.h.v / 2 + 10);
+          // a new question stays joined to the composer it came from until it has risen
+          const dc = compY() - m.y.v;
+          neck(m.nk, m.x.v, m.y.v, m.x.v, compY(), m.fromComp && dc < 90 ? neckT(dc, 90, 30) : 0);
+          if (m.parent && msgs.includes(m.parent) && i === msgs.length - 1) d += `M${m.x.v - m.w.v / 2 + 18} ${m.y.v - m.h.v / 2} C ${m.x.v} ${m.parent.y.v + 30}, ${m.parent.x.v - 40} ${m.parent.y.v + 30}, ${m.parent.x.v - m.parent.w.v / 2 + 14} ${m.parent.y.v + m.parent.h.v / 2 - 4}`;
+        });
+        svg.innerHTML = d ? `<path d="${d}"/>` : '';
+        drop.x.step(dt, ...MEM); drop.y.step(dt, ...MEM); drop.r.step(dt, ...PRE);
+        const pulse = still() ? 0 : Math.sin(t * 9) * 2;
+        shape(drop.e, drop.x.v, drop.y.v, drop.r.v * 2 + pulse, drop.r.v * 2 + pulse);
+        const h = drop.host, hd = h && drop.r.v > 2 ? Math.hypot(drop.x.v - (h.x.v - h.w.v / 2 + 10), drop.y.v - (h.y.v + h.h.v / 2 - 6)) : 999;
+        neck(dropNeck, h ? h.x.v - h.w.v / 2 + 12 : 0, h ? h.y.v + h.h.v / 2 - 8 : 0, drop.x.v, drop.y.v, neckT(hd, 120, 22));
+      },
+    };
+  });
+
+  /* ── Files: a file holds on to its folder; the Bin reaches out ── */
+  study('sFiles', s => {
+    const panel = el(s.goo, 'b'), bin = el(s.goo, 'b'), reach = el(s.goo, 'b');
+    const binIc = el(s.ui, 'ico', ICON.bin), count = el(s.ui, 'lab', '');
+    const note = el(s.ui, 'lab note', 'Drag a file to the Bin.');
+    const put = el(s.ui, 'act quiet', 'Put back', 'button'); put.hidden = true;
+    const head = el(s.ui, 'lab', '<small>Documents</small>');
+    const FILES = [['XLS', 'Budget 2026', 'warm'], ['PDF', 'Shell spec', 'on'], ['MD', 'Interview notes', 'warm']];
+    const files = FILES.map(([t, n, c], i) => ({ i, t, n, e: el(s.goo, 'b ' + c), nk: el(s.goo, 'b ' + c), lab: el(s.ui, 'lab on', t), x: new Sp(0), y: new Sp(0), sz: new Sp(64), attached: true, inBin: false }));
+    const binR = new Sp(32), reachT = new Sp(0);
+    const P = () => ({ x: 20, y: 46, w: Math.min(280, s.W - 40), h: 150 });
+    const slot = i => { const p = P(); return [p.x + 30 + 42 + i * ((p.w - 60) / 3), p.y + 82]; };
+    const BIN = () => [s.W - 58, s.H - 92];
+    files.forEach((f, i) => { const [x, y] = slot(i); f.x.jump(x); f.y.jump(y); });
+    let held = null, off = [0, 0], binned = [];
+    drag(s, p => {
+      held = files.find(f => !f.inBin && Math.abs(p[0] - f.x.v) < 34 && Math.abs(p[1] - f.y.v) < 34) || null; if (!held) return false;
+      off = [held.x.v - p[0], held.y.v - p[1]]; return true;
+    }, p => {
+      held.x.jump(p[0] + off[0]); held.y.jump(p[1] + off[1]);
+      const [sx, sy] = slot(held.i), d = Math.hypot(held.x.v - sx, held.y.v - sy);
+      if (held.attached && d > 100) { held.attached = false; note.textContent = `“${held.n}” has let go of Documents.`; }
+      const [bx, by] = BIN(); if (Math.hypot(held.x.v - bx, held.y.v - by) < 130) note.textContent = 'The Bin reaches for it.';
+    }, () => {
+      const f = held; held = null;
+      const [bx, by] = BIN(), [sx, sy] = slot(f.i);
+      if (Math.hypot(f.x.v - bx, f.y.v - by) < 76) {   // swallowed
+        f.inBin = true; f.attached = false; f.x.to(bx); f.y.to(by); f.sz.to(0); binR.kick(160); binned.push(f);
+        note.textContent = `Moved “${f.n}” to the Bin.`; put.hidden = false;
+      } else if (f.attached) { f.x.to(sx); f.y.to(sy); note.textContent = 'Still in Documents. Nothing moved.'; }
+      else note.textContent = 'Dropped outside the folder.';
+    });
+    put.addEventListener('click', () => {
+      const f = binned.pop(); if (!f) return;
+      const [sx, sy] = slot(f.i); f.inBin = false; f.sz.to(64); f.x.to(sx); f.y.to(sy); f.fromBin = true; binR.kick(-120);
+      note.textContent = `“${f.n}” is going back to Documents.`; put.hidden = !binned.length;
+    });
+    return {
+      step(dt) {
+        const p = P(), [bx, by] = BIN();
+        shape(panel, p.x + p.w / 2, p.y + p.h / 2, p.w, p.h, 28); place(head, p.x + 20, p.y + 16);
+        let pull = 0, near = null;
+        files.forEach(f => {
+          if (f !== held) { f.x.step(dt, ...PRE); f.y.step(dt, ...PRE); }
+          f.sz.step(dt, ...PRE);
+          const [sx, sy] = slot(f.i), d = Math.hypot(f.x.v - sx, f.y.v - sy);
+          if (!f.attached && !f.inBin && f !== held && d < 30) { f.attached = true; f.fromBin = false; }
+          shape(f.e, f.x.v, f.y.v, f.sz.v, f.sz.v * 1.08, 18);
+          neck(f.nk, sx, sy, f.x.v, f.y.v, f.attached ? Math.min(46, neckT(d, 100, 56)) : 0);
+          f.lab.style.opacity = f.sz.v > 40 ? 1 : 0; place(f.lab, f.x.v - f.lab.offsetWidth / 2, f.y.v - 8);
+          const bd = Math.hypot(f.x.v - bx, f.y.v - by);
+          if (!f.inBin && bd < 130 && (f === held || f.fromBin) && 1 - bd / 130 > pull) { pull = 1 - bd / 130; near = f; }
+        });
+        reachT.to(pull * 40); reachT.step(dt, ...MEM); binR.to(32 + pull * 12); binR.step(dt, ...MEM);
+        shape(bin, bx, by, binR.v * 2, binR.v * 2);
+        const nf = near || { x: { v: bx }, y: { v: by } }, rk = 0.55;
+        neck(reach, bx, by, lerp(bx, nf.x.v, rk), lerp(by, nf.y.v, rk), reachT.v);
+        place(binIc, bx - 11, by - 11);
+        count.textContent = binned.length ? binned.length + ' in Bin' : 'Bin'; place(count, bx - count.offsetWidth / 2, by + binR.v + 6);
+        place(put, 20, s.H - 86);
+      },
+    };
+  });
+
+  /* ── Menus bud from where you click ── */
+  study('sMenu', s => {
+    const seed = el(s.goo, 'b'), body = el(s.goo, 'b'), nk = el(s.goo, 'b'), sub = el(s.goo, 'b'), subNk = el(s.goo, 'b');
+    const note = el(s.ui, 'lab note', 'Click or right-click anywhere.');
+    const ROWS = ['Add widgets…', 'Wallpaper', 'Refresh', 'Display settings'], SUBS = ['Matte', 'Tidal', 'Aurora'];
+    const rows = ROWS.map((r, i) => { const e = el(s.ui, 'mrow', r + (i === 1 ? '<span>›</span>' : '')); e.style.width = '168px'; e.style.opacity = 0; e.dataset.i = i; return e; });
+    const subRows = SUBS.map(r => { const e = el(s.ui, 'mrow', r); e.style.width = '128px'; e.style.opacity = 0; return e; });
+    const at = { x: 0, y: 0 }, mw = new Sp(0), mh = new Sp(0), sr = new Sp(0), sw = new Sp(0), sh = new Sp(0);
+    let open = false, subOpen = false, origin = { x: 0, y: 0 };
+    const MW = 184, MH = ROWS.length * 34 + 14, SW = 144, SH = SUBS.length * 34 + 14;
+    function openAt(x, y) {
+      origin = { x, y }; at.x = clamp(x + 6, 12, s.W - MW - 12); at.y = clamp(y + 6, 12, s.H - MH - 40);
+      mw.jump(0); mh.jump(0); mw.to(MW); mh.to(MH); sr.jump(14); sr.to(0); open = true; closeSub();
+      rows.forEach((r, i) => { r.style.transition = still() ? 'none' : `opacity 240ms ease ${120 + i * 40}ms`; r.style.opacity = 1; r.style.pointerEvents = 'auto'; });
+      note.textContent = 'The menu buds from the point you clicked.';
+    }
+    function closeMenu(msg) {
+      mw.to(0); mh.to(0); sr.to(12); open = false; closeSub();
+      rows.forEach(r => { r.style.transition = 'opacity 120ms ease'; r.style.opacity = 0; r.style.pointerEvents = 'none'; });
+      setTimeout(() => sr.to(0), still() ? 0 : 380);
+      if (msg) note.textContent = msg;
+    }
+    function openSub() { if (subOpen) return; subOpen = true; sw.to(SW); sh.to(SH); subRows.forEach((r, i) => { r.style.transition = still() ? 'none' : `opacity 220ms ease ${100 + i * 40}ms`; r.style.opacity = 1; r.style.pointerEvents = 'auto'; }); }
+    function closeSub() { subOpen = false; sw.to(0); sh.to(0); subRows.forEach(r => { r.style.transition = 'opacity 100ms ease'; r.style.opacity = 0; r.style.pointerEvents = 'none'; }); }
+    s.stage.addEventListener('contextmenu', e => e.preventDefault());
+    s.stage.addEventListener('pointerdown', e => {
+      if (e.target.closest('.mrow')) return;
+      const [x, y] = s.pos(e);
+      if (open) closeMenu('Dismissed: it draws back into the point it came from.'); else openAt(x, y);
+    });
+    rows.forEach((r, i) => {
+      r.addEventListener('pointerenter', () => (i === 1 ? openSub() : closeSub()));
+      r.addEventListener('click', () => (i === 1 ? openSub() : closeMenu(`Chose “${ROWS[i]}”.`)));
+    });
+    subRows.forEach((r, i) => r.addEventListener('click', () => closeMenu(`Wallpaper: ${SUBS[i]}.`)));
+    s.stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open ? closeMenu() : openAt(s.W / 2 - 90, 70); } if (e.key === 'Escape' && open) closeMenu('Dismissed.'); });
+    let woke = false;
+    return {
+      wake() { if (!woke) { woke = true; setTimeout(() => { if (!open) openAt(s.W * 0.28, 60); }, 700); } },
+      step(dt) {
+        [mw, mh, sw, sh].forEach(v => v.step(dt, ...DET)); sr.step(dt, ...PRE);
+        const w = Math.max(0, mw.v), h = Math.max(0, mh.v);
+        shape(seed, origin.x, origin.y, sr.v * 2, sr.v * 2);
+        shape(body, at.x + w / 2, at.y + h / 2, w, h, 16);
+        // joined to the click until it has grown
+        const grown = w / MW;
+        neck(nk, origin.x, origin.y, at.x + 14, at.y + 14, grown > 0.05 && grown < 0.92 ? 22 * (1 - grown) + 6 : 0);
+        rows.forEach((r, i) => place(r, at.x + 8, at.y + 7 + i * 34));
+        const rx = at.x + MW - 4, ry = at.y + 7 + 34 + 17, sx = rx + 10, sy = ry - 24;
+        shape(sub, sx + sw.v / 2, sy + sh.v / 2, sw.v, sh.v, 14);
+        const sg = sw.v / SW;
+        neck(subNk, rx - 12, ry, sx + 12, sy + 18, open && sg > 0.05 && sg < 0.9 ? 18 * (1 - sg) + 6 : 0);
+        subRows.forEach((r, i) => place(r, sx + 8, sy + 7 + i * 34));
+      },
+    };
+  });
+
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
