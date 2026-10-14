@@ -57,22 +57,23 @@ extends to the screen edge.
 ## The Pip notch
 
 A black notch at the top centre of the screen, in both themes, flat against the edge with concave
-"ears", like a laptop's camera notch. It is where Pip lives while you work in other apps, and it
-grows to show what's going on, on springs, then shrinks back when it's done.
+"ears", like a laptop's camera notch. **It only exists while Pip is working:** it slides down from
+the top edge when Pip has something in progress, grows to show it, and slides back up into the
+edge when Pip is done. With nothing in progress there is no notch at all.
 
 | Size | When | What it shows |
 |---|---|---|
-| **Idle** | Nothing is running | The notch alone. Click it to talk to Pip; it grows a little under the pointer |
-| **Compact** | Something is running | It widens: on the left Pip's orb (or the album art), on the right the activity: Pip's task with a progress ring ("Slides · 46 %"), music with a moving equaliser, "Slides are ready" for a few seconds when a task finishes, or what Pip is doing for a request you typed in the Pip app |
-| **Expanded** | You talk to Pip with windows open, or click the compact notch | It drops down into a panel: Pip's state and source ("Asking · waiting for your review", "on this device"), a voice wave, what you said, Pip's reply and review cards; below that the running task (with **Stop task**) and the music (play/pause, next) |
+| **Hidden** | Pip isn't doing anything (music playing, timers and other apps don't count) | Nothing: the menu bar is clear |
+| **Compact** | Pip is working | It slides down: on the left Pip's orb, on the right what Pip is doing: its task with a progress ring ("Slides · 46 %"), "Slides are ready" for a few seconds when a task finishes, or the request it's working on ("searching Documents", "asking Claude"), including ones typed in the Pip app |
+| **Expanded** | You talk to Pip with windows open, or click the compact notch | It drops down into a panel: Pip's state and source ("Asking · waiting for your review", "on this device"), a voice wave, what you said, Pip's reply and review cards; below that the running task (with **Stop task**) and, if music is playing, its controls (play/pause, next) |
 
 The voice panel closes 6 s after Pip answers (longer while a review waits), or at once with
 `Esc` or ×; a click outside closes an activity panel. Right-click the notch for *Talk to Pip*,
-*Open the Pip app* and Pip's settings. On narrow screens the idle notch is hidden; activities and
-the voice panel still appear.
+*Open the Pip app* and Pip's settings. It appears at every screen size.
 
 | Moment | Motion |
 |---|---|
+| Appears | Slides down out of the top edge, its height growing from nothing on the detent spring; leaving, it slides back up into the edge (320 ms) and fades as it goes |
 | Grows (compact, expanded) | Width and height on the detent spring, so it lands with a hint of overshoot (460–560 ms); the bottom corners round out from 14 to 28 px |
 | Contents arrive | Fade in with a 4–6 px focus pull after the shape has started moving (140 ms later); the panel's contents scale up from 94 % |
 | Shrinks | Contents leave first (140 ms, ease-in), then the shape closes on the precise spring |

@@ -619,14 +619,16 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
   --isl-h: calc(var(--menubar-h) + 2px); position: absolute; top: 0; left: 50%; z-index: 958; width: 190px; height: var(--isl-h);
   transform: translateX(-50%); background: #000; color: #f3f3f7; border-radius: 0 0 14px 14px;
   --c-text: #f3f3f7; --c-text-2: #b8b8c6; --c-text-3: #8c8c9c; --c-surface: #1c1c22; --c-surface-2: #141418; --c-surface-3: #26262e; --c-line: rgba(255,255,255,0.1); --c-line-strong: rgba(255,255,255,0.18);
-  transition: width 460ms var(--ease-spring), height 460ms var(--ease-spring), border-radius 460ms var(--ease-spring), box-shadow 300ms var(--ease-out);
+  transition: width 460ms var(--ease-spring), height 460ms var(--ease-spring), border-radius 460ms var(--ease-spring), box-shadow 300ms var(--ease-out), opacity 160ms var(--ease-out);
 }
 #island[data-mode="expanded"] { border-radius: 0 0 28px 28px; box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.55); transition-timing-function: var(--ease-detent); transition-duration: 560ms; }
 #island[data-mode="compact"] { transition-timing-function: var(--ease-detent); }
 #island::before, #island::after { content: ""; position: absolute; top: 0; width: 10px; height: 10px; pointer-events: none; }
 #island::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent 9.5px, #000 10px); }
 #island::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent 9.5px, #000 10px); }
-#island:has(.isl-hit:hover)[data-mode="idle"] { width: 206px !important; height: calc(var(--isl-h) + 4px) !important; }
+#island[data-mode="hidden"] { height: 0; opacity: 0; pointer-events: none; transition: width 320ms var(--ease-spring), height 320ms var(--ease-spring), opacity 200ms var(--ease-in) 120ms; }
+#island[data-mode="hidden"]::before, #island[data-mode="hidden"]::after { opacity: 0; }
+#island:has(.isl-hit:hover)[data-mode="compact"] { height: calc(var(--isl-h) + 3px) !important; }
 .isl-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
 .isl-hit { position: absolute; inset: 0; border: 0; background: transparent; border-radius: inherit; cursor: pointer; }
 .isl-hit:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
@@ -678,7 +680,6 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .isl-music .isl-art { width: 40px; height: 40px; border-radius: 10px; flex: none; }
 .isl-music .isl-row { flex: 1; }
 .isl-round { width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.12); color: #fff; font: 14px/1 var(--font-ui); display: grid; place-items: center; flex: none; }
-@media (max-width: 720px) { #island[data-mode="idle"] { opacity: 0; pointer-events: none; } }
 /* floating widgets: above every window, in glass */
 #pins { position: absolute; inset: 0; z-index: 945; pointer-events: none; }
 #pins > .widget { pointer-events: auto; }
@@ -2174,7 +2175,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     </div>
   </header>
   <!-- the Pip notch: Pip while you work in other apps; grows with what's running -->
-  <div id="island" data-mode="idle">
+  <div id="island" data-mode="hidden" aria-hidden="true">
     <div class="isl-clip">
       <div class="isl-compact" aria-hidden="true">
         <span class="isl-l" data-show="orb"><canvas class="dotorb" data-follow="1" data-state="ready"></canvas><span class="isl-art"></span></span>
@@ -6277,18 +6278,20 @@ Current prototype state: ${stateSummary()}`;
   /* ── The Pip notch ─────────────────────────────────────────────────
      A black notch at the top centre of the screen, where Pip lives while you work in other apps.
      It grows to show what's going on and shrinks back when it's done, on springs:
-       idle      the notch alone; click it to talk to Pip
-       compact   it widens with a live activity: Pip's task and its progress ring, music that's
-                 playing, or Pip working on something you asked in the Pip app
+       hidden    nothing for Pip to show: there's no notch at all
+       compact   it slides down from the top edge with what Pip is doing: its task and a progress
+                 ring, a task that just finished, or a request it's working on
        expanded  it drops down into a panel: talking to Pip over your windows (what you said,
                  Pip's reply, review cards), or the details of an activity when you click it */
-  const isl = { el: $('#island'), mode: 'idle', voice: false, open: false, doneAt: 0, doneSeen: false, waveT: 0 };
+  const isl = { el: $('#island'), mode: 'hidden', voice: false, open: false, doneAt: 0, doneSeen: false, waveT: 0 };
   const islMusic = () => { const m = W_KINDS.music.el; return m && widgetEls.includes(m) && m._playing?.() ? m : null; };
+  // the notch only appears while Pip is doing something: a task in progress (or just finished),
+  // a request it's working on, or a conversation over your windows. Otherwise it isn't there.
+  const PIP_BUSY = ['thinking', 'working', 'searching', 'asking', 'waiting', 'retrying', 'compacting', 'speaking'];
   function islActivity() {
     if (taskLive && taskPct < 100) return 'task';
     if (isl.doneAt && Date.now() - isl.doneAt < 6000) return 'done';
-    if (islMusic()) return 'music';
-    if (!isl.voice && topVisible() && !['ready', 'resting', 'complete', 'cancelled'].includes(pipNow)) return 'pip';
+    if (!isl.voice && PIP_BUSY.includes(pipNow)) return 'pip';
     return null;
   }
   function islSize() {
@@ -6296,7 +6299,7 @@ Current prototype state: ${stateSummary()}`;
     if (m === 'expanded') {
       el.style.width = Math.min(440, desk.clientWidth - 16) + 'px';
       el.style.height = Math.max(64, Math.ceil($('.isl-body', el).scrollHeight)) + 'px';
-    } else { el.style.width = (m === 'compact' ? Math.min(340, desk.clientWidth - 16) : 190) + 'px'; el.style.height = ''; }
+    } else { el.style.width = (m === 'compact' ? Math.min(340, desk.clientWidth - 16) : 150) + 'px'; el.style.height = ''; }
   }
   function islSync() {
     if (!isl.el) return;
@@ -6321,11 +6324,12 @@ Current prototype state: ${stateSummary()}`;
     }
     $('.isl-music', el).hidden = !mus;
     if (mus) { const tr = mus._track(); $('#islTrack').textContent = tr.t; $('#islArtist').textContent = tr.a; $('.isl-music .isl-art', el).style.background = tr.g; }
-    const mode = isl.voice || (isl.open && act) ? 'expanded' : act ? 'compact' : 'idle';
+    const mode = isl.voice || (isl.open && act) ? 'expanded' : act ? 'compact' : 'hidden';
     if (!act && !isl.voice) isl.open = false;
     if (mode !== isl.mode) {
       isl.mode = mode; el.dataset.mode = mode;
-      $('#islHit').setAttribute('aria-label', mode === 'idle' ? 'Pip. Click to talk' : mode === 'compact' ? 'Show what’s running' : 'Pip');
+      $('#islHit').setAttribute('aria-label', mode === 'compact' ? 'Show what Pip is doing' : 'Pip');
+      isl.el.setAttribute('aria-hidden', mode === 'hidden');
     }
     islSize();
   }
@@ -6344,8 +6348,7 @@ Current prototype state: ${stateSummary()}`;
   }, 90);
   setInterval(islSync, 1000);   // task progress and music
   $('#islHit').addEventListener('click', () => {
-    if (isl.mode === 'idle') startListening();
-    else if (isl.mode === 'compact') { isl.open = true; islSync(); }
+    if (isl.mode === 'compact') { isl.open = true; islSync(); }
   });
   $('#islClose').addEventListener('click', () => { if (isl.voice) { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); isl.voice = false; } isl.open = false; islSync(); });
   $('#islTaskStop').addEventListener('click', () => $('#taskStop').click());
