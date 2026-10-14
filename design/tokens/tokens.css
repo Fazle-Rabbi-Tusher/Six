@@ -302,6 +302,31 @@
   --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
+/* ── Satin: floating panels and every control (guide/05-materials.md §2) ── */
+:root {
+  --sat-a: rgba(252, 252, 253, 0.95); --sat-b: rgba(234, 235, 238, 0.94);
+  --sat-rim: rgba(16, 18, 22, 0.11); --sat-lip: rgba(255, 255, 255, 0.95); --sat-shade: rgba(16, 18, 22, 0.1); --sat-drop: rgba(16, 18, 22, 0.26);
+  --ctl-a: #ffffff; --ctl-b: #e5e7ea; --ctl-rim: rgba(16, 18, 22, 0.15); --ctl-lip: #ffffff; --ctl-shade: rgba(16, 18, 22, 0.13); --ctl-drop: rgba(16, 18, 22, 0.28); --ctl-glint: rgba(255, 255, 255, 0.9);
+  --trk-a: #d9dbdf; --trk-b: #e9eaed; --trk-shade: rgba(16, 18, 22, 0.18);
+  --on-a: color-mix(in srgb, var(--c-accent) 78%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 82%, #000); --on-glint: rgba(255, 255, 255, 0.35);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+    --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+    --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+    --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+    --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+  }
+}
+:root[data-theme="dark"] {
+  --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+  --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+  --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+  --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+  --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+}
+
 /* ── Accent options (Settings › Appearance). Graphite is the default; each option keeps the same
    contrast as Graphite (checked by check_contrast.py) and borrows its hue from a semantic colour. ── */
 :root[data-accent="iris"] { --c-accent: #5340d9; --c-accent-hover: #4733c9; --c-accent-soft: #e3dfff; --c-focus: #5340d9; --c-text-on-accent: #ffffff; }

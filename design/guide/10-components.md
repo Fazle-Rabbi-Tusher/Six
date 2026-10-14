@@ -9,13 +9,13 @@ touch density.
 
 | Variant | Material | Look | Use |
 |---|---|---|---|
-| **Primary** | Clay | Accent fill, `--c-text-on-accent`, `--clay-1` | The one main action |
-| **Secondary** | Clay | `--c-surface-2` fill, `--c-text` | Other actions |
+| **Primary** | Satin, on | The accent's satin (`--on-a` → `--on-b`), `--c-text-on-accent` | The one main action |
+| **Secondary** | Satin | `--ctl-a` → `--ctl-b` with rim, lip and glint, `--c-text` | Other actions |
 | **Quiet** | none | Transparent, `--c-text`; hover `--c-surface-3` | Toolbars, low emphasis |
 | **Danger** | Clay | `--c-danger` fill, white text | Irreversible destructive actions only |
 | **Icon** | Quiet | 28/36 px square, tooltip required | Toolbars, title bars |
 
-- Heights 28 / 36 / 44 px; horizontal padding 12 / 16 / 20 px; `text-label`; radius `--radius-md`.
+- Heights 28 / 36 / 44 px; horizontal padding 12 / 16 / 20 px; `text-label`; pill radius.
 - Labels are verbs: "Save", "Install", "Delete 3 files". Never "OK" when a verb fits.
 - Loading: label stays, a small Pip "thinking" glyph replaces the leading icon; width doesn't change.
 - Dialog button order: secondary left, **primary right**; Enter = primary, Esc = cancel. The
@@ -25,8 +25,8 @@ touch density.
   Its label never stretches. See [08 · Motion › Tension](08-motion.md#tension).
 
 ## Toggle (switch)
-- Track 40 × 22 px, thumb 18 px clay. On = accent track + thumb right; off = `--c-surface-3`
-  track with `--c-line-strong` outline. The thumb stretches to 24 px mid-travel, like a drop.
+- A sunken satin track 46 × 26 px with a glossy 20 px satin bead. On = the accent's satin track +
+  bead right; off = the sunken well. The thumb stretches to 24 px mid-travel, like a drop.
 - Always paired with a text label; state changes apply immediately (no Save button).
 
 ## Checkbox and radio
@@ -41,8 +41,8 @@ touch density.
 - Clear (✕) button appears when there's text; search fields also show the shortcut hint.
 
 ## Slider
-- 6 px track, 20 px thumb (white, silver in dark, with a `--c-line-strong` edge), filled part in
-  accent. Value tooltip while dragging. Arrow keys step 1 %, Page Up/Down 10 %.
+- A satin pill: a sunken track 26 px tall (46 px in Control Center, with the icon and value inside),
+  filled with the accent's light up to a round, glinting end that is the thumb. Value tooltip while dragging. Arrow keys step 1 %, Page Up/Down 10 %.
 - The thumb stretches with the speed it's dragged at. Pulled up or down off the track, the track
   bends after it like a membrane and springs flat past 100 px; the value only follows along it.
 
@@ -59,8 +59,8 @@ touch density.
   choosing an item draws the menu back into the point.
 
 ## Tabs and segmented control
-- Segmented control (2–5 options): clay track (`--c-surface-2` + pressed shadow), selected
-  segment = `--c-surface` clay-1 pill. The pill is one drop that flows to a new option: it reaches
+- Segmented control (2–5 options): a sunken satin well; the selected segment is a raised satin
+  pill. The pill is one drop that flows to a new option: it reaches
   across both, then lets go of the old one (560 ms).
 - Tabs (page-level): text tabs with a 3 px accent underline that slides (snappy spring).
 

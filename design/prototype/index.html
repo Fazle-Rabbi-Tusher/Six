@@ -358,8 +358,6 @@ kbd { font: 600 11px/1 var(--font-ui); padding: 3px 6px; border-radius: 6px; bac
 .slider-row { display: flex; align-items: center; gap: 12px; }
 .slider-row label { display: flex; color: var(--c-text-2); }
 input[type="range"] { flex: 1; height: var(--control-sm); -webkit-appearance: none; appearance: none; background: transparent; margin: 0; cursor: pointer; --p: 50%; --thumb: #ffffff; }
-:root[data-theme="dark"] input[type="range"] { --thumb: #e8eaee; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) input[type="range"] { --thumb: #e8eaee; } }
 input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(90deg, var(--c-accent) var(--p), var(--c-surface-3) var(--p)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-line-strong) 40%, transparent); }
 input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 999px; background: var(--thumb); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 0 0 1.5px var(--c-line-strong); transform: scale(var(--sx, 1), var(--sy, 1)); }
 input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: var(--c-surface-3); }
@@ -379,17 +377,15 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 .sw:checked::after { transform: translateX(18px); }
 #tensionLayer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 2050; pointer-events: none; overflow: visible; }
 #tensionLayer path { fill: var(--c-surface); }
-#tensionLayer .mem-off { fill: var(--c-surface-3); }
+#tensionLayer .mem-off { fill: var(--trk-b, var(--c-surface-3)); stroke: var(--ctl-rim, transparent); stroke-width: 1; }
 .fghost { position: fixed; z-index: 2045; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: 12px; background: var(--c-surface-2); color: var(--c-text); font: var(--text-body-sm); box-shadow: var(--shadow-3); pointer-events: none; white-space: nowrap; max-width: 260px; }
 .fghost span { overflow: hidden; text-overflow: ellipsis; }
 .fghost.near { box-shadow: var(--shadow-3), 0 0 0 2px var(--c-danger); }
 .frow.fheld { opacity: 0.45; }
 body.fdragging, body.fdragging * { user-select: none !important; cursor: grabbing !important; }
 #tensionLayer .tendril { fill: #050506; stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
-#tensionLayer .mem-on { fill: var(--c-accent); }
-#tensionLayer .mem-thumb { fill: #fff; stroke: var(--c-line-strong); stroke-width: 1.5; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
-:root[data-theme="dark"] #tensionLayer .mem-thumb { fill: #e8eaee; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #tensionLayer .mem-thumb { fill: #e8eaee; } }
+#tensionLayer .mem-on { fill: color-mix(in srgb, var(--c-accent) 55%, var(--trk-b, var(--c-surface-3))); }
+#tensionLayer .mem-thumb { fill: color-mix(in srgb, var(--c-accent) 62%, var(--c-surface)); stroke: var(--ctl-rim, var(--c-line-strong)); stroke-width: 1; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
 input[type="range"].bending::-webkit-slider-runnable-track { background: transparent; box-shadow: none; }
 input[type="range"].bending::-webkit-slider-thumb { opacity: 0; }
 input[type="range"].bending::-moz-range-track, input[type="range"].bending::-moz-range-progress { background: transparent; }
@@ -1231,6 +1227,111 @@ button.cal-cell:hover { background: var(--c-surface-3); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .glint i { mix-blend-mode: plus-lighter; opacity: 0.55; } }
 .ceremony { position: absolute; z-index: 2050; width: 260vmax; height: 260vmax; border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, transparent 60%, color-mix(in srgb, var(--c-accent) 50%, transparent) 66%, color-mix(in srgb, var(--c-accent) 18%, transparent) 69%, transparent 72%); }
+
+/* ── Satin: the material of SIX's controls and floating panels ───────────────
+   The same stuff as the home cards and the tension studies: mostly opaque, a bevel rim, a bright
+   lip along the top, a soft inner shade at the bottom, a glint where the key light catches it, and
+   a soft drop shadow. Less glass: you see colour and light, not what's behind. Graphite in light,
+   silver in dark; "on" takes the accent. Under Reduce transparency or More contrast it goes solid. */
+:root {
+  --sat-a: rgba(252, 252, 253, 0.95); --sat-b: rgba(234, 235, 238, 0.94);
+  --sat-rim: rgba(16, 18, 22, 0.11); --sat-lip: rgba(255, 255, 255, 0.95); --sat-shade: rgba(16, 18, 22, 0.1); --sat-drop: rgba(16, 18, 22, 0.26);
+  --ctl-a: #ffffff; --ctl-b: #e5e7ea; --ctl-rim: rgba(16, 18, 22, 0.15); --ctl-lip: #ffffff; --ctl-shade: rgba(16, 18, 22, 0.13); --ctl-drop: rgba(16, 18, 22, 0.28); --ctl-glint: rgba(255, 255, 255, 0.9);
+  --trk-a: #d9dbdf; --trk-b: #e9eaed; --trk-shade: rgba(16, 18, 22, 0.18);
+  --on-a: color-mix(in srgb, var(--c-accent) 78%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 82%, #000); --on-glint: rgba(255, 255, 255, 0.35);
+  --fill-a: color-mix(in srgb, var(--on-a) 62%, var(--trk-b)); --fill-b: color-mix(in srgb, var(--on-a) 52%, var(--trk-b));
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+  --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+  --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+  --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+  --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+  --fill-a: color-mix(in srgb, var(--on-a) 46%, var(--trk-b)); --fill-b: color-mix(in srgb, var(--on-a) 38%, var(--trk-b));
+} }
+:root[data-theme="dark"] {
+  --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+  --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+  --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+  --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+  --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+  --fill-a: color-mix(in srgb, var(--on-a) 46%, var(--trk-b)); --fill-b: color-mix(in srgb, var(--on-a) 38%, var(--trk-b));
+}
+:root {
+  --sat-panel: linear-gradient(180deg, var(--sat-a), var(--sat-b));
+  --sat-edge: inset 0 0 0 1px var(--sat-rim), inset 0 1px 0 var(--sat-lip), inset 0 -14px 22px -16px var(--sat-shade);
+  --ctl: radial-gradient(60% 46% at 30% 16%, var(--ctl-glint), transparent 72%), linear-gradient(180deg, var(--ctl-a), var(--ctl-b));
+  --ctl-edge: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--ctl-lip), inset 0 -3px 6px -2px var(--ctl-shade), 0 6px 14px -7px var(--ctl-drop), 0 1px 2px var(--ctl-drop);
+  --ctl-on: radial-gradient(60% 46% at 30% 16%, var(--on-glint), transparent 72%), linear-gradient(180deg, var(--on-a), var(--on-b));
+  --trk: linear-gradient(180deg, var(--trk-a), var(--trk-b));
+  --trk-edge: inset 0 0 0 1px var(--ctl-rim), inset 0 2px 5px var(--trk-shade);
+}
+/* panels: menus, Control Center, the Six Menu, Search, toasts, the menu bar and the dock */
+.glass {
+  background: var(--sat-panel); border: 0;
+  -webkit-backdrop-filter: blur(16px) saturate(1.15); backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: var(--sat-edge), 0 22px 44px -18px var(--sat-drop), 0 2px 6px -2px var(--sat-drop);
+}
+#menubar.glass, #dock.glass { box-shadow: var(--sat-edge), 0 10px 24px -14px var(--sat-drop); }
+.rim::before { background: linear-gradient(160deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.04) 70%, rgba(255, 255, 255, 0.3)); opacity: 0.6; }
+:root[data-transparency="reduced"] .glass, :root[data-contrast="more"] .glass { background: var(--c-surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.mrow:hover, .mrow:focus-visible { background: var(--ctl-on); color: var(--c-text-on-accent); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--on-glint); }
+/* buttons */
+.btn-secondary, .sugg, .toast-btn { background: var(--ctl); color: var(--c-text); box-shadow: var(--ctl-edge); }
+.btn-secondary:hover, .sugg:hover { background: var(--ctl); filter: brightness(1.05); }
+.btn-primary { background: var(--ctl-on); color: var(--c-text-on-accent); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--on-glint), inset 0 -3px 6px -2px rgba(0, 0, 0, 0.3), 0 6px 14px -7px var(--ctl-drop); }
+.btn-primary:hover { background: var(--ctl-on); filter: brightness(1.06); }
+.btn-primary:active, .btn-secondary:active, .btn-danger:active, .sugg:active { box-shadow: var(--trk-edge); transform: none; }
+.btn { border-radius: 999px; }
+.iconbtn:hover { background: var(--ctl); box-shadow: var(--ctl-edge); }
+/* Control Center: round buttons with a name under them, and pill sliders */
+#qs .qs-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 6px; }
+.qtile, .qtile[aria-pressed="true"] { background: none; box-shadow: none; padding: 2px 0; min-height: 0; display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; color: var(--c-text); border-radius: 18px; }
+.qtile:active { transform: none; box-shadow: none; }
+.qtile .qb { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--ctl); box-shadow: var(--ctl-edge); color: var(--c-text); transition: background var(--dur-fast), transform var(--dur-instant); }
+.qtile .qb svg.i { width: 22px; height: 22px; }
+.qtile[aria-pressed="true"] .qb { background: var(--ctl-on); color: var(--c-text-on-accent); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--on-glint), inset 0 -4px 8px -3px rgba(0, 0, 0, 0.3), 0 8px 18px -8px var(--ctl-drop); }
+.qtile:active .qb { transform: scale(0.96); }
+.qtile b { font: 600 12px/15px var(--font-ui); }
+.qtile small, .qtile[aria-pressed="true"] small { font: 500 11px/14px var(--font-ui); color: var(--c-text-2); display: block; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qtile.wide { grid-column: span 3; display: flex; align-items: center; gap: 10px; text-align: left; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--ctl); box-shadow: var(--ctl-edge); align-self: center; }
+.qtile.wide .qb { width: 40px; height: 40px; flex: none; }
+.qtile.wide[aria-pressed="true"] { background: var(--ctl); }
+.qtile.wide small { max-width: none; }
+.qtile:focus-visible { outline: none; }
+.qtile:focus-visible .qb, .qtile.wide:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+.qs-fuse path { fill: color-mix(in srgb, var(--on-a) 50%, var(--on-b)); }
+/* sliders: a satin track, a fill of the accent's light and a round end; the big ones carry their
+   icon and value inside */
+input[type="range"] { --rh: 26px; height: var(--rh); --thumb: var(--fill-b); }
+input[type="range"]::-webkit-slider-runnable-track { height: var(--rh); border-radius: 999px; box-shadow: var(--trk-edge);
+  background: linear-gradient(90deg, var(--fill-a), var(--fill-b)) 0 0 / calc(var(--rh) / 2 + (100% - var(--rh)) * var(--pf, 0.5)) 100% no-repeat, var(--trk); }
+input[type="range"]::-webkit-slider-thumb { width: var(--rh); height: var(--rh); margin-top: 0; border-radius: 50%;
+  background: radial-gradient(50% 40% at 34% 24%, var(--on-glint), transparent 72%), var(--thumb);
+  box-shadow: 3px 0 8px -5px var(--ctl-drop), inset 0 0 0 1px color-mix(in srgb, var(--ctl-rim) 60%, transparent); }
+input[type="range"]::-moz-range-track { height: var(--rh); border-radius: 999px; background: var(--trk); box-shadow: var(--trk-edge); }
+input[type="range"]::-moz-range-progress { height: var(--rh); border-radius: 999px; background: linear-gradient(90deg, var(--fill-a), var(--fill-b)); }
+input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); border: 0; border-radius: 50%; background: var(--thumb); box-shadow: inset 0 0 0 1px var(--ctl-rim), 0 2px 6px -1px var(--ctl-drop); }
+.slider-row.big { position: relative; }
+.slider-row.big input[type="range"] { --rh: 46px; width: 100%; }
+.slider-row.big label { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; color: var(--c-text); }
+.slider-row.big .sl-val { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; font: 600 13px/1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--c-text); }
+.slider-row.big input[type="range"]::-webkit-slider-thumb { background: radial-gradient(50% 40% at 34% 24%, var(--on-glint), transparent 72%), var(--fill-b); box-shadow: 4px 0 10px -6px var(--ctl-drop); }
+.vid-seek { --rh: 16px; height: 16px; }
+/* switches: a satin well, a glossy bead */
+.sw { width: 46px; height: 26px; background: var(--trk); box-shadow: var(--trk-edge); }
+.sw::after { top: 3px; left: 3px; width: 20px; height: 20px; background: var(--ctl); box-shadow: inset 0 0 0 1px var(--ctl-rim), 0 2px 5px -1px var(--ctl-drop); }
+.sw:checked { background: var(--ctl-on); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 2px 5px rgba(0, 0, 0, 0.25); }
+.sw:checked::after { transform: translateX(20px); }
+@keyframes sw-drop-r { 35% { width: 27px; } 100% { width: 20px; } }
+@keyframes sw-drop-l { 35% { width: 27px; margin-left: -7px; } 100% { width: 20px; margin-left: 0; } }
+/* segmented controls: a satin well with one raised drop of selection */
+.seg { background: var(--trk); box-shadow: var(--trk-edge); border-radius: 999px; padding: 3px; }
+.seg button { border-radius: 999px; }
+.seg button[aria-pressed="true"], .seg-blob { background: var(--ctl); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--ctl-lip), 0 3px 8px -4px var(--ctl-drop); }
+.seg-blob { border-radius: 999px; }
+.seg.has-blob > button[aria-pressed="true"] { background: transparent; box-shadow: none; color: var(--c-text); }
+:root[data-contrast="more"] .seg, :root[data-contrast="more"] .sw, :root[data-contrast="more"] input[type="range"]::-webkit-slider-runnable-track { box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
 </style>
 </head>
 <body>
@@ -2181,17 +2282,17 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   <!-- Quick Settings -->
   <div id="qs" class="pop glass" role="dialog" aria-label="Quick Settings">
     <div class="qs-grid">
-      <button class="qtile" aria-pressed="true" data-qs="wifi"><svg class="i"><use href="#i-wifi"/></svg><div><b>Wi-Fi</b><small data-on="Home-5G" data-off="Off">Home-5G</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="bt"><svg class="i"><use href="#i-bt"/></svg><div><b>Bluetooth</b><small data-on="On" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="air"><svg class="i"><use href="#i-plane"/></svg><div><b>Airplane mode</b><small data-on="On" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="night"><svg class="i"><use href="#i-moon"/></svg><div><b>Night light</b><small data-on="On" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="dark"><svg class="i"><use href="#i-sun"/></svg><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="touch"><svg class="i"><use href="#i-hand"/></svg><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
-      <button class="qtile" aria-pressed="false" data-qs="focus"><svg class="i"><use href="#i-focus"/></svg><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
-      <button class="qtile wide" aria-pressed="false" data-qs="wake"><svg class="i"><use href="#i-mic"/></svg><div><b>Listen for “Hey Pip”</b><small data-on="Always listening, on this device" data-off="Off · press the mic to talk">Off · press the mic to talk</small></div></button>
+      <button class="qtile" aria-pressed="true" data-qs="wifi"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-wifi"/></svg></span><div><b>Wi-Fi</b><small data-on="Home-5G" data-off="Off">Home-5G</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="bt"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-bt"/></svg></span><div><b>Bluetooth</b><small data-on="On" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="air"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-plane"/></svg></span><div><b>Airplane</b><small data-on="On" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="night"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-moon"/></svg></span><div><b>Night light</b><small data-on="On" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="dark"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-sun"/></svg></span><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="touch"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="focus"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-focus"/></svg></span><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
+      <button class="qtile wide" aria-pressed="false" data-qs="wake"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-mic"/></svg></span><div><b>Listen for “Hey Pip”</b><small data-on="Always listening, on this device" data-off="Off · press the mic to talk">Off · press the mic to talk</small></div></button>
     </div>
-    <div class="slider-row"><label for="bright" aria-label="Brightness"><svg class="i"><use href="#i-sun"/></svg></label><input type="range" id="bright" min="30" max="100" value="100"></div>
-    <div class="slider-row"><label for="vol" aria-label="Volume"><svg class="i"><use href="#i-volume"/></svg></label><input type="range" id="vol" min="0" max="100" value="64"></div>
+    <div class="slider-row big"><label for="bright" aria-label="Brightness"><svg class="i"><use href="#i-sun"/></svg></label><input type="range" id="bright" min="30" max="100" value="100"><output class="sl-val" for="bright" aria-hidden="true">100 %</output></div>
+    <div class="slider-row big"><label for="vol" aria-label="Volume"><svg class="i"><use href="#i-volume"/></svg></label><input type="range" id="vol" min="0" max="100" value="64"><output class="sl-val" for="vol" aria-hidden="true">64 %</output></div>
     <div class="switch-list">
       <span class="overline" style="padding: 4px 6px">Accessibility</span>
       <label class="sw-row" for="a11yTransp"><svg class="i"><use href="#i-layers"/></svg><span>Reduce transparency</span><input class="sw" type="checkbox" id="a11yTransp"></label>
@@ -2457,12 +2558,14 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   }, true);
   function memDraw(m) {
     const r = m.r, b = r.getBoundingClientRect(), min = +r.min || 0, max = r.max === '' ? 100 : +r.max;
-    const fr = (+r.value - min) / ((max - min) || 1), x0 = b.left + 10, x1 = b.right - 10, xt = x0 + (x1 - x0) * fr, cy = b.top + b.height / 2;
+    const hh = (parseFloat(getComputedStyle(r).getPropertyValue('--rh')) || 26) / 2;
+    const fr = (+r.value - min) / ((max - min) || 1), x0 = b.left + hh, x1 = b.right - hh, xt = x0 + (x1 - x0) * fr, cy = b.top + b.height / 2;
+    const h = Math.max(6, parseFloat(getComputedStyle(r).getPropertyValue('--rh')) || 26), rr = h / 2;
     const w = Math.max(36, b.width * 0.2), yAt = x => cy + m.bend * Math.exp(-(((x - xt) / w) ** 2));
-    const line = (a, z) => { const pts = [], hw = []; for (let i = 0; i <= 28; i++) { const x = a + (z - a) * i / 28; pts.push([x, yAt(x)]); hw.push(3); } return tubeD(pts, hw); };
+    const line = (a, z) => { const pts = [], hw = []; for (let i = 0; i <= 28; i++) { const x = a + (z - a) * i / 28; pts.push([x, yAt(x)]); hw.push(rr); } return tubeD(pts, hw); };
     if (!m.paths) { m.paths = [tPath('mem-off'), tPath('mem-on'), tPath('mem-thumb')]; r.classList.add('bending'); }
-    m.paths[0].setAttribute('d', line(x0, x1)); m.paths[1].setAttribute('d', xt - x0 > 1 ? line(x0, xt) : '');
-    m.paths[2].setAttribute('d', `M${xt - 10},${yAt(xt)}a10,10 0 1,0 20,0a10,10 0 1,0 -20,0Z`);
+    m.paths[0].setAttribute('d', line(x0, x1)); m.paths[1].setAttribute('d', line(x0, Math.max(x0 + 0.5, xt)));
+    m.paths[2].setAttribute('d', `M${xt - rr},${yAt(xt)}a${rr},${rr} 0 1,0 ${2 * rr},0a${rr},${rr} 0 1,0 ${-2 * rr},0Z`);
   }
   function memEnd(m) {
     if (!m.paths) return;
@@ -2480,7 +2583,9 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   addEventListener('pointerup', memUp, true); addEventListener('pointercancel', memUp, true);
   function rangeFill(r) {
     const min = +r.min || 0, max = r.max === '' ? 100 : +r.max, v = +r.value;
-    r.style.setProperty('--p', ((v - min) / ((max - min) || 1) * 100).toFixed(2) + '%');
+    const f = Math.max(0, Math.min(1, (v - min) / ((max - min) || 1)));
+    r.style.setProperty('--p', (f * 100).toFixed(2) + '%'); r.style.setProperty('--pf', f.toFixed(4));
+    const out = r.parentElement && r.parentElement.querySelector(':scope > .sl-val'); if (out) out.textContent = Math.round(f * 100) + ' %';
   }
   addEventListener('input', e => {
     const r = e.target;
@@ -2912,13 +3017,11 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   fuseSvg.setAttribute('class', 'qs-fuse'); fuseSvg.setAttribute('aria-hidden', 'true'); fuseSvg.append(fusePath); $('#qs .qs-grid').prepend(fuseSvg);
   let fuseK = 0, fuseTo = 0, fuseRaf = 0;
   function fuseDraw() {
-    const a = qsTile('wifi'), b = qsTile('bt'), g = a.parentElement;
-    if (!a.offsetWidth || a.offsetTop !== b.offsetTop || fuseK <= 0.001) { fusePath.setAttribute('d', ''); return; }
-    const x0 = a.offsetLeft + a.offsetWidth - 22, x1 = b.offsetLeft + 22, top = a.offsetTop, h = a.offsetHeight;
-    const half = (h / 2 - 14) * fuseK, cy = top + h / 2, xm = (x0 + x1) / 2, sag = 10 * (1 - fuseK * 0.6);
-    // a waist that is narrowest in the gap, flaring into the tiles on both sides
-    fusePath.setAttribute('d', `M${x0},${cy - half - 10}C${xm - 10},${cy - half - 10} ${xm - 6},${cy - half + sag} ${xm},${cy - half + sag}C${xm + 6},${cy - half + sag} ${xm + 10},${cy - half - 10} ${x1},${cy - half - 10}L${x1},${cy + half + 10}C${xm + 10},${cy + half + 10} ${xm + 6},${cy + half - sag} ${xm},${cy + half - sag}C${xm - 6},${cy + half - sag} ${xm - 10},${cy + half + 10} ${x0},${cy + half + 10}Z`);
-    void g;
+    const a = $('.qb', qsTile('wifi')), b = $('.qb', qsTile('bt'));
+    if (!a.offsetWidth || fuseK <= 0.001 || Math.abs(a.getBoundingClientRect().top - b.getBoundingClientRect().top) > 2) { fusePath.setAttribute('d', ''); return; }
+    // centres in the grid's own coordinates, so the bridge moves with the panel
+    const g = fuseSvg.getBoundingClientRect(), ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(), r = ra.width / 2;
+    fusePath.setAttribute('d', neckD(ra.left - g.left + r, ra.top - g.top + r, r * 0.92, rb.left - g.left + r, rb.top - g.top + r, r * 0.92, r * 0.5 * fuseK));
   }
   function qsFuse(instant) {
     const want = qsOn('wifi') && qsOn('bt') ? 1 : 0, was = fuseTo;
@@ -4110,12 +4213,12 @@ vec4 ripple(vec2 p) {
   float s = r * N - uFlowA * 0.9 + uSwirl * ang / 6.28318 * 2.0 + uRipple * 0.25 * sin(uT * 5.0 - r * 9.0);
   float idx = floor(s), f = fract(s);
   float depth = clamp(idx / N, 0.0, 1.0);                          // 0 at the centre, 1 at the rim
-  vec3 c0 = vec3(0.04, 0.09, 0.11), c1 = vec3(0.1, 0.3, 0.36), c2 = vec3(0.16, 0.62, 0.7), c3 = vec3(0.55, 0.84, 0.87), c4 = vec3(0.9, 0.96, 0.96);
+  vec3 c0 = vec3(0.04, 0.1, 0.14), c1 = vec3(0.1, 0.36, 0.48), c2 = vec3(0.3, 0.72, 0.9), c3 = vec3(0.62, 0.88, 1.0), c4 = vec3(0.86, 0.96, 1.0);   // deep teal to sky
   float tdepth = clamp((idx + 0.5) / (N * 1.05), 0.0, 1.0);
   vec3 col = mix(c0, c1, smoothstep(0.0, 0.25, tdepth));
-  col = mix(col, c2, smoothstep(0.25, 0.55, tdepth));
-  col = mix(col, c3, smoothstep(0.55, 0.8, tdepth));
-  col = mix(col, c4, smoothstep(0.8, 1.0, tdepth));
+  col = mix(col, c2, smoothstep(0.2, 0.45, tdepth));
+  col = mix(col, c3, smoothstep(0.45, 0.7, tdepth));
+  col = mix(col, c4, smoothstep(0.72, 0.95, tdepth));
   // the lip of each step: lit on the side toward the light, in shade on the other
   vec2 L = normalize(vec2(-0.6 + uGaze.x * 0.5, 0.65 - uGaze.y * 0.5));
   vec2 nrm = q / max(r, 0.001);

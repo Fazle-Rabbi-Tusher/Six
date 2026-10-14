@@ -4,19 +4,22 @@ Soft Matter has three core materials and one hybrid, plasma clay, reserved for t
 Pick by **role**, never by taste.
 
 ```
-           ┌──────────────── Plasma glass ────────────────┐   floats above, temporary
+           ┌─────────────────── Satin ────────────────────┐   floats above, temporary
            │  menu bar · dock · menus · Six Search        │
            └──────────────────────────────────────────────┘
    ┌───────────── Paper (window) ─────────────┐               where work happens
    │  text, lists, documents, forms           │
    │    ╭──────╮  ╭──────╮                     │
-   │    │ Clay │  │ Clay │  ← things you press │
+   │    │Satin │  │Satin │  ← things you press │
    │    ╰──────╯  ╰──────╯                     │
    └──────────────────────────────────────────┘
                  Plasma wallpaper (ambient, never holds text)
 ```
 
-## 1. Clay: things you press
+## 1. Clay: app icons and tiles
+
+> Controls you press (buttons, switches, sliders, Control Center's buttons) are now **satin**
+> (§2). Clay stays for app icons, folder icons and the widget gallery's tiles.
 
 A filled, rounded object that looks soft and slightly inflated. Built from three shadows:
 
@@ -48,32 +51,35 @@ A filled, rounded object that looks soft and slightly inflated. Built from three
 - Dark mode: highlight drops to 14 % white, drop shadow becomes black; clay stays readable
   because the pastels are re-tuned, not dimmed.
 
-## 2. Plasma glass: things that float
+## 2. Satin: things that float, and every control
 
-Translucent, blurred, slightly saturated material for temporary or always-on-top chrome. It shows
-a hint of what is behind it so the user keeps context (which window the menu belongs to).
+Less glass. Menus, Control Center, the Six Menu, Search, toasts, the menu bar and the dock, and
+every control (buttons, switches, sliders, segmented controls, Control Center's round buttons) are
+**satin**: the same stuff as the home cards and the tension studies. It is mostly opaque (94–95 %),
+so you see colour and light rather than what's behind it, with a bevel: a 1 px rim, a bright lip
+along the top, a soft shade inside the bottom edge, a glint where the key light catches it, and a
+soft drop shadow. Graphite in light, silver in dark; anything that is **on** takes the accent.
 
-```css
-.glass {
-  background: var(--glass-fill);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-3);
-  border-radius: var(--radius-md);
-}
-```
+![Control Center in satin: round buttons, the radios fused, pill sliders](../screens/cc-fuse.png)
+
+| Part | Panels (`.glass`) | Controls |
+|---|---|---|
+| Fill | `--sat-a` → `--sat-b`, top to bottom, 94–95 % opaque, 16 px blur behind | `--ctl-a` → `--ctl-b`, opaque, with a radial glint at the top left (`--ctl-glint`) |
+| Edge | `--sat-rim` 1 px, `--sat-lip` along the top, `--sat-shade` inside the bottom | `--ctl-rim`, `--ctl-lip`, `--ctl-shade`, and a drop shadow (`--ctl-drop`) |
+| On | — | `--on-a` → `--on-b`, made from the accent (graphite in light, silver in dark), with its own glint |
+| Wells | — | Switch tracks, slider tracks and segmented-control tracks are sunken: `--trk-a` → `--trk-b` with an inner shadow |
+
+**Sliders** are pills: a sunken track, a fill of the accent's light that ends in a round, glinting
+end (the thumb is the end of the fill), and in Control Center the icon and the value sit inside the
+pill. **Control Center's** toggles are round satin buttons with their name and state under them;
+Wi-Fi and Bluetooth fuse into one body when both are on.
 
 **Rules**
-- Minimum fill opacity: **78 % light, 72 % dark** (tokens). Text on glass must pass 4.5:1
-  against the worst case (white and black wallpapers). If a renderer can't blur, it uses
-  `--glass-fill-strong`.
-- Glass never stacks on glass more than once (menu → submenu is fine; nothing deeper).
-- The **iridescent rim** (a 1 px gradient border in the plasma colours) is reserved for Six
-  Search and plasma clay. Everything else uses the plain rim.
-- **Reduce transparency** replaces glass with `--c-surface`. Layout and shadows stay the same.
-- Performance: blur is the most expensive effect in the shell. Budget **at most 3 live blurred
-  surfaces** on screen; the dock and menu bar cache their blur when no window moves behind them. Without GPU
-  compositing, glass falls back to the solid fill (same approach as plasma-ui's CSS fallback).
+- Text on satin passes 4.5:1 in both themes: the fill is close to opaque. With **Reduce
+  transparency** or **More contrast** panels are solid `--c-surface` and wells get a 1.5 px
+  `--c-line-strong` outline.
+- Satin never stacks more than twice (menu → submenu).
+- Budget: the panels' 16 px blur is the only blur; at most 3 live blurred surfaces on screen.
 
 ## 3. Paper: where work happens
 

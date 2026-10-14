@@ -184,11 +184,10 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 
 ```
 ╭────────────────────────────────╮
-│ [Wi-Fi  ✓ ][Bluetooth ✓ ] [Airplane ]│  clay tiles: on = accent fill + "On"; Wi-Fi and
-│ [Night     ] [Dark mode   ] [Focus   ]│  Bluetooth fuse into one body when both are on
-│ [Touch     ] [Listen for "Hey Pip"   ]│
-│ ☀ ─────────●──────           │  brightness
-│ 🔊 ───────●────────  ›        │  volume, › = output device
+│  (Wi-Fi)=(BT)  (✈)   (☾)   (☀)    │  round satin buttons, name and state under them;
+│  (☝)   (🔕)  [🎙 Listen for "Hey Pip"]│  on = the accent's satin; Wi-Fi + Bluetooth fuse
+│ (☀ ▓▓▓▓▓▓▓▓▓▓▓▓●        100 %)│  pill sliders: icon and value inside
+│ (🔊 ▓▓▓▓▓▓▓●           64 %) │
 │ 🔋 64 % · 3 h 10 m left    ⚙   │
 ╰────────────────────────────────╯
 ```
@@ -199,7 +198,8 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
   whatever was on. Turning a radio on turns Airplane mode off.
 - **Sliders are a membrane.** Pull a slider's thumb up or down off its track and the track bends
   after it; past 100 px it lets go and springs flat. The value only ever follows along the track.
-- Tiles have two hit zones: the main area toggles, the `›` chevron opens details.
+- Each button toggles; its name and state ("Home-5G", "On", "Off") sit under it, so state is
+  never shown by colour alone. Right-click a button for its settings page.
 - Tiles can be added/removed/reordered (edit mode via the ✎ button).
 - *Accessibility* tile is always pinnable and opens the accessibility quick panel (text size,
   contrast, reduce motion, reduce transparency, screen reader, magnifier).

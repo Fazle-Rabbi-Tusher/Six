@@ -333,7 +333,7 @@ the near one. On a light page it sits in a small dark pool, and its light stays 
 ### Ripple
 
 A terraced pool seen from above, from the teal rings it is modelled on: eight steps of colour
-falling from pale aqua at the rim to a near-black centre. Each step's lip catches the light on the
+falling from pale sky blue at the rim through aqua to a near-black centre. Each step's lip catches the light on the
 side facing it and shades the step below, the outer rings thin out to nothing, and the deeper rings
 shift further than the outer ones as Pip looks around, so it reads in depth. The rings flow slowly
 outward, like ripples.

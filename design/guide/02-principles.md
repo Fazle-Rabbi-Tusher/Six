@@ -18,7 +18,7 @@ Every pixel belongs to one of four materials:
 | Material | Role | Examples |
 |---|---|---|
 | **Clay** | things you press | buttons, toggles, quick-setting tiles, app icons |
-| **Plasma glass** | things that float above content for a moment | menu bar, dock, menus, popovers, notifications, Six Search |
+| **Satin** | things that float above content for a moment, and every control | menu bar, dock, menus, popovers, notifications, Six Search; buttons, switches, sliders |
 | **Paper** (flat) | things you read and work in | window content, documents, lists, settings pages |
 | **Plasma clay** | the living surfaces of home | home cards, Pip's conversation and composer, desktop widgets |
 
