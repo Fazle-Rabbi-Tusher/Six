@@ -14,7 +14,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 
 | | |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is voice only: press the mic in the menu bar, click Pip, hold Space or press `Ctrl + Space`, or click a **Try saying** example. Drag Pip anywhere on home, or right-click it to hide it; Settings › Pip & voice sets its look and colour (in previews without a microphone Pip hears sample requests). Try "delete interview notes" for a review card you can answer by voice. Click the Pip icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Click **Add widgets**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
+| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. Home is voice only: press the mic in the menu bar, click Pip, hold Space or press `Ctrl + Space`, or click a **Try saying** example. Drag Pip anywhere on home, or right-click it to hide it. With windows open, Pip talks from the **notch** at the top centre, which also shows the running task and music. Right-click anything for its menu, like Windows; right-click a widget to make it **float** over every app; add the **Video** widget and drag its corner to resize it; Settings › Pip & voice sets its look and colour (in previews without a microphone Pip hears sample requests). Try "delete interview notes" for a review card you can answer by voice. Click the Pip icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Click **Add widgets**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
 | **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
 | **Rules** | [02 · Principles](guide/02-principles.md) |
 
@@ -30,13 +30,13 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
 | [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, clay app icons, folder, drive and file icons |
 | [08 · Motion](guide/08-motion.md) | The feel (precise, continuous, lit; after the Ferrari Luce interior by LoveFrom), durations, precise and detent springs, choreography for windows, stacks, the dock, menus, voice and unlock, reduced motion |
-| [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Pip) and macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, first run |
+| [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Pip), the Pip notch, right-click menus, macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Pip's small orb, Overview, first run |
 | [10 · Components](guide/10-components.md) | Buttons, toggles, inputs, menus, lists, dialogs, toasts… and a checklist for adopting 21st.dev / shadcn components |
 | [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
 | [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
 | [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Pip (press to talk or "Hey Pip"), captions, review by voice, widgets (gallery and widgets Pip makes), stacks, the Pip app, failures and recovery, Pip's states and looks (the Hologram, the default, in four colours; the dotted sphere; the 3D Turbine), and moving or hiding Pip |
-| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, fifteen tasks, targets, and the order to build SIX in |
+| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, seventeen tasks, targets, and the order to build SIX in |
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
 
@@ -61,7 +61,7 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|
 | ![](screens/home-voice.png) | ![](screens/voice-reply.png) | ![](screens/pip-review.png) |
 
-| Voice over windows | The Pip app | A failure with recovery chips |
+| Pip in the notch over windows | The Pip app | A failure with recovery chips |
 |---|---|---|
 | ![](screens/voice-hud.png) | ![](screens/pip-app.png) | ![](screens/pip-failed.png) |
 
@@ -84,6 +84,14 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 | Dragging a card onto another | A stack with previews | Stack opened in place |
 |---|---|---|
 | ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
+
+| The notch with Pip's task | The notch while Pip asks for a review | A floating video widget over Settings |
+|---|---|---|
+| ![](screens/notch-task.png) | ![](screens/notch-voice.png) | ![](screens/widget-floating.png) |
+
+| Right-click on home | Right-click a widget |
+|---|---|
+| ![](screens/menu-desktop.png) | ![](screens/menu-widget.png) |
 
 | The clay app icons |
 |---|

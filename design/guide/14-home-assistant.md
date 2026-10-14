@@ -106,13 +106,14 @@ Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interfa
 | Reminders | A checklist with what's left in the header | Check off, add |
 | Focus timer | A 25-minute session | Start, pause, reset; a toast at the end |
 | Calendar | This month, today in the accent colour | — |
+| Video | A demo reel, or any video file you open or drop on it | Play/pause, scrub, open a file; **resize** from the corner or *Size › Small / Medium / Large* |
 
 ### Adding, removing and when home is full
 
 | Way in | What happens |
 |---|---|
 | **Add widgets** button | Sits at the foot of the shorter column while there is room; opens the gallery |
-| Right-click home or a widget | *Edit widgets…* and *Remove "Clock"* |
+| Right-click home or a widget | *Edit widgets…*, *Float on top of everything*, *Size* (video), *Remove "Clock"* (see [09 · Right-click menus](09-shell.md#right-click-menus)) |
 | Six menu, Six Search | *Edit widgets…*, *Add widgets* |
 | Ask Pip | "Add a clock widget", "remove the music widget", "edit widgets" |
 
@@ -121,7 +122,19 @@ Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interfa
 - **When home is full**, a new widget goes into the stack at the foot of its column, right under the
   top card, so the column keeps its height; its preview shows it is there, and a click brings it up.
   If a card grows (a task finishing shows its output) and the card below no longer fits, that card
-  goes into the stack too, with a toast saying so. Cards never overlap.
+  goes into the stack too, with a toast saying so. Cards never overlap. A card you resize stays where
+  you put it, and the others flow around it.
+
+### Floating widgets
+
+Right-click any widget → **Float on top of everything**. It lifts off home into a layer above every
+window, in glass (the plasma clay surface lives under the windows, so it can't follow), with a
+small accent dot by its title. It stays with you whatever app or file you open: a timer while you
+work, a note while you browse, a video while you write. Drag it anywhere (it keeps clear of the
+menu bar); `Alt + arrows` move it from the keyboard. Right-click → **Stop floating** sends it back
+to its column on home. Its clock, music or video keeps running throughout.
+
+![A video widget floating over Settings](../screens/widget-floating.png)
 
 ### Widgets Pip makes
 
@@ -233,7 +246,7 @@ visible.
 | Working | The caption keeps what Pip heard; the orb and status label show what Pip is doing ("PIP · ARRANGING WINDOWS") |
 | Answer | The reply appears under what you said, in Instrument Serif, and is spoken aloud (Settings › Pip & voice › *Speak replies*) |
 | Review | Changes to files show the review card inside the caption with "Say "yes" or "no"". Pip waits; you can answer by voice or with the buttons |
-| With windows open | The same caption appears as a small glass panel at the top right, under the menu bar, so home doesn't have to be visible |
+| With windows open | Pip talks from the **notch** at the top centre: it drops down into a panel with what you said, Pip's reply and any review card (see [09 · The Pip notch](09-shell.md#the-pip-notch)) |
 
 Rules:
 - **The mic has two visible states, never a hidden one.** Amber pill = Pip is hearing you now. A

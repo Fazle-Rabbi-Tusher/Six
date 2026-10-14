@@ -47,7 +47,9 @@ touch density.
 - Groups separated by a 1 px `--c-line` divider with 4 px space above and below.
 - Max **2 levels** deep. Max ~12 items per group before it becomes a dialog or search.
 - **Right-click everywhere** has a menu; the first group is always the most common actions
-  (Open, Cut, Copy, Paste, Rename, Delete), in Windows order.
+  (Open, Cut, Copy, Paste, Rename, Delete), in Windows order. What each place offers is listed in
+  [09 · Right-click menus](09-shell.md#right-click-menus). Destructive rows turn red on hover;
+  options that are on carry a tick; a menu from the dock opens upward.
 
 ## Tabs and segmented control
 - Segmented control (2–5 options): clay track (`--c-surface-2` + pressed shadow), selected

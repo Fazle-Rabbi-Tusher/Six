@@ -45,6 +45,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **Separator** | Thin line before Pip and the Bin |
 | **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |
 | **Bin** | Deleted files; shows a count |
+| **Notch** | Pip's notch at the top centre of the menu bar; see [The Pip notch](#the-pip-notch) |
 | **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius), each on its own spring, so the dock flows rather than snaps (see [08](08-motion.md#choreography)). Off under Reduce motion, on touch, and on narrow screens |
 | **Launch lift** | An opening app's icon lifts once, 12 px, while its window grows out of it; never repeatedly for attention (a badge does that) |
 | **Labels** | A small glass label above the hovered icon |
@@ -52,6 +53,50 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 Maximized windows fill the space between menu bar and dock; the dock can be set to auto-hide.
 Fitts's law still applies: the menu bar items reach the top edge, and the dock's bottom edge
 extends to the screen edge.
+
+## The Pip notch
+
+A black notch at the top centre of the screen, in both themes, flat against the edge with concave
+"ears", like a laptop's camera notch. It is where Pip lives while you work in other apps, and it
+grows to show what's going on, on springs, then shrinks back when it's done.
+
+| Size | When | What it shows |
+|---|---|---|
+| **Idle** | Nothing is running | The notch alone. Click it to talk to Pip; it grows a little under the pointer |
+| **Compact** | Something is running | It widens: on the left Pip's orb (or the album art), on the right the activity: Pip's task with a progress ring ("Slides · 46 %"), music with a moving equaliser, "Slides are ready" for a few seconds when a task finishes, or what Pip is doing for a request you typed in the Pip app |
+| **Expanded** | You talk to Pip with windows open, or click the compact notch | It drops down into a panel: Pip's state and source ("Asking · waiting for your review", "on this device"), a voice wave, what you said, Pip's reply and review cards; below that the running task (with **Stop task**) and the music (play/pause, next) |
+
+The voice panel closes 6 s after Pip answers (longer while a review waits), or at once with
+`Esc` or ×; a click outside closes an activity panel. Right-click the notch for *Talk to Pip*,
+*Open the Pip app* and Pip's settings. On narrow screens the idle notch is hidden; activities and
+the voice panel still appear.
+
+| Moment | Motion |
+|---|---|
+| Grows (compact, expanded) | Width and height on the detent spring, so it lands with a hint of overshoot (460–560 ms); the bottom corners round out from 14 to 28 px |
+| Contents arrive | Fade in with a 4–6 px focus pull after the shape has started moving (140 ms later); the panel's contents scale up from 94 % |
+| Shrinks | Contents leave first (140 ms, ease-in), then the shape closes on the precise spring |
+
+![The notch expanded while Pip asks for a review](../screens/notch-voice.png)
+
+## Right-click menus
+
+Like Windows, a right-click anywhere in SIX gives the actions for what's under the pointer; text
+fields keep their own Cut/Copy/Paste menu. Rows have a 16 px icon, a label, a shortcut or a
+submenu arrow, and ticks for options that are on. Submenus open on hover or `→`. `Shift + F10` or
+the Menu key opens the menu for whatever has focus; arrows move, `←` or `Esc` go back.
+
+| Where | Menu |
+|---|---|
+| Home (empty space) | Add widgets…, Talk to Pip · *View ›* Pip on home, Greeting, "Try saying" examples, Put Pip back in the middle, Put cards back in their columns · Refresh · *Wallpaper ›* Matte, Tidal, Aurora, Ember · Display settings, Personalise · Open in Terminal |
+| A widget | Float on top of everything / Stop floating · *Size ›* (video) · Show all in this stack, Unstack, Put back in its column · Edit widgets…, Remove |
+| Pip on home, the notch | Talk to Pip, Open the Pip app · Move Pip back to the middle, Hide Pip from home · Pip & voice settings |
+| A window | Restore, Minimise, Maximise, *Snap ›* halves, thirds, quarters · Close (`Alt F4`) |
+| A dock icon | Open / Show, Minimise · Keep in dock · Quit; the Bin: Open Bin, Empty Bin…; Six Menu: Six Search, Settings, Lock screen. Dock menus open upward, above the dock |
+| A file in Files | Open, Ask Pip about this · Copy name, Move to Bin (in the Bin: Put back, Delete permanently…) · Properties |
+| Menu bar, anywhere else | Control Center, Six Search, Settings · Lock screen |
+
+![The home menu with the Wallpaper submenu](../screens/menu-desktop.png)
 
 ## Six Menu (Start)
 

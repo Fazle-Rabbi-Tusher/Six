@@ -611,6 +611,115 @@ input[type="range"] { flex: 1; accent-color: var(--c-accent); height: var(--cont
 .gal-tile .btn { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
 #wMenu { position: absolute; z-index: 972; width: 220px; padding: 6px; border-radius: var(--radius-lg); }
 #wMenu[hidden] { display: none; }
+/* ── The Pip notch ──────────────────────────────────────────────────
+   Hardware-black in both themes, flat against the top edge with concave "ears"; it changes size
+   on springs (a detent when it grows, so it lands; precise when it shrinks) and its contents
+   cross-fade with a short focus pull. */
+#island {
+  --isl-h: calc(var(--menubar-h) + 2px); position: absolute; top: 0; left: 50%; z-index: 958; width: 190px; height: var(--isl-h);
+  transform: translateX(-50%); background: #000; color: #f3f3f7; border-radius: 0 0 14px 14px;
+  --c-text: #f3f3f7; --c-text-2: #b8b8c6; --c-text-3: #8c8c9c; --c-surface: #1c1c22; --c-surface-2: #141418; --c-surface-3: #26262e; --c-line: rgba(255,255,255,0.1); --c-line-strong: rgba(255,255,255,0.18);
+  transition: width 460ms var(--ease-spring), height 460ms var(--ease-spring), border-radius 460ms var(--ease-spring), box-shadow 300ms var(--ease-out);
+}
+#island[data-mode="expanded"] { border-radius: 0 0 28px 28px; box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.55); transition-timing-function: var(--ease-detent); transition-duration: 560ms; }
+#island[data-mode="compact"] { transition-timing-function: var(--ease-detent); }
+#island::before, #island::after { content: ""; position: absolute; top: 0; width: 10px; height: 10px; pointer-events: none; }
+#island::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent 9.5px, #000 10px); }
+#island::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent 9.5px, #000 10px); }
+#island:has(.isl-hit:hover)[data-mode="idle"] { width: 206px !important; height: calc(var(--isl-h) + 4px) !important; }
+.isl-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
+.isl-hit { position: absolute; inset: 0; border: 0; background: transparent; border-radius: inherit; cursor: pointer; }
+.isl-hit:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+#island[data-mode="expanded"] .isl-hit { display: none; }
+.isl-compact { position: absolute; inset: 0 12px 0 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; opacity: 0; filter: blur(4px); transition: opacity 160ms var(--ease-in), filter 160ms var(--ease-in); }
+#island[data-mode="compact"] .isl-compact { opacity: 1; filter: none; transition: opacity 280ms var(--ease-out) 140ms, filter 280ms var(--ease-out) 140ms; }
+.isl-l { display: grid; place-items: center; width: 22px; height: 22px; }
+.isl-l .dotorb { width: 22px; height: 22px; color: #fff; }
+.isl-l .isl-art { display: none; }
+.isl-l[data-show="art"] .dotorb { display: none; }
+.isl-l[data-show="art"] .isl-art { display: block; }
+.isl-art { width: 22px; height: 22px; border-radius: 6px; }
+.isl-r { display: flex; align-items: center; gap: 8px; min-width: 0; font: 600 12px/1 var(--font-ui); }
+.isl-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.isl-eq, .isl-ring { display: none; }
+#island[data-act="music"] .isl-eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+.isl-eq i { width: 3px; height: 100%; border-radius: 2px; background: #ff7f99; transform-origin: bottom; animation: isl-eq 0.9s ease-in-out infinite alternate; }
+.isl-eq i:nth-child(2) { animation-delay: -0.3s; } .isl-eq i:nth-child(3) { animation-delay: -0.6s; } .isl-eq i:nth-child(4) { animation-delay: -0.15s; }
+@keyframes isl-eq { from { transform: scaleY(0.2); } to { transform: scaleY(1); } }
+#island[data-act="task"] .isl-ring { display: block; width: 18px; height: 18px; transform: rotate(-90deg); }
+.isl-ring circle { fill: none; stroke-width: 2.6; stroke: rgba(255, 255, 255, 0.18); }
+.isl-ring circle:last-child { stroke: #7ce0ff; stroke-linecap: round; transition: stroke-dashoffset 600ms var(--ease-spring); }
+#island[data-act="done"] .isl-txt { color: #7be3a6; }
+.isl-body { position: absolute; left: 0; right: 0; top: 0; padding: 8px 18px 16px; display: grid; gap: 10px; opacity: 0; filter: blur(6px); transform: scale(0.94); transform-origin: 50% 0; pointer-events: none; transition: opacity 140ms var(--ease-in), filter 140ms var(--ease-in), transform 160ms var(--ease-in); }
+#island[data-mode="expanded"] .isl-body { opacity: 1; filter: none; transform: none; pointer-events: auto; transition: opacity 300ms var(--ease-out) 150ms, filter 300ms var(--ease-out) 150ms, transform 560ms var(--ease-detent) 60ms; }
+.isl-head { display: flex; align-items: center; gap: 10px; min-height: 30px; font: var(--text-caption); }
+.isl-head .dotorb { width: 26px; height: 26px; color: #fff; flex: none; }
+.isl-head b { font: 600 13px/1 var(--font-ui); }
+#islHeadLabel { flex: 1; color: #a8a8b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.isl-wave { display: none; align-items: center; gap: 3px; height: 18px; }
+#island:has(.isl-voice:not([hidden])) .isl-wave { display: flex; }
+.isl-wave i { width: 3px; height: 18px; border-radius: 2px; background: #8fd3ff; transform: scaleY(0.12); transition: transform 90ms linear; }
+.isl-x { width: 26px; height: 26px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #fff; font: 500 16px/1 var(--font-ui); display: grid; place-items: center; flex: none; }
+.isl-x:hover { background: rgba(255, 255, 255, 0.2); }
+.isl-voice { display: grid; gap: 6px; }
+.isl-voice[hidden], .isl-task[hidden], .isl-music[hidden] { display: none; }
+#islYou { margin: 0; font: var(--text-body-sm); color: #b8b8c6; }
+#islPip { margin: 0; font: 400 19px/1.3 var(--font-display); color: #fff; }
+#islYou:empty, #islPip:empty, #islCard:empty { display: none; }
+#islCard { display: grid; gap: 8px; }
+#islCard .review { max-width: none; background: #141418; }
+.isl-task { display: grid; gap: 8px; padding: 10px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
+.isl-row { display: grid; gap: 2px; min-width: 0; font: var(--text-caption); color: #a8a8b8; }
+.isl-row b { font: 600 13px/18px var(--font-ui); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.isl-bar { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.isl-bar i { display: block; height: 100%; background: #7ce0ff; transition: width 600ms var(--ease-spring); }
+.isl-btn { justify-self: start; height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: #fff; font: 600 12px/1 var(--font-ui); }
+.isl-music { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
+.isl-music .isl-art { width: 40px; height: 40px; border-radius: 10px; flex: none; }
+.isl-music .isl-row { flex: 1; }
+.isl-round { width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.12); color: #fff; font: 14px/1 var(--font-ui); display: grid; place-items: center; flex: none; }
+@media (max-width: 720px) { #island[data-mode="idle"] { opacity: 0; pointer-events: none; } }
+/* floating widgets: above every window, in glass */
+#pins { position: absolute; inset: 0; z-index: 945; pointer-events: none; }
+#pins > .widget { pointer-events: auto; }
+.widget.pinned { background: var(--glass-fill-strong) !important; -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.3); backdrop-filter: blur(var(--glass-blur)) saturate(1.3);
+  border-radius: var(--radius-xl); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-rim), var(--shadow-4); cursor: grab; }
+.widget.pinned.drag { cursor: grabbing; box-shadow: inset 0 0 0 1px var(--glass-edge), var(--shadow-4), 0 0 0 4px color-mix(in srgb, var(--c-accent) 30%, transparent); }
+.widget.pinned h3 > span::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--c-accent); vertical-align: 1px; }
+/* the video widget */
+.vid { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-md); overflow: hidden; background: #000; cursor: pointer; }
+.vid canvas, .vid video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+.vid canvas[hidden], .vid video[hidden] { display: none; }
+.vid-big { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border: 0; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(0, 0, 0, 0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25); }
+.vid-big[hidden] { display: none; }
+.vid-big svg.i { width: 22px; height: 22px; }
+.vid-hint { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font: var(--text-caption); color: rgba(255, 255, 255, 0.7); opacity: 0; transition: opacity var(--dur-fast); pointer-events: none; }
+.widget.vid-drop .vid-hint { opacity: 1; }
+.widget.vid-drop .vid { outline: 2px dashed var(--c-focus); outline-offset: -6px; }
+.vid-ctl { display: flex; align-items: center; gap: 8px; }
+.vid-ctl button { width: 32px; height: 32px; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--c-surface-3); color: var(--c-text); flex: none; }
+.vid-ctl button svg.i { width: 16px; height: 16px; }
+.vid-seek { flex: 1; min-width: 0; accent-color: var(--c-accent); }
+.vid-t { font: var(--text-caption); color: var(--c-text-2); white-space: nowrap; }
+.rs-handle { position: absolute; right: 4px; bottom: 4px; width: 16px; height: 16px; cursor: nwse-resize; touch-action: none; opacity: 0.55;
+  background: linear-gradient(135deg, transparent 50%, var(--c-text-3) 50%, var(--c-text-3) 58%, transparent 58%, transparent 70%, var(--c-text-3) 70%, var(--c-text-3) 78%, transparent 78%); }
+.rs-handle:hover { opacity: 1; }
+/* right-click menus */
+.ctx.glass { background: color-mix(in srgb, var(--c-surface) 90%, transparent); }
+.ctx { position: absolute; z-index: 973; min-width: 230px; width: max-content; max-width: 320px; padding: 6px; border-radius: var(--radius-lg); }
+.ctx[hidden] { display: none; }
+.ctx:focus { outline: none; }
+.ctx .mrow { justify-content: flex-start; gap: 10px; }
+.ctx .mi { width: 16px; height: 16px; display: grid; place-items: center; flex: none; color: var(--c-text-2); }
+.ctx .mi svg.i { width: 16px; height: 16px; }
+.ctx .ml { flex: 1; white-space: nowrap; }
+.ctx .mchev { width: 14px; height: 14px; color: var(--c-text-3); }
+.ctx .mrow:hover .mi, .ctx .mrow:focus-visible .mi, .ctx .mrow:hover .mchev { color: inherit; }
+.ctx .mrow.open { background: color-mix(in srgb, var(--c-accent) 22%, transparent); }
+.ctx .mrow:disabled { opacity: 0.42; background: transparent; color: var(--c-text); cursor: default; }
+.ctx .mrow.danger:hover, .ctx .mrow.danger:focus-visible { background: var(--c-danger); color: #fff; }
+.isl-round svg.i { width: 16px; height: 16px; }
+
 .wrow { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 8px 10px; border: 0; background: transparent; color: var(--c-text); text-align: left; border-radius: var(--radius-md); cursor: pointer; }
 .wrow:hover { background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); }
 .wrow .meta { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); white-space: nowrap; }
@@ -2064,6 +2173,23 @@ button.cal-cell:hover { background: var(--c-surface-3); }
       <button class="mb-btn mb-clock" id="clock" aria-label="Clock"><span id="clockD" class="mb-hide">Mon 12 Oct</span><span id="clockT">10:42</span></button>
     </div>
   </header>
+  <!-- the Pip notch: Pip while you work in other apps; grows with what's running -->
+  <div id="island" data-mode="idle">
+    <div class="isl-clip">
+      <div class="isl-compact" aria-hidden="true">
+        <span class="isl-l" data-show="orb"><canvas class="dotorb" data-follow="1" data-state="ready"></canvas><span class="isl-art"></span></span>
+        <span class="isl-r"><span class="isl-txt"></span><span class="isl-eq"><i></i><i></i><i></i><i></i></span><svg class="isl-ring" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" pathLength="100"/><circle cx="10" cy="10" r="7.5" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60"/></svg></span>
+      </div>
+      <div class="isl-body" role="status">
+        <div class="isl-head"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><b id="islHeadState">Pip</b><span id="islHeadLabel"></span><span class="isl-wave" id="islWave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="isl-x" id="islClose" aria-label="Close">×</button></div>
+        <div class="isl-voice" hidden><p id="islYou"></p><p id="islPip" aria-live="polite"></p><div id="islCard"></div></div>
+        <div class="isl-task" hidden><div class="isl-row"><b>Slides from my notes</b><span id="islTaskLine"></span></div><div class="isl-bar"><i id="islTaskBar"></i></div><button type="button" class="isl-btn" id="islTaskStop">Stop task</button></div>
+        <div class="isl-music" hidden><span class="isl-art"></span><span class="isl-row"><b id="islTrack"></b><span id="islArtist"></span></span><button type="button" class="isl-round" id="islPlay" aria-label="Play or pause"><svg class="i"><use href="#i-f-play"/></svg></button><button type="button" class="isl-round" id="islNext" aria-label="Next track"><svg class="i"><use href="#i-f-skip-forward"/></svg></button></div>
+      </div>
+    </div>
+    <button type="button" class="isl-hit" id="islHit" aria-label="Pip. Click to talk"></button>
+  </div>
+  <div id="pins" aria-label="Floating widgets"></div>
 
   <!-- System menu (logo) -->
   <div id="sysMenu" class="pop glass" role="menu" aria-label="SIX menu">
@@ -4023,9 +4149,11 @@ void main() {
   pipHome.innerHTML = '<canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>';
   $$('.dotorb').forEach(o => mountOrb(o));
   let pipNow = 'ready', pipLabel = '', ampTimer = null, pipBack = null;
+  let islandHook = null;   // the Pip notch follows Pip's state (set up with the notch, below)
   // label: what Pip is doing right now, in words ("searching Documents"), shown under the orb
   function setPip(state, label = '') {
     pipNow = state; pipLabel = label;
+    if (islandHook) islandHook();
     clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
@@ -4088,19 +4216,59 @@ void main() {
   };
   const plasma = { mood: 'matte', visc: 'gel', frost: 0.55, refr: 1, rim: 'soft' };
   const isWide = () => desk.clientWidth >= 1100 && !narrowMQ.matches;
+  /* ── Floating widgets ───────────────────────────────────────────────
+     Right-click a widget → Float on top of everything: it lifts off home into a layer above every
+     window, so a timer, a note or a video stays with you whatever app you're in. Drag it anywhere;
+     right-click → Stop floating sends it back to its column on home. Floating cards are glass
+     (the plasma surface lives under the windows, so it can't follow them up there). */
+  const pinsLayer = $('#pins');
+  function pinWidget(el) {
+    if (popStack) closeStack(true);
+    if (stackOf(el)) pullOut(el);
+    const dr = desk.getBoundingClientRect(), r = el.getBoundingClientRect();
+    el.classList.add('pinned'); pinsLayer.append(el);
+    el.style.left = Math.round(r.left - dr.left) + 'px'; el.style.top = Math.round(r.top - dr.top) + 'px';
+    settle(el); layoutHome(); markDirty();
+    toast(`“${cardName(el)}” floats over your windows now. Drag it anywhere; right-click it to put it back.`, () => unpinWidget(el), 'Undo');
+  }
+  function unpinWidget(el) {
+    if (!el.classList.contains('pinned')) return;
+    const dr = desk.getBoundingClientRect(), r = el.getBoundingClientRect(), ph = phys.get(el);
+    el.classList.remove('pinned'); $('#widgets').insertBefore(el, $('#addWidget'));
+    Object.assign(ph, { x: r.left - dr.left, y: r.top - dr.top, vx: 0, vy: 0, moved: false });
+    layoutHome(); markDirty();
+  }
+  function pinDrag(el, e) {
+    const dr = desk.getBoundingClientRect(), ox = e.clientX - dr.left - el.offsetLeft, oy = e.clientY - dr.top - el.offsetTop, sx = e.clientX, sy = e.clientY;
+    let on = false;
+    const move = ev => {
+      if (!on && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 4) return;
+      on = true; el.classList.add('drag');
+      el.style.left = Math.min(Math.max(ev.clientX - dr.left - ox, 0), desk.clientWidth - el.offsetWidth) + 'px';
+      el.style.top = Math.min(Math.max(ev.clientY - dr.top - oy, mbH() + 4), desk.clientHeight - 48) + 'px';
+    };
+    const up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (on) { el.classList.remove('drag'); settle(el); } };
+    addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+  }
+  const homeCards = () => widgetEls.filter(c => !c.classList.contains('pinned'));
   function layoutHome() {
     const wide = isWide();
     home.classList.toggle('stack', !wide);
-    if (!wide) { widgetEls.forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; applyPip(); return; }
+    if (!wide) { homeCards().forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; applyPip(); return; }
     const pad = 24, gap = 12, sideW = 284, top = mbH() + 16;
     let yL = top, yR = top;
     const H = desk.clientHeight - dockSpace() - 8;
     // cards the user placed (or stacked) stay put; the rest flow down their column around them
-    const taken = widgetEls.filter(c => phys.get(c).moved && !c.classList.contains('stack-hidden')).map(c => {
+    // cards you placed are pulled back on screen first, so the rest flow around where they really are
+    homeCards().filter(c => phys.get(c).moved && !stackOf(c)).forEach(c => {
+      const p = phys.get(c);
+      p.tx = Math.min(Math.max(p.tx, 0), desk.clientWidth - c.offsetWidth); p.ty = Math.min(Math.max(p.ty, mbH() + 8), H - c.offsetHeight);
+    });
+    const taken = homeCards().filter(c => phys.get(c).moved && !c.classList.contains('stack-hidden')).map(c => {
       const p = phys.get(c), st = stackOf(c);
       return st && st.cards[0] === c ? [st.x, st.y, c.offsetWidth, st.H + peekSpace(st)] : [p.tx, p.ty, c.offsetWidth, c.offsetHeight];
     });
-    widgetEls.forEach(el => {
+    homeCards().forEach(el => {
       const ph = phys.get(el), left = el.dataset.slot[0] === 'L';
       const x = left ? pad : desk.clientWidth - pad - sideW, w = el.offsetWidth, h = el.offsetHeight;
       if (!ph.moved) {
@@ -4119,7 +4287,7 @@ void main() {
     });
     // Add widgets sits at the foot of the shorter column while there is room for it
     const add = $('#addWidget');
-    const foot = col => Math.max(top, ...widgetEls.filter(c => !c.classList.contains('stack-hidden') && sideOf(c) === col).map(c => {
+    const foot = col => Math.max(top, ...homeCards().filter(c => !c.classList.contains('stack-hidden') && sideOf(c) === col).map(c => {
       const ph = phys.get(c), st = stackOf(c);
       return ph.ty + c.offsetHeight + (st && st.cards[0] === c ? peekSpace(st) : 0) + gap;
     }));
@@ -4130,7 +4298,7 @@ void main() {
     // a card that no longer fits its column (another card grew, or a stack sits below) goes into
     // the stack at the foot of that column instead of overlapping it
     if (!fitting && !tucking) {
-      const over = widgetEls.find(c => { const ph = phys.get(c); return !ph.moved && ph.over && !stackOf(c); });
+      const over = homeCards().find(c => { const ph = phys.get(c); return !ph.moved && ph.over && !stackOf(c); });
       const foot = over && footOf(sideOf(over), over);
       if (foot) {
         tucking = true; tuckUnder(over, foot); tucking = false;
@@ -4225,7 +4393,7 @@ void main() {
     R0: `Slides from my notes · ${$('.widget[data-slot="R0"]').dataset.status || '40 %'}`, R1: 'Battery 64 % · 212 GB free',
   })[c.dataset.slot] || (c._peek ? c._peek() : '');
   function targetAt(el, x, y) {
-    return widgetEls.find(c => {
+    return homeCards().find(c => {
       if (c === el || c.classList.contains('stack-hidden')) return false;
       const r = c.getBoundingClientRect();
       return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
@@ -4514,18 +4682,22 @@ void main() {
   });
   function wireWidget(el) {
     el.addEventListener('dblclick', e => {   // double-click a moved card to send it back to its place
-      if (e.target.closest('button, a, input, textarea') || stackOf(el)) return;
+      if (e.target.closest('button, a, input, textarea') || stackOf(el) || el.classList.contains('pinned')) return;
       phys.get(el).moved = false; layoutHome();
     });
     el.addEventListener('pointerdown', e => {
-      if (e.button !== 0 || !isWide() || e.target.closest('button, a, input, textarea') || el.classList.contains('in-pop')) return;   // pop-up cards have their own handler
+      if (e.button !== 0 || e.target.closest('button, a, input, textarea, video, .rs-handle') || el.classList.contains('in-pop')) return;   // pop-up cards have their own handler
+      if (el.classList.contains('pinned')) { e.preventDefault(); pinDrag(el, e); return; }   // a floating card goes wherever you put it
+      if (!isWide()) return;
       e.preventDefault(); beginDrag(el, e, false);
     });
     // keyboard alternative to dragging (WCAG 2.5.7): focus a card, Alt + arrows moves it one grid step
     el.tabIndex = 0;
     el.addEventListener('keydown', e => {
       const d = { ArrowLeft: [-24, 0], ArrowRight: [24, 0], ArrowUp: [0, -24], ArrowDown: [0, 24] }[e.key];
-      if (!e.altKey || !d || !isWide() || e.target !== el || el.classList.contains('in-pop')) return;
+      if (!e.altKey || !d || e.target !== el || el.classList.contains('in-pop')) return;
+      if (el.classList.contains('pinned')) { e.preventDefault(); el.style.left = Math.max(0, el.offsetLeft + d[0]) + 'px'; el.style.top = Math.max(mbH(), el.offsetTop + d[1]) + 'px'; return; }
+      if (!isWide()) return;
       e.preventDefault();
       if (stackOf(el)) pullOut(el);
       const ph = phys.get(el), H = desk.clientHeight - dockSpace() - 8;
@@ -4596,6 +4768,103 @@ void main() {
         return el;
       },
     },
+    video: {
+      name: 'Video', desc: 'Plays a video at any size; float it over your work', icon: 'f-play', tile: 't-sky',
+      make() {
+        const el = shell('video', 'Video', 'Demo reel', `<div class="vid"><canvas class="vid-demo" aria-hidden="true"></canvas><video class="vid-file" playsinline hidden></video>
+          <button type="button" class="vid-big" aria-label="Play">${icon('f-play')}</button><span class="vid-hint">Drop a video here</span></div>
+          <div class="vid-ctl"><button type="button" data-v="play" aria-label="Play">${icon('f-play')}</button><input type="range" class="vid-seek" min="0" max="1000" value="0" aria-label="Position"><span class="vid-t tnum">0:00</span><button type="button" data-v="open" aria-label="Open a video file" title="Open a video…">${icon('f-folder')}</button></div>
+          <input type="file" accept="video/*" hidden><span class="rs-handle" aria-hidden="true" title="Drag to resize"></span>`);
+        const cv = $('.vid-demo', el), vf = $('.vid-file', el), seek = $('.vid-seek', el), tEl = $('.vid-t', el), big = $('.vid-big', el), pbtn = $('[data-v="play"]', el), pick = $('input[type="file"]', el);
+        const s = { on: false, t: 0, len: 32, mode: 'demo', raf: 0, last: 0, name: 'Demo reel', url: '' };
+        const fmt = x => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`;
+        // the demo reel: a short generative film, so the widget plays something without a file
+        function drawDemo() {
+          const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+          const dpr = Math.min(2, devicePixelRatio || 1);
+          if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+          const c = cv.getContext('2d'), t = s.t;
+          c.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const g = c.createLinearGradient(0, 0, 0, h);
+          g.addColorStop(0, `hsl(${228 + 24 * Math.sin(t / 6)} 55% 13%)`); g.addColorStop(1, '#04050a');
+          c.globalCompositeOperation = 'source-over'; c.fillStyle = g; c.fillRect(0, 0, w, h);
+          c.globalCompositeOperation = 'lighter';
+          for (let k = 0; k < 3; k++) {   // aurora ribbons
+            c.beginPath();
+            for (let x = 0; x <= w + 6; x += 6) {
+              const y = h * (0.42 + 0.1 * k) + Math.sin(x / w * 5.5 + t * (0.5 + 0.22 * k) + k * 2) * h * 0.13 + Math.sin(x / w * 13 - t * 1.2 + k) * h * 0.025;
+              x ? c.lineTo(x, y) : c.moveTo(x, y);
+            }
+            c.strokeStyle = `hsla(${185 + 45 * k}, 90%, 60%, 0.16)`; c.lineWidth = h * 0.11; c.stroke();
+            c.strokeStyle = `hsla(${185 + 45 * k}, 100%, 75%, 0.55)`; c.lineWidth = Math.max(1, h * 0.008); c.stroke();
+          }
+          for (let i = 0; i < 46; i++) {   // drifting sparks
+            const px = ((i * 97.3) % w + t * (10 + (i % 5) * 7)) % w, py = (i * 53.7) % h + Math.sin(t * 0.8 + i) * 6, a = 0.25 + 0.35 * Math.sin(t * 2 + i * 1.7) ** 2;
+            c.fillStyle = `rgba(190,220,255,${a.toFixed(3)})`; c.fillRect(px, py, 1.6, 1.6);
+          }
+          c.globalCompositeOperation = 'source-over';
+          const a = Math.max(0, Math.min(1, 1.4 - Math.abs(t - 3) / 2));   // the title card
+          if (a > 0) {
+            c.textAlign = 'center'; c.fillStyle = `rgba(255,255,255,${a})`;
+            c.font = `400 ${Math.round(h * 0.17)}px "Instrument Serif", serif`; c.fillText('Soft Matter', w / 2, h * 0.5);
+            c.font = `600 ${Math.max(8, Math.round(h * 0.055))}px Geist, sans-serif`; c.fillStyle = `rgba(255,255,255,${a * 0.7})`; c.fillText('S I X  ·  D E M O  R E E L', w / 2, h * 0.64);
+          }
+        }
+        function ui() {
+          pbtn.innerHTML = icon(s.on ? 'f-pause' : 'f-play'); pbtn.setAttribute('aria-label', s.on ? 'Pause' : 'Play');
+          big.hidden = s.on;
+          const len = s.mode === 'file' ? (vf.duration || 0) : s.len, t = s.mode === 'file' ? vf.currentTime : s.t;
+          seek.value = len ? Math.round(t / len * 1000) : 0; tEl.textContent = `${fmt(t)} / ${fmt(len)}`;
+        }
+        function loop(now) {
+          if (!s.on || s.mode !== 'demo') { s.raf = 0; return; }
+          s.t = (s.t + (s.last ? Math.min(0.1, (now - s.last) / 1000) : 0)) % s.len; s.last = now;
+          if (el.offsetParent) drawDemo();
+          ui(); s.raf = requestAnimationFrame(loop);
+        }
+        function play(on) {
+          s.on = on;
+          if (s.mode === 'file') { if (on) vf.play().catch(() => { s.on = false; ui(); }); else vf.pause(); }
+          else if (on && !s.raf) { s.last = 0; s.raf = requestAnimationFrame(loop); }
+          ui();
+        }
+        function load(f) {
+          if (s.url) URL.revokeObjectURL(s.url);
+          s.url = URL.createObjectURL(f); s.name = f.name; vf.src = s.url; s.mode = 'file';
+          vf.hidden = false; cv.hidden = true; $('h3 small', el).textContent = f.name.length > 26 ? f.name.slice(0, 25) + '…' : f.name;
+          play(true);
+        }
+        pbtn.onclick = big.onclick = () => play(!s.on);
+        $('.vid', el).addEventListener('click', e => { if (!e.target.closest('button')) play(!s.on); });
+        seek.addEventListener('input', () => {
+          const f = seek.value / 1000;
+          if (s.mode === 'file') vf.currentTime = f * (vf.duration || 0); else { s.t = f * s.len; drawDemo(); }
+          ui();
+        });
+        $('[data-v="open"]', el).onclick = () => pick.click();
+        pick.onchange = () => { if (pick.files[0]) load(pick.files[0]); };
+        vf.ontimeupdate = vf.onloadedmetadata = ui; vf.onended = () => { s.on = false; ui(); };
+        el.addEventListener('dragover', e => { if ([...(e.dataTransfer?.items || [])].some(i => i.type.startsWith('video/'))) { e.preventDefault(); el.classList.add('vid-drop'); } });
+        el.addEventListener('dragleave', () => el.classList.remove('vid-drop'));
+        el.addEventListener('drop', e => { const f = [...(e.dataTransfer?.files || [])].find(x => x.type.startsWith('video/')); el.classList.remove('vid-drop'); if (f) { e.preventDefault(); load(f); } });
+        // any size: drag the corner, or pick one from the right-click menu
+        const SIZES = [['Small', 284], ['Medium', 400], ['Large', 560]];
+        // a card you've sized stays where you put it (it never gets tucked into a stack for being big)
+        const setW = w => { el.style.width = Math.round(Math.max(240, Math.min(w, 760, desk.clientWidth - 24))) + 'px'; const ph = phys.get(el); if (ph && !el.classList.contains('pinned')) ph.moved = true; drawDemo(); };
+        el._sizes = () => SIZES.map(([n, w]) => ({ label: n, checked: Math.abs(el.offsetWidth - w) < 3, run: () => { const a = el.getBoundingClientRect(); setW(w); moveFrom(el, a, { duration: 420 }); } }));
+        $('.rs-handle', el).addEventListener('pointerdown', e => {
+          e.preventDefault(); e.stopPropagation();
+          const sx = e.clientX, w0 = el.offsetWidth;
+          const move = ev => setW(w0 + ev.clientX - sx);
+          const up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); };
+          addEventListener('pointermove', move); addEventListener('pointerup', up);
+        });
+        el._peek = () => `${s.on ? 'Playing' : 'Paused'} · ${s.name}`;
+        el._playing = () => s.on;
+        requestAnimationFrame(() => { drawDemo(); ui(); });
+        return el;
+      },
+    },
     music: {
       name: 'Now playing', short: 'Music', desc: 'Play, pause and skip without opening Music', icon: 'music', tile: 't-rose',
       make() {
@@ -4619,6 +4888,7 @@ void main() {
         });
         el._tick = () => { if (!s.on) return; if (++s.pos >= TRACKS[s.i].len) { s.i = (s.i + 1) % TRACKS.length; s.pos = 0; } draw(); };
         el._peek = () => `${s.on ? 'Playing' : 'Paused'} · ${TRACKS[s.i].t}, ${TRACKS[s.i].a}`;
+        el._playing = () => s.on; el._track = () => TRACKS[s.i];   // for the Pip notch
         draw();
         return el;
       },
@@ -4814,7 +5084,7 @@ void main() {
   }
   // which side of home a card sits on, and the lowest visible card (or stack) on that side
   function sideOf(c) { return phys.get(c).tx + c.offsetWidth / 2 < desk.clientWidth / 2 ? 'L' : 'R'; }
-  const footOf = (col, not) => widgetEls.filter(c => c !== not && !c.classList.contains('stack-hidden') && sideOf(c) === col)
+  const footOf = (col, not) => homeCards().filter(c => c !== not && !c.classList.contains('stack-hidden') && sideOf(c) === col)
     .sort((p, q) => phys.get(q).ty - phys.get(p).ty)[0] || null;
   // a widget with no room goes into the foot stack, right under the top card: the column keeps its
   // height, and its preview shows it's there (click the preview to bring it up)
@@ -4888,39 +5158,206 @@ void main() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGallery(); hideWMenu(); } });
   $('#addWidget').addEventListener('click', openGallery);
 
-  // right-click a widget (or empty home) for Edit widgets / Remove
-  const wMenu = $('#wMenu');
-  function hideWMenu() { wMenu.hidden = true; }
-  $('#home').addEventListener('contextmenu', e => {
-    if (e.target.closest('#pipSpot') && isWide()) { e.preventDefault(); pipMenu(e); return; }
-    if (e.target.closest('#center, input, textarea') || !isWide()) return;
-    e.preventDefault();
-    const card = e.target.closest('.widget'), k = kindOf(card);
-    wMenu.innerHTML = '<button class="mrow" role="menuitem" data-w="edit">Edit widgets…</button>' + (k ? `<div class="msep"></div><button class="mrow" role="menuitem" data-w="remove">Remove “${esc(W_KINDS[k]?.name || cardName(card))}”</button>` : '');
-    wMenu._k = k;
-    const dr = desk.getBoundingClientRect();
-    wMenu.hidden = false;
-    anim(wMenu, [{ opacity: 0, transform: 'scale(0.94)', transformOrigin: '0 0' }, { opacity: 1, transform: 'none', transformOrigin: '0 0' }], { duration: 420 });
-    wMenu.style.left = Math.min(e.clientX - dr.left, desk.clientWidth - wMenu.offsetWidth - 8) + 'px';
-    wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
-    $('.mrow', wMenu).focus();
-  });
-  wMenu.addEventListener('click', e => {
-    const b = e.target.closest('[data-w]'); if (!b) return; hideWMenu();
-    const w = b.dataset.w;
-    if (w === 'edit') openGallery(); else if (w === 'pip-centre') placePip(null); else if (w === 'pip-hide') setPipShown(false); else removeKind(wMenu._k);
-  });
-  function pipMenu(e) {
-    const dr = desk.getBoundingClientRect();
-    wMenu.innerHTML = (pipPlace ? '<button class="mrow" role="menuitem" data-w="pip-centre">Move Pip back to the middle</button>' : '')
-      + '<button class="mrow" role="menuitem" data-w="pip-hide">Hide Pip from home</button>';
-    wMenu.hidden = false;
-    anim(wMenu, [{ opacity: 0, transform: 'scale(0.94)', transformOrigin: '0 0' }, { opacity: 1, transform: 'none', transformOrigin: '0 0' }], { duration: 420 });
-    wMenu.style.left = Math.min(e.clientX - dr.left, desk.clientWidth - wMenu.offsetWidth - 8) + 'px';
-    wMenu.style.top = Math.min(e.clientY - dr.top, desk.clientHeight - wMenu.offsetHeight - 8) + 'px';
-    $('.mrow', wMenu).focus();
+  /* ── Right-click menus, everywhere ─────────────────────────────────
+     Like Windows: a right-click anywhere in SIX gives the actions for what's under the pointer,
+     with icons, shortcuts, ticks and submenus (hover or →). Keyboard: Shift + F10 or the Menu key
+     on the focused item, arrows to move, → into a submenu, ← or Esc out. */
+  const wMenu = $('#wMenu'), wSub = document.createElement('div');
+  wSub.id = 'wSub'; wSub.className = 'glass ctx'; wSub.setAttribute('role', 'menu'); wSub.hidden = true; wMenu.after(wSub);
+  wMenu.classList.add('ctx'); wMenu.tabIndex = -1; wSub.tabIndex = -1;
+  let subT = 0;
+  function hideWMenu() { wMenu.hidden = true; wSub.hidden = true; clearTimeout(subT); }
+  function fillMenu(m, items) {
+    m.replaceChildren(); m._items = items;
+    items.forEach((it, i) => {
+      if (!it) return;
+      if (it === '-') { const s = document.createElement('div'); s.className = 'msep'; s.setAttribute('role', 'separator'); m.append(s); return; }
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'mrow' + (it.danger ? ' danger' : ''); b.dataset.i = i; b.disabled = !!it.disabled;
+      b.setAttribute('role', it.checked !== undefined ? 'menuitemcheckbox' : 'menuitem');
+      if (it.checked !== undefined) b.setAttribute('aria-checked', !!it.checked);
+      if (it.sub) b.setAttribute('aria-haspopup', 'menu');
+      b.innerHTML = `<span class="mi" aria-hidden="true">${it.checked ? icon('check') : it.icon ? icon(it.icon) : ''}</span><span class="ml"></span>${it.sub ? icon('chev', 'i mchev') : it.kbd ? `<kbd>${it.kbd}</kbd>` : ''}`;
+      $('.ml', b).textContent = it.label;
+      m.append(b);
+    });
   }
-  document.addEventListener('pointerdown', e => { if (!wMenu.hidden && !e.target.closest('#wMenu')) hideWMenu(); });
+  function placeMenu(m, x, y, origin = '0 0', above = false) {
+    const dr = desk.getBoundingClientRect(), H = Math.min(desk.clientHeight, innerHeight - dr.top);
+    m.hidden = false;
+    const h = m.offsetHeight, top = above ? y - dr.top - h : y - dr.top;   // a menu from the dock opens upward, above it
+    m.style.left = Math.max(8, Math.min(x - dr.left, desk.clientWidth - m.offsetWidth - 8)) + 'px';
+    m.style.top = Math.max(8, Math.min(top, H - h - 8)) + 'px';
+    if (above) origin = '0 100%';
+    anim(m, [{ opacity: 0, transform: 'scale(0.95)', transformOrigin: origin }, { opacity: 1, transform: 'none', transformOrigin: origin }], { duration: 360 });
+    $$('.mrow:not(:disabled)', m).forEach((r, i) => anim(r, [{ opacity: 0 }, { opacity: 1 }], { duration: 240, delay: 30 + i * 12, easing: EASE.out }));
+  }
+  function ctxMenu(x, y, items, above = false) {
+    items = items.filter(Boolean).filter((it, i, a) => it !== '-' || (i > 0 && a[i - 1] !== '-' && i < a.length - 1));
+    if (!items.length) return;
+    closeAllPops(); wSub.hidden = true;
+    fillMenu(wMenu, items); placeMenu(wMenu, x, y, '0 0', above);
+    (kbdNav ? $('.mrow:not(:disabled)', wMenu) : wMenu)?.focus({ preventScroll: true });
+  }
+  function openSub(row, focus) {
+    const it = wMenu._items[+row.dataset.i]; if (!it || !it.sub) return;
+    fillMenu(wSub, it.sub);
+    wSub.hidden = false;
+    const r = row.getBoundingClientRect(), w = wSub.offsetWidth, room = desk.getBoundingClientRect().right - r.right;
+    placeMenu(wSub, room > w + 8 ? r.right + 2 : r.left - w - 2, r.top - 6, room > w + 8 ? '0 0' : '100% 0');
+    $$('.mrow', wMenu).forEach(b => b.classList.toggle('open', b === row));
+    if (focus) $('.mrow:not(:disabled)', wSub)?.focus();
+  }
+  [wMenu, wSub].forEach(m => {
+    m.addEventListener('click', e => {
+      const b = e.target.closest('.mrow'); if (!b || b.disabled) return;
+      const it = m._items[+b.dataset.i];
+      if (it.sub) { openSub(b, true); return; }
+      hideWMenu(); it.run && it.run();
+    });
+    m.addEventListener('keydown', e => {
+      const rows = $$('.mrow:not(:disabled)', m), i = rows.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); rows[(i + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length]?.focus(); }
+      else if (e.key === 'ArrowRight' && m === wMenu && document.activeElement?.getAttribute('aria-haspopup')) { e.preventDefault(); openSub(document.activeElement, true); }
+      else if ((e.key === 'ArrowLeft' || e.key === 'Escape') && m === wSub) { e.preventDefault(); e.stopPropagation(); wSub.hidden = true; $('.mrow.open', wMenu)?.focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); hideWMenu(); }
+    });
+  });
+  wMenu.addEventListener('pointerover', e => {
+    const b = e.target.closest('.mrow'); if (!b) return;
+    clearTimeout(subT);
+    subT = setTimeout(() => { if (b.getAttribute('aria-haspopup')) openSub(b); else { wSub.hidden = true; $$('.mrow', wMenu).forEach(x => x.classList.remove('open')); } }, 140);
+  });
+  document.addEventListener('pointerdown', e => { if (!wMenu.hidden && !e.target.closest('#wMenu, #wSub')) hideWMenu(); });
+  addEventListener('blur', hideWMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !wMenu.hidden) { e.preventDefault(); hideWMenu(); } }, true);
+
+  // what each place offers
+  const MOODS_MENU = () => Object.keys(MOODS).map(m => ({ label: cap(m), checked: plasma.mood === m, run: () => ACT.plasma(m) }));
+  function deskItems() {
+    return [
+      { label: 'Add widgets…', icon: 'plus', run: openGallery },
+      { label: 'Talk to Pip', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
+      '-',
+      { label: 'View', icon: 'grid', sub: [
+        { label: 'Pip on home', checked: !pipSpot.hidden, run: () => setPipShown(pipSpot.hidden) },
+        { label: 'Greeting', checked: !$('#greet').hidden, run: () => { const s = $('#w-settings [data-bind="greet"]'); s.checked = !s.checked; s.dispatchEvent(new Event('change', { bubbles: true })); } },
+        { label: '“Try saying” examples', checked: !$('#vTry').hidden, run: () => { const s = $('#w-settings [data-bind="tries"]'); s.checked = !s.checked; s.dispatchEvent(new Event('change', { bubbles: true })); } },
+        '-',
+        { label: 'Put Pip back in the middle', disabled: !pipPlace, run: () => placePip(null) },
+        { label: 'Put cards back in their columns', run: () => { stacks.slice().forEach(unstack); homeCards().forEach(c => { phys.get(c).moved = false; }); layoutHome(); } },
+      ] },
+      { label: 'Refresh', icon: 'arrow-counter-clockwise', kbd: 'F5', run: () => { layoutHome(); paintWall(true); homeCards().filter(c => c.offsetParent && !c.classList.contains('stack-hidden')).forEach((c, i) => glint(c, i * 70)); } },
+      '-',
+      { label: 'Wallpaper', icon: 'image', sub: MOODS_MENU() },
+      { label: 'Display settings', icon: 'monitor', run: () => openSettings('display') },
+      { label: 'Personalise', icon: 'palette', run: () => openSettings('appearance') },
+      '-',
+      { label: 'Open in Terminal', icon: 'terminal', run: () => openApp('terminal') },
+    ];
+  }
+  function widgetItems(card) {
+    const k = kindOf(card), st = stackOf(card), pinned = card.classList.contains('pinned');
+    return [
+      { label: pinned ? 'Stop floating · back to home' : 'Float on top of everything', icon: 'layers', run: () => (pinned ? unpinWidget(card) : pinWidget(card)) },
+      card._sizes ? { label: 'Size', icon: 'squares-four', sub: card._sizes() } : null,
+      '-',
+      st && st.cards[0] === card ? { label: 'Show all in this stack', icon: 'layers', run: () => openStack(st) } : null,
+      st ? { label: 'Unstack', run: () => unstack(st) } : null,
+      !st && !pinned && phys.get(card)?.moved ? { label: 'Put back in its column', run: () => { phys.get(card).moved = false; layoutHome(); } } : null,
+      '-',
+      { label: 'Edit widgets…', icon: 'sliders', run: openGallery },
+      k ? { label: `Remove “${W_KINDS[k]?.name || cardName(card)}”`, icon: 'trash', danger: true, run: () => removeKind(k) } : null,
+    ];
+  }
+  function pipItems() {
+    return [
+      { label: 'Talk to Pip', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
+      { label: 'Open the Pip app', icon: 'spark', run: () => openPip() },
+      '-',
+      { label: 'Move Pip back to the middle', disabled: !pipPlace, run: () => placePip(null) },
+      { label: 'Hide Pip from home', run: () => setPipShown(false) },
+      '-',
+      { label: 'Pip & voice settings', icon: 'gear', run: () => openSettings('pip') },
+    ];
+  }
+  function winItems(id) {
+    const w = wins[id];
+    const zones = [['Left half', 'L50'], ['Right half', 'R50'], ['Left two thirds', 'L66'], ['Right third', 'R33'], '-', ['Top left', 'TL'], ['Top right', 'TR'], ['Bottom left', 'BL'], ['Bottom right', 'BR']];
+    return [
+      { label: 'Restore', icon: 'restore', disabled: !w.snapped, run: () => unsnap(id) },
+      { label: 'Minimise', icon: 'min', run: () => minimize(id) },
+      { label: 'Maximise', icon: 'max', disabled: w.max, run: () => snap(id, 'MAX') },
+      { label: 'Snap', icon: 'grid', sub: zones.map(z => z === '-' ? '-' : { label: z[0], checked: w.snapped === z[1], run: () => snap(id, z[1]) }) },
+      '-',
+      { label: 'Close', icon: 'close', kbd: 'Alt F4', danger: true, run: () => closeWin(id) },
+    ];
+  }
+  function dockItems(b) {
+    const id = b.dataset.app;
+    if (b.id === 'dockPip') return pipItems().filter(it => !it.label || !/middle|Hide Pip/.test(it.label));
+    if (b.id === 'dockBin') return [{ label: 'Open Bin', icon: 'trash', run: () => openFilesAt('bin') }, '-', { label: 'Empty Bin…', danger: true, run: emptyBin }];
+    if (b.id === 'launchBtn') return [{ label: 'Open Six Menu', icon: 'grid', run: () => openPop('six') }, { label: 'Six Search', icon: 'search', kbd: 'Ctrl K', run: () => openSearch() }, '-', { label: 'Settings', icon: 'gear', run: () => openSettings() }, { label: 'Lock screen', icon: 'lock', run: lockScreen }];
+    const w = wins[id], open = w && !w.el.hidden, running = w && (open || w.min);
+    return [
+      { label: open ? 'Show' : 'Open', icon: 'f-folder', run: () => (open ? focusWin(id) : openApp(id)) },
+      running && open ? { label: 'Minimise', icon: 'min', run: () => minimize(id) } : null,
+      '-',
+      { label: 'Keep in dock', checked: true, run: () => toast(`${appById[id].name} stays in the dock. Rearranging the dock isn’t part of this prototype.`, null) },
+      running ? '-' : null,
+      running ? { label: 'Quit', icon: 'close', danger: true, run: () => closeWin(id) } : null,
+    ];
+  }
+  function fileItems(i) {
+    const x = visible()[i]; if (!x) return [];
+    const inBin = FTREE[cur]?.bin;
+    return [
+      { label: 'Open', icon: 'f-file', kbd: 'Enter', run: () => openEntry(x) },
+      x.kind === 'file' && !inBin ? { label: 'Ask Pip about this', icon: 'spark', run: () => askPip(`Tell me about “${x.f.name}”`) } : null,
+      '-',
+      x.kind === 'file' ? { label: 'Copy name', icon: 'file', run: () => { try { navigator.clipboard.writeText(x.f.name); } catch {} toast(`Copied “${x.f.name}”`, null); } } : null,
+      x.kind === 'file' && !inBin ? { label: 'Move to Bin', icon: 'trash', kbd: 'Delete', danger: true, run: () => { selectRow(i); deleteSel(); } } : null,
+      inBin ? { label: 'Put back', run: () => { const r = $('#fstatus [data-act="restore"]'); selectRow(i); r ? r.click() : null; } } : null,
+      inBin ? { label: 'Delete permanently…', icon: 'trash', danger: true, run: () => { selectRow(i); deleteSel(); } } : null,
+      '-',
+      { label: 'Properties', icon: 'info', run: () => toast(x.f ? `${x.f.name} · ${x.f.size || ''} · modified ${x.f.mod || ''}` : nameOf(x), null) },
+    ];
+  }
+  const sysItems = () => [
+    { label: 'Control Center', icon: 'cc', run: () => openPop('qs') },
+    { label: 'Six Search', icon: 'search', kbd: 'Ctrl K', run: () => openSearch() },
+    { label: 'Settings', icon: 'gear', run: () => openSettings() },
+    '-',
+    { label: 'Lock screen', icon: 'lock', run: lockScreen },
+  ];
+  // one listener decides what the menu is about
+  desk.addEventListener('contextmenu', e => {
+    const t = e.target;
+    if (t.closest('input, textarea, [contenteditable], #wMenu, #wSub, #lock')) return;   // text keeps its own menu
+    e.preventDefault();
+    const x = e.clientX, y = e.clientY;
+    let items;
+    if (t.closest('#island')) items = pipItems().filter(it => !it.label || !/middle|Hide Pip/.test(it.label));
+    else if (t.closest('#pipSpot')) items = pipItems();
+    else if (t.closest('.widget')) items = widgetItems(t.closest('.widget'));
+    else if (t.closest('.peek')) items = widgetItems(t.closest('.peek')._card);
+    else if (t.closest('.dk')) items = dockItems(t.closest('.dk'));
+    else if (t.closest('#flist .frow[data-i]')) { const r = t.closest('.frow[data-i]'); selectRow(+r.dataset.i); items = fileItems(+r.dataset.i); }
+    else if (t.closest('.win')) items = winItems(t.closest('.win').dataset.app);
+    else if (t.closest('#menubar, #dock')) items = sysItems();
+    else if (t.closest('#home') && isWide()) items = deskItems();
+    else items = sysItems();
+    const fromDock = !!t.closest('#dock');
+    ctxMenu(x, fromDock ? $('#dock').getBoundingClientRect().top - 8 : y, items, fromDock);
+  });
+  // the keyboard way in: Shift + F10 or the Menu key opens the menu for whatever has focus
+  document.addEventListener('keydown', e => {
+    if (!((e.shiftKey && e.key === 'F10') || e.key === 'ContextMenu')) return;
+    const a = document.activeElement; if (!a || a === document.body || a.closest('input, textarea')) return;
+    e.preventDefault();
+    const r = a.getBoundingClientRect();
+    a.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: r.left + 12, clientY: r.top + Math.min(r.height, 28) }));
+  });
 
   // ── Pip designs a widget from a description ──
   const CITY_TZ = { dhaka: 'Asia/Dhaka', chattogram: 'Asia/Dhaka', chittagong: 'Asia/Dhaka', sylhet: 'Asia/Dhaka', london: 'Europe/London', paris: 'Europe/Paris', berlin: 'Europe/Berlin', madrid: 'Europe/Madrid', rome: 'Europe/Rome', istanbul: 'Europe/Istanbul', moscow: 'Europe/Moscow',
@@ -5001,14 +5438,14 @@ Request: ${JSON.stringify(d)}`;
       thread.scrollTop = thread.scrollHeight;
     });
   }
-  const WIDGET_NAMES = { clock: 'clock', 'world clock': 'clock', weather: 'weather', music: 'music', 'now playing': 'music', news: 'news', headlines: 'news', notes: 'notes', note: 'notes', 'to-do': 'todo', todo: 'todo', 'to do': 'todo', reminders: 'todo', reminder: 'todo', timer: 'timer', 'focus timer': 'timer', focus: 'timer', pomodoro: 'timer', calendar: 'month', month: 'month', today: 'today', recent: 'recent', 'recent files': 'recent', device: 'device', 'this device': 'device', task: 'task', 'current task': 'task' };
+  const WIDGET_NAMES = { video: 'video', 'video player': 'video', movie: 'video', player: 'video', clock: 'clock', 'world clock': 'clock', weather: 'weather', music: 'music', 'now playing': 'music', news: 'news', headlines: 'news', notes: 'notes', note: 'notes', 'to-do': 'todo', todo: 'todo', 'to do': 'todo', reminders: 'todo', reminder: 'todo', timer: 'timer', 'focus timer': 'timer', focus: 'timer', pomodoro: 'timer', calendar: 'month', month: 'month', today: 'today', recent: 'recent', 'recent files': 'recent', device: 'device', 'this device': 'device', task: 'task', 'current task': 'task' };
   const findKind = n => WIDGET_NAMES[n] || Object.keys(W_KINDS).find(k => W_KINDS[k].custom && W_KINDS[k].name.toLowerCase() === n);
 
   function stepPhysics(dt) {
     if (!isWide()) return false;
     let busy = false;
     const v = VISC[plasma.visc];
-    widgetEls.forEach(el => {
+    homeCards().forEach(el => {
       const ph = phys.get(el);
       if (v.stiff === 0 || reducedMotion()) { ph.x = ph.tx; ph.y = ph.ty; ph.vx = ph.vy = 0; }
       else {
@@ -5053,6 +5490,7 @@ Request: ${JSON.stringify(d)}`;
       if (taskLive && taskPct < 100) o.dataset.progress = (taskPct / 100).toFixed(2); else delete o.dataset.progress;
     });
     $$('.peek').forEach(p => { const l = $('.peek-line', p); if (l) l.textContent = peekLine(p._card); });
+    if (islandHook) islandHook();
     const label = taskLive && taskPct < 100 ? `Slides from my notes, ${taskPct} %` : '';
     $('#pipBtn').title = label ? 'Pip · ' + label : 'Pip';
     $('#pipBtn').setAttribute('aria-label', `Pip: ${PIP_STATES[pipNow][0]}${label ? '. ' + label : ''}. Open Pip`);
@@ -5209,7 +5647,7 @@ void main(){
     const cr = glCanvas.getBoundingClientRect();
     let n = 0, key = '';
     $$('[data-liquid]').forEach(el => {
-      if (n >= MAXR || el.offsetParent === null || el.classList.contains('stack-hidden') || el.classList.contains('in-pop')) return;
+      if (n >= MAXR || el.offsetParent === null || el.classList.contains('stack-hidden') || el.classList.contains('in-pop') || el.classList.contains('pinned')) return;
       let r = el.getBoundingClientRect();
       // a stack switching cards draws one surface at the height it has reached so far
       const sw = el.classList.contains('stack-top') && stackOf(el)?.swap;
@@ -5706,11 +6144,15 @@ Current prototype state: ${stateSummary()}`;
       if (was) surfaceIn($('#vcap'));
       return { you: $('#vYou'), pip: $('#vPip'), card: $('#vCard') };
     }
-    if ($('#vhud').hidden) { $('#vhud').hidden = false; surfaceIn($('#vhud'), -10); }
-    return { you: $('#hudYou'), pip: $('#hudPip'), card: $('#hudCard') };
+    islVoice(true);   // over your windows, Pip talks from the notch
+    return { you: $('#islYou'), pip: $('#islPip'), card: $('#islCard') };
   }
   function capDone(ms = 9000) {
     clearTimeout(capT);
+    if (isl.voice) {
+      capT = setTimeout(() => { if (voice.pending || voice.on) { capDone(4000); return; } islVoice(false); }, Math.min(ms, 6000));
+      return;
+    }
     capT = setTimeout(() => {
       if (voice.pending || voice.on) { capDone(4000); return; }
       const out = el => el.hidden ? null : anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6px) scale(0.98)' }], { duration: 320, easing: EASE.in, fill: 'forwards' });
@@ -5832,6 +6274,86 @@ Current prototype state: ${stateSummary()}`;
   });
   document.addEventListener('keyup', e => { if (e.code === 'Space' && voice.hold && voice.rec) { try { voice.rec.stop(); } catch {} } });
   syncVoiceUI();
+  /* ── The Pip notch ─────────────────────────────────────────────────
+     A black notch at the top centre of the screen, where Pip lives while you work in other apps.
+     It grows to show what's going on and shrinks back when it's done, on springs:
+       idle      the notch alone; click it to talk to Pip
+       compact   it widens with a live activity: Pip's task and its progress ring, music that's
+                 playing, or Pip working on something you asked in the Pip app
+       expanded  it drops down into a panel: talking to Pip over your windows (what you said,
+                 Pip's reply, review cards), or the details of an activity when you click it */
+  const isl = { el: $('#island'), mode: 'idle', voice: false, open: false, doneAt: 0, doneSeen: false, waveT: 0 };
+  const islMusic = () => { const m = W_KINDS.music.el; return m && widgetEls.includes(m) && m._playing?.() ? m : null; };
+  function islActivity() {
+    if (taskLive && taskPct < 100) return 'task';
+    if (isl.doneAt && Date.now() - isl.doneAt < 6000) return 'done';
+    if (islMusic()) return 'music';
+    if (!isl.voice && topVisible() && !['ready', 'resting', 'complete', 'cancelled'].includes(pipNow)) return 'pip';
+    return null;
+  }
+  function islSize() {
+    const el = isl.el, m = isl.mode;
+    if (m === 'expanded') {
+      el.style.width = Math.min(440, desk.clientWidth - 16) + 'px';
+      el.style.height = Math.max(64, Math.ceil($('.isl-body', el).scrollHeight)) + 'px';
+    } else { el.style.width = (m === 'compact' ? Math.min(340, desk.clientWidth - 16) : 190) + 'px'; el.style.height = ''; }
+  }
+  function islSync() {
+    if (!isl.el) return;
+    if (taskPct >= 100 && !isl.doneSeen) { isl.doneSeen = true; isl.doneAt = Date.now(); setTimeout(islSync, 6100); }
+    const act = islActivity(), el = isl.el, mus = islMusic();
+    // compact: one thing on the left, its state on the right
+    const L = $('.isl-l', el), R = $('.isl-r', el);
+    el.dataset.act = act || '';
+    if (act === 'music') { const tr = mus._track(); $('.isl-art', el).style.background = tr.g; $('.isl-txt', el).textContent = tr.t; }
+    else if (act === 'task') { $('.isl-txt', el).textContent = `Slides · ${taskPct} %`; $('.isl-ring circle:last-child', el).style.strokeDashoffset = (100 - taskPct).toFixed(1); }
+    else if (act === 'done') $('.isl-txt', el).textContent = 'Slides are ready';
+    else if (act === 'pip') $('.isl-txt', el).textContent = pipLabel || PIP_STATES[pipNow][0];
+    L.dataset.show = act === 'music' ? 'art' : 'orb';
+    // expanded: the conversation, and the details of what's running
+    $('#islHeadState').textContent = isl.voice ? (voice.on ? 'Listening' : PIP_STATES[pipNow][0]) : act === 'music' ? 'Now playing' : act ? 'Pip' : 'Pip';
+    $('#islHeadLabel').textContent = isl.voice ? (voice.on ? 'on this device' : pipLabel || '') : '';
+    $('.isl-voice', el).hidden = !isl.voice;
+    $('.isl-task', el).hidden = !(taskLive && taskPct < 100) && act !== 'done';
+    if (!$('.isl-task', el).hidden) {
+      $('#islTaskLine').textContent = act === 'done' ? 'Done. Saved to Documents.' : $('#taskLine').textContent;
+      $('#islTaskBar').style.width = taskPct + '%'; $('#islTaskStop').hidden = act === 'done';
+    }
+    $('.isl-music', el).hidden = !mus;
+    if (mus) { const tr = mus._track(); $('#islTrack').textContent = tr.t; $('#islArtist').textContent = tr.a; $('.isl-music .isl-art', el).style.background = tr.g; }
+    const mode = isl.voice || (isl.open && act) ? 'expanded' : act ? 'compact' : 'idle';
+    if (!act && !isl.voice) isl.open = false;
+    if (mode !== isl.mode) {
+      isl.mode = mode; el.dataset.mode = mode;
+      $('#islHit').setAttribute('aria-label', mode === 'idle' ? 'Pip. Click to talk' : mode === 'compact' ? 'Show what’s running' : 'Pip');
+    }
+    islSize();
+  }
+  islandHook = islSync;
+  function islVoice(on) {
+    isl.voice = on;
+    if (on) { $('#islYou').textContent = ''; $('#islPip').textContent = ''; $('#islCard').replaceChildren(); }
+    islSync();
+  }
+  // the conversation's text grows the panel as it arrives
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (isl.mode === 'expanded') islSize(); }).observe($('.isl-body', isl.el));
+  // a voice wave while you talk
+  setInterval(() => {
+    const on = isl.voice && voice.on;
+    $$('#islWave i').forEach((b, i) => { b.style.transform = `scaleY(${on ? (waveTalk ? 0.25 + Math.random() * 0.75 : 0.18 + 0.08 * Math.sin(Date.now() / 200 + i)) : 0.12})`; });
+  }, 90);
+  setInterval(islSync, 1000);   // task progress and music
+  $('#islHit').addEventListener('click', () => {
+    if (isl.mode === 'idle') startListening();
+    else if (isl.mode === 'compact') { isl.open = true; islSync(); }
+  });
+  $('#islClose').addEventListener('click', () => { if (isl.voice) { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); isl.voice = false; } isl.open = false; islSync(); });
+  $('#islTaskStop').addEventListener('click', () => $('#taskStop').click());
+  $('#islPlay').addEventListener('click', () => { const m = islMusic(); if (m) $('[data-m="play"]', m).click(); islSync(); });
+  $('#islNext').addEventListener('click', () => { const m = islMusic(); if (m) $('[data-m="next"]', m).click(); islSync(); });
+  document.addEventListener('pointerdown', e => { if (isl.open && !isl.voice && !e.target.closest('#island, #wMenu, #wSub')) { isl.open = false; islSync(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && isl.mode === 'expanded' && !voice.on) $('#islClose').click(); });
+  islSync();
 
   function showHome() {
     Object.keys(wins).forEach(k => { if (!wins[k].el.hidden) { wins[k].el.hidden = true; wins[k].min = true; } });

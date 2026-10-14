@@ -61,7 +61,10 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Stack: choose a card in the open stack | One motion: the chosen card travels to the top of the stack while the others tuck in behind it; nothing plays twice |
 | Widget added | It slides up into its column on the card spring and light crosses it |
 | Pages (Settings, Files) | The new page slides 18 px in from the side you travelled toward; back and up come from the left |
-| Pip's caption and voice panel | Rise 10 px and scale from 97 %; Pip's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
+| The Pip notch | Grows on the detent spring (460–560 ms) and its contents fade in with a focus pull after the shape starts moving; shrinks contents-first, then shape, on the precise spring. See [09](09-shell.md#the-pip-notch) |
+| Floating a widget | It lifts off home on a detent and catches the light; it follows the pointer exactly when dragged and settles on a detent when dropped |
+| Right-click menu | Scales up from where you clicked (from below, for dock menus) on the precise spring (360 ms); rows fade in 12 ms apart; submenus open after 140 ms of hover |
+| Pip's caption | Rise 10 px and scale from 97 %; Pip's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
 | Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; the Turbine and the Hologram instead ease their speed and light into the new state over about 0.4 s, like a machine spinning up. The orb never jumps |
