@@ -139,7 +139,7 @@ Dropped cards settle on the 24 px grid.
 **Tension.** The top card of a stack holds on when you pull it. It follows the pointer
 reluctantly (it moves about 0.8 × as far, less the further it goes) while the water left in its
 slot shrinks and a neck joins the two, thinning as they part. Past **150 px** the neck breaks:
-the card lets go of the stack with a small wobble and follows the pointer normally. Let go before
+the card lets go of the stack with one small recoil and follows the pointer normally; the cards behind lean after it and recoil when it leaves. Let go before
 that and it springs back into the stack with nothing changed. A click is never a pull.
 
 **Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark

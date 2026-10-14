@@ -20,10 +20,13 @@ touch density.
 - Loading: label stays, a small Pip "thinking" glyph replaces the leading icon; width doesn't change.
 - Dialog button order: secondary left, **primary right**; Enter = primary, Esc = cancel. The
   destructive button is never the default Enter action.
+- Tension: pressed, a button sinks to 97 %; held and pulled it leans after the pointer, rigidly,
+  and past 100 px it lets go and the press is cancelled; released, it settles on the recoil spring.
+  Its label never stretches. See [08 · Motion › Tension](08-motion.md#tension).
 
 ## Toggle (switch)
 - Track 40 × 22 px, thumb 18 px clay. On = accent track + thumb right; off = `--c-surface-3`
-  track with `--c-line-strong` outline.
+  track with `--c-line-strong` outline. The thumb stretches to 24 px mid-travel, like a drop.
 - Always paired with a text label; state changes apply immediately (no Save button).
 
 ## Checkbox and radio
@@ -38,8 +41,10 @@ touch density.
 - Clear (✕) button appears when there's text; search fields also show the shortcut hint.
 
 ## Slider
-- 4 px track, 20 px clay thumb, filled part in accent. Value tooltip while dragging.
-  Arrow keys step 1 %, Page Up/Down 10 %.
+- 6 px track, 20 px thumb (white, silver in dark, with a `--c-line-strong` edge), filled part in
+  accent. Value tooltip while dragging. Arrow keys step 1 %, Page Up/Down 10 %.
+- The thumb stretches with the speed it's dragged at. Pulled up or down off the track, the track
+  bends after it like a membrane and springs flat past 100 px; the value only follows along it.
 
 ## Menus and context menus
 - Glass, `--radius-md`, 4 px inner padding, rows 32 px (pointer) / 44 px (touch).
@@ -50,10 +55,13 @@ touch density.
   (Open, Cut, Copy, Paste, Rename, Delete), in Windows order. What each place offers is listed in
   [09 · Right-click menus](09-shell.md#right-click-menus). Destructive rows turn red on hover;
   options that are on carry a tick; a menu from the dock opens upward.
+- A menu opens 8 px from the pointer and buds out of that point; a submenu buds from its row;
+  choosing an item draws the menu back into the point.
 
 ## Tabs and segmented control
 - Segmented control (2–5 options): clay track (`--c-surface-2` + pressed shadow), selected
-  segment = `--c-surface` clay-1 pill.
+  segment = `--c-surface` clay-1 pill. The pill is one drop that flows to a new option: it reaches
+  across both, then lets go of the old one (560 ms).
 - Tabs (page-level): text tabs with a 3 px accent underline that slides (snappy spring).
 
 ## Lists and tables

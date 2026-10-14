@@ -95,11 +95,24 @@
   --ease-detent: linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985,
     1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002,
     1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1);
-  /* water: damping ratio 0.36, overshoots about 30 %; only a control let go after being pulled (tension) */
-  --ease-water: linear(0, 0.028, 0.103, 0.215, 0.351, 0.5, 0.652, 0.799, 0.932, 1.048, 1.143,
-    1.215, 1.264, 1.291, 1.297, 1.287, 1.263, 1.229, 1.188, 1.143, 1.098, 1.055, 1.015, 0.982,
-    0.954, 0.934, 0.92, 0.913, 0.912, 0.915, 0.923, 0.933, 0.946, 0.959, 0.973, 0.985, 0.997,
-    1.007, 1.015, 1.02, 1.024, 1.026, 1.026, 1.025, 1);
+  /* recoil: damping ratio 0.72, overshoots 3.7 %; tension only: a control, a neck or a card let go */
+  --ease-recoil: linear(0, 0.026, 0.093, 0.185, 0.29, 0.399, 0.506, 0.606, 0.695, 0.774, 0.84,
+    0.895, 0.939, 0.973, 0.998, 1.016, 1.028, 1.035, 1.038, 1.038, 1.037, 1.034, 1.03, 1.026,
+    1.022, 1.018, 1.014, 1.011, 1.008, 1.005, 1.003, 1.002, 1.001, 1, 0.999, 0.999, 0.999, 0.999,
+    0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 1);
+  /* membrane: damping ratio 0.64; what leans after a pull (cards behind, the Bin bulging) */
+  --ease-membrane: linear(0, 0.027, 0.095, 0.191, 0.302, 0.418, 0.533, 0.641, 0.738, 0.822, 0.893,
+    0.95, 0.995, 1.027, 1.05, 1.064, 1.071, 1.073, 1.07, 1.065, 1.058, 1.05, 1.041, 1.033, 1.025,
+    1.018, 1.012, 1.007, 1.003, 1, 0.998, 0.996, 0.995, 0.995, 0.995, 0.995, 0.995, 0.996, 0.996,
+    0.997, 0.998, 0.998, 0.999, 0.999, 1);
+
+  /* ── Tension (guide/08-motion.md › Tension) ─────────────── */
+  --tension-snap: 150px;     /* a card leaves its stack */
+  --tension-snap-sm: 100px;  /* files, buttons, chips, toggles, slider membranes */
+  --neck-max: 0.7;           /* × the short side: the thickest a neck gets */
+  --neck-min: 8px;           /* below this the surface can't hold; a hairline thread takes over */
+  --neck-falloff: 0.8;       /* thickness × (1 − d / snap) ^ falloff */
+  --merge-gap: 40px;         /* plasma clay's fusing distance */
 
   /* ── Color: light ─────────────────────────────────────── */
   color-scheme: light;
@@ -324,7 +337,8 @@
   --dur-base: 120ms; /* cross-fades only, no movement */
   --dur-slow: 160ms;
   --ease-spring: var(--ease-standard);
-  --ease-water: var(--ease-standard);
+  --ease-recoil: var(--ease-standard);
+  --ease-membrane: var(--ease-standard);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -333,7 +347,8 @@
     --dur-base: 120ms;
     --dur-slow: 160ms;
     --ease-spring: var(--ease-standard);
-    --ease-water: var(--ease-standard);
+    --ease-recoil: var(--ease-standard);
+    --ease-membrane: var(--ease-standard);
   }
 }
 

@@ -47,6 +47,7 @@ tokens = {
         for k, v in re.findall(r"--((?:control|target|titlebar|menubar|dock|icon|appicon)-[a-z-]*|measure):\s*([^;]+);", root)
     },
     "liquid": {k: {"$type": "number" if "px" not in v else "dimension", "$value": v.split("/*")[0].strip()} for k, v in re.findall(r"--liquid-([a-z-]+):\s*([^;]+);", root)},
+    "tension": {k: {"$type": "dimension" if "px" in v else "number", "$value": v.split("/*")[0].strip()} for k, v in re.findall(r"--((?:tension|neck|merge)-[a-z-]+):\s*([^;]+);", root)},
     "duration": vals("dur", "duration"),
     "easing": {k: {"$type": "cubicBezier", "$value": v.strip()} for k, v in re.findall(r"--ease-([a-z-]+):\s*(cubic-bezier\([^)]*\))", root)},
     "spring": {
@@ -56,7 +57,8 @@ tokens = {
         "viscosity-water": {"$type": "spring", "$value": {"stiffness": 320, "damping": 13, "mass": 1}, "$description": "home cards, blend 54 px"},
         "precise": {"$type": "spring", "$value": {"stiffness": 177, "damping": 23, "mass": 1}, "$description": "damping ratio 0.86: windows, stacks, pages; the default"},
         "detent": {"$type": "spring", "$value": {"stiffness": 282, "damping": 23, "mass": 1}, "$description": "damping ratio 0.68: a card landing in a stack; nothing else"},
-        "water": {"$type": "spring", "$value": {"stiffness": 300, "damping": 12.5, "mass": 1}, "$description": "damping ratio 0.36: tension, a control let go after being pulled or pressed; nothing else"},
+        "recoil": {"$type": "spring", "$value": {"stiffness": 300, "damping": 25, "mass": 1}, "$description": "damping ratio 0.72, one recoil of 3.7 %: tension, something let go (a control, a neck, a card)"},
+        "membrane": {"$type": "spring", "$value": {"stiffness": 120, "damping": 14, "mass": 1}, "$description": "damping ratio 0.64: what leans after a pull (cards behind a stack, the Bin bulging)"},
         "viscosity-gel": {"$type": "spring", "$value": {"stiffness": 260, "damping": 27, "mass": 1}, "$description": "home cards (default), damping ratio 0.84, blend 40 px"},
         "viscosity-honey": {"$type": "spring", "$value": {"stiffness": 70, "damping": 17, "mass": 1}, "$description": "home cards, blend 32 px"},
     },

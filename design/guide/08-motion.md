@@ -19,7 +19,7 @@ yellow spreads through the interface. SIX borrows the feel, not the look or the 
 | Two display planes give real depth; needles move with the wheel | **Continuity.** Things move from where they are: a stack opens in place with its cards sliding out from behind the top card, a window grows out of its dock icon and folds back into it, a menu unfolds from what opened it, a page slides in the direction you travelled |
 | The start-up ceremony: colour spreads through the interface | **Light as feedback.** A band of light crosses a card when it lands or is added; unlocking sends a ring of accent light out from the password field; Pip's words arrive with a short focus pull, like a display waking |
 | Glass and aluminium, little decoration | **Restraint.** One thing moves big at a time; no confetti, no shaking, no rubber-ball bounces anywhere in the system |
-| (SIX's own) Water held in a hand | **Tension.** Things you touch behave like water: a control squashes when pressed and stretches toward the pointer when pulled; past a point it lets go and springs back with one small wobble. That wobble, the **water** spring, is the only one in the system, and it only follows a release |
+| (SIX's own) Things that hold on to each other | **Tension.** Things that belong together stay joined by a neck that thins as they part, and letting go is the commit. A release settles with one **recoil** under 4 %; nothing jiggles on its own. See [Tension](#tension) |
 
 Sources: [Dezeen · Ferrari Luce interior by LoveFrom](https://www.dezeen.com/?p=2296493),
 [Domus · Jony Ive designed Ferrari's first electric car](https://www.domusweb.it/en/news/gallery/2026/02/10/jony-ive-Ferrari-luce-electric-car-design-apple.html),
@@ -42,10 +42,11 @@ Sources: [Dezeen · Ferrari Luce interior by LoveFrom](https://www.dezeen.com/?p
 | `--ease-in-out` | `cubic-bezier(.65,0,.35,1)` | Minimising into the dock; light sweeps |
 | `--ease-spring` | `linear()` spring, damping ratio 0.86 | **Precise**: everything that moves position or size |
 | `--ease-detent` | `linear()` spring, damping ratio 0.68 | **Detent**: a card landing in a stack, nothing else |
-| `--ease-water` | `linear()` spring, damping ratio 0.36 (overshoots about 30 %) | **Water**: a control let go after a press or a pull (tension), nothing else |
+| `--ease-recoil` | `linear()` spring, damping ratio 0.72 (one recoil of 3.7 %) | **Recoil**: tension only; something let go (a control, a neck, a card) |
+| `--ease-membrane` | `linear()` spring, damping ratio 0.64 | **Membrane**: what leans after a pull (cards behind a stack, the Bin bulging) |
 
 Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 23) by default,
-**detent** (282 / 23) for landings, **water** (300 / 12.5) for tension, and the viscosity springs for home cards (gel, the default, is
+**detent** (282 / 23) for landings, **recoil** (300 / 25) and **membrane** (120 / 14) for tension, and the viscosity springs for home cards (gel, the default, is
 260 / 27: damping ratio 0.84, so dragged cards settle without wobble).
 
 ## Choreography
@@ -70,7 +71,7 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
 | Pip changes state | The dotted orb crossfades from the old look into the new one over 420 ms; Bloom and Halo instead ease their colour, speed and light into the new state over about 0.5 s. The orb never jumps |
-| Pip's personality | Bloom and Halo turn toward the pointer (0.35 s lag); while idle, Pip blinks (a 0.2 s squash) every 4.5–10 s; a poke squashes it and it springs back; dragged or flung, it stretches the way it moves and wobbles to a stop like a drop of water. All off under Reduce motion |
+| Pip's personality | Bloom, Halo and Ripple turn toward the pointer (0.35 s lag) and lean in when it comes close; they glance at a field you type into; while idle Pip blinks (a 0.2 s squash) every 4.5–10 s; a poke squashes it; dragged or flung it stretches the way it moves. It hops on Complete (520 ms, landing with a squash), shakes its head on Failed (700 ms), nods when it asks (900 ms) and hops hello when it appears. After 40 s with no input it gets drowsy (dims, breathes slower, looks down) and wakes with a small hop. All off under Reduce motion |
 | Moving Pip | Pip follows the pointer exactly, lifted 4 %; on release it lands on a detent; the greeting and examples slide to close (or open) the space in the middle (520 ms). *Move back to the middle* glides it home (620 ms); hiding it fades and shrinks it (220 ms, ease-in) |
 | Unlock | A ring of accent light spreads from the password field across the screen while the lock lifts away (scales to 104 %, blurs and fades); light then crosses each widget in turn |
 | System update applied | The update screen fades and the same ring spreads from the centre |
@@ -79,8 +80,8 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Toggle | Thumb slides on the precise spring and stretches to 24 px mid-travel, like a drop; tile fill crossfades |
 | Segmented control | One drop of selection flows from the old option to the new: it reaches across both, then lets go of the old one (560 ms) |
 | Slider | The thumb stretches with the speed it is dragged at and relaxes when it stops |
-| Press (tension) | A button squashes to 104 × 92 % (140 ms). Held and pulled, it leans and stretches toward the pointer; past 64 px it lets go (the press is cancelled). On release it springs back on the water spring (720 ms). Not for menu rows, the dock or large surfaces |
-| Stack pull (tension) | The top card follows reluctantly, joined to its slot by a thinning neck of water; past 150 px it lets go with a small wobble; released before that it springs back into the stack. See [05](05-materials.md#5-plasma-clay-the-homes-living-surfaces) |
+| Press (tension) | A button sinks to 97 % (140 ms). Held and pulled, it leans after the pointer, rigidly (its label never stretches); past 100 px it lets go and the press is cancelled. On release it settles on the recoil spring (620 ms). Not for menu rows, the dock or large surfaces |
+| Stack pull (tension) | The top card follows reluctantly, joined to its slot by a thinning neck; the cards behind lean after it. Past 150 px it lets go and the cards behind recoil once; released before that it springs back into the stack. See [Tension](#tension) |
 | Notification | Slides in 16 px, stays, slides out; never bounces |
 | Home cards dragged | Follow the pointer on a spring set by viscosity; fuse with cards closer than 40 px; settle on the 24 px grid |
 
@@ -112,5 +113,43 @@ When *Reduce motion* is on (system setting or `prefers-reduced-motion`):
 - Wallpaper becomes a still image; Pip changes state without a crossfade and draws a static shape;
   home cards jump to place.
 - Progress indicators still move (they carry information) but without decorative easing.
-- Tension keeps its rules (a pulled stack card still lets go only past 150 px) but nothing
-  squashes, stretches or wobbles; Pip neither blinks nor follows the pointer.
+- Tension keeps its rules (a pulled stack card still lets go only past 150 px) but necks are drawn
+  still or not at all, a snap is instant, and nothing squashes or recoils; Pip neither blinks,
+  hops nor follows the pointer.
+
+## Tension
+
+Where two things belong together, SIX shows the link, and the moment it breaks, as a surface that
+stretches. Six places use it.
+
+| Where | What happens | Plain alternative |
+|---|---|---|
+| **Home · stacks** | The top card stays joined to its stack by a neck that thins as you pull; the cards behind lean after it on the membrane spring. Past 150 px it lets go and the cards behind recoil once: that release is the moment it leaves the stack. Let go sooner and it springs back, nothing changed | *Unstack*, *Show all*, Alt + arrows |
+| **Pip · the notch** | When Pip opens, snaps or closes a window, or adds or removes a widget, the notch (or Pip's menu-bar orb when the notch isn't showing) drops a black tendril to its title bar and holds on while it moves, so you see what Pip is touching. Then it thins in the middle, lets go, and the halves draw back into the notch and into the window. One tendril at a time | The reply names every action |
+| **Control Center** | Wi-Fi and Bluetooth are both radios, so when both are on a bridge of the same graphite (silver in dark) grows between them and they read as one body. Airplane mode turns both off: the bridge thins, snaps and the tiles recoil apart; turning it off brings back what was on. Pull a slider's thumb off its track and the track bends after it like a membrane; past 100 px it lets go and springs flat. The value only ever follows along the track | The tiles and sliders themselves |
+| **The Pip app** | Your message buds off the send button and rises into place (revealed, never scaled). While Pip works a drop leaves your message and swells into Pip's answer, which hangs from the question by a hairline while it's the latest exchange. Ask again and the old hairline parts in the middle and each half draws back | — |
+| **Files and the Bin** | A dragged file stays tethered to its row and follows reluctantly until 100 px; let go sooner and it springs back. Past that it's free, and near the dock's Bin the Bin bulges toward it; drop it in and it's swallowed with a gulp (with Undo). *Put back* buds the file out of the Bin and carries it to its folder | Delete, the Move to Bin button, the row's menu |
+| **Menus** | A right-click menu opens 8 px from the pointer and buds out of that point, joined to it until it settles; a submenu buds from its row. Choosing an item draws the menu back into the point it came from | Shift + F10, the keyboard |
+
+**Rules**
+
+1. **Tension means a real relationship.** A neck only joins things that belong together (a card and
+   its stack, Pip and what it's changing, an answer and its question). Nothing stretches for decoration.
+2. **Necks thin with distance, then snap.** Thickness × (1 − d / snap) ^ 0.8; at the snap distance
+   it lets go. The snap is the commit: before it, letting go cancels.
+3. **Content never stretches.** Text, icons and images stay rigid; only surfaces bend. Buttons lean,
+   bubbles are revealed, menus scale uniformly.
+4. **Springs, not wobble.** A release settles with one recoil under 4 %; nothing jiggles on its own.
+5. **One tether per thing**, and budding goes at most two levels deep (menu, submenu).
+6. **Every stretch has a plain alternative**, listed above. Under Reduce motion necks are drawn still
+   (or not at all) and a snap is instant.
+
+**Material.** Necks and tendrils are solid, made of what they join: the notch's black, a tile's
+accent, a menu's surface, a bubble's fill. They are drawn on one overlay above everything, so a
+tendril can cross from the notch to any window.
+
+**Tokens** (`tokens.css`): `--tension-snap` 150 px (cards), `--tension-snap-sm` 100 px (files,
+buttons, chips, toggles, sliders), `--neck-max` 0.7 × the short side, `--neck-min` 8 px (below it a
+hairline takes over), `--neck-falloff` 0.8, `--merge-gap` 40 px, `--ease-recoil`, `--ease-membrane`.
+The studies these come from are live in [`concepts/tension.html`](../concepts/tension.html).
+

@@ -341,7 +341,10 @@ kbd { font: 600 11px/1 var(--font-ui); padding: 3px 6px; border-radius: 6px; bac
 
 #qs { right: 8px; width: min(380px, calc(100% - 16px)); padding: 16px; display: grid; gap: 14px; transform-origin: top right; }
 #sysMenu { transform-origin: top left; }
-.qs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.qs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; position: relative; isolation: isolate; }
+/* related controls fuse: Wi-Fi and Bluetooth are both radios, so when both are on they are one body */
+.qs-fuse { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: -1; }
+.qs-fuse path { fill: var(--c-accent); }
 .qtile {
   border: 0; border-radius: var(--radius-xl); background: var(--c-surface-2); color: var(--c-text);
   box-shadow: var(--clay-2); padding: 12px; display: grid; gap: 10px; text-align: left; min-height: 84px;
@@ -374,6 +377,23 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--c-surface); box-shadow: var(--clay-1), 0 1px 2px rgba(0,0,0,.2); transition: transform var(--dur-base) var(--ease-spring); }
 .sw:checked { background: var(--c-accent); box-shadow: none; }
 .sw:checked::after { transform: translateX(18px); }
+#tensionLayer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 2050; pointer-events: none; overflow: visible; }
+#tensionLayer path { fill: var(--c-surface); }
+#tensionLayer .mem-off { fill: var(--c-surface-3); }
+.fghost { position: fixed; z-index: 2045; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: 12px; background: var(--c-surface-2); color: var(--c-text); font: var(--text-body-sm); box-shadow: var(--shadow-3); pointer-events: none; white-space: nowrap; max-width: 260px; }
+.fghost span { overflow: hidden; text-overflow: ellipsis; }
+.fghost.near { box-shadow: var(--shadow-3), 0 0 0 2px var(--c-danger); }
+.frow.fheld { opacity: 0.45; }
+body.fdragging, body.fdragging * { user-select: none !important; cursor: grabbing !important; }
+#tensionLayer .tendril { fill: #050506; stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
+#tensionLayer .mem-on { fill: var(--c-accent); }
+#tensionLayer .mem-thumb { fill: #fff; stroke: var(--c-line-strong); stroke-width: 1.5; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
+:root[data-theme="dark"] #tensionLayer .mem-thumb { fill: #e8eaee; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #tensionLayer .mem-thumb { fill: #e8eaee; } }
+input[type="range"].bending::-webkit-slider-runnable-track { background: transparent; box-shadow: none; }
+input[type="range"].bending::-webkit-slider-thumb { opacity: 0; }
+input[type="range"].bending::-moz-range-track, input[type="range"].bending::-moz-range-progress { background: transparent; }
+input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 /* tension (see the Tension module in the script): switches stretch as they travel */
 .sw.sw-go:checked::after { animation: sw-drop-r 440ms var(--ease-out); }
 .sw.sw-go:not(:checked)::after { animation: sw-drop-l 440ms var(--ease-out); }
@@ -414,7 +434,7 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 /* Pip can live anywhere on home: drag it out of the middle, and it stays where you put it */
 .pip-spot { display: grid; justify-items: center; gap: 6px; touch-action: none; }
 .pip-spot.floating { position: absolute; z-index: 22; }
-.pip-spot.floating .pip { --size: 190px; }
+.pip-spot.floating .pip { --size: 230px; }
 .pip-spot.lift .pip { transform: scale(1.04); cursor: grabbing; }
 .pip-spot[hidden] { display: none; }
 #home.stack .pip-spot.floating { position: static; }
@@ -428,7 +448,13 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 .msg { display: grid; gap: 6px; max-width: 80%; flex: none; }
 .msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .msg.from-user { align-self: flex-end; padding: 10px 14px; border-radius: 18px 18px 6px 18px; background: var(--c-accent); color: var(--c-text-on-accent); box-shadow: var(--clay-1); }
-.msg.from-pip { align-self: stretch; max-width: 100%; }
+.msg.from-pip { align-self: stretch; max-width: 100%; position: relative; padding: 10px 14px 12px; border-radius: 6px 18px 18px 18px; background: var(--c-surface-2); }
+/* the hairline that links the latest answer to the question that raised it */
+.qa-link { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.qa-link path { fill: none; stroke: var(--c-line-strong); stroke-width: 1.2; stroke-linecap: round; }
+.qa-link circle { fill: var(--c-line-strong); }
+#tensionLayer .neck.accent { fill: var(--c-accent); }
+#tensionLayer .neck.well { fill: var(--c-surface-2); }
 .msg .who { font: 600 11px/14px var(--font-mono); letter-spacing: 0.18em; color: var(--pip-line); display: flex; align-items: center; gap: 8px; }
 .msg .txt.wait { color: var(--c-text-3); }
 .acts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -759,7 +785,7 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 :root { --pip-line: #9a3c1c; --pip-deep: #e0402a; --pip-glow: #ff9a3c; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --pip-line: #ffa064; } }
 :root[data-theme="dark"] { --pip-line: #ffa064; }
-.pip { --size: 260px; position: relative; width: var(--size); height: var(--size); flex: none; perspective: 900px; transition: width var(--dur-slow) var(--ease-out), height var(--dur-slow) var(--ease-out), opacity var(--dur-slow), transform var(--dur-slow) var(--ease-out); }
+.pip { --size: 330px; position: relative; width: var(--size); height: var(--size); flex: none; perspective: 900px; transition: width var(--dur-slow) var(--ease-out), height var(--dur-slow) var(--ease-out), opacity var(--dur-slow), transform var(--dur-slow) var(--ease-out); }
 .center[data-chat="on"] .pip { --size: 168px; }
 .pip .dotorb.orb-hi, .pip-card .dotorb.orb-hi { width: 100%; height: 100%; color: var(--c-text); }
 
@@ -947,7 +973,7 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
   .win { order: -1; }
   #home.stack { height: auto; overflow: visible; padding: 4px 0 16px; }
   .greet { font: var(--text-title-lg); }
-  .pip { --size: 200px; }
+  .pip { --size: 240px; }
   .win { position: relative !important; left: auto !important; top: auto !important; width: auto !important; height: 560px !important; min-width: 0; flex: none; }
   .win.edge { border-radius: var(--radius-lg); }
   .grip, .cap.max { display: none; }
@@ -1008,7 +1034,7 @@ button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6p
 .mb-micbtn[data-mode="wake"]::after { content: ""; position: absolute; right: 3px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--c-success); }
 .mb-micbtn[aria-pressed="true"] { background: var(--c-warning); color: var(--c-surface); border-radius: 999px; }
 .mb-micbtn[aria-pressed="true"]::after { display: none; }
-.qtile.wide { grid-column: 1 / -1; }
+.qtile.wide { grid-column: span 2; }
 #vhud { position: absolute; z-index: 965; top: calc(var(--menubar-h) + 10px); right: 12px; width: min(380px, calc(100% - 24px)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
 #vhud[hidden] { display: none; }
 #vhud > .dotorb { width: 40px; height: 40px; flex: none; color: var(--c-text); }
@@ -1222,6 +1248,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     <symbol id="i-wifi" viewBox="0 0 256 256"><path d="M140,204a12,12,0,1,1-12-12A12,12,0,0,1,140,204ZM237.08,87A172,172,0,0,0,18.92,87,8,8,0,0,0,29.08,99.37a156,156,0,0,1,197.84,0A8,8,0,0,0,237.08,87ZM205,122.77a124,124,0,0,0-153.94,0A8,8,0,0,0,61,135.31a108,108,0,0,1,134.06,0,8,8,0,0,0,11.24-1.3A8,8,0,0,0,205,122.77Zm-32.26,35.76a76.05,76.05,0,0,0-89.42,0,8,8,0,0,0,9.42,12.94,60,60,0,0,1,70.58,0,8,8,0,1,0,9.42-12.94Z"/></symbol>
     <symbol id="i-volume" viewBox="0 0 256 256"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
     <symbol id="i-battery" viewBox="0 0 256 256"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM144,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm-40,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM64,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm192,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 256 256"><path d="M235.58,128.84,160,91.06V48a32,32,0,0,0-64,0V91.06L20.42,128.84A8,8,0,0,0,16,136v32a8,8,0,0,0,9.57,7.84L96,161.76v18.93L82.34,194.34A8,8,0,0,0,80,200v32a8,8,0,0,0,11,7.43l37-14.81,37,14.81A8,8,0,0,0,176,232V200a8,8,0,0,0-2.34-5.66L160,180.69V161.76l70.43,14.08A8,8,0,0,0,240,168V136A8,8,0,0,0,235.58,128.84ZM224,158.24l-70.43-14.08A8,8,0,0,0,144,152v32a8,8,0,0,0,2.34,5.66L160,203.31v16.87l-29-11.61a8,8,0,0,0-5.94,0L96,220.18V203.31l13.66-13.65A8,8,0,0,0,112,184V152a8,8,0,0,0-9.57-7.84L32,158.24v-17.3l75.58-37.78A8,8,0,0,0,112,96V48a16,16,0,0,1,32,0V96a8,8,0,0,0,4.42,7.16L224,140.94Z"/></symbol>
     <symbol id="i-bt" viewBox="0 0 256 256"><path d="M196.8,169.6,141.33,128,196.8,86.4a8,8,0,0,0,0-12.8l-64-48A8,8,0,0,0,120,32v80L68.8,73.6a8,8,0,0,0-9.6,12.8L114.67,128,59.2,169.6a8,8,0,1,0,9.6,12.8L120,144v80a8,8,0,0,0,12.8,6.4l64-48a8,8,0,0,0,0-12.8ZM136,48l42.67,32L136,112Zm0,160V144l42.67,32Z"/></symbol>
     <symbol id="i-moon" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"/></symbol>
     <symbol id="i-sun" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></symbol>
@@ -1640,19 +1667,25 @@ button.cal-cell:hover { background: var(--c-surface-3); }
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
           <h2>Pip lives on the home screen</h2>
-          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has three looks (Settings › Pip &amp; voice › Look): Bloom, the default; Halo; and the dotted sphere. Every state moves Pip's colour differently, never its shape. Pick one to set Pip everywhere.</p>
-          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="dots" aria-pressed="false">Dotted</button></div>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has four looks (Settings › Pip &amp; voice › Look): Bloom, the default; Halo; Ripple; and the dotted sphere. Every state moves Pip's colour differently, never its shape. Pick one to set Pip everywhere.</p>
+          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div>
           <h3>Bloom</h3>
           <p>A soft ball of warm colour: orange and red flowing over violet, with a pink haze lighting the air around it and a fine film grain, so it reads as a material and not a gradient. It is shaded as a matte ball, lit from the side Pip is looking at, and the only colour in an otherwise graphite and silver system. Thinking stirs it and sends a spark across; listening ripples it; working fills it like a glass of water as the task progresses; Complete warms it green once; Failed cools it red.</p>
           <div class="pips" id="pipStates"></div>
           <h3>Halo</h3>
           <p>A ring of cold light turning in the dark, brightest at the top and bottom where you see it edge-on, with long-exposure streaks in the light. Working lights the ring round as the task progresses; searching and waiting send a bright knot along it. On a light page it sits in a small dark pool, so the light can be seen.</p>
           <div class="pips" id="haloStates"></div>
+          <h3>Ripple</h3>
+          <p>A terraced pool seen from above, from the teal rings it is modelled on: steps of colour falling to a dark centre, each lip lit on the side toward the light and shading the step below. The deeper rings shift further as Pip looks around, so it reads in depth, and the rings flow slowly outward like ripples. Listening sends waves through it; thinking winds the rings into a spiral; working fills it from the centre out.</p>
+          <div class="pips" id="rippleStates"></div>
           <h3>Personality</h3>
           <ul class="principles">
             <li><span class="n">1</span><div><b>Pip looks at you.</b> <span>The light on Bloom and the tilt of Halo turn toward the pointer.</span></div></li>
             <li><span class="n">2</span><div><b>Pip blinks.</b> <span>While idle, Pip squashes for a moment every few seconds, then springs back.</span></div></li>
             <li><span class="n">3</span><div><b>Pip is water.</b> <span>Poke it and it squashes; drag it across home and it stretches the way it's moving and wobbles to a stop.</span></div></li>
+            <li><span class="n">4</span><div><b>Pip reacts.</b> <span>It hops when a task completes, shakes its head when something fails, nods when it asks you something, and says hello with a hop when it first appears.</span></div></li>
+            <li><span class="n">5</span><div><b>Pip is curious.</b> <span>Bring the pointer close and it leans in, looks harder and brightens; start typing and it glances at the field.</span></div></li>
+            <li><span class="n">6</span><div><b>Pip gets drowsy.</b> <span>Left alone on home for a while it dims, breathes slower and looks down; move the mouse and it wakes with a little hop.</span></div></li>
           </ul>
           <h3>The dotted look</h3>
           <p>The third look, and the orb in the gallery below: a sphere of dots whose light moves differently in each state, so it reads at 18 px and in grayscale.</p>
@@ -1892,7 +1925,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
-              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="dots" aria-pressed="false">Dotted</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div></div>
               <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
@@ -2150,6 +2183,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     <div class="qs-grid">
       <button class="qtile" aria-pressed="true" data-qs="wifi"><svg class="i"><use href="#i-wifi"/></svg><div><b>Wi-Fi</b><small data-on="Home-5G" data-off="Off">Home-5G</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="bt"><svg class="i"><use href="#i-bt"/></svg><div><b>Bluetooth</b><small data-on="On" data-off="Off">Off</small></div></button>
+      <button class="qtile" aria-pressed="false" data-qs="air"><svg class="i"><use href="#i-plane"/></svg><div><b>Airplane mode</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="night"><svg class="i"><use href="#i-moon"/></svg><div><b>Night light</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="dark"><svg class="i"><use href="#i-sun"/></svg><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="touch"><svg class="i"><use href="#i-hand"/></svg><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
@@ -2279,24 +2313,30 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   // move focus for keyboard users only, so a mouse click never leaves a focus ring behind
   let kbdNav = false;
   addEventListener('keydown', () => { kbdNav = true; }, true);
-  /* ── Tension: controls are water ─────────────────────────────────
-     Pressed, a control squashes like a drop. Held and pulled, it stretches toward the pointer; past
-     a point it lets go (the press is cancelled) and springs back with a little wobble. Switches
-     stretch as they travel, a segmented control's selection flows from one option to the next, and
-     a slider's thumb stretches with the speed it is dragged at. Skipped under Reduce motion. */
+  /* ── Tension ──────────────────────────────────────────────────────
+     Things that belong together hold on to each other, and letting go is the commit. Rules (see the
+     guide, 08 · Motion): a neck only joins things that belong together; it thins with distance and
+     snaps at TENSION.snap (cards) or TENSION.snapSm (smaller things); content never stretches, only
+     surfaces bend; springs settle with one recoil under 4 %; one tether per thing; every stretch
+     has a plain alternative; under Reduce motion necks are drawn still and a snap is instant.
+     Here: a pressed control sinks, and held and pulled it leans toward the pointer (rigidly) until
+     it lets go; switches stretch as they travel; a segmented control's selection flows from one
+     option to the next; a slider's thumb stretches with the speed it is dragged at. */
   const springEase = (z, n = 44) => {
     const w = 2 * Math.PI, wd = w * Math.sqrt(1 - z * z), pts = [];
     for (let i = 0; i <= n; i++) { const t = i / n * 1.7; pts.push((1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t))).toFixed(3)); }
     pts[n] = '1'; return `linear(${pts.join(', ')})`;
   };
-  EASE.water = LINEAR_OK ? springEase(0.36) : 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+  EASE.recoil = LINEAR_OK ? springEase(0.72) : 'cubic-bezier(0.34, 1.2, 0.64, 1)';   // one recoil, 3.7 %
+  EASE.membrane = LINEAR_OK ? springEase(0.64) : 'cubic-bezier(0.34, 1.3, 0.64, 1)';
+  const TENSION = { snap: 150, snapSm: 100, neckMax: 0.7, neckMin: 8, fall: d => Math.max(0, 1 - d) ** 0.8 };
   const TENSE = 'button, [role="button"], .qtile', NO_TENSE = '.mrow, .dk, .pip-card, .widget, .peek, .seg, .isl-l, .wm-cell, [data-still]';
   let held = null;
   function tenseRelease(el) {
     if (el._tr0 === undefined) el._tr0 = el.style.transition;
-    el.style.transition = `translate 720ms ${EASE.water}, scale 720ms ${EASE.water}`;
+    el.style.transition = `translate 620ms ${EASE.recoil}, scale 620ms ${EASE.recoil}`;
     el.style.translate = ''; el.style.scale = '';
-    clearTimeout(el._tensT); el._tensT = setTimeout(() => { el.style.transition = el._tr0; }, 740);
+    clearTimeout(el._tensT); el._tensT = setTimeout(() => { el.style.transition = el._tr0; }, 640);
   }
   addEventListener('pointerdown', e => {
     if (e.button !== 0 || calm()) return;
@@ -2308,17 +2348,17 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     if (el._tr0 === undefined) el._tr0 = el.style.transition;
     clearTimeout(el._tensT);
     el.style.transition = 'translate 140ms cubic-bezier(0.2, 0, 0, 1), scale 140ms cubic-bezier(0.2, 0, 0, 1)';
-    el.style.scale = '1.04 0.92';
+    el.style.scale = '0.97';
   }, true);
   addEventListener('pointermove', e => {
     if (!held || held.gone) return;
-    const dx = e.clientX - held.x, dy = e.clientY - held.y, d = Math.hypot(dx, dy), SNAP = 64;
+    const dx = e.clientX - held.x, dy = e.clientY - held.y, d = Math.hypot(dx, dy);
     if (d < 3) return;
-    if (d > SNAP) { held.gone = true; tenseRelease(held.el); return; }   // past the snap: it lets go
-    const k = (d / SNAP) * 0.14, ux = Math.abs(dx / d), uy = Math.abs(dy / d);
+    if (d > TENSION.snapSm) { held.gone = true; tenseRelease(held.el); return; }   // past the snap: it lets go, the press is cancelled
+    // it leans after the pointer, rigidly (content never stretches), less the further it goes
+    const k = 0.14 * TENSION.fall(d / TENSION.snapSm * 0.5);
     held.el.style.transition = 'none';
-    held.el.style.translate = `${(dx * 0.16).toFixed(1)}px ${(dy * 0.16).toFixed(1)}px`;
-    held.el.style.scale = `${(1 + k * ux - k * uy * 0.5).toFixed(3)} ${(1 + k * uy - k * ux * 0.5).toFixed(3)}`;
+    held.el.style.translate = `${(dx * k).toFixed(1)}px ${(dy * k).toFixed(1)}px`;
   }, { passive: true });
   const tenseUp = () => { if (held && !held.gone) tenseRelease(held.el); held = null; };
   addEventListener('pointerup', tenseUp, true); addEventListener('pointercancel', tenseUp, true);
@@ -2350,7 +2390,94 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   segObs.observe(document.body, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });
   const segSize = typeof ResizeObserver === 'function' ? new ResizeObserver(es => es.forEach(en => segBlob(en.target, true))) : null;
   const wireSegs = () => document.querySelectorAll('.seg').forEach(seg => { if (seg._blob) return; segBlob(seg, true); segSize && segSize.observe(seg); });
-  // sliders: the filled part of the track, and a thumb that stretches with the speed of the drag
+  // the tension layer: one overlay above everything that draws necks and tendrils as solid shapes
+  // (they are made of the same stuff as what they join, not glass)
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const TLayer = document.createElementNS(SVGNS, 'svg');
+  TLayer.id = 'tensionLayer'; TLayer.setAttribute('aria-hidden', 'true');
+  document.body.append(TLayer);
+  function tPath(cls) { const p = document.createElementNS(SVGNS, 'path'); p.setAttribute('class', cls); TLayer.append(p); return p; }
+  // a tube along a polyline with a half-width at each point and round ends: one closed outline
+  function tubeD(pts, hw) {
+    const n = pts.length, L = [], Rt = [];
+    for (let i = 0; i < n; i++) {
+      const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)];
+      let tx = b[0] - a[0], ty = b[1] - a[1]; const l = Math.hypot(tx, ty) || 1; tx /= l; ty /= l;
+      const h = Math.max(0, hw[i]);
+      L.push([pts[i][0] - ty * h, pts[i][1] + tx * h]); Rt.push([pts[i][0] + ty * h, pts[i][1] - tx * h]);
+    }
+    const f = v => v.toFixed(1), h0 = Math.max(0.01, hw[0]), h1 = Math.max(0.01, hw[n - 1]);
+    let d = `M${f(L[0][0])},${f(L[0][1])}`;
+    for (let i = 1; i < n; i++) d += `L${f(L[i][0])},${f(L[i][1])}`;
+    d += `A${f(h1)},${f(h1)} 0 0 0 ${f(Rt[n - 1][0])},${f(Rt[n - 1][1])}`;
+    for (let i = n - 2; i >= 0; i--) d += `L${f(Rt[i][0])},${f(Rt[i][1])}`;
+    return d + `A${f(h0)},${f(h0)} 0 0 0 ${f(L[0][0])},${f(L[0][1])}Z`;
+  }
+  // a neck between two round ends: thick at each end, pinched in the middle by `waist` (0 = broken)
+  function neckD(ax, ay, ra, bx, by, rb, waist, n = 18) {
+    const pts = [], hw = [];
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, e = ra + (rb - ra) * t, k = Math.sin(Math.PI * t) ** 0.7;
+      pts.push([ax + (bx - ax) * t, ay + (by - ay) * t]); hw.push(e - (e - waist) * k);
+    }
+    return tubeD(pts, hw);
+  }
+  // a neck that buds: joined at A (radius ra) to a moving B (radius rb), thinning to nothing over `ms`.
+  // Reversed, B shrinks into A (something drawn back into the point it came from)
+  function budNeck(A, ra, getB, rb, ms, back = false, cls = '', alive = null) {
+    if (calm()) return;
+    const p = tPath('neck' + (cls ? ' ' + cls : '')), t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms), B = getB();
+      if (!B || (alive && !alive())) { p.remove(); return; }
+      const waist = Math.min(ra, rb) * 0.9 * (1 - k) ** 1.3;
+      p.setAttribute('d', neckD(A[0], A[1], ra * (back ? 1 - k * 0.3 : 1 - k * 0.7), B[0], B[1], rb * (back ? 1 - k : 1 - k * 0.4), waist));
+      p.style.opacity = String(1 - k ** 3);
+      if (k < 1) requestAnimationFrame(step); else p.remove();
+    };
+    requestAnimationFrame(step);
+  }
+  // a spring for one number: settles on the recoil spring (damping ratio 0.72, one overshoot under 4 %)
+  function springTo(from, to, ms, onStep, onDone) {
+    const z = 0.72, w = 2 * Math.PI * 1.7 / (ms / 1000), wd = w * Math.sqrt(1 - z * z), t0 = performance.now();
+    const step = now => {
+      const t = (now - t0) / 1000, e = Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t));
+      if (t * 1000 >= ms || calm()) { onStep(to); onDone && onDone(); return; }
+      onStep(to + (from - to) * e); requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  // sliders: pull the thumb off its track and the track stretches after it like a membrane; past
+  // TENSION.snapSm it lets go and springs flat. Only the track bends; the value still follows along
+  let mem = null;
+  addEventListener('pointerdown', e => {
+    const r = e.target;
+    if (e.button !== 0 || r.type !== 'range' || calm()) return;
+    mem = { r, y0: e.clientY, bend: 0, gone: false, paths: null };
+  }, true);
+  function memDraw(m) {
+    const r = m.r, b = r.getBoundingClientRect(), min = +r.min || 0, max = r.max === '' ? 100 : +r.max;
+    const fr = (+r.value - min) / ((max - min) || 1), x0 = b.left + 10, x1 = b.right - 10, xt = x0 + (x1 - x0) * fr, cy = b.top + b.height / 2;
+    const w = Math.max(36, b.width * 0.2), yAt = x => cy + m.bend * Math.exp(-(((x - xt) / w) ** 2));
+    const line = (a, z) => { const pts = [], hw = []; for (let i = 0; i <= 28; i++) { const x = a + (z - a) * i / 28; pts.push([x, yAt(x)]); hw.push(3); } return tubeD(pts, hw); };
+    if (!m.paths) { m.paths = [tPath('mem-off'), tPath('mem-on'), tPath('mem-thumb')]; r.classList.add('bending'); }
+    m.paths[0].setAttribute('d', line(x0, x1)); m.paths[1].setAttribute('d', xt - x0 > 1 ? line(x0, xt) : '');
+    m.paths[2].setAttribute('d', `M${xt - 10},${yAt(xt)}a10,10 0 1,0 20,0a10,10 0 1,0 -20,0Z`);
+  }
+  function memEnd(m) {
+    if (!m.paths) return;
+    springTo(m.bend, 0, 560, v => { m.bend = v; memDraw(m); }, () => { m.paths.forEach(p => p.remove()); m.r.classList.remove('bending'); });
+  }
+  addEventListener('pointermove', e => {
+    const m = mem; if (!m || m.gone) return;
+    const dy = e.clientY - m.y0;
+    if (Math.abs(dy) > TENSION.snapSm) { m.gone = true; memEnd(m); return; }   // past the snap: the membrane lets go
+    if (!m.paths && Math.abs(dy) < 6) return;
+    m.bend = Math.sign(dy) * Math.min(Math.abs(dy) * 0.6, 34) * TENSION.fall(Math.abs(dy) / TENSION.snapSm * 0.6) / TENSION.fall(0);
+    memDraw(m);
+  }, { passive: true });
+  const memUp = () => { if (mem && !mem.gone) memEnd(mem); mem = null; };
+  addEventListener('pointerup', memUp, true); addEventListener('pointercancel', memUp, true);
   function rangeFill(r) {
     const min = +r.min || 0, max = r.max === '' ? 100 : +r.max, v = +r.value;
     r.style.setProperty('--p', ((v - min) / ((max - min) || 1) * 100).toFixed(2) + '%');
@@ -2777,13 +2904,52 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     btn.setAttribute('aria-pressed', on);
     const s = $('small', btn); s.textContent = on ? s.dataset.on : s.dataset.off;
   }
-  const qsTile = k => $(`[data-qs="${k}"]`);
+  const qsTile = k => $(`[data-qs="${k}"]`), qsOn = k => qsTile(k).getAttribute('aria-pressed') === 'true';
+  let airWas = null;
+  // the radios' bridge: a neck of the same stuff as the tiles grows between them when both are on,
+  // and thins, snaps and lets them recoil apart when one goes off
+  const fuseSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'), fusePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  fuseSvg.setAttribute('class', 'qs-fuse'); fuseSvg.setAttribute('aria-hidden', 'true'); fuseSvg.append(fusePath); $('#qs .qs-grid').prepend(fuseSvg);
+  let fuseK = 0, fuseTo = 0, fuseRaf = 0;
+  function fuseDraw() {
+    const a = qsTile('wifi'), b = qsTile('bt'), g = a.parentElement;
+    if (!a.offsetWidth || a.offsetTop !== b.offsetTop || fuseK <= 0.001) { fusePath.setAttribute('d', ''); return; }
+    const x0 = a.offsetLeft + a.offsetWidth - 22, x1 = b.offsetLeft + 22, top = a.offsetTop, h = a.offsetHeight;
+    const half = (h / 2 - 14) * fuseK, cy = top + h / 2, xm = (x0 + x1) / 2, sag = 10 * (1 - fuseK * 0.6);
+    // a waist that is narrowest in the gap, flaring into the tiles on both sides
+    fusePath.setAttribute('d', `M${x0},${cy - half - 10}C${xm - 10},${cy - half - 10} ${xm - 6},${cy - half + sag} ${xm},${cy - half + sag}C${xm + 6},${cy - half + sag} ${xm + 10},${cy - half - 10} ${x1},${cy - half - 10}L${x1},${cy + half + 10}C${xm + 10},${cy + half + 10} ${xm + 6},${cy + half - sag} ${xm},${cy + half - sag}C${xm - 6},${cy + half - sag} ${xm - 10},${cy + half + 10} ${x0},${cy + half + 10}Z`);
+    void g;
+  }
+  function qsFuse(instant) {
+    const want = qsOn('wifi') && qsOn('bt') ? 1 : 0, was = fuseTo;
+    fuseTo = want;
+    if (instant || calm()) { fuseK = want; fuseDraw(); return; }
+    if (was && !want) {   // the neck snaps: the tiles recoil apart once
+      [[qsTile('wifi'), -3], [qsTile('bt'), 3]].forEach(([t, d]) => anim(t, [{ translate: '0 0' }, { translate: `${d}px 0`, offset: 0.35 }, { translate: '0 0' }], { duration: 520, easing: EASE.recoil }));
+    }
+    cancelAnimationFrame(fuseRaf);
+    const from = fuseK, t0 = performance.now(), ms = want ? 420 : 260;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms), e = want ? 1 - (1 - k) ** 3 : k * k;
+      fuseK = from + (want - from) * e; fuseDraw();
+      if (k < 1) fuseRaf = requestAnimationFrame(step);
+    };
+    fuseRaf = requestAnimationFrame(step);
+  }
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => fuseDraw()).observe($('#qs .qs-grid'));
   function syncThemeTile() { setTile(qsTile('dark'), isDark()); renderSwatches(); paintWall(true); }
   $('#qs').addEventListener('click', e => {
     const b = e.target.closest('.qtile'); if (!b) return;
     const k = b.dataset.qs, on = b.getAttribute('aria-pressed') !== 'true';
     if (k === 'dark') { root.dataset.theme = isDark() ? 'light' : 'dark'; syncThemeTile(); return; }
     setTile(b, on);
+    // Airplane mode turns the radios off and pulls them apart; turning it off brings back what was on
+    if (k === 'air') {
+      if (on) { airWas = { wifi: qsOn('wifi'), bt: qsOn('bt') }; setTile(qsTile('wifi'), false); setTile(qsTile('bt'), false); }
+      else if (airWas) { setTile(qsTile('wifi'), airWas.wifi); setTile(qsTile('bt'), airWas.bt); airWas = null; }
+    }
+    if ((k === 'wifi' || k === 'bt') && on && qsOn('air')) { setTile(qsTile('air'), false); airWas = null; }
+    qsFuse();
     if (k === 'night') $('#night').classList.toggle('on', on);
     if (k === 'touch') { if (on) root.dataset.density = 'touch'; else delete root.dataset.density; }
     if (k === 'focus') toast(on ? 'Focus is on. Notifications are silenced.' : 'Focus is off.', null);
@@ -3095,10 +3261,107 @@ button.cal-cell:hover { background: var(--c-surface-3); }
     const b = e.target.closest('[data-act]'); if (!b) return;
     if (b.dataset.act === 'empty') { emptyBin(); return; }
     const x = visible()[fsel]; if (!x) return;
+    budOutOfBin(x.f);
     restoreFromBin(x.f); fsel = -1; renderFiles();
     toast(`Put “${x.f.name}” back in ${FTREE[x.f.from].name}`, null);
   });
   renderFiles();
+  /* Files hold on, the Bin reaches out. A dragged file stays tethered to its row until you clearly
+     mean to move it (past TENSION.snapSm); let go sooner and it springs back. Near the dock's Bin the
+     Bin bulges toward it; drop it in and it's swallowed with a gulp. Put back buds it out of the Bin
+     and carries it home. The plain alternatives: Delete, the Move to Bin button and menu item. */
+  const binIcon = () => $('#dockBin .appicon');
+  let fdrag = null, fDragged = false;
+  $('#flist').addEventListener('pointerdown', e => {
+    const row = e.target.closest('.frow[data-i]');
+    if (!row || e.button !== 0 || FTREE[cur]?.bin) return;
+    const x = visible()[+row.dataset.i]; if (!x || x.kind !== 'file') return;
+    fdrag = { row, x, sx: e.clientX, sy: e.clientY, on: false, snapped: false };
+  });
+  function fghost(x, cx, cy) {
+    const g = document.createElement('div');
+    g.className = 'fghost'; g.setAttribute('aria-hidden', 'true');
+    g.innerHTML = `${thumb(x.f, false)}<span>${escF(x.f.name)}</span>`;
+    document.body.append(g);
+    g._w = g.offsetWidth; g._h = g.offsetHeight; g._place = (px, py) => { g.style.left = (px - 20) + 'px'; g.style.top = (py - g._h / 2) + 'px'; };
+    g._place(cx, cy);
+    return g;
+  }
+  addEventListener('pointermove', e => {
+    const d = fdrag; if (!d) return;
+    const dx = e.clientX - d.sx, dy = e.clientY - d.sy, dist = Math.hypot(dx, dy);
+    if (!d.on) {
+      if (dist < 6) return;
+      d.on = true; fDragged = true; document.body.classList.add('fdragging');
+      const ir = ($('.fname svg', d.row) || d.row).getBoundingClientRect();
+      d.ox = ir.left + ir.width / 2; d.oy = ir.top + ir.height / 2;
+      d.g = fghost(d.x, d.ox, d.oy); d.neck = tPath('neck well');
+      d.row.classList.add('fheld');
+    }
+    let gx, gy;
+    if (!d.snapped && dist > TENSION.snapSm) {   // past the snap: the file lets go of its row
+      d.snapped = true; d.neck.remove(); d.neck = null;
+      budNeck([d.ox, d.oy], 9, () => null, 9, 1);
+      anim(d.g, [{ translate: `${-dx * 0.25}px ${-dy * 0.25}px` }, { translate: '0 0' }], { duration: 420, easing: EASE.recoil });
+    }
+    if (d.snapped) { gx = e.clientX; gy = e.clientY; }
+    else {
+      const k = 0.78 / (1 + dist / 200);
+      gx = d.ox + dx * k; gy = d.oy + dy * k;
+      const w = Math.max(TENSION.neckMin / 2, 11 * TENSION.fall(dist / TENSION.snapSm));
+      d.neck.setAttribute('d', neckD(d.ox, d.oy, 11, gx, gy, 13, w));
+    }
+    d.g._place(gx, gy); d.gx = gx; d.gy = gy;
+    // the Bin reaches for a file that has let go of its folder and comes near
+    const bi = binIcon(), br = bi && bi.getBoundingClientRect();
+    if (br && br.width && d.snapped) {
+      const bx = br.left + br.width / 2, by = br.top + br.height / 2, bd = Math.hypot(e.clientX - bx, e.clientY - by), f = Math.max(0, 1 - bd / 170);
+      d.overBin = bd < Math.max(56, br.width * 0.8);
+      bi.style.transition = 'none';
+      bi.style.translate = f ? `${((e.clientX - bx) / (bd || 1) * 9 * f).toFixed(1)}px ${((e.clientY - by) / (bd || 1) * 9 * f).toFixed(1)}px` : '';
+      bi.style.scale = f ? (1 + 0.14 * f).toFixed(3) : '';
+      d.g.classList.toggle('near', d.overBin);
+    }
+  }, { passive: true });
+  function fdragEnd() {
+    const d = fdrag; fdrag = null;
+    if (!d || !d.on) return;
+    document.body.classList.remove('fdragging'); d.row.classList.remove('fheld');
+    setTimeout(() => { fDragged = false; }, 0);
+    const bi = binIcon(), g = d.g;
+    if (bi) { bi.style.transition = `translate 620ms ${EASE.recoil}, scale 620ms ${EASE.recoil}`; bi.style.translate = ''; bi.style.scale = ''; }
+    if (d.snapped && d.overBin) {   // swallowed with a gulp
+      const br = bi.getBoundingClientRect(), tx = br.left + br.width / 2 - d.gx, ty = br.top + br.height / 2 - d.gy;
+      const a = anim(g, [{ transform: 'none', opacity: 1 }, { transform: `translate(${tx}px, ${ty}px) scale(0.15)`, opacity: 0 }], { duration: 260, easing: EASE.in, fill: 'forwards' });
+      settled(a).then(() => g.remove());
+      if (bi) anim(bi, [{ scale: '1.16 0.86' }, { scale: '1' }], { duration: 560, easing: EASE.recoil, delay: 200 });
+      const undo = moveToBin(d.x.f, d.x.at); fsel = -1; renderFiles();
+      toast(`Moved “${d.x.f.name}” to Bin`, undo, 'Undo');
+      return;
+    }
+    // not meant: it springs back into its row, nothing changed
+    const from = [d.gx, d.gy];
+    if (d.neck) d.neck.remove();
+    if (calm()) { g.remove(); return; }
+    springTo(1, 0, 520, k => g._place(d.ox + (from[0] - d.ox) * k, d.oy + (from[1] - d.oy) * k), () => g.remove());
+    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 520, easing: EASE.in, fill: 'forwards' });
+  }
+  addEventListener('pointerup', fdragEnd); addEventListener('pointercancel', fdragEnd);
+  $('#flist').addEventListener('click', e => { if (fDragged) { e.stopImmediatePropagation(); fDragged = false; } }, true);
+  // Put back: the file buds out of the Bin and is carried home to its folder
+  function budOutOfBin(b) {
+    const bi = binIcon(); if (!bi || calm()) return;
+    const br = bi.getBoundingClientRect(); if (!br.width) return;
+    const home = $(`#fSide .navbtn[data-go="${b.from}"]`), hr = (home && home.offsetParent ? home : $('#flist')).getBoundingClientRect();
+    const A = [br.left + br.width / 2, br.top + br.height / 2], B = [hr.left + 24, hr.top + hr.height / 2];
+    const g = fghost({ kind: 'file', f: b.f || b }, A[0], A[1]);
+    budNeck(A, 14, () => (g.isConnected ? [parseFloat(g.style.left) + 20, parseFloat(g.style.top) + g._h / 2] : null), 12, 420, false, 'well');
+    anim(bi, [{ scale: '0.9 1.1' }, { scale: '1' }], { duration: 520, easing: EASE.recoil });
+    g.animate([{ clipPath: 'circle(6px at 20px 50%)' }, { clipPath: 'circle(160% at 20px 50%)' }], { duration: 300, easing: EASE.out });
+    springTo(0, 1, 760, k => g._place(A[0] + (B[0] - A[0]) * k, A[1] + (B[1] - A[1]) * k), () => {
+      const a = g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }); a.finished.then(() => g.remove(), () => g.remove());
+    });
+  }
 
   /* ── Settings: one window, a sidebar of sections, search across every row ──
      Pages are plain markup; controls tied to the system carry data-bind and stay in sync with
@@ -3614,7 +3877,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
   function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 1500); }
   function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; o._sprites = null; }); }
-  const drawAnyOrb = (el, t) => { const f = formOf(el); return f === 'bloom' || f === 'halo' ? drawFluidOrb(el, t, f) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t); };
+  const drawAnyOrb = (el, t) => { const f = formOf(el); return f === 'bloom' || f === 'halo' || f === 'ripple' ? drawFluidOrb(el, t, f) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t); };
   // Complete and Failed take their semantic colour; everything else draws in the orb's own colour
   const colOf = (el, look) => look === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : look === 'failed' ? hex(tok('--c-danger')).map(v => Math.round(v * 255)) : el._col;
   const progressOf = el => (el.dataset.progress !== undefined && el.dataset.progress !== '' ? Math.max(0, Math.min(1, +el.dataset.progress)) : null);
@@ -3716,7 +3979,7 @@ button.cal-cell:hover { background: var(--c-surface-3); }
   const ORB_FS = `precision highp float;
 uniform vec3 uC;
 uniform float uT, uForm, uFlowA, uSwirl, uRipple, uAmp, uDim, uSat, uTintK, uLevel, uSpark, uSparkA, uBeam, uBeamA, uGrain, uDark, uSq, uHaze, uThin, uSmall;
-uniform vec2 uGaze, uStretch;
+uniform vec2 uGaze, uStretch, uOff;
 uniform vec3 uTint;
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float h3(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
@@ -3789,43 +4052,95 @@ vec4 bloom(vec2 p) {
   return vec4(outc, outa);
 }
 vec4 halo(vec2 p) {
-  // a ring of light in 3D: points along it, projected and added up, so it is brightest where you
-  // see it edge-on (top and bottom) and fades where it faces you
-  mat3 M = rotY(uFlowA * 1.6 + 1.2 + uGaze.x * 0.6) * rotX(0.2 - uGaze.y * 0.5);
-  float e = 0.0, wide = 0.0, th = 0.045 * uThin;
-  float rr = 0.72 * (1.0 + uRipple * 0.035 * sin(uT * 6.0));
-  for (int i = 0; i < 96; i++) {
-    float phi = float(i) * (6.28318 / 96.0);
-    vec3 q = M * vec3(cos(phi) * rr, sin(phi) * rr, 0.0);
-    vec2 dv = p - q.xy;
-    float d2 = dot(dv, dv);
-    float streak = 0.45 + 0.55 * noise(vec3(phi * 3.0, uT * 0.35, 0.0));
-    float lit = uLevel >= 0.0 ? mix(0.2, 1.0, step(fract(phi / 6.28318 - 0.25 + 1.0), uLevel)) : 1.0;
-    float knot = uSpark * 3.0 * exp(-pow(mod(phi - uSparkA + 3.14159, 6.28318) - 3.14159, 2.0) / 0.05);
-    float cm = uBeam * 2.0 * exp(-pow(mod(phi - uBeamA + 3.14159, 6.28318) - 3.14159, 2.0) / 0.4);
-    float depth = 0.75 + 0.25 * q.z;
-    e += exp(-d2 / (th * th)) * streak * lit * depth * (1.0 + knot + cm);
-    wide += exp(-d2 / 0.05) * lit;
+  // a ring of light spinning about its vertical axis, caught over a short exposure: each moment of
+  // the spin is an ellipse, and together they make a translucent shell, brightest at the top and
+  // bottom where the ring is seen edge-on, streaked with vertical bands where the spin lingered
+  float R0 = 0.74 * (1.0 + uRipple * 0.035 * sin(uT * 6.0));
+  float tilt = 0.16 - uGaze.y * 0.35;
+  float spread = 1.15 + uSwirl * 0.9 + uAmp * 0.4;    // how much of a turn the exposure catches
+  float e = 0.0, wide = 0.0;
+  for (int k = 0; k < 14; k++) {
+    float fk = float(k) / 13.0;
+    float phi = uFlowA * 1.9 + uGaze.x * 0.5 + (fk - 0.5) * spread;
+    float a = max(abs(cos(phi)) * R0, 0.09), bb = R0;
+    float edgeOn = smoothstep(0.08, 0.45, abs(cos(phi)));          // a ring seen exactly edge-on is a line: let it fade
+    // a slight tilt toward you lifts the ellipse's back
+    vec2 q = vec2(p.x, p.y + tilt * p.x * sin(phi) * 0.4);
+    vec2 n = q / vec2(a, bb);
+    float ln = length(n);
+    float d = abs(ln - 1.0) * ln / max(length(q / vec2(a * a, bb * bb)), 0.001);   // distance to the ellipse, to first order
+    float t = atan(n.y, n.x);
+    float speed = sqrt(a * a * sin(t) * sin(t) + bb * bb * cos(t) * cos(t));
+    float dens = clamp(0.24 / max(speed, 0.1), 0.0, 1.8);           // edge-on runs of the ring pile up light
+    float back = 0.65 + 0.35 * step(0.0, cos(t) * sin(phi));         // the far half is dimmer
+    float w = 0.55 + 0.45 * noise(vec3(fk * 7.0, uT * 0.6, 1.0));     // where the spin lingered
+    float th = 0.055 * uThin;
+    float lit = uLevel >= 0.0 ? mix(0.18, 1.0, step(p.y, -R0 + uLevel * 2.0 * R0)) : 1.0;
+    float knot = uSpark * 2.5 * exp(-pow(mod(t - uSparkA + 3.14159, 6.28318) - 3.14159, 2.0) / 0.06);
+    float cm = uBeam * 1.6 * exp(-pow(mod(t - uBeamA + 3.14159, 6.28318) - 3.14159, 2.0) / 0.4);
+    e += exp(-d * d / (th * th)) * dens * back * w * lit * (0.25 + 0.75 * edgeOn) * (1.0 + knot + cm);
+    wide += exp(-d * d / 0.03) * lit;
   }
-  e *= 0.42; wide *= 0.03;
-  // fine vertical striations in the light, like a long exposure
-  e *= 0.75 + 0.25 * noise(vec3(p.x * 46.0, uT * 0.9, 3.0));
-  e = e * (1.0 + uAmp * 0.6) + wide;
-  vec3 deep = vec3(0.1, 0.36, 0.7), ice = vec3(0.78, 0.95, 1.0);
-  vec3 col = 1.0 - exp(-mix(deep, ice, smoothstep(0.25, 1.6, e)) * e * 1.6);
+  e *= 0.3; wide *= 0.02;
+  // long-exposure streaks running up and down through the light
+  float streak = 0.7 + 0.3 * noise(vec3(p.x * 34.0, uT * 0.7, 2.0)) + 0.15 * noise(vec3(p.x * 90.0, 5.0, uT * 0.3));
+  float r = length(p);
+  float shell = exp(-pow((r - R0 * 0.92) / 0.22, 2.0)) * 0.12;         // the faint body of the shell
+  e = (e * streak + wide + shell) * (1.0 + uAmp * 0.6);
+  vec3 deep = vec3(0.08, 0.3, 0.55), ice = vec3(0.8, 0.96, 1.0);
+  vec3 col = 1.0 - exp(-mix(deep, ice, smoothstep(0.3, 1.8, e)) * e * 1.7);
   col = mix(col, uTint * length(col), uTintK);
   col = sat(col, uSat);
-  float a = clamp(max(col.r, max(col.g, col.b)) * 1.15, 0.0, 1.0);
+  float al = clamp(max(col.r, max(col.g, col.b)) * 1.15, 0.0, 1.0);
   // on a light page the light needs a dark pool to be seen in
-  float r = length(p);
-  float pool = (1.0 - uDark) * (1.0 - smoothstep(0.9, 1.1, r)) * uHaze;
+  float pool = (1.0 - uDark) * (1.0 - smoothstep(0.92, 1.12, r)) * uHaze;
+  float keep = mix(1.0 - smoothstep(0.9, 1.08, r), 1.0, max(uDark, 1.0 - uHaze));   // in light, the light stays inside its pool
+  col *= keep; al *= keep;
   vec3 pc = vec3(0.02, 0.03, 0.055);
-  return vec4(col + pc * pool * (1.0 - a), a + pool * (1.0 - a));
+  return vec4(col + pc * pool * (1.0 - al), al + pool * (1.0 - al));
+}
+vec4 ripple(vec2 p) {
+  // a terraced pool, seen from above: rings stepping down to a dark centre, each lip catching the
+  // light on one side and shading the step below it. Deeper rings shift further as Pip looks
+  // around, so it reads in depth; the rings flow outward like ripples
+  float r0 = length(p);
+  vec2 q = p - uGaze * 0.1 * (1.0 - smoothstep(0.0, 1.0, r0));
+  float r = length(q), ang = atan(q.y, q.x);
+  float N = 8.0;
+  float s = r * N - uFlowA * 0.9 + uSwirl * ang / 6.28318 * 2.0 + uRipple * 0.25 * sin(uT * 5.0 - r * 9.0);
+  float idx = floor(s), f = fract(s);
+  float depth = clamp(idx / N, 0.0, 1.0);                          // 0 at the centre, 1 at the rim
+  vec3 c0 = vec3(0.04, 0.09, 0.11), c1 = vec3(0.1, 0.3, 0.36), c2 = vec3(0.16, 0.62, 0.7), c3 = vec3(0.55, 0.84, 0.87), c4 = vec3(0.9, 0.96, 0.96);
+  float tdepth = clamp((idx + 0.5) / (N * 1.05), 0.0, 1.0);
+  vec3 col = mix(c0, c1, smoothstep(0.0, 0.25, tdepth));
+  col = mix(col, c2, smoothstep(0.25, 0.55, tdepth));
+  col = mix(col, c3, smoothstep(0.55, 0.8, tdepth));
+  col = mix(col, c4, smoothstep(0.8, 1.0, tdepth));
+  // the lip of each step: lit on the side toward the light, in shade on the other
+  vec2 L = normalize(vec2(-0.6 + uGaze.x * 0.5, 0.65 - uGaze.y * 0.5));
+  vec2 nrm = q / max(r, 0.001);
+  float lip = 1.0 - smoothstep(0.0, 0.16, f), foot = smoothstep(0.7, 1.0, f);
+  col += vec3(0.85, 1.0, 1.0) * lip * max(dot(-nrm, L), 0.0) * 0.32;
+  col *= 1.0 - lip * max(dot(nrm, L), 0.0) * 0.35;
+  col *= 1.0 - foot * 0.16;
+  // states
+  vec2 sp = vec2(cos(uSparkA), sin(uSparkA * 1.3)) * 0.45;
+  col += vec3(0.8, 1.0, 1.0) * exp(-dot(q - sp, q - sp) / 0.02) * uSpark;
+  col += vec3(0.7, 1.0, 1.0) * pow(max(cos(ang - uBeamA), 0.0), 14.0) * smoothstep(0.3, 0.9, r) * uBeam * 0.6;
+  col *= 1.0 + uAmp * 0.3;
+  float lv = 1.0;
+  if (uLevel >= 0.0) { lv = step(depth, uLevel); col = mix(sat(col, 0.2) * 0.6 + 0.3, col, lv); }
+  col = mix(col, uTint, uTintK * 0.7);
+  col = sat(col, uSat);
+  // the outer rings thin out to nothing, like the reference
+  float a = (1.0 - smoothstep(0.82, 1.06, r)) * mix(1.0, 0.45, smoothstep(0.55, 1.0, tdepth));
+  a *= 1.0 - smoothstep(0.0, 0.02, -(1.0 - r));
+  return vec4(col * a, a);
 }
 void main() {
-  vec2 p = (gl_FragCoord.xy - uC.xy) / uC.z;
+  vec2 p = (gl_FragCoord.xy - uC.xy) / uC.z - uOff;
   p = jelly(p);
-  vec4 o = uForm < 0.5 ? bloom(p) : halo(p);
+  vec4 o = uForm < 0.5 ? bloom(p) : uForm < 1.5 ? halo(p) : ripple(p);
   o *= uDim;
   // film grain, so the colour reads as a material, not a gradient
   float g = hash(gl_FragCoord.xy + fract(uT * 7.0) * vec2(91.0, 37.0)) - 0.5;
@@ -3851,7 +4166,7 @@ void main() {
       const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), g.STATIC_DRAW);
       const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
       const U = {};
-      ['uC', 'uT', 'uForm', 'uFlowA', 'uSwirl', 'uRipple', 'uAmp', 'uDim', 'uSat', 'uTintK', 'uLevel', 'uSpark', 'uSparkA', 'uBeam', 'uBeamA', 'uGrain', 'uDark', 'uSq', 'uHaze', 'uThin', 'uSmall', 'uGaze', 'uStretch', 'uTint']
+      ['uC', 'uT', 'uForm', 'uFlowA', 'uSwirl', 'uRipple', 'uAmp', 'uDim', 'uSat', 'uTintK', 'uLevel', 'uSpark', 'uSparkA', 'uBeam', 'uBeamA', 'uGrain', 'uDark', 'uSq', 'uHaze', 'uThin', 'uSmall', 'uGaze', 'uStretch', 'uOff', 'uTint']
         .forEach(n => { U[n] = g.getUniformLocation(pr, n); });
       g.clearColor(0, 0, 0, 0);
       cv.addEventListener('webglcontextlost', () => { OGL = false; });
@@ -3881,9 +4196,16 @@ void main() {
     return tg;
   }
   const ORB_TINT = { green: [0.25, 0.85, 0.5], red: [1.0, 0.3, 0.26] };
-  // the pointer, for Pip's gaze
-  let orbPtr = null;
-  addEventListener('pointermove', e => { orbPtr = [e.clientX, e.clientY]; }, { passive: true });
+  // the pointer, for Pip's gaze; the last time anyone did anything, for drowsiness; and a glance at
+  // the field you're typing into
+  let orbPtr = null, orbActive = performance.now(), orbGlance = null;
+  addEventListener('pointermove', e => { orbPtr = [e.clientX, e.clientY]; orbActive = performance.now(); }, { passive: true });
+  addEventListener('pointerdown', () => { orbActive = performance.now(); }, { capture: true, passive: true });
+  addEventListener('keydown', e => {
+    orbActive = performance.now();
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') && t.type !== 'range' && t.type !== 'checkbox') { const r = t.getBoundingClientRect(); orbGlance = { pt: [r.left + Math.min(r.width, 40 + (t.value || '').length * 7), r.top + r.height / 2], at: performance.now() }; }
+  }, true);
   // a poke: Pip squashes and springs back
   addEventListener('pointerdown', e => {
     const host = e.target.closest && e.target.closest('#pipHome, #pipBtn, #dockPip, .pip-card, .isl-l, .isl-head');
@@ -3902,13 +4224,20 @@ void main() {
     for (const key in tg) p[key] += (tg[key] - p[key]) * k;
     el._flow = (el._flow || 0) + dt * p.flow * 6;
     const body = ring ? size * 0.75 : size, cx = size / 2, cy = size / 2, small = size < 30;
-    const R = body * (form === 'halo' ? (hi ? 0.4 : 0.44) : hi ? 0.36 : small ? 0.44 : 0.4);
+    const R = body * (form === 'halo' || form === 'ripple' ? (hi ? 0.4 : 0.44) : hi ? 0.36 : small ? 0.44 : 0.4);
+    const big = !still && (hi || size >= 40), drowsy = big && look === 'base' ? Math.max(0, Math.min(1, (now - orbActive - 40000) / 4000)) : 0;
     // personality, on a spring: gaze toward the pointer, a jelly that follows the orb's own motion,
     // a blink now and then while idle, and a squash when poked
     let gz = el._gz || (el._gz = [0, 0]), st = el._st || (el._st = { x: 0, y: 0, vx: 0, vy: 0 });
     if (!still && dt && (hi || size >= 40)) {
       const r = el.getBoundingClientRect(), mx = r.left + r.width / 2, my = r.top + r.height / 2;
-      const want = orbPtr ? [Math.max(-1, Math.min(1, (orbPtr[0] - mx) / 420)), Math.max(-1, Math.min(1, (orbPtr[1] - my) / 420))] : [0, 0];
+      // it looks at the pointer, or for a moment at whatever you're typing into; drowsy, it looks down
+      const look2 = orbGlance && now - orbGlance.at < 1500 ? orbGlance.pt : orbPtr;
+      const rpx = R * (r.width / size), pd = orbPtr ? Math.hypot(orbPtr[0] - mx, orbPtr[1] - my) : 1e9;
+      el._cur = (el._cur || 0) + ((pd < rpx * 2.2 ? 1 - Math.max(0, pd - rpx) / (rpx * 1.2) : 0) - (el._cur || 0)) * (1 - Math.exp(-dt / 0.25));
+      let want = look2 ? [Math.max(-1, Math.min(1, (look2[0] - mx) / 420)), Math.max(-1, Math.min(1, (look2[1] - my) / 420))] : [0, 0];
+      want = want.map(v => Math.max(-1.3, Math.min(1.3, v * (1 + 0.8 * el._cur))));
+      if (drowsy > 0) want = [want[0] * (1 - drowsy), want[1] * (1 - drowsy) + 0.75 * drowsy];
       gz[0] += (want[0] - gz[0]) * (1 - Math.exp(-dt / 0.35)); gz[1] += (want[1] - gz[1]) * (1 - Math.exp(-dt / 0.35));
       // the jelly: the orb's screen acceleration pushes its shape the other way
       const lp = el._lp || [mx, my], v = [(mx - lp[0]) / dt, (my - lp[1]) / dt], lv = el._lv || v; el._lp = [mx, my]; el._lv = v;
@@ -3917,8 +4246,30 @@ void main() {
       st.x += st.vx * dt; st.y += st.vy * dt;
       st.x = Math.max(-0.35, Math.min(0.35, st.x)); st.y = Math.max(-0.35, Math.min(0.35, st.y));
     }
-    // blink: idle Pip squashes for a moment every few seconds
-    if (!still && look === 'base' && (hi || size >= 40)) {
+    // more personality, for Pip at a size where you can see it, never under Reduce motion:
+    // a hop when a task completes, a shake of the head when something fails, a nod when Pip asks you
+    // something, a hello when it first appears; drowsy when left alone, waking with a little hop
+    let off = [0, 0];
+    if (big) {
+      if (el._look2 !== look) { el._look2 = look; el._gest = look === 'done' ? { kind: 'hop', at: now } : look === 'failed' ? { kind: 'shake', at: now } : look === 'searching-lighthouse' ? { kind: 'nod', at: now } : el._gest; }
+      if (!el._hello) { el._hello = true; if (hi) el._gest = { kind: 'hop', at: now + 700, h: 0.1 }; }
+      if (drowsy > 0.5) el._sleepy = true;
+      else if (el._sleepy && now - orbActive < 300) { el._sleepy = false; el._gest = { kind: 'hop', at: now, h: 0.08 }; }
+      const g = el._gest;
+      if (g) {
+        const k = (now - g.at) / ({ hop: 520, shake: 700, nod: 900 })[g.kind];
+        if (k >= 1) { if (g.kind === 'hop') el._sqv = (el._sqv || 0) + 2.6; el._gest = null; }   // it lands with a squash
+        else if (k > 0) {
+          if (g.kind === 'hop') off[1] = (g.h || 0.15) * Math.sin(Math.PI * k);
+          else if (g.kind === 'shake') off[0] = 0.07 * Math.sin(k * 6 * Math.PI) * (1 - k);
+          else if (g.kind === 'nod') off[1] = -0.05 * Math.sin(k * 4 * Math.PI) * (1 - k);
+        }
+      }
+      // curious: with the pointer close, Pip leans toward it
+      if (el._cur > 0.01) { off[0] += gz[0] * 0.05 * el._cur; off[1] -= gz[1] * 0.05 * el._cur; }
+    }
+    // blink: idle Pip squashes for a moment every few seconds (not while drowsy)
+    if (!still && look === 'base' && (hi || size >= 40) && drowsy < 0.5) {
       if (!el._blink) el._blink = now + 3000 + Math.random() * 5000;
       if (now > el._blink) { el._sqv = (el._sqv || 0) - 3.2; el._blink = now + 4500 + Math.random() * 6000; }
     }
@@ -3928,7 +4279,7 @@ void main() {
       el._sqv += (-320 * (el._sq - wob) - 11 * el._sqv) * dt; el._sq += el._sqv * dt;
       el._sq = Math.max(-0.3, Math.min(0.3, el._sq));
     }
-    const breathe = still ? 1 : 1 + 0.02 * Math.sin(T / 1300) + amp * 0.05 + (look === 'listen' ? 0.03 : 0);
+    const breathe = still ? 1 : 1 + 0.02 * Math.sin(T / (1300 + drowsy * 1200)) + amp * 0.05 + (look === 'listen' ? 0.03 : 0) + (el._cur || 0) * 0.03;
     const done = look === 'done' ? Math.max(0, 1 - t / 2400) : 0;
     const tint = p.tr > p.tg ? ORB_TINT.red : ORB_TINT.green, tintK = Math.max(p.tg * 0.55 * (0.35 + 0.65 * done), p.tr * 0.5);
     const G = orbGL();
@@ -3937,11 +4288,11 @@ void main() {
       if (cv.width < px) cv.width = cv.height = Math.min(2048, 2 ** Math.ceil(Math.log2(px)));
       g.viewport(0, 0, px, px); g.enable(g.SCISSOR_TEST); g.scissor(0, 0, px, px); g.clear(g.COLOR_BUFFER_BIT);
       g.uniform3f(U.uC, cx * dpr, px - cy * dpr, R * dpr * breathe);
-      [['uT', still ? 0.8 : (T / 1000) % 600], ['uForm', form === 'halo' ? 1 : 0], ['uFlowA', still ? 0.8 : el._flow], ['uSwirl', p.swirl], ['uRipple', p.ripple], ['uAmp', amp], ['uDim', p.dim], ['uSat', p.sat],
+      [['uT', still ? 0.8 : (T / 1000) % 600], ['uForm', form === 'halo' ? 1 : form === 'ripple' ? 2 : 0], ['uFlowA', still ? 0.8 : el._flow], ['uSwirl', p.swirl], ['uRipple', p.ripple], ['uAmp', amp], ['uDim', p.dim * (1 - drowsy * 0.25) * (1 + (el._cur || 0) * 0.06)], ['uSat', p.sat],
         ['uTintK', tintK], ['uLevel', level], ['uSpark', p.spark], ['uSparkA', (T * 0.0021) % TAU], ['uBeam', p.beam], ['uBeamA', (T * (look.startsWith('waiting') ? 0.0011 : 0.0016)) % TAU],
         ['uGrain', small ? 0.04 : 0.11], ['uDark', dark ? 1 : 0], ['uSq', el._sq], ['uHaze', small ? 0.25 : 1], ['uThin', small ? 2.4 : size < 60 ? 1.5 : 1], ['uSmall', small ? 1 : 0]]
         .forEach(([n, v]) => g.uniform1f(U[n], v));
-      g.uniform2f(U.uGaze, gz[0], gz[1]); g.uniform2f(U.uStretch, st.x, st.y);
+      g.uniform2f(U.uGaze, gz[0], gz[1]); g.uniform2f(U.uStretch, st.x, st.y); g.uniform2f(U.uOff, off[0], off[1]);
       g.uniform3f(U.uTint, ...tint);
       g.drawArrays(g.TRIANGLES, 0, 3);
       ctx.drawImage(cv, 0, cv.height - px, px, px, 0, 0, size, size);
@@ -3951,7 +4302,9 @@ void main() {
   // without WebGL: the same two looks as gradients
   function drawFluidFlat(ctx, { form, cx, cy, R, p, dark }) {
     ctx.save(); ctx.globalAlpha = p.dim;
-    if (form === 'halo') {
+    if (form === 'ripple') {
+      for (let i = 8; i >= 1; i--) { const k = i / 8; ctx.fillStyle = `rgba(${Math.round(20 + 200 * k)},${Math.round(40 + 190 * k)},${Math.round(48 + 190 * k)},${(1 - k * 0.5).toFixed(2)})`; ctx.beginPath(); ctx.arc(cx, cy, R * k, 0, TAU); ctx.fill(); }
+    } else if (form === 'halo') {
       if (!dark) { ctx.fillStyle = '#06080f'; ctx.beginPath(); ctx.arc(cx, cy, R * 1.05, 0, TAU); ctx.fill(); }
       ctx.strokeStyle = 'rgba(150,220,255,0.9)'; ctx.lineWidth = Math.max(1.5, R * 0.08); ctx.shadowColor = 'rgba(80,170,255,0.9)'; ctx.shadowBlur = R * 0.3;
       ctx.beginPath(); ctx.ellipse(cx, cy, R * 0.32, R * 0.72, 0, 0, TAU); ctx.stroke();
@@ -4046,17 +4399,18 @@ void main() {
     if ($('#pipStates').children.length) return;
     const cards = form => Object.entries(PIP_STATES).map(([k, [n, d]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="${form}" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b>${form === 'bloom' ? `<small>${d}</small>` : ''}</button>`).join('');
-    $('#pipStates').innerHTML = cards('bloom'); $('#haloStates').innerHTML = cards('halo');
-    $$('#pipStates .dotorb, #haloStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
+    $('#pipStates').innerHTML = cards('bloom'); $('#haloStates').innerHTML = cards('halo'); $('#rippleStates').innerHTML = cards('ripple');
+    $$('#pipStates .dotorb, #haloStates .dotorb, #rippleStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#orbTiles').innerHTML = ORB_GALLERY
       .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-form="dots" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
   }
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
+  $('#rippleStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#haloStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   // Pip's look, everywhere at once
   function setOrbForm(v) {
-    if (v === 'halo' || v === 'dots') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'bloom'; }
+    if (v === 'halo' || v === 'ripple' || v === 'dots') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'bloom'; }
     $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   }
   $('#segOrbGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setOrbForm(b.dataset.v); });
@@ -4508,13 +4862,14 @@ void main() {
     // tension: the top card of a stack holds on. It follows the pointer reluctantly, joined to the
     // stack by a neck that thins as it goes, and only leaves the stack past TETHER px; let go
     // before that and it springs back, with nothing changed
-    let held = !fromPeek && !!stackOf(el) && plasma.visc !== 'solid', ax = 0, ay = 0;
-    const TETHER = 150;
+    let held = !fromPeek && !!stackOf(el) && plasma.visc !== 'solid', ax = 0, ay = 0, leanPeeks = [];
+    const TETHER = TENSION.snap;
     const move = ev => {
       if (!started) {
         if (Math.hypot(ev.clientX - e.clientX, ev.clientY - e.clientY) < 5) return;
         started = true; dragging = el; el.classList.add('drag');
-        if (held) { ax = ph.tx; ay = ph.ty; } else if (stackOf(el)) pullOut(el);
+        if (held) { ax = ph.tx; ay = ph.ty; const st = stackOf(el); leanPeeks = $$('.peek').filter(p => p._card && st.cards.includes(p._card)); }
+        else if (stackOf(el)) pullOut(el);
         if (fromPeek) {   // the card comes out from under the stack, held by its header
           ox = Math.min(64, el.offsetWidth / 2); oy = 18;
           ph.x = ev.clientX - dr.left - ox; ph.y = ev.clientY - dr.top - oy; ph.vx = ph.vy = 0;
@@ -4528,10 +4883,14 @@ void main() {
           // the water left in the slot shrinks as the card pulls away, joined to it by a thinning neck
           const w = el.offsetWidth, h = el.offsetHeight, f = (1 - d / TETHER) ** 0.5;
           stackNeck = [dr.left + ax + w / 2, dr.top + ay + h / 2, dr.left + ph.x + w / 2, dr.top + ph.y + h / 2, Math.max(6, Math.min(w, h) * 0.22 * f), w * 0.9 * f, h * 0.9 * f, +el.dataset.liquid || 0];
+          // the cards behind lean after the one being pulled, on the softer membrane spring
+          if (!calm()) leanPeeks.forEach((p, i) => { p.style.transition = `translate 240ms ${EASE.membrane}`; p.style.translate = `${(dx * 0.1 / (i + 1)).toFixed(1)}px ${(dy * 0.1 / (i + 1)).toFixed(1)}px`; });
           markDirty(); return;
         }
-        held = false; stackNeck = null; pullOut(el);   // past the snap: the card lets go of the stack
-        anim(el, [{ scale: '1.035 0.965' }, { scale: '0.99 1.01', offset: 0.45 }, { scale: '1' }], { duration: 520, easing: 'ease-out' });
+        held = false; stackNeck = null;
+        // past the snap: the card lets go of the stack, and the cards behind recoil once and settle
+        leanPeeks.forEach(p => { p.style.transition = `translate 620ms ${EASE.recoil}`; p.style.translate = ''; });
+        pullOut(el);
       }
       ph.moved = true;
       ph.tx = ev.clientX - dr.left - ox; ph.ty = ev.clientY - dr.top - oy;
@@ -4543,7 +4902,11 @@ void main() {
       removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
       if (!started) return;   // a click is not a drag: the stack stays as it is
       el.classList.remove('drag'); dragging = null;
-      if (held) { stackNeck = null; ph.tx = ax; ph.ty = ay; markDirty(); return; }   // let go before the snap: back into the stack
+      if (held) {   // let go before the snap: back into the stack, nothing changed
+        stackNeck = null; ph.tx = ax; ph.ty = ay; markDirty();
+        leanPeeks.forEach(p => { p.style.transition = `translate 620ms ${EASE.recoil}`; p.style.translate = ''; });
+        return;
+      }
       if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
       const H = desk.clientHeight - dockSpace() - 8;
       ph.tx = Math.min(Math.max(Math.round(ph.tx / 24) * 24, 0), desk.clientWidth - el.offsetWidth); // 24 px grid
@@ -5059,7 +5422,7 @@ void main() {
       m.append(b);
     });
   }
-  function placeMenu(m, x, y, origin = '0 0', above = false) {
+  function placeMenu(m, x, y, origin = '0 0', above = false, bud = null) {
     const dr = desk.getBoundingClientRect(), H = Math.min(desk.clientHeight, innerHeight - dr.top);
     m.hidden = false;
     const h = m.offsetHeight, top = above ? y - dr.top - h : y - dr.top;   // a menu from the dock opens upward, above it
@@ -5068,12 +5431,36 @@ void main() {
     if (above) origin = '0 100%';
     anim(m, [{ opacity: 0, transform: 'scale(0.95)', transformOrigin: origin }, { opacity: 1, transform: 'none', transformOrigin: origin }], { duration: 360 });
     $$('.mrow:not(:disabled)', m).forEach((r, i) => anim(r, [{ opacity: 0 }, { opacity: 1 }], { duration: 240, delay: 30 + i * 12, easing: EASE.out }));
+    // tension: the menu buds out of the point it came from and stays joined to it until it settles
+    if (bud) {
+      const [bx, by, ra] = bud;
+      budNeck([bx, by], ra, () => {
+        if (m.hidden) return null;
+        const r = m.getBoundingClientRect(), cx = Math.max(r.left + 14, Math.min(bx, r.right - 14)), cy = Math.max(r.top + 14, Math.min(by, r.bottom - 14));
+        return [cx, cy];
+      }, 14, 340);
+    }
+  }
+  // choosing an item draws the menu back into the point it came from
+  function drawBack() {
+    const from = wMenu._from;
+    if (!from || calm()) return;
+    [wMenu, wSub].filter(m => !m.hidden).forEach(m => {
+      const r = m.getBoundingClientRect(), c = m.cloneNode(true);
+      c.removeAttribute('id'); c.setAttribute('aria-hidden', 'true'); c.inert = true; c.style.pointerEvents = 'none';
+      m.parentElement.append(c);
+      const o = `${from[0] - r.left}px ${from[1] - r.top}px`;
+      const a = c.animate([{ transform: 'none', opacity: 1, transformOrigin: o }, { transform: 'scale(0.2)', opacity: 0, transformOrigin: o }], { duration: 220, easing: EASE.in, fill: 'forwards' });
+      a.finished.then(() => c.remove(), () => c.remove());
+      budNeck(from, 3, () => (c.isConnected ? [Math.max(r.left + 14, Math.min(from[0], r.right - 14)), Math.max(r.top + 14, Math.min(from[1], r.bottom - 14))] : null), 14, 220, true);
+    });
   }
   function ctxMenu(x, y, items, above = false) {
     items = items.filter(Boolean).filter((it, i, a) => it !== '-' || (i > 0 && a[i - 1] !== '-' && i < a.length - 1));
     if (!items.length) return;
     closeAllPops(); wSub.hidden = true;
-    fillMenu(wMenu, items); placeMenu(wMenu, x, y, '0 0', above);
+    // the menu opens a little away from the pointer, so you can see it bud from that point
+    fillMenu(wMenu, items); wMenu._from = [x, y]; placeMenu(wMenu, x + 8, above ? y - 8 : y + 8, '0 0', above, [x, y, 4]);
     (kbdNav ? $('.mrow:not(:disabled)', wMenu) : wMenu)?.focus({ preventScroll: true });
   }
   function openSub(row, focus) {
@@ -5081,7 +5468,8 @@ void main() {
     fillMenu(wSub, it.sub);
     wSub.hidden = false;
     const r = row.getBoundingClientRect(), w = wSub.offsetWidth, room = desk.getBoundingClientRect().right - r.right;
-    placeMenu(wSub, room > w + 8 ? r.right + 2 : r.left - w - 2, r.top - 6, room > w + 8 ? '0 0' : '100% 0');
+    // a submenu buds from its row
+    placeMenu(wSub, room > w + 8 ? r.right + 2 : r.left - w - 2, r.top - 6, room > w + 8 ? '0 0' : '100% 0', false, [room > w + 8 ? r.right - 10 : r.left + 10, r.top + r.height / 2, Math.min(10, r.height / 2 - 4)]);
     $$('.mrow', wMenu).forEach(b => b.classList.toggle('open', b === row));
     if (focus) $('.mrow:not(:disabled)', wSub)?.focus();
   }
@@ -5090,7 +5478,7 @@ void main() {
       const b = e.target.closest('.mrow'); if (!b || b.disabled) return;
       const it = m._items[+b.dataset.i];
       if (it.sub) { openSub(b, true); return; }
-      hideWMenu(); it.run && it.run();
+      drawBack(); hideWMenu(); it.run && it.run();
     });
     m.addEventListener('keydown', e => {
       const rows = $$('.mrow:not(:disabled)', m), i = rows.indexOf(document.activeElement);
@@ -5726,7 +6114,8 @@ void main(){
     $('#pipEmpty').hidden = true; live.el.hidden = false;
     const m = msgEl(who, text, viaVoice);
     thread.append(m);
-    anim(m, [{ opacity: 0, transform: `translateY(10px)${who === 'user' ? ' scale(0.98)' : ''}` }, { opacity: 1, transform: 'none' }], { duration: 460 });
+    thread.scrollTop = thread.scrollHeight;
+    if (who === 'user') budQuestion(m); else growAnswer(m);
     const o = $('.dotorb', m); if (o) mountOrb(o, true);
     if (who === 'user' && live.title === 'New chat') { live.title = text.length > 34 ? text.slice(0, 32).trim() + '…' : text; $('#convTitle').textContent = live.title; }
     if (viaVoice) live.voice = true;
@@ -5734,21 +6123,138 @@ void main(){
     thread.scrollTop = thread.scrollHeight;
     return m;
   }
+  /* Answers grow out of questions. Your message buds off the composer and rises into place; while
+     Pip works a drop travels out of it and swells into Pip's answer, which hangs from the question by
+     a hairline while it's the latest exchange. Older exchanges let go. Content never stretches: the
+     bubbles are revealed, not scaled. */
+  // a chat animation only runs while the conversation is what you see there
+  const chatSeen = el => { const r = el.getBoundingClientRect(), h = document.elementFromPoint(r.left + Math.min(20, r.width / 2), r.top + Math.min(14, r.height / 2)); return !!(h && h.closest('#w-pip')); };
+  function budQuestion(m) {
+    $$('.qa-link', thread).forEach(letGoLink);
+    const send = $('#sendBtn'); if (calm() || !send.offsetParent) return;
+    const sr = send.getBoundingClientRect(), mr = m.getBoundingClientRect();
+    const sx = sr.left + sr.width / 2, sy = sr.top + sr.height / 2, ox = sx - mr.right + 14, oy = sy - mr.bottom + 14;
+    const at = `${mr.width - 14}px ${mr.height - 14}px`;
+    anim(m, [{ transform: `translate(${ox}px, ${oy}px)`, clipPath: `circle(12px at ${at})` }, { transform: 'none', clipPath: `circle(${Math.hypot(mr.width, mr.height)}px at ${at})` }], { duration: 520 });
+    budNeck([sx, sy], 13, () => { const r = m.getBoundingClientRect(); return [r.right - 14, r.bottom - 14]; }, 14, 420, false, 'accent', () => chatSeen($('#composer')));
+  }
+  function growAnswer(m) {
+    const q = m.previousElementSibling;
+    if (!q || !q.classList.contains('from-user')) return;
+    // the hairline, drawn in the answer's own coordinates so it scrolls and resizes with the thread
+    const svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('class', 'qa-link'); svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<path class="a"/><path class="b"/><circle r="2"/><circle r="2"/>';
+    m.prepend(svg); m._q = q; drawLink(m);
+    if (calm() || !m.offsetParent || !chatSeen(q)) return;
+    // a drop leaves the question and swells into the answer
+    const qr = q.getBoundingClientRect(), mr = m.getBoundingClientRect(), A = [qr.left + 16, qr.bottom - 6], B = [mr.left + 18, mr.top + 18];
+    const drop = tPath('neck well'), t0 = performance.now(), MS = 360;
+    m.style.clipPath = 'circle(0px at 18px 18px)';
+    const step = now => {
+      if (!chatSeen(q)) { drop.remove(); m.style.clipPath = ''; return; }
+      const k = Math.min(1, (now - t0) / MS), e = 1 - (1 - k) ** 2, D = [A[0] + (B[0] - A[0]) * e, A[1] + (B[1] - A[1]) * e];
+      drop.setAttribute('d', neckD(A[0], A[1], 6 * (1 - e), D[0], D[1], 7 + 3 * e, Math.max(0, 3 * (1 - k * 1.4))));
+      if (k < 1) { requestAnimationFrame(step); return; }
+      drop.remove(); m.style.clipPath = '';
+      const r = m.getBoundingClientRect();
+      anim(m, [{ clipPath: 'circle(8px at 18px 18px)' }, { clipPath: `circle(${Math.hypot(r.width, r.height) + 20}px at 18px 18px)` }], { duration: 480 });
+    };
+    requestAnimationFrame(step);
+  }
+  function drawLink(m) {
+    const svg = $('.qa-link', m), q = m._q; if (!svg || !q || !q.isConnected) return;
+    // layout offsets, not screen rects, so a window opening or moving never bends the line
+    const x0 = q.offsetLeft - m.offsetLeft + 18, y0 = q.offsetTop + q.offsetHeight - m.offsetTop, x1 = 22, y1 = 0, my = (y0 + y1) / 2, mx = (x0 + x1) / 2;
+    $('.a', svg).setAttribute('d', `M${x0},${y0}C${x0},${my} ${mx},${my} ${mx},${my}`);
+    $('.b', svg).setAttribute('d', `M${x1},${y1}C${x1},${my} ${mx},${my} ${mx},${my}`);
+    const c = $$('circle', svg); c[0].setAttribute('cx', x0); c[0].setAttribute('cy', y0); c[1].setAttribute('cx', x1); c[1].setAttribute('cy', y1);
+  }
+  // an older exchange lets go: the hairline parts in the middle and each half draws back to its end
+  function letGoLink(svg) {
+    if (calm()) { svg.remove(); return; }
+    $$('path', svg).forEach(p => { p.setAttribute('pathLength', '1'); p.style.strokeDasharray = '1 1'; p.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: 1 }], { duration: 320, easing: EASE.in, fill: 'forwards' }); });
+    $$('circle', svg).forEach(c => c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, delay: 160, fill: 'forwards' }));
+    setTimeout(() => svg.remove(), 520);
+  }
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => $$('.msg.from-pip', thread).forEach(drawLink)).observe($('#threads'));
   const actChip = (m, text, warn) => { const c = document.createElement('span'); c.className = 'act' + (warn ? ' warn' : ''); c.innerHTML = icon(warn ? 'info' : 'check', 'i sm'); c.append(text); $('.acts', m).append(c); };
 
   // what Pip can do in the prototype (used by local commands and by Claude's tools)
   const APP_NAMES = { files: 'files', file: 'files', explorer: 'files', 'file manager': 'files', terminal: 'terminal', guide: 'guide', 'design guide': 'guide', settings: 'settings', software: 'software', 'app store': 'software', store: 'software', calendar: 'calendar', pip: 'pip', chat: 'pip' };
   const ZONES = { left: 'L50', right: 'R50', maximize: 'MAX', max: 'MAX', 'top-left': 'TL', 'top-right': 'TR', 'bottom-left': 'BL', 'bottom-right': 'BR', 'left-two-thirds': 'L66', 'right-third': 'R33' };
   function ensureOpen(id) { const w = wins[id]; if (w.el.hidden) { w.el.hidden = false; w.min = false; } focusWin(id); }
+  /* Pip reaches for what it changes: when Pip opens, snaps or closes a window, or adds or removes a
+     widget, the notch (or Pip's menu-bar orb, when the notch isn't showing) drops a tendril to it and
+     holds on while it moves, so you see exactly what Pip is touching. Then the tendril thins, lets go
+     and draws back. One tether at a time: a second action waits for the first to let go. */
+  const reachQ = [];
+  let reaching = false;
+  function pipReach(target) {
+    if (!target) return;
+    reachQ.push(target);
+    if (!reaching) nextReach();
+  }
+  function nextReach() {
+    const target = reachQ.shift();
+    if (!target) { reaching = false; return; }
+    reaching = true;
+    const p = tPath('tendril'), p2 = tPath('tendril'), t0 = performance.now(), GROW = 320, HOLD = 760, LET = 300, BACK = 260;
+    const still = calm();
+    let lastB = null;
+    const src = () => {
+      const isl = $('#island');
+      if (isl && isl.dataset.mode !== 'hidden') { const r = isl.getBoundingClientRect(); if (r.height > 8) return [r.left + r.width / 2, r.bottom - 3, Math.min(20, r.width * 0.12)]; }
+      const b = $('#pipBtn').getBoundingClientRect(); return [b.left + b.width / 2, b.bottom - 2, 6];
+    };
+    const dst = () => {
+      if (target.isConnected && !target.hidden && target.offsetParent !== null) {
+        const r = target.getBoundingClientRect();
+        if (r.width > 4) lastB = [r.left + r.width / 2, r.top + Math.min(22, r.height / 2)];   // it holds the title bar
+      }
+      return lastB;
+    };
+    const curve = (A, B, a, z, hwAt) => {
+      const dy = B[1] - A[1], P1 = [A[0], A[1] + Math.max(46, dy * 0.45)], P2 = [B[0], B[1] - Math.max(18, dy * 0.35)], pts = [], hw = [];
+      for (let i = 0; i <= 26; i++) {
+        const t = a + (z - a) * i / 26, u = 1 - t;
+        pts.push([u * u * u * A[0] + 3 * u * u * t * P1[0] + 3 * u * t * t * P2[0] + t * t * t * B[0], u * u * u * A[1] + 3 * u * u * t * P1[1] + 3 * u * t * t * P2[1] + t * t * t * B[1]]);
+        hw.push(hwAt(t));
+      }
+      return tubeD(pts, hw);
+    };
+    const step = now => {
+      const T = still ? GROW + HOLD / 2 : now - t0, A = src(), B = dst();
+      if (!B) { p.remove(); p2.remove(); nextReach(); return; }
+      const ra = A[2], rb = 11;
+      const prof = t => Math.max(2.5, (ra + (rb - ra) * t) * (1 - 0.55 * Math.sin(Math.PI * t)));
+      if (T < GROW) {   // it reaches down; the tip leads
+        const g = 1 - (1 - T / GROW) ** 2;
+        p.setAttribute('d', curve(A, B, 0, g, t => Math.max(2.5, prof(t) * (t > g - 0.05 ? 1.15 : 1))));
+      } else if (T < GROW + HOLD) {   // it holds on while the thing moves
+        p.setAttribute('d', curve(A, B, 0, 1, prof));
+      } else if (T < GROW + HOLD + LET) {   // it thins in the middle until it lets go
+        const k = (T - GROW - HOLD) / LET;
+        p.setAttribute('d', curve(A, B, 0, 1, t => prof(t) * (1 - k * Math.exp(-(((t - 0.55) / 0.2) ** 2)))));
+      } else if (T < GROW + HOLD + LET + BACK) {   // the two halves draw back: one into the notch, one into what it held
+        const q = (T - GROW - HOLD - LET) / BACK, e = q * q;
+        p.setAttribute('d', curve(A, B, 0, 0.5 * (1 - e) + 0.001, t => prof(t) * (1 - e * 0.5)));
+        p2.setAttribute('d', curve(A, B, 0.6 + 0.4 * e, 1, t => prof(t) * (1 - e)));
+      } else { p.remove(); p2.remove(); nextReach(); return; }
+      if (still && now - t0 > HOLD) { p.remove(); p2.remove(); nextReach(); return; }
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
   const ACT = {
-    open(app) { const id = APP_NAMES[app] || app; if (!wins[id]) throw new Error('Unknown app: ' + app); ensureOpen(id); return 'Opened ' + appById[id].name; },
-    close(app) { const id = APP_NAMES[app] || app; if (!wins[id]) throw new Error('Unknown app: ' + app); if (!wins[id].el.hidden) closeWin(id); return 'Closed ' + appById[id].name; },
+    open(app) { const id = APP_NAMES[app] || app; if (!wins[id]) throw new Error('Unknown app: ' + app); ensureOpen(id); pipReach(wins[id].el); return 'Opened ' + appById[id].name; },
+    close(app) { const id = APP_NAMES[app] || app; if (!wins[id]) throw new Error('Unknown app: ' + app); if (!wins[id].el.hidden) { pipReach(wins[id].el); closeWin(id); } return 'Closed ' + appById[id].name; },
     snap(app, zone) {
       const id = APP_NAMES[app] || app, z = ZONES[zone];
       if (!wins[id] || !z) throw new Error('Unknown app or zone');
       ensureOpen(id);
       if (narrowMQ.matches) return appById[id].name + ' opened (snapping needs a wider screen)';
-      snap(id, z); return 'Snapped ' + appById[id].name + ' ' + zone;
+      snap(id, z); pipReach(wins[id].el); return 'Snapped ' + appById[id].name + ' ' + zone;
     },
     setting(name, on) {
       const map = { dark_mode: [() => isDark(), () => qsTile('dark').click()], night_light: [() => qsTile('night').getAttribute('aria-pressed') === 'true', () => qsTile('night').click()],
@@ -5816,7 +6322,7 @@ void main(){
     if ((m = s.match(/^(?:remove|hide|close|delete|get rid of)(?: the| my)? (.+?) widget$/))) {
       const k = findKind(m[1]);
       if (!k || !W_KINDS[k].el || !widgetEls.includes(W_KINDS[k].el)) return { fail: `There’s no ${m[1]} widget on home, so nothing was removed.`, label: 'widget not found', fixes: [['Edit widgets', () => openGallery()]] };
-      removeKind(k);
+      pipReach(W_KINDS[k].el); removeKind(k);
       return done('Removed. It’s back in one click from the toast or the widget gallery.', [`Removed ${W_KINDS[k].name}`]);
     }
     // changes to files never run straight away: Pip shows a review card naming the file and the effect
@@ -5937,7 +6443,7 @@ Current prototype state: ${stateSummary()}`;
         say(`Here’s a preview.${spec.note ? ' ' + spec.note : ''} Add it to home?`);
         setPip('asking', 'waiting for your review');
         if (await previewCard(m, spec, cap && cap.card)) {
-          const el = mkCustom(spec), r = addEl(el);
+          const el = mkCustom(spec), r = addEl(el); pipReach(el);
           renderGallery();
           actChip(m, `Added “${spec.title}” to home`);
           reply = r.stackedOn ? `Added. Home is full, so it went into the stack under “${r.stackedOn}”. Click its preview to bring it up.` : `Added to the ${r.col ? colName(r.col) + ' column' : 'home screen'}. Drag it anywhere, or right-click it to remove it.`;
@@ -6309,6 +6815,7 @@ Current prototype state: ${stateSummary()}`;
   syncThemeTile();
   layoutHome();
   wireSegs(); document.querySelectorAll('input[type="range"]').forEach(rangeFill);
+  qsFuse(true);
   if (document.fonts) document.fonts.ready.then(() => { layoutHome(); markDirty(); });
   startWall();
 })();

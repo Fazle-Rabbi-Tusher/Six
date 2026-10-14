@@ -30,6 +30,12 @@ The written side of the assistant (home is the spoken side, see [14 · Home](14-
 | Thread | Your messages on the right in accent clay; spoken ones marked *Said aloud*. Pip's replies on the left, labelled PIP, with action chips, review cards, previews and recovery chips |
 | Composer | Text field, a dictation mic (speech typed into the field, then sent) and Send, which becomes Stop while Pip answers |
 
+**Answers grow out of questions.** Your message buds off the Send button and rises into place.
+While Pip works a drop leaves your message and swells into Pip's answer, which sits in a soft well
+and hangs from the question by a hairline while it's the latest exchange; ask again and the old
+hairline parts in the middle and draws back. Bubbles are revealed, never scaled, and nothing plays
+while another window covers the conversation.
+
 ## Settings
 
 ![Settings, Display](../screens/settings.png)
@@ -56,7 +62,7 @@ two controls.
 | Sound | Output; volume; input (the mic Pip uses); alert sound |
 | Battery & power | Charge and time left; power mode (Saver, Balanced, Performance); battery protection at 80 %; screen off and sleep |
 | Storage | Used of total with a breakdown; free up space (empty the Bin, clear caches) |
-| Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); Look (*Bloom*, the default, *Halo* or *Dotted*); shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
+| Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); Look (*Bloom*, the default, *Halo*, *Ripple* or *Dotted*); shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
 | Appearance | Theme (Light, Dark, Auto); accent (Graphite, the default, Iris, Tide, Moss, Sun); wallpaper mood; plasma clay viscosity, frost, refraction and rim |
 | Home & widgets | Edit widgets; greeting; "Try saying" examples; what happens when home is full |
 | Desktop & dock | Layout (*Menu bar + dock* or *Taskbar*, see [12](12-windows-migration.md)); magnification; hot corner |
@@ -90,6 +96,12 @@ Control Center and Settings, whichever you use.
 | List view | Name, modified, size; tabular figures |
 | Status bar | Item count and free space, or what's selected and its size |
 | Keyboard | Arrows move the selection (in icon view, up and down move by a row); Enter opens; Delete moves to the Bin; Backspace or `Alt + ↑` goes up; `Alt + ←/→` back and forward |
+
+**Files hold on, the Bin reaches out.** Drag a file and it stays tethered to its row, following
+reluctantly, until you've moved it 100 px; let go sooner and it springs back, nothing changed. Past
+that it's free; near the dock's Bin the Bin bulges toward it, and dropped in, it's swallowed with a
+gulp (with **Undo** in the toast). *Put back* buds the file out of the Bin and carries it to its
+folder. Delete, the toolbar's Move to Bin and the row's menu do the same without dragging.
 
 **The Bin remembers where things came from.** Each item shows "From Documents"; *Put back*
 returns it there, at its old position. Deleting from the Bin asks first, because it can't be

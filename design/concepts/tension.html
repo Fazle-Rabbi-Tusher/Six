@@ -266,7 +266,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
     </ol>
   </section>
 
-  <footer>Concept studies for SIX's Soft Matter design language, after the <i>Tensionmorphism</i> reference (stretchable surfaces, visual relationships, dynamic feedback). Surfaces are drawn as liquid glass on the GPU (smooth-union distance fields with refraction, a bevel, rim light and soft shadow) and move on SIX's springs; nothing here is in the prototype yet.</footer>
+  <footer>Concept studies for SIX's Soft Matter design language, after the <i>Tensionmorphism</i> reference (stretchable surfaces, visual relationships, dynamic feedback). Surfaces are drawn on the GPU as satin glass, mostly frosted with a hint of what's behind (smooth-union distance fields with a little refraction, a bevel, rim light and soft shadow), and move on SIX's springs. All six studies are now built into the SIX prototype, following the rules and tokens above.</footer>
 </main>
 
 <script>
@@ -390,14 +390,14 @@ void main() {
     float edge = clamp(1.0 + d / 26.0, 0.0, 1.0);                   // 1 at the lip, 0 where the glass is full thickness
     float thick = sqrt(max(1.0 - edge * edge, 0.0));
     // the room seen through the glass, bent at the rim, with a trace of dispersion
-    vec2 off = -n.xy * 30.0;
+    vec2 off = -n.xy * 16.0;                                        // less glass: the floor bends a little, not a lot
     vec3 seen = vec3(backdrop(p + off * 1.07).r, backdrop(p + off).g, backdrop(p + off * 0.93).b);
-    vec3 body = mix(seen, uFrost, mix(0.38, 0.16, uDark) * thick);  // frosted where it's thick
+    vec3 body = mix(seen, uFrost, mix(0.62, 0.42, uDark) * (0.45 + 0.55 * thick));  // satin: mostly frosted, a hint of what's behind
     body = mix(body, tint, ta * (0.45 + 0.4 * thick));             // the material's own colour
-    body = mix(body, uFill, 0.08 * thick);
+    body = mix(body, uFill, 0.22 * thick);
     // reflections, strongest at grazing angles
     vec3 R = reflect(vec3(0.0, 0.0, -1.0), n);
-    float fres = 0.05 + 0.95 * pow(1.0 - n.z, 3.5);
+    float fres = 0.03 + 0.6 * pow(1.0 - n.z, 3.5);
     vec3 glass = mix(body, env(R), clamp(fres, 0.0, 0.85));
     // the key light's highlight on the shoulder, and light gathering in the lower inside edge
     vec3 L = normalize(vec3(-0.45, -0.75, 0.25)), Hh = normalize(L + vec3(0.0, 0.0, 1.0));

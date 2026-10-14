@@ -80,6 +80,15 @@ The voice panel closes 6 s after Pip answers (longer while a review waits), or a
 
 ![The notch expanded while Pip asks for a review](../screens/notch-voice.png)
 
+**Pip reaches for what it changes.** When Pip opens, snaps or closes a window, or adds or removes
+a widget, the notch drops a black tendril to the window's title bar (or the widget) and holds on
+while it moves, so you can see what Pip is touching. It then thins in the middle, lets go, and the
+two halves draw back into the notch and into the window (about 1.6 s in all). When the notch isn't
+showing, the tendril comes from Pip's orb in the menu bar. One tendril at a time; a second action
+waits its turn. See [08 · Motion › Tension](08-motion.md#tension).
+
+![The notch reaching for the window Pip opened](../screens/notch-reach.png)
+
 ## Right-click menus
 
 Like Windows, a right-click anywhere in SIX gives the actions for what's under the pointer; text
@@ -98,6 +107,11 @@ the Menu key opens the menu for whatever has focus; arrows move, `←` or `Esc` 
 | Menu bar, anywhere else | Control Center, Six Search, Settings · Lock screen |
 
 ![The home menu with the Wallpaper submenu](../screens/menu-desktop.png)
+
+**Menus bud from where you click.** The menu opens 8 px from the pointer and grows out of that
+point, joined to it by a short neck until it settles; a submenu buds from its row the same way.
+Choosing an item draws the menu back into the point it came from, so it's clear what you dismissed
+and where. `Esc` closes without the draw-back.
 
 ## Six Menu (Start)
 
@@ -170,14 +184,21 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 
 ```
 ╭────────────────────────────────╮
-│ [Wi-Fi  ✓ ] [Bluetooth   ] [Focus ]│  clay tiles: on = accent fill + filled glyph + "On"
-│ [Night  ✓ ] [Airplane    ] [Access]│
+│ [Wi-Fi  ✓ ][Bluetooth ✓ ] [Airplane ]│  clay tiles: on = accent fill + "On"; Wi-Fi and
+│ [Night     ] [Dark mode   ] [Focus   ]│  Bluetooth fuse into one body when both are on
+│ [Touch     ] [Listen for "Hey Pip"   ]│
 │ ☀ ─────────●──────           │  brightness
 │ 🔊 ───────●────────  ›        │  volume, › = output device
 │ 🔋 64 % · 3 h 10 m left    ⚙   │
 ╰────────────────────────────────╯
 ```
 
+- **Related controls fuse.** Wi-Fi and Bluetooth are both radios, so when both are on a bridge of
+  the accent colour grows between them and they read as one body. **Airplane mode** turns both off:
+  the bridge thins, snaps, and the tiles recoil apart; turning Airplane mode off brings back
+  whatever was on. Turning a radio on turns Airplane mode off.
+- **Sliders are a membrane.** Pull a slider's thumb up or down off its track and the track bends
+  after it; past 100 px it lets go and springs flat. The value only ever follows along the track.
 - Tiles have two hit zones: the main area toggles, the `›` chevron opens details.
 - Tiles can be added/removed/reordered (edit mode via the ✎ button).
 - *Accessibility* tile is always pinnable and opens the accessibility quick panel (text size,

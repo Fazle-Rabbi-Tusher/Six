@@ -38,7 +38,7 @@ This chapter covers how Pip works inside the OS.
 
 | Part | Spec |
 |---|---|
-| **Pip** | 260 px realistic orb centred above the greeting, drawn as Bloom by default (see [Pip's looks](#pips-looks)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
+| **Pip** | 330 px orb centred above the greeting, drawn as Bloom by default (see [Pip's looks](#pips-looks)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
 | **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."), and one line saying how to talk: "Press the mic in the menu bar, or hold Space, and talk." or, with Hey Pip on, "Say "Hey Pip", then what you need." |
 | **Moving Pip** | Pip starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move Pip back to the middle* or *Hide Pip from home*; `Alt + arrows` moves it from the keyboard. Hidden, Pip still listens through the menu bar mic; *Settings › Home & widgets › Pip on home* brings it back. Its place is remembered |
 | **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Instrument Serif. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
@@ -300,10 +300,10 @@ look is replaced by the dotted orb in the OS.
 
 ## Pip's looks
 
-*Settings › Pip & voice › Look: Bloom / Halo / Dotted* sets Pip everywhere at once (home, the
-menu bar, the dock, the notch, the task card). **Bloom** is the default. On a graphite and silver
-screen Pip is the one thing with colour, so it can be found at a glance and has a character of its
-own.
+*Settings › Pip & voice › Look: Bloom / Halo / Ripple / Dotted* sets Pip everywhere at once (home,
+the menu bar, the dock, the notch, the task card). **Bloom** is the default. On a graphite and
+silver screen Pip is the one thing with colour, so it can be found at a glance and has a character
+of its own. On home Pip is 330 px (230 px when moved out of the middle, 240 px on a phone).
 
 ### Bloom (the default)
 
@@ -318,47 +318,65 @@ around it, and a fine film grain, so it reads as a material rather than a gradie
 | Form | Shaded as a matte ball (velvet, not gloss): lit from the side Pip is looking at, the far side sinking into violet, a pink rim where the light wraps round, and a soft sheen |
 | Haze | The ball's colour lighting the air around it: pink above, amber below. Reduced at small sizes so the shape stays crisp |
 | Grain | Animated film grain over the ball and its haze (lighter below 30 px) |
-| Rendering | One fragment shader on a shared WebGL canvas copies into each orb; gradients without WebGL |
+| Rendering | One fragment shader on a shared WebGL canvas draws all three looks and copies into each orb; gradients without WebGL |
 
 ### Halo
 
-A ring of cold light turning in the dark, from the long-exposure light rings it is modelled on:
-brightest at the top and bottom, where you see the ring edge-on, with streaks running through the
-light and a soft glow around it. On a light page it sits in a small dark pool so the light can be
-seen.
+A ring of cold light spinning about its vertical axis, caught over a short exposure, from the
+long-exposure light rings it is modelled on. Each moment of the spin is an ellipse; together they
+make a translucent 3D shell, brightest at the top and bottom where the ring is seen edge-on, with
+a dark seam down the middle, vertical streaks where the spin lingered and the far half dimmer than
+the near one. On a light page it sits in a small dark pool, and its light stays inside it.
 
 ![Home with Pip as Halo](../screens/home-halo.png)
+
+### Ripple
+
+A terraced pool seen from above, from the teal rings it is modelled on: eight steps of colour
+falling from pale aqua at the rim to a near-black centre. Each step's lip catches the light on the
+side facing it and shades the step below, the outer rings thin out to nothing, and the deeper rings
+shift further than the outer ones as Pip looks around, so it reads in depth. The rings flow slowly
+outward, like ripples.
+
+![Home with Pip as Ripple](../screens/home-ripple.png)
 
 ### What each state does
 
 A state changes how the colour or light moves, never the shape, and every change eases in over
 about half a second.
 
-| State | Bloom | Halo |
-|---|---|---|
-| Ready | The colour drifts slowly | Turns slowly |
-| Listening | Ripples run out from the centre; it swells a little | The ring breathes with your voice |
-| Thinking | The colour stirs into a swirl and a spark crosses it | Spins up; a bright knot runs round the ring |
-| Speaking | Swells and brightens with each word | Brightens with each word |
-| Searching | A bright spot roams across the face | A bright knot circles the ring |
-| Working | Fills like a glass of water as the task progresses, its surface rocking | The ring lights up round as the task progresses |
-| Asking | A beam turns round the rim until you answer | A beam of light circles the ring |
-| Waiting | A slower beam circles | A slow comet circles |
-| Retrying | Wobbles, settles, then tries again | Wobbles, then tries again |
-| Compacting | The colour winds tightly in on itself | Spins tighter |
-| Complete | Warms green once, then settles | Turns green once |
-| Failed | Cools red and slows | Turns red and slows |
-| Cancelled, Resting | Fades to grey, dim and almost still | Fades to grey, dim |
+| State | Bloom | Halo | Ripple |
+|---|---|---|---|
+| Ready | The colour drifts slowly | Turns slowly | The rings flow slowly outward |
+| Listening | Ripples run out from the centre; it swells a little | The shell breathes with your voice | Waves run through the rings |
+| Thinking | The colour stirs into a swirl and a spark crosses it | Spins faster into a fuller shell; a bright knot runs round | The rings wind into a spiral; a spark crosses |
+| Speaking | Swells and brightens with each word | Brightens with each word | Brightens with each word |
+| Searching | A bright spot roams across the face | A bright knot circles the ring | A bright spot roams across the pool |
+| Working | Fills like a glass of water as the task progresses | Lights from the bottom up as the task progresses | Lights from the centre out as the task progresses |
+| Asking | A beam turns round the rim until you answer | A beam of light circles the ring | A beam turns round the rim |
+| Waiting | A slower beam circles | A slow comet circles | A slower beam circles |
+| Retrying | Wobbles, settles, then tries again | Spins faster, then tries again | Flows faster, then tries again |
+| Compacting | The colour winds tightly in on itself | Spins tighter | The spiral winds tighter |
+| Complete | Warms green once, then settles | Turns green once | Turns green once |
+| Failed | Cools red and slows | Turns red and slows | Turns red and slows |
+| Cancelled, Resting | Fades to grey, dim and almost still | Fades to grey, dim | Fades to grey, dim |
 
 ### Personality
 
-- **Pip looks at you.** The light on Bloom, and the tilt of Halo, turn toward the pointer.
+- **Pip looks at you.** The light on Bloom, the tilt of Halo and the depth of Ripple turn toward
+  the pointer; bring it close and Pip leans in, looks harder and brightens a little.
+- **Pip watches you type.** Start typing in a field and it glances at what you're writing.
 - **Pip blinks.** While idle, Pip squashes for a moment every few seconds and springs back.
+- **Pip reacts.** It hops when a task completes (and lands with a squash), shakes its head when
+  something fails, nods when it asks you something, and says hello with a hop when it appears.
 - **Pip is water.** Poke it and it squashes; drag it across home (or fling it) and it stretches
-  the way it moves and wobbles to a stop.
+  the way it moves and settles.
+- **Pip gets drowsy.** Left alone for 40 seconds it dims, breathes slower and looks down; move the
+  mouse or press a key and it wakes with a little hop.
 
-All three are off under Reduce motion, where Pip is drawn still on a fixed frame and changes state
-at once.
+All of these are off under Reduce motion, where Pip is drawn still on a fixed frame and changes
+state at once. None of them carries information on its own: the state label under Pip and the
+reply always say what happened.
 
 ## The current task card
 
