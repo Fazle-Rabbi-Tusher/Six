@@ -44,7 +44,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 
 | File | What it is |
 |---|---|
-| [`concepts/tension.html`](concepts/tension.html) | **Tension studies**: live concepts for elastic surfaces in SIX (after the *Tensionmorphism* reference): a card stretching out of a stack, Pip's notch reaching for the window it's moving, Control Center radios that merge, answers growing out of questions, Files and the Bin, menus budding from the click. With rules, tokens and a recommended build order. Not in the prototype yet |
+| [`concepts/tension.html`](concepts/tension.html) | **Tension studies**: live concepts for elastic, liquid-glass surfaces in SIX (after the *Tensionmorphism* reference; translucent, refractive and 3D, rendered with WebGL): a card stretching out of a stack, Pip's notch reaching for the window it's moving, Control Center radios that merge, answers growing out of questions, Files and the Bin, menus budding from the click. With rules, tokens and a recommended build order. Not in the prototype yet |
 
 ## Tokens
 
