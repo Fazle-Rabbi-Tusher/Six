@@ -377,15 +377,10 @@ input[type="range"]:focus-visible { outline: 2px solid var(--c-focus); outline-o
 .sw:checked::after { transform: translateX(18px); }
 #tensionLayer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 2050; pointer-events: none; overflow: visible; }
 #tensionLayer path { fill: var(--c-surface); }
-#tensionLayer .mem-off { fill: var(--trk-b, var(--c-surface-3)); stroke: var(--ctl-rim, transparent); stroke-width: 1; }
-.fghost { position: fixed; z-index: 2045; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: 12px; background: var(--c-surface-2); color: var(--c-text); font: var(--text-body-sm); box-shadow: var(--shadow-3); pointer-events: none; white-space: nowrap; max-width: 260px; }
-.fghost span { overflow: hidden; text-overflow: ellipsis; }
-.fghost.near { box-shadow: var(--shadow-3), 0 0 0 2px var(--c-danger); }
-.frow.fheld { opacity: 0.45; }
-body.fdragging, body.fdragging * { user-select: none !important; cursor: grabbing !important; }
-#tensionLayer .tendril { fill: #050506; stroke: rgba(255, 255, 255, 0.22); stroke-width: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
-#tensionLayer .mem-on { fill: color-mix(in srgb, var(--c-accent) 55%, var(--trk-b, var(--c-surface-3))); }
-#tensionLayer .mem-thumb { fill: color-mix(in srgb, var(--c-accent) 62%, var(--c-surface)); stroke: var(--ctl-rim, var(--c-line-strong)); stroke-width: 1; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
+.mem-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.mem-svg .mem-off { fill: var(--trk-b, var(--c-surface-3)); stroke: var(--ctl-rim, transparent); stroke-width: 1; }
+.mem-svg .mem-on { fill: var(--fill-a, var(--c-accent)); }
+.mem-svg .mem-thumb { fill: var(--fill-b, var(--c-accent)); filter: drop-shadow(3px 0 4px rgba(0, 0, 0, 0.3)); }
 input[type="range"].bending::-webkit-slider-runnable-track { background: transparent; box-shadow: none; }
 input[type="range"].bending::-webkit-slider-thumb { opacity: 0; }
 input[type="range"].bending::-moz-range-track, input[type="range"].bending::-moz-range-progress { background: transparent; }
@@ -1305,18 +1300,20 @@ button.cal-cell:hover { background: var(--c-surface-3); }
    icon and value inside */
 input[type="range"] { --rh: 26px; height: var(--rh); --thumb: var(--fill-b); }
 input[type="range"]::-webkit-slider-runnable-track { height: var(--rh); border-radius: 999px; box-shadow: var(--trk-edge);
-  background: linear-gradient(90deg, var(--fill-a), var(--fill-b)) 0 0 / calc(var(--rh) / 2 + (100% - var(--rh)) * var(--pf, 0.5)) 100% no-repeat, var(--trk); }
+  --fw: calc(var(--rh) / 2 + (100% - var(--rh)) * var(--pf, 0.5));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 52%) 0 0 / var(--fw) 100% no-repeat,
+    linear-gradient(90deg, var(--fill-a), var(--fill-b)) 0 0 / var(--fw) 100% no-repeat, var(--trk); }
 input[type="range"]::-webkit-slider-thumb { width: var(--rh); height: var(--rh); margin-top: 0; border-radius: 50%;
-  background: radial-gradient(50% 40% at 34% 24%, var(--on-glint), transparent 72%), var(--thumb);
-  box-shadow: 3px 0 8px -5px var(--ctl-drop), inset 0 0 0 1px color-mix(in srgb, var(--ctl-rim) 60%, transparent); }
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 52%), radial-gradient(circle, rgba(0, 0, 0, 0.1) 0 42%, transparent 72%), var(--thumb);
+  box-shadow: 4px 0 10px -6px var(--ctl-drop); }
 input[type="range"]::-moz-range-track { height: var(--rh); border-radius: 999px; background: var(--trk); box-shadow: var(--trk-edge); }
 input[type="range"]::-moz-range-progress { height: var(--rh); border-radius: 999px; background: linear-gradient(90deg, var(--fill-a), var(--fill-b)); }
 input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); border: 0; border-radius: 50%; background: var(--thumb); box-shadow: inset 0 0 0 1px var(--ctl-rim), 0 2px 6px -1px var(--ctl-drop); }
 .slider-row.big { position: relative; }
 .slider-row.big input[type="range"] { --rh: 46px; width: 100%; }
-.slider-row.big label { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; color: var(--c-text); }
-.slider-row.big .sl-val { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; font: 600 13px/1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--c-text); }
-.slider-row.big input[type="range"]::-webkit-slider-thumb { background: radial-gradient(50% 40% at 34% 24%, var(--on-glint), transparent 72%), var(--fill-b); box-shadow: 4px 0 10px -6px var(--ctl-drop); }
+.slider-row.big label { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 2; pointer-events: none; color: var(--c-text); }
+.slider-row.big .sl-val { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 2; font: 600 13px/1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--c-text); }
+.slider-row.big input[type="range"]::-webkit-slider-thumb { background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 52%), radial-gradient(circle, rgba(0, 0, 0, 0.1) 0 42%, transparent 72%), var(--fill-b); box-shadow: 4px 0 12px -6px var(--ctl-drop); }
 .vid-seek { --rh: 16px; height: 16px; }
 /* switches: a satin well, a glossy bead */
 .sw { width: 46px; height: 26px; background: var(--trk); box-shadow: var(--trk-edge); }
@@ -2563,13 +2560,22 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     const h = Math.max(6, parseFloat(getComputedStyle(r).getPropertyValue('--rh')) || 26), rr = h / 2;
     const w = Math.max(36, b.width * 0.2), yAt = x => cy + m.bend * Math.exp(-(((x - xt) / w) ** 2));
     const line = (a, z) => { const pts = [], hw = []; for (let i = 0; i <= 28; i++) { const x = a + (z - a) * i / 28; pts.push([x, yAt(x)]); hw.push(rr); } return tubeD(pts, hw); };
-    if (!m.paths) { m.paths = [tPath('mem-off'), tPath('mem-on'), tPath('mem-thumb')]; r.classList.add('bending'); }
+    if (!m.paths) {
+      // drawn inside the slider's own row, under its icon and value, so nothing it carries is covered
+      const host = r.parentElement;
+      if (getComputedStyle(host).position === 'static') { host.style.position = 'relative'; m.posd = true; }
+      m.svg = document.createElementNS(SVGNS, 'svg'); m.svg.setAttribute('class', 'mem-svg'); m.svg.setAttribute('aria-hidden', 'true');
+      m.paths = ['mem-off', 'mem-on', 'mem-thumb'].map(c => { const q = document.createElementNS(SVGNS, 'path'); q.setAttribute('class', c); m.svg.append(q); return q; });
+      host.append(m.svg); r.classList.add('bending');
+    }
+    const hb = m.svg.getBoundingClientRect(), ox = hb.left, oy = hb.top;
+    m.svg.setAttribute('viewBox', `${ox} ${oy} ${hb.width || 1} ${hb.height || 1}`);
     m.paths[0].setAttribute('d', line(x0, x1)); m.paths[1].setAttribute('d', line(x0, Math.max(x0 + 0.5, xt)));
     m.paths[2].setAttribute('d', `M${xt - rr},${yAt(xt)}a${rr},${rr} 0 1,0 ${2 * rr},0a${rr},${rr} 0 1,0 ${-2 * rr},0Z`);
   }
   function memEnd(m) {
     if (!m.paths) return;
-    springTo(m.bend, 0, 560, v => { m.bend = v; memDraw(m); }, () => { m.paths.forEach(p => p.remove()); m.r.classList.remove('bending'); });
+    springTo(m.bend, 0, 560, v => { m.bend = v; memDraw(m); }, () => { m.svg.remove(); if (m.posd) m.r.parentElement.style.position = ''; m.r.classList.remove('bending'); });
   }
   addEventListener('pointermove', e => {
     const m = mem; if (!m || m.gone) return;
@@ -4210,15 +4216,19 @@ vec4 ripple(vec2 p) {
   vec2 q = p - uGaze * 0.1 * (1.0 - smoothstep(0.0, 1.0, r0));
   float r = length(q), ang = atan(q.y, q.x);
   float N = 8.0;
-  float s = r * N - uFlowA * 0.9 + uSwirl * ang / 6.28318 * 2.0 + uRipple * 0.25 * sin(uT * 5.0 - r * 9.0);
+  // the rings flow outward: only the fraction of the flow matters, so a ring's colour depends on
+  // where it is (deep at the centre, pale at the rim), never on how long Pip has been running
+  float ph = fract(uFlowA * 0.9);
+  float s = r * N - ph + uSwirl * ang / 6.28318 * 2.0 + uRipple * 0.25 * sin(uT * 5.0 - r * 9.0);
   float idx = floor(s), f = fract(s);
-  float depth = clamp(idx / N, 0.0, 1.0);                          // 0 at the centre, 1 at the rim
+  float ringR = (idx + ph + 0.5) / N;                              // the ring's own radius
+  float depth = clamp(ringR, 0.0, 1.0);                            // 0 at the centre, 1 at the rim
   vec3 c0 = vec3(0.04, 0.1, 0.14), c1 = vec3(0.1, 0.36, 0.48), c2 = vec3(0.3, 0.72, 0.9), c3 = vec3(0.62, 0.88, 1.0), c4 = vec3(0.86, 0.96, 1.0);   // deep teal to sky
-  float tdepth = clamp((idx + 0.5) / (N * 1.05), 0.0, 1.0);
-  vec3 col = mix(c0, c1, smoothstep(0.0, 0.25, tdepth));
-  col = mix(col, c2, smoothstep(0.2, 0.45, tdepth));
-  col = mix(col, c3, smoothstep(0.45, 0.7, tdepth));
-  col = mix(col, c4, smoothstep(0.72, 0.95, tdepth));
+  float tdepth = clamp(ringR / 1.05, 0.0, 1.0);
+  vec3 col = mix(c0, c1, smoothstep(0.12, 0.36, tdepth));
+  col = mix(col, c2, smoothstep(0.34, 0.58, tdepth));
+  col = mix(col, c3, smoothstep(0.58, 0.8, tdepth));
+  col = mix(col, c4, smoothstep(0.8, 1.0, tdepth));
   // the lip of each step: lit on the side toward the light, in shade on the other
   vec2 L = normalize(vec2(-0.6 + uGaze.x * 0.5, 0.65 - uGaze.y * 0.5));
   vec2 nrm = q / max(r, 0.001);
