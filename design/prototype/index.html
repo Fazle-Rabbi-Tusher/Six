@@ -1335,6 +1335,23 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
 .seg-blob { border-radius: 999px; }
 .seg.has-blob > button[aria-pressed="true"] { background: transparent; box-shadow: none; color: var(--c-text); }
 :root[data-contrast="more"] .seg, :root[data-contrast="more"] .sw, :root[data-contrast="more"] input[type="range"]::-webkit-slider-runnable-track { box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+
+/* wallpaper picker: a thumbnail of each drawn wallpaper */
+.moods { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.moods button { border: 0; background: none; padding: 0; display: grid; gap: 6px; justify-items: center; font: var(--text-caption); color: var(--c-text-2); cursor: pointer; }
+.mthumb { display: block; width: 100%; aspect-ratio: 3 / 4; border-radius: 12px; box-shadow: var(--ctl-edge); transition: transform var(--dur-fast) var(--ease-out); }
+.moods button:hover .mthumb { transform: translateY(-2px); }
+.moods button[aria-pressed="true"] { color: var(--c-text); font-weight: 600; }
+.moods button[aria-pressed="true"] .mthumb { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+.moods button:focus-visible { outline: none; }
+.moods button:focus-visible .mthumb { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+.wt-matte { background: radial-gradient(circle at 50% 50%, #2a2a2e, #060607 75%); }
+.wt-obsidian { background: radial-gradient(40% 18% at 34% 46%, rgba(200, 210, 225, 0.85), transparent 70%), radial-gradient(30% 14% at 62% 22%, rgba(160, 170, 190, 0.5), transparent 70%), linear-gradient(150deg, #10131a, #050608 45%, #1a1f27 60%, #030405); }
+.wt-signal { background: radial-gradient(circle at 50% 45%, #ff5ab0 0 5%, rgba(255, 58, 160, 0.45) 16%, transparent 36%), radial-gradient(#ff3aa0 0.9px, transparent 1.4px) 0 0 / 4px 4px, #0a0207; }
+.wt-contour { background: linear-gradient(90deg, transparent 40%, #040310 85%), repeating-radial-gradient(circle at 15% 70%, #e2e4ff 0 1.5px, #5a48ff 2.5px 5px); }
+.wt-strata { background: radial-gradient(circle at 85% 20%, #d4f2ee 0 14%, #8fd0c9 15% 24%, #3f8f8a 25% 34%, #1b5558 35% 48%, #0b2a2d 49% 64%, #061a1c 65%); }
+.wt-velvet { background: radial-gradient(circle at 40% 30%, #8cb6ff 0 10%, #4f7ed8 11% 22%, #2a4ea8 23% 36%, #142c74 37% 52%, #070f3a 53%); }
+@media (max-width: 720px) { .moods { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 </style>
 </head>
 <body>
@@ -1913,7 +1930,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             <div class="chips-row" id="chatSuggest">
               <button type="button" class="sugg">Open Files and Terminal side by side</button>
               <button type="button" class="sugg">Make a widget: a countdown to my exam on 14 December</button>
-              <button type="button" class="sugg">Switch to the tidal mood</button>
+              <button type="button" class="sugg">Switch to the strata wallpaper</button>
               <button type="button" class="sugg">What can you do?</button>
             </div>
           </div>
@@ -2055,7 +2072,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             </div>
             <span class="overline">Wallpaper and plasma clay</span>
             <div class="sgroup">
-              <div class="srow"><span class="sl"><b>Mood</b></span><div class="seg" id="segMood" role="group" aria-label="Mood"><button data-v="matte" aria-pressed="true">Matte</button><button data-v="tidal" aria-pressed="false">Tidal</button><button data-v="aurora" aria-pressed="false">Aurora</button><button data-v="ember" aria-pressed="false">Ember</button></div></div>
+              <div class="srow col"><span class="sl"><b>Wallpaper</b><small>Drawn live, and moving slowly</small></span><div class="moods" id="segMood" role="group" aria-label="Wallpaper"><button data-v="matte" aria-pressed="true"><span class="mthumb wt-matte"></span>Matte</button><button data-v="obsidian" aria-pressed="false"><span class="mthumb wt-obsidian"></span>Obsidian</button><button data-v="signal" aria-pressed="false"><span class="mthumb wt-signal"></span>Signal</button><button data-v="contour" aria-pressed="false"><span class="mthumb wt-contour"></span>Contour</button><button data-v="strata" aria-pressed="false"><span class="mthumb wt-strata"></span>Strata</button><button data-v="velvet" aria-pressed="false"><span class="mthumb wt-velvet"></span>Velvet</button></div></div>
               <div class="srow"><span class="sl"><b>Viscosity</b><small>How cards move and fuse</small></span><div class="seg" id="segVisc" role="group" aria-label="Viscosity"><button data-v="water" aria-pressed="false">Water</button><button data-v="gel" aria-pressed="true">Gel</button><button data-v="honey" aria-pressed="false">Honey</button><button data-v="solid" aria-pressed="false">Solid</button></div></div>
               <div class="srow col"><span class="sl"><b><label for="frost">Frost</label></b><small id="frostV" class="tnum">0.55</small></span><input type="range" id="frost" min="0" max="100" value="55"></div>
               <div class="srow col"><span class="sl"><b><label for="refr">Refraction</label></b><small id="refrV" class="tnum">1.00</small></span><input type="range" id="refr" min="0" max="150" value="100"></div>
@@ -5937,11 +5954,14 @@ Request: ${JSON.stringify(d)}`;
   /* ── Plasma clay renderer (WebGL) ────────────────────────────── */
   const MAXR = 16;
   const MATTE = { dark: ['#060607', '#151517', '#d4d4d9', '#2a2a2e'], light: ['#d4d4d8', '#f7f7f8', '#ffffff', '#c4c4c9'] };
+  const WALLS = ['matte', 'obsidian', 'signal', 'contour', 'strata', 'velvet'];   // the order the shader numbers them
   const MOODS = {
     matte: MATTE.dark,
-    tidal: ['#05262c', '#0e4c55', '#5fd8cb', '#7b6cff'],
-    aurora: ['#17123f', '#3a2f8f', '#9ef0ff', '#ff8a6b'],
-    ember: ['#240c18', '#6b2236', '#ffb86b', '#ff6b4a'],
+    obsidian: ['#020305', '#15181e', '#c9d0dc', '#3a404a'],
+    signal: ['#050103', '#3a0a24', '#ff3aa0', '#7a1450'],
+    contour: ['#040310', '#2a1f9a', '#dfe2ff', '#5a48ff'],
+    strata: ['#062023', '#1b5558', '#c9efe9', '#3fa29c'],
+    velvet: ['#030722', '#13307a', '#7fb0ff', '#2a5ad0'],
   };
   const hex = h => { h = h.trim().replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h.slice(0, 6), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; };
   const mixc = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
@@ -5952,25 +5972,107 @@ precision highp float;
 uniform vec2 u_res; uniform float u_dpr, u_time, u_k, u_dark, u_fill, u_frost, u_refr, u_rim, u_rimMode, u_elev, u_matte;
 uniform vec4 u_rect[MAXR]; uniform float u_rad[MAXR]; uniform float u_grp[MAXR]; uniform int u_count;
 uniform vec3 u_m0, u_m1, u_m2, u_m3, u_tint, u_accent; uniform vec2 u_ptr;
-uniform vec4 u_neck; uniform float u_neckR;
+uniform vec4 u_neck; uniform float u_neckR; uniform float u_wall;
 float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float noise(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3. - 2. * f);
   return mix(mix(hash(i), hash(i + vec2(1., 0.)), u.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), u.x), u.y); }
 float fbm(vec2 p, float oct){ float v = 0., a = .5; mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
   for (int i = 0; i < 5; i++) { if (float(i) >= oct) break; v += a * noise(p); p = m * p; a *= .5; } return v; }
+// ── Wallpapers ──────────────────────────────────────────────────────────────
+// Five drawn wallpapers, each after a reference: black liquid lit in silver, a pink dot-matrix
+// signal, violet contour lines, teal paper strata and deep blue velvet layers. All are generated
+// here, move slowly, and keep the home's words readable with a soft scrim behind the centre.
+vec3 wObsidian(vec2 p, float oct, float t){
+  vec2 s = p / 900.; float o = min(oct, 3.);
+  vec2 w = vec2(fbm(s * 1.3 + vec2(t * .012, 0.), o), fbm(s * 1.3 + vec2(4.1, 2.7) - t * .009, o));
+  vec2 b = s * 1.6 + 2.9 * w;
+  float f = fbm(b, o), fx = fbm(b + vec2(.015, 0.), o), fy = fbm(b + vec2(0., .015), o);
+  vec3 n = normalize(vec3((f - fx) * 60., (fy - f) * 60., 1.));
+  vec3 L = normalize(vec3(-.55, .55, .65));
+  float spec = pow(max(reflect(-L, n).z, 0.), 14.), sheen = pow(max(dot(n, L), 0.), 2.);
+  float line = smoothstep(.43, .5, abs(fract(f * 7.) - .5));       // fine flow lines along the swirls
+  vec3 c = vec3(.012, .015, .022) + vec3(.06, .07, .09) * smoothstep(.3, .8, f);
+  c += vec3(.74, .78, .86) * (spec * 1.1 + sheen * .16) * smoothstep(.12, .55, f);
+  c += vec3(.55, .6, .7) * line * .22 * smoothstep(.25, .7, f);
+  c += vec3(.8) * step(.9975, hash(floor(p * .5)));                 // stardust
+  return c;
+}
+vec3 wSignal(vec2 p, float t){
+  vec2 sc = u_res / u_dpr, c0 = sc * vec2(.5, .47);
+  vec2 d = (p - c0) / sc.y;
+  float r = length(d), th = atan(d.x, -d.y);
+  float I = exp(-pow(length(d / vec2(.045, .07)), 2.)) * 1.3;               // the body
+  I += exp(-pow(length((d - vec2(0., .11)) / vec2(.055, .12)), 2.)) * .45;  // and below it
+  // eight legs, four a side, each bending as it reaches out
+  for (int i = 0; i < 4; i++) {
+    float a = .5 + float(i) * .6, bend = .9 - float(i) * .45;
+    for (int k = 0; k < 2; k++) {
+      float sg = k == 0 ? 1. : -1., ta = sg * (a + bend * r * 1.6 * r / (r + .15));
+      float da = atan(sin(th - ta), cos(th - ta));
+      I += exp(-pow(da / (.045 + .016 / (r + .05)), 2.)) * smoothstep(.62, .2, r) * smoothstep(.03, .09, r) * 1.05;
+    }
+  }
+  float ov = abs(length(d / vec2(.27, .42)) - 1.);                          // the tall oval around it
+  I += exp(-ov * ov / .0005) * .5 * (.45 + .55 * noise(vec2(th * 7., t * .3)));
+  I *= .88 + .12 * sin(t * 1.2);
+  vec2 cell = mod(p, 6.) - 3.;
+  float dotv = 1. - smoothstep(I * 2.5 - .5, I * 2.5 + .5, length(cell));  // halftone: dots sized by the light
+  float grid = (1. - smoothstep(.3, 1.1, length(cell))) * .05;
+  vec3 pink = vec3(1., .22, .58);
+  vec3 c = vec3(.014, .004, .01) + pink * (min(dotv, 1.) * .9 + grid) + pink * min(I, 1.5) * .1;
+  c += pink * exp(-abs(p.y - c0.y) / 1.2) * (.45 + .55 * step(.45, fract(p.x / 28. - t * .05))) * .7;   // the laser line
+  c += pink * exp(-abs(p.x - c0.x) / .8) * .12;
+  return c;
+}
+vec3 wContour(vec2 p, float oct, float t){
+  vec2 sc = u_res / u_dpr, s = p / 420.;
+  vec2 w = vec2(fbm(s + vec2(t * .01, 0.), oct), fbm(s + vec2(3.3, 1.7) - t * .012, oct));
+  float f = fbm(s * 1.2 + 1.8 * w, oct);
+  float m = smoothstep(.18, .66, f) * (1. - smoothstep(.5, 1.05, p.x / sc.x));   // lit on the left, black on the right
+  float line = 1. - smoothstep(.07, .22, abs(fract(f * 30.) - .5));
+  vec3 col = mix(vec3(.3, .22, .95) * .7, vec3(.9, .92, 1.), smoothstep(.4, .95, m));
+  col = mix(col, vec3(.97, .98, 1.), smoothstep(.85, 1., m));
+  return vec3(.008, .006, .025) + col * m * (.45 + .75 * line);
+}
+vec3 wStrata(vec2 p, float oct, float t){
+  vec2 sc = u_res / u_dpr, s = p / 820.; float o = min(oct, 3.);
+  vec2 w = vec2(fbm(s * 1.1 + vec2(t * .006, 0.), o), fbm(s * 1.1 + vec2(2.3, 4.1), o));
+  float f = fbm(s * 1.3 + 1.6 * w, o) + .4 * (p.x / sc.x) - .14;      // paler toward the right
+  float x = f * 13., fr = fract(x), lv = clamp(floor(x) / 13. * 1.25 - .08, 0., 1.);
+  vec3 c = mix(vec3(.03, .11, .13), vec3(.1, .33, .35), smoothstep(0., .45, lv));
+  c = mix(c, vec3(.42, .72, .7), smoothstep(.45, .75, lv));
+  c = mix(c, vec3(.82, .95, .93), smoothstep(.75, 1., lv));
+  c *= .7 + .3 * smoothstep(0., .3, fr);                                 // each layer shades the one below
+  c += .05 * smoothstep(.86, 1., fr);                                     // its cut edge catches the light
+  c += (fbm(p / 24., 2.) - .5) * .05 + (hash(floor(p)) - .5) * .025;     // paper grain
+  return c;
+}
+vec3 wVelvet(vec2 p, float oct, float t){
+  vec2 s = p / 950.; float o = min(oct, 3.);
+  vec2 w = vec2(fbm(s + vec2(t * .008, 0.), o), fbm(s + vec2(1.7, 3.9) - t * .006, o));
+  float f = fbm(s * 1.2 + 1.5 * w, o);
+  float x = f * 8., fr = fract(x), lv = clamp(floor(x) / 8. * 1.75 - .12, 0., 1.);
+  vec3 c = mix(vec3(.015, .03, .12), vec3(.1, .22, .6), smoothstep(0., .45, lv));
+  c = mix(c, vec3(.42, .65, 1.), smoothstep(.45, 1., lv));
+  c *= .58 + .42 * smoothstep(0., .45, fr);                               // a soft shadow on the layer below
+  c += vec3(.1, .18, .35) * smoothstep(.7, 1., fr) * .25;
+  c += (hash(floor(p)) - .5) * .03;                                       // velvet grain
+  return c;
+}
 vec3 bg(vec2 p, float oct){
+  vec2 sc = u_res / u_dpr;
   if (u_matte > .5) {   // matte: a soft centre-weighted gradient with fine grain, no colour
-    vec2 sc = u_res / u_dpr;
     float v = 1. - smoothstep(0., 1.25, length((p - sc * .5) / sc.y));
     return mix(u_m0, u_m1, v) + (hash(floor(p * .5)) - .5) * .012;
   }
-  vec2 s = p / 480.; float t = u_time;
-  vec2 q = vec2(fbm(s + vec2(0., t * .02), oct), fbm(s + vec2(5.2, 1.3) - t * .015, oct));
-  float f = fbm(s * 1.5 + 1.9 * q + vec2(t * .012, 0.), oct);
-  vec3 c = mix(u_m0, u_m1, smoothstep(.15, .85, f));
-  c = mix(c, u_m3, smoothstep(.55, .95, q.y) * .4);
-  float v = 1. - abs(f * 2. - 1.);
-  c += mix(vec3(.38), u_m2 * .6, u_dark) * pow(v, 7.);
+  float t = u_time;
+  vec3 c = u_wall < 1.5 ? wObsidian(p, oct, t) : u_wall < 2.5 ? wSignal(p, t) : u_wall < 3.5 ? wContour(p, oct, t) : u_wall < 4.5 ? wStrata(p, oct, t) : wVelvet(p, oct, t);
+  // the greeting, Pip's label and the examples sit on the wallpaper itself: a soft scrim behind the
+  // centre column keeps them readable. In light, the wallpaper is a pale print of itself
+  vec2 dd = (p - sc * vec2(.5, .58)) / vec2(sc.x * .24, sc.y * .3);
+  float k = exp(-dot(dd, dd));
+  if (u_dark > .5) c *= 1. - .55 * k;
+  else c = mix(mix(vec3(.955, .96, .965), c, .4), vec3(.965, .97, .975), .6 * k);
   return c;
 }
 float sdr(vec2 p, vec2 b, float r){ vec2 q = abs(p) - b + r; return length(max(q, 0.)) + min(max(q.x, q.y), 0.) - r; }
@@ -6068,7 +6170,7 @@ void main(){
       const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
       const a = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
-      ['u_res', 'u_dpr', 'u_time', 'u_k', 'u_dark', 'u_fill', 'u_frost', 'u_refr', 'u_rim', 'u_rimMode', 'u_elev', 'u_matte', 'u_rect', 'u_rad', 'u_grp', 'u_count', 'u_m0', 'u_m1', 'u_m2', 'u_m3', 'u_tint', 'u_accent', 'u_ptr', 'u_neck', 'u_neckR']
+      ['u_res', 'u_dpr', 'u_time', 'u_k', 'u_dark', 'u_fill', 'u_frost', 'u_refr', 'u_rim', 'u_rimMode', 'u_elev', 'u_matte', 'u_rect', 'u_rad', 'u_grp', 'u_count', 'u_m0', 'u_m1', 'u_m2', 'u_m3', 'u_tint', 'u_accent', 'u_ptr', 'u_neck', 'u_neckR', 'u_wall']
         .forEach(n => { U[n] = gl.getUniformLocation(prog, n); });
       root.classList.add('gl');
       const info = gl.getExtension('WEBGL_debug_renderer_info');
@@ -6087,7 +6189,7 @@ void main(){
     const matte = plasma.mood === 'matte';
     let m = (matte ? MATTE[dark ? 'dark' : 'light'] : MOODS[plasma.mood]).map(hex);
     if (!dark && !matte) m = [mixc(m[0], [1, 1, 1], 0.8), mixc(m[1], [1, 1, 1], 0.6), m[2], mixc(m[3], [1, 1, 1], 0.45)];
-    gl.uniform1f(U.u_matte, matte ? 1 : 0);
+    gl.uniform1f(U.u_matte, matte ? 1 : 0); gl.uniform1f(U.u_wall, Math.max(1, WALLS.indexOf(plasma.mood)));
     ['u_m0', 'u_m1', 'u_m2', 'u_m3'].forEach((n, i) => gl.uniform3fv(U[n], m[i]));
     gl.uniform3fv(U.u_tint, hex(tok('--c-surface')));
     gl.uniform3fv(U.u_accent, hex(tok('--c-accent')));
@@ -6431,9 +6533,9 @@ void main(){
     },
     plasma(mood, visc) {
       const out = [];
-      if (mood && MOODS[mood]) { plasma.mood = mood; syncSeg('segMood', mood); out.push(mood[0].toUpperCase() + mood.slice(1) + ' mood'); }
+      if (mood && MOODS[mood]) { plasma.mood = mood; syncSeg('segMood', mood); out.push(mood[0].toUpperCase() + mood.slice(1) + ' wallpaper'); }
       if (visc && VISC[visc]) { plasma.visc = visc; syncSeg('segVisc', visc); out.push(visc[0].toUpperCase() + visc.slice(1) + ' surfaces'); }
-      if (!out.length) throw new Error('Give a mood (matte, tidal, aurora, ember) or viscosity (water, gel, honey, solid)');
+      if (!out.length) throw new Error('Give a wallpaper (matte, obsidian, signal, contour, strata, velvet) or viscosity (water, gel, honey, solid)');
       paintWall(true); return out.join(', ');
     },
     home() { showHome(); return 'Showing home'; },
@@ -6462,7 +6564,7 @@ void main(){
       return done('Done.', [ACT.setting(name.replace(/ /g, '_'), on === 'on')]);
     }
     if ((m = s.match(/^(?:switch to |use |go )?(dark|light)(?: mode)?$/))) return done('Done.', [ACT.setting('dark_mode', m[1] === 'dark')]);
-    if ((m = s.match(/^(?:switch to |use |change to )?(?:the )?(matte|tidal|aurora|ember)(?: mood)?$/))) return done('Switched. Drag the cards together to see the surfaces fuse.', [ACT.plasma(m[1])]);
+    if ((m = s.match(/^(?:switch to |use |change to |set )?(?:the )?(matte|obsidian|signal|contour|strata|velvet)(?: mood| wallpaper| background)?$/))) return done('Switched. Drag the cards together to see the surfaces fuse.', [ACT.plasma(m[1])]);
     if ((m = s.match(/^(?:make (?:it|the surfaces) |use )?(water|gel|honey|solid)(?: surfaces)?$/))) return done('Changed how the surfaces move.', [ACT.plasma(null, m[1])]);
     if (/^(show )?(home|desktop)$/.test(s)) return done('Home.', [ACT.home()]);
     // a settings page by name: “open display settings”, “go to wifi settings”, “bluetooth settings”
@@ -6519,7 +6621,7 @@ Current prototype state: ${stateSummary()}`;
       { name: 'close_app', description: 'Close an app window. Returns what happened.', inputSchema: { type: 'object', properties: { app: appEnum }, required: ['app'] }, execute: wrap('closing a window', i => ACT.close(String(i.app))) },
       { name: 'snap_window', description: 'Open if needed and snap an app window to a screen zone.', inputSchema: { type: 'object', properties: { app: appEnum, zone: { type: 'string', enum: Object.keys(ZONES) } }, required: ['app', 'zone'] }, execute: wrap('arranging windows', i => ACT.snap(String(i.app), String(i.zone))) },
       { name: 'set_setting', description: 'Turn a system setting on or off.', inputSchema: { type: 'object', properties: { setting: { type: 'string', enum: ['dark_mode', 'night_light', 'focus', 'touch_mode', 'reduce_motion', 'reduce_transparency', 'more_contrast'] }, on: { type: 'boolean' } }, required: ['setting', 'on'] }, execute: wrap('changing a setting', i => ACT.setting(String(i.setting), !!i.on)) },
-      { name: 'set_plasma', description: 'Change the plasma clay surfaces: mood (matte, tidal, aurora, ember) and/or viscosity (water, gel, honey, solid).', inputSchema: { type: 'object', properties: { mood: { type: 'string', enum: Object.keys(MOODS) }, viscosity: { type: 'string', enum: Object.keys(VISC) } } }, execute: wrap('changing the surfaces', i => ACT.plasma(i.mood && String(i.mood), i.viscosity && String(i.viscosity))) },
+      { name: 'set_plasma', description: 'Change the home wallpaper (matte, obsidian, signal, contour, strata, velvet) and/or the plasma clay viscosity (water, gel, honey, solid).', inputSchema: { type: 'object', properties: { mood: { type: 'string', enum: Object.keys(MOODS) }, viscosity: { type: 'string', enum: Object.keys(VISC) } } }, execute: wrap('changing the surfaces', i => ACT.plasma(i.mood && String(i.mood), i.viscosity && String(i.viscosity))) },
       { name: 'show_home', description: 'Minimize all windows to show the home screen with this conversation.', execute: wrap('showing home', () => ACT.home()) },
     ];
   }
@@ -6674,7 +6776,7 @@ Current prototype state: ${stateSummary()}`;
       busy = null; setBusy(false);
     } else {
       await wait(380);
-      reply = 'In this copy I only understand simple commands, like “open files”, “turn on dark mode” or “switch to the ember mood”. In SIX I’d answer this properly.';
+      reply = 'In this copy I only understand simple commands, like “open files”, “turn on dark mode” or “switch to the obsidian wallpaper”. In SIX I’d answer this properly.';
     }
     say(reply);
     fixChips(m, fixes);
@@ -6713,7 +6815,7 @@ Current prototype state: ${stateSummary()}`;
      where it can't (most embedded previews), Pip hears sample requests and says so. */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const voice = { mode: 'ptt', on: false, real: !!SR, rec: null, wakeRec: null, pending: null, demoN: 0, timers: [], cap: null, dictate: false, hold: false };
-  const VOICE_SAMPLES = ['Open Files and Terminal side by side', 'What’s on my calendar today?', 'Add a clock widget', 'Turn on night light', 'Open display settings', 'Make a widget that counts down to my exam on 14 December', 'Switch to the aurora mood'];
+  const VOICE_SAMPLES = ['Open Files and Terminal side by side', 'What’s on my calendar today?', 'Add a clock widget', 'Turn on night light', 'Open display settings', 'Make a widget that counts down to my exam on 14 December', 'Switch to the velvet wallpaper'];
   const wave = $('#wave');
   wave.innerHTML = '<i></i>'.repeat(22);
   let waveTimer = null, capT = null, waveTalk = false;

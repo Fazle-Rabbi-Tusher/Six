@@ -63,7 +63,7 @@ two controls.
 | Battery & power | Charge and time left; power mode (Saver, Balanced, Performance); battery protection at 80 %; screen off and sleep |
 | Storage | Used of total with a breakdown; free up space (empty the Bin, clear caches) |
 | Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); Look (*Bloom*, the default, *Halo*, *Ripple* or *Dotted*); shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
-| Appearance | Theme (Light, Dark, Auto); accent (Graphite, the default, Iris, Tide, Moss, Sun); wallpaper mood; plasma clay viscosity, frost, refraction and rim |
+| Appearance | Theme (Light, Dark, Auto); accent (Graphite, the default, Iris, Tide, Moss, Sun); wallpaper (Matte, Obsidian, Signal, Contour, Strata, Velvet, as thumbnails); plasma clay viscosity, frost, refraction and rim |
 | Home & widgets | Edit widgets; greeting; "Try saying" examples; what happens when home is full |
 | Desktop & dock | Layout (*Menu bar + dock* or *Taskbar*, see [12](12-windows-migration.md)); magnification; hot corner |
 | Notifications & Focus | Focus; per-app notifications; previews on the lock screen |

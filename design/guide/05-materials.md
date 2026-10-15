@@ -91,9 +91,10 @@ Windows, documents, settings pages, lists. Opaque, flat, quiet.
 
 ## 4. Wallpaper: matte by default
 
-The default wallpaper is matte (black / white-gray). The plasma moods below are optional.
+The default wallpaper is matte (black / white-gray). Five drawn wallpapers (Obsidian, Signal,
+Contour, Strata, Velvet; see [04 · Color](04-color.md#wallpapers)) are the alternatives.
 
-A slow field of blurred colour blobs (the plasma moods) that drift over ~60 s loops. It is GPU
+Every wallpaper is generated live and moves on slow loops. It is GPU
 cheap (one fragment shader at reduced resolution, paused when fully covered by maximized windows
 or on battery saver) and freezes to a still frame under *Reduce motion*.
 
@@ -150,10 +151,11 @@ that and it springs back into the stack with nothing changed. A click is never a
 
 **Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark
 mode and white fading to soft gray in light mode, with a faint grain and no colour, so content and
-Pip carry the colour. **Tidal** (teal veins), **Aurora** (violet and cyan) and **Ember** (warm
-reds) are optional, livelier moods. The default rim is **Soft**, a neutral highlight; the
-iridescent rim is an option. Users pick mood, viscosity,
-frost, refraction and rim in Quick Settings › Plasma clay.
+Pip carry the colour. **Obsidian**, **Signal**, **Contour**, **Strata** and **Velvet** are the drawn
+alternatives. The default rim is **Soft**, a neutral highlight; the
+iridescent rim is an option. Users pick the wallpaper (from
+thumbnails), viscosity, frost, refraction and rim in Settings › Appearance; the wallpaper is also
+in the home's right-click menu and Pip can switch it ("switch to the strata wallpaper").
 
 **Rules**
 - Text sits on the fill, never on raw refraction: the fill floor above keeps body text above

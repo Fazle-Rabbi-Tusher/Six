@@ -187,7 +187,7 @@ thread, marked *Said aloud*, so nothing said to Pip is lost or hidden.
 ![The Pip app](../screens/pip-app.png)
 
 
-- **Local first.** Plain commands ("open files", "turn on night light", "switch to the ember mood",
+- **Local first.** Plain commands ("open files", "turn on night light", "switch to the obsidian wallpaper",
   "put Terminal on the right") are understood on the device, instantly, with no network. They are
   marked *Handled on this device*.
 - **Where the answer came from is always shown.** Each reply ends with a small note: *Handled on
@@ -196,7 +196,7 @@ thread, marked *Said aloud*, so nothing said to Pip is lost or hidden.
 - **Everything else** goes to the language model. On-device by default where hardware allows; a
   cloud model only after the person agrees, said in Pip's words: "This needs the cloud model.
   Nothing leaves until you say so."
-- **Pip can act.** It can open, close and snap windows, change settings and switch moods. Every
+- **Pip can act.** It can open, close and snap windows, change settings and switch wallpapers. Every
   action shows as a chip under the reply (✓ *Snapped Files left*); failed actions show a Sun chip
   with the reason. Pip never claims an action it didn't take.
 - **Changes to files ask first, with a review card.** Anything that edits, moves or deletes the

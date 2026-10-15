@@ -111,6 +111,10 @@ python3 design/tokens/check_contrast.py   # fails if any pair drops below its mi
 |---|---|---|---|
 | ![](screens/home-halo.png) | ![](screens/halo-states.png) | ![](screens/home-ripple.png) | ![](screens/ripple-states.png) |
 
+| The five drawn wallpapers (Obsidian, Signal, Contour, Strata, Velvet) and their picker in Settings |
+|---|
+| ![](screens/wallpapers.png) |
+
 | Tension: the notch reaching for the window Pip opened | Tension: radios fused, a slider pulled off its track | Tension: the Bin reaching for a file | Pip moved out of the middle |
 |---|---|---|---|
 | ![](screens/notch-reach.png) | ![](screens/cc-fuse.png) | ![](screens/files-bin.png) | ![](screens/home-pip-moved.png) |

@@ -98,7 +98,7 @@ the Menu key opens the menu for whatever has focus; arrows move, `←` or `Esc` 
 
 | Where | Menu |
 |---|---|
-| Home (empty space) | Add widgets…, Talk to Pip · *View ›* Pip on home, Greeting, "Try saying" examples, Put Pip back in the middle, Put cards back in their columns · Refresh · *Wallpaper ›* Matte, Tidal, Aurora, Ember · Display settings, Personalise · Open in Terminal |
+| Home (empty space) | Add widgets…, Talk to Pip · *View ›* Pip on home, Greeting, "Try saying" examples, Put Pip back in the middle, Put cards back in their columns · Refresh · *Wallpaper ›* Matte, Obsidian, Signal, Contour, Strata, Velvet · Display settings, Personalise · Open in Terminal |
 | A widget | Float on top of everything / Stop floating · *Size ›* (video) · Show all in this stack, Unstack, Put back in its column · Edit widgets…, Remove |
 | Pip on home, the notch | Talk to Pip, Open the Pip app · Move Pip back to the middle, Hide Pip from home · Pip & voice settings |
 | A window | Restore, Minimise, Maximise, *Snap ›* halves, thirds, quarters · Close (`Alt F4`) |

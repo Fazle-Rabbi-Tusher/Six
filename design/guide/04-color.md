@@ -85,18 +85,25 @@ pastel is always `--c-text` (8:1 or better in both themes).
 | `--clay-butter` | `#FFEBB3` | `#54451B` |
 | `--clay-rose` | `#FFD1E3` | `#5A2840` |
 
-## Wallpaper moods
+## Wallpapers
 
-The default wallpaper is **Matte**: no colour, so the interface and Pip stay the focus.
+The default wallpaper is **Matte**: no colour, so the interface and Pip stay the focus. Five drawn
+wallpapers are the alternatives. Each is generated live by the home's shader (nothing is a
+picture), moves slowly, and was made after a reference image.
 
-| Mood | Colours | Feel |
+| Wallpaper | What it is | Colours |
 |---|---|---|
-| **Matte** (default) | Dark: `#060607` edges → `#151517` centre. Light: `#D4D4D8` edges → `#F7F7F8` centre. Fine grain | Calm, neutral |
-| **Aurora** | `#7B6CFF` `#39C6D4` `#FF8A6B` `#F6C9FF` | Calm, friendly |
-| **Tidal** | `#2F6BFF` `#39C6D4` `#9EF0E0` `#1B2A6B` | Cool, focused |
-| **Ember** | `#FF6B4A` `#FFB86B` `#C2477F` `#3A1C3F` | Warm, evening |
+| **Matte** (default) | A soft centre-weighted gradient with fine grain. Dark: `#060607` edges → `#151517` centre; light: `#D4D4D8` → `#F7F7F8` | None |
+| **Obsidian** | Black liquid marble: domain-warped swirls shaded as a glossy surface, silver highlights along the flows, a fine stardust | Near-black, silver `#C9D0DC` |
+| **Signal** | A pink dot-matrix creature on black: a halftone grid whose dots grow with the light, an eight-legged figure in a tall oval, a dashed laser line across and a fine vertical rule | Black, pink `#FF3AA0` |
+| **Contour** | Violet contour lines on black: the isolines of a warped field, white-hot where it's brightest and fading to black on the right | Indigo `#2A1F9A` → lavender `#DFE2FF` |
+| **Strata** | Teal paper layers: the field cut into 13 terraces, each shading the one below, its cut edge catching the light, with paper grain; paler to the right | Deep teal `#062023` → mint `#C9EFE9` |
+| **Velvet** | Deep blue soft layers: broad terraces with soft shadows and a velvet grain | Navy `#030722` → sky `#7FB0FF` |
 
-Night light shifts the wallpaper mood toward Ember automatically after sunset.
+**Readability.** The greeting, Pip's label and the examples sit directly on the wallpaper, so a soft
+scrim darkens (in dark) or lightens (in light) the wallpaper behind the centre column. In light
+mode the drawn wallpapers are shown as a pale print of themselves (40 % strength), so dark text
+keeps its contrast. Cards and panels sit on their own fill and are unaffected.
 
 ## Verified contrast (WCAG 2.2)
 
