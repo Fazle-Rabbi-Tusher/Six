@@ -188,14 +188,19 @@ svg.i.sm { width: 16px; height: 16px; }
 .win.active .titlebar .title { color: var(--c-text); }
 .titlebar .appicon { --ic: 22px; border-radius: 6px; }
 .titlebar .appicon svg.i { width: 64%; height: 64%; }
-.capbtns { display: flex; align-self: stretch; }
+/* window buttons: round satin buttons, close turns red under the pointer */
+.capbtns { display: flex; align-items: center; gap: 8px; padding: 0 12px 0 8px; align-self: stretch; }
 .cap {
-  width: 46px; border: 0; background: transparent; color: var(--c-text-2); display: grid; place-items: center;
-  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast);
+  width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center;
+  background: var(--ctl, var(--c-surface-2)); box-shadow: var(--ctl-edge, none); color: var(--c-text-2);
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast), box-shadow var(--dur-fast);
 }
-.cap:hover { background: var(--c-surface-3); color: var(--c-text); }
-.cap.close:hover { background: var(--c-close-hover); color: var(--c-on-close); }
-.cap:focus-visible { outline-offset: -3px; }
+.cap svg.i.sm { width: 13px; height: 13px; }
+.cap { position: relative; }
+.cap::before { content: ""; position: absolute; inset: -2px; border-radius: 50%; }   /* a 32 px hit area around the 28 px button */
+.cap:hover { color: var(--c-text); filter: brightness(1.06); }
+.cap.close:hover { background: radial-gradient(60% 46% at 30% 16%, rgba(255, 255, 255, 0.35), transparent 72%), var(--c-close-hover); color: var(--c-on-close); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 4px 10px -5px var(--c-close-hover); }
+.cap:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
 .win-body { flex: 1; min-height: 0; display: flex; }
 .grip { position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; touch-action: none; }
 .grip::after { content: ""; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; border-right: 2px solid var(--c-line-strong); border-bottom: 2px solid var(--c-line-strong); border-radius: 0 0 3px 0; }
@@ -4572,16 +4577,42 @@ void main() {
     Object.assign(ph, { x: r.left - dr.left, y: r.top - dr.top, vx: 0, vy: 0, moved: false });
     layoutHome(); markDirty();
   }
+  // a flick: how far a thrown thing glides on, from the pointer's speed over its last few moves.
+  // Returns [dx, dy, vx, vy] or null when the release was gentle (under 650 px/s)
+  // (times are the input events' own, so a slow frame never turns a flick into a stop)
+  function flick(trail, upAt) {
+    if (trail.length < 2 || calm()) return null;
+    const a = trail[0], b = trail[trail.length - 1], dt = (b[0] - a[0]) / 1000;
+    if (dt <= 0 || (upAt !== undefined && upAt - b[0] > 90)) return null;   // it stopped before letting go
+    const vx = (b[1] - a[1]) / dt, vy = (b[2] - a[2]) / dt, sp = Math.hypot(vx, vy);
+    if (sp < 650) return null;
+    const k = Math.min(1, 2400 / sp) * 0.22;   // glides about a fifth of a second's travel, less for very fast flicks
+    return [vx * k, vy * k, vx * 0.35, vy * 0.35];
+  }
   function pinDrag(el, e) {
     const dr = desk.getBoundingClientRect(), ox = e.clientX - dr.left - el.offsetLeft, oy = e.clientY - dr.top - el.offsetTop, sx = e.clientX, sy = e.clientY;
     let on = false;
+    const trail = [];
     const move = ev => {
       if (!on && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 4) return;
       on = true; el.classList.add('drag');
+      trail.push([ev.timeStamp, ev.clientX, ev.clientY]); if (trail.length > 6) trail.shift();
       el.style.left = Math.min(Math.max(ev.clientX - dr.left - ox, 0), desk.clientWidth - el.offsetWidth) + 'px';
       el.style.top = Math.min(Math.max(ev.clientY - dr.top - oy, mbH() + 4), desk.clientHeight - 48) + 'px';
     };
-    const up = () => { removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); if (on) { el.classList.remove('drag'); settle(el); } };
+    const up = upEv => {
+      removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      if (!on) return;
+      el.classList.remove('drag');
+      const fl = flick(trail, upEv && upEv.timeStamp);
+      if (fl) {   // thrown: it glides on and slows to a stop, kept on screen
+        const x0 = el.offsetLeft, y0 = el.offsetTop;
+        const x1 = Math.min(Math.max(x0 + fl[0], 0), desk.clientWidth - el.offsetWidth), y1 = Math.min(Math.max(y0 + fl[1], mbH() + 4), desk.clientHeight - 48);
+        el.style.left = x1 + 'px'; el.style.top = y1 + 'px';
+        anim(el, [{ translate: `${x0 - x1}px ${y0 - y1}px` }, { translate: '0 0' }], { duration: 520, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+      }
+      settle(el);
+    };
     addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
   }
   const homeCards = () => widgetEls.filter(c => !c.classList.contains('pinned'));
@@ -4985,6 +5016,7 @@ void main() {
     // stack by a neck that thins as it goes, and only leaves the stack past TETHER px; let go
     // before that and it springs back, with nothing changed
     let held = !fromPeek && !!stackOf(el) && plasma.visc !== 'solid', ax = 0, ay = 0, leanPeeks = [];
+    const trail = [];   // recent pointer positions, for the speed of a flick
     const TETHER = TENSION.snap;
     const move = ev => {
       if (!started) {
@@ -5015,12 +5047,13 @@ void main() {
         pullOut(el);
       }
       ph.moved = true;
+      trail.push([ev.timeStamp, ev.clientX, ev.clientY]); if (trail.length > 6) trail.shift();
       ph.tx = ev.clientX - dr.left - ox; ph.ty = ev.clientY - dr.top - oy;
       if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
       const t = targetAt(el, ev.clientX, ev.clientY);
       if (t !== dropTarget) { dropTarget?.classList.remove('drop-target'); dropTarget = t; t?.classList.add('drop-target'); }
     };
-    const up = () => {
+    const up = upEv => {
       removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
       if (!started) return;   // a click is not a drag: the stack stays as it is
       el.classList.remove('drag'); dragging = null;
@@ -5031,6 +5064,9 @@ void main() {
       }
       if (dropTarget) { const t = dropTarget; t.classList.remove('drop-target'); dropTarget = null; mergeInto(el, t); return; }
       const H = desk.clientHeight - dockSpace() - 8;
+      // a flick throws the card: it glides on in the direction it was going and settles where it lands
+      const fl = flick(trail, upEv && upEv.timeStamp);
+      if (fl) { ph.tx += fl[0]; ph.ty += fl[1]; ph.vx = fl[2]; ph.vy = fl[3]; }
       ph.tx = Math.min(Math.max(Math.round(ph.tx / 24) * 24, 0), desk.clientWidth - el.offsetWidth); // 24 px grid
       ph.ty = Math.min(Math.max(Math.round(ph.ty / 24) * 24, mbH() + 8), H - el.offsetHeight);
       if (plasma.visc === 'solid') { ph.x = ph.tx; ph.y = ph.ty; }
@@ -5528,7 +5564,7 @@ void main() {
   wSub.id = 'wSub'; wSub.className = 'glass ctx'; wSub.setAttribute('role', 'menu'); wSub.hidden = true; wMenu.after(wSub);
   wMenu.classList.add('ctx'); wMenu.tabIndex = -1; wSub.tabIndex = -1;
   let subT = 0;
-  function hideWMenu() { wMenu.hidden = true; wSub.hidden = true; clearTimeout(subT); }
+  function hideWMenu() { wMenu.hidden = true; wSub.hidden = true; wSub._row = null; clearTimeout(subT); }
   function fillMenu(m, items) {
     m.replaceChildren(); m._items = items;
     items.forEach((it, i) => {
@@ -5587,6 +5623,9 @@ void main() {
   }
   function openSub(row, focus) {
     const it = wMenu._items[+row.dataset.i]; if (!it || !it.sub) return;
+    // already open from this row: leave it be (rebuilding it on every hover made it blink)
+    if (!wSub.hidden && wSub._row === row) { if (focus) $('.mrow:not(:disabled)', wSub)?.focus(); return; }
+    wSub._row = row;
     fillMenu(wSub, it.sub);
     wSub.hidden = false;
     const r = row.getBoundingClientRect(), w = wSub.offsetWidth, room = desk.getBoundingClientRect().right - r.right;
@@ -5613,8 +5652,11 @@ void main() {
   wMenu.addEventListener('pointerover', e => {
     const b = e.target.closest('.mrow'); if (!b) return;
     clearTimeout(subT);
-    subT = setTimeout(() => { if (b.getAttribute('aria-haspopup')) openSub(b); else { wSub.hidden = true; $$('.mrow', wMenu).forEach(x => x.classList.remove('open')); } }, 140);
+    if (!wSub.hidden && wSub._row === b) return;   // moving within the open row's icon, label and arrow
+    // crossing other rows on the way into an open submenu shouldn't close it: wait a little longer
+    subT = setTimeout(() => { if (b.getAttribute('aria-haspopup')) openSub(b); else { wSub.hidden = true; wSub._row = null; $$('.mrow', wMenu).forEach(x => x.classList.remove('open')); } }, wSub.hidden ? 140 : 280);
   });
+  wSub.addEventListener('pointerenter', () => clearTimeout(subT));
   document.addEventListener('pointerdown', e => { if (!wMenu.hidden && !e.target.closest('#wMenu, #wSub')) hideWMenu(); });
   addEventListener('blur', hideWMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !wMenu.hidden) { e.preventDefault(); hideWMenu(); } }, true);

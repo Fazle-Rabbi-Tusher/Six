@@ -83,7 +83,8 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Press (tension) | A button sinks to 97 % (140 ms). Held and pulled, it leans after the pointer, rigidly (its label never stretches); past 100 px it lets go and the press is cancelled. On release it settles on the recoil spring (620 ms). Not for menu rows, the dock or large surfaces |
 | Stack pull (tension) | The top card follows reluctantly, joined to its slot by a thinning neck; the cards behind lean after it. Past 150 px it lets go and the cards behind recoil once; released before that it springs back into the stack. See [Tension](#tension) |
 | Notification | Slides in 16 px, stays, slides out; never bounces |
-| Home cards dragged | Follow the pointer on a spring set by viscosity; fuse with cards closer than 40 px; settle on the 24 px grid |
+| Home cards dragged | Follow the pointer on a spring set by viscosity; fuse with cards closer than 40 px; settle on the 24 px grid. **Flick** a card (release faster than 650 px/s while still moving) and it's thrown: it glides on about a fifth of a second's travel in that direction, carrying its speed into the spring, and settles on the grid where it lands, kept on screen. Floating widgets glide the same way (520 ms ease-out). No glide under Reduce motion |
+| Menus: submenus | A submenu opens after 140 ms on its row and isn't rebuilt while the pointer moves over that row; crossing other rows on the way into it waits 280 ms before switching, and entering the submenu cancels the switch |
 
 ## Rules
 - **Only transform and opacity move** (plus clip and blur for unfolding and focus pulls), so motion

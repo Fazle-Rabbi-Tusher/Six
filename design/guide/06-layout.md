@@ -56,8 +56,9 @@ Quick Settings.
 └───────────────┴───────────────────────────────────────────────────────┘
 ```
 
-- Title bar: 44 px; caption buttons are 46 × 44 px each (close turns `--c-danger` with white glyph
-  on hover; this is the one place danger colour is used without a label because the ✕ is universal).
+- Title bar: 44 px; the window buttons (minimise, maximise, close) are round satin buttons, 28 px,
+  8 px apart and 12 px from the right edge; close turns `--c-close-hover` red with a white glyph on
+  hover. Each still has a 32 px hit area (WCAG 2.5.8) and a visible focus ring.
 - The whole title bar is a drag handle; double-click maximizes (Windows behaviour).
 - Sidebar: 240 px default, 200–320 px resizable, collapses to an icon rail below 720 px window width.
 - Minimum window size: 360 × 240 px.
