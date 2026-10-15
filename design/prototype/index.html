@@ -926,7 +926,8 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .flist { list-style: none; margin: 0; padding: 6px 8px; overflow: auto; flex: 1; }
 .fhead, .frow { display: grid; grid-template-columns: 1fr 110px 80px; gap: 12px; align-items: center; }
 .fhead { padding: 6px 18px; font: var(--text-caption); color: var(--c-text-3); border-bottom: 1px solid var(--c-line); }
-.frow { min-height: var(--control-md); padding: 4px 10px; border-radius: var(--radius-sm); cursor: default; }
+.frow { min-height: var(--control-md); padding: 4px 10px; border-radius: var(--radius-sm); cursor: default; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
+.frow img, .frow svg { -webkit-user-drag: none; }
 .frow:hover { background: var(--c-surface-2); }
 .frow[aria-selected="true"] { background: var(--c-accent-soft); }
 .frow[aria-selected="true"] .fname { color: var(--c-accent); font-weight: 600; }
@@ -1771,7 +1772,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <p>A soft ball of warm colour: orange and red flowing over violet, with a pink haze lighting the air around it and a fine film grain, so it reads as a material and not a gradient. It is shaded as a matte ball, lit from the side Pip is looking at, and the only colour in an otherwise graphite and silver system. Thinking stirs it and sends a spark across; listening ripples it; working fills it like a glass of water as the task progresses; Complete warms it green once; Failed cools it red.</p>
           <div class="pips" id="pipStates"></div>
           <h3>Halo</h3>
-          <p>A ring of cold light turning in the dark, brightest at the top and bottom where you see it edge-on, with long-exposure streaks in the light. Working lights the ring round as the task progresses; searching and waiting send a bright knot along it. On a light page it sits in a small dark pool, so the light can be seen.</p>
+          <p>A ring of cold light spinning about its vertical axis, caught over a short exposure, so it reads as a 3D shell: brightest at the top and bottom where you see the ring edge-on, with long-exposure streaks running through the light. Its outline is always a circle, and it has no backing: on a light page it is drawn as blue ink. Working lights it from the bottom up as the task progresses; searching and waiting send a bright knot round it.</p>
           <div class="pips" id="haloStates"></div>
           <h3>Ripple</h3>
           <p>A terraced pool seen from above, from the teal rings it is modelled on: steps of colour falling to a dark centre, each lip lit on the side toward the light and shading the step below. The deeper rings shift further as Pip looks around, so it reads in depth, and the rings flow slowly outward like ripples. Listening sends waves through it; thinking winds the rings into a spiral; working fills it from the centre out.</p>
@@ -3387,6 +3388,9 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     const x = visible()[+row.dataset.i]; if (!x || x.kind !== 'file') return;
     fdrag = { row, x, sx: e.clientX, sy: e.clientY, on: false, snapped: false };
   });
+  // the drag is ours: no text selection and no native drag-and-drop on file rows (a selected name
+  // would otherwise start the browser's own drag next time and cancel this one)
+  $('#flist').addEventListener('dragstart', e => { if (e.target.closest && e.target.closest('.frow')) e.preventDefault(); });
   function fghost(x, cx, cy) {
     const g = document.createElement('div');
     g.className = 'fghost'; g.setAttribute('aria-hidden', 'true');
@@ -4165,8 +4169,10 @@ vec4 halo(vec2 p) {
   // the spin is an ellipse, and together they make a translucent shell, brightest at the top and
   // bottom where the ring is seen edge-on, streaked with vertical bands where the spin lingered
   float R0 = 0.74 * (1.0 + uRipple * 0.035 * sin(uT * 6.0));
-  float tilt = 0.16 - uGaze.y * 0.35;
-  float spread = 1.15 + uSwirl * 0.9 + uAmp * 0.4;    // how much of a turn the exposure catches
+  float tilt = 0.06 - uGaze.y * 0.12;
+  // the exposure always catches at least half a turn, from edge-on to face-on, so the shell's
+  // outline is a circle; a faster spin (thinking, speaking) fills it more evenly
+  float spread = 3.3 + uSwirl * 0.8 + uAmp * 0.4;
   float e = 0.0, wide = 0.0;
   for (int k = 0; k < 14; k++) {
     float fk = float(k) / 13.0;
@@ -4190,23 +4196,27 @@ vec4 halo(vec2 p) {
     e += exp(-d * d / (th * th)) * dens * back * w * lit * (0.25 + 0.75 * edgeOn) * (1.0 + knot + cm);
     wide += exp(-d * d / 0.03) * lit;
   }
-  e *= 0.3; wide *= 0.02;
+  e *= 0.24; wide *= 0.016;
   // long-exposure streaks running up and down through the light
   float streak = 0.7 + 0.3 * noise(vec3(p.x * 34.0, uT * 0.7, 2.0)) + 0.15 * noise(vec3(p.x * 90.0, 5.0, uT * 0.3));
   float r = length(p);
-  float shell = exp(-pow((r - R0 * 0.92) / 0.22, 2.0)) * 0.12;         // the faint body of the shell
+  float shell = exp(-pow((r - R0 * 0.92) / 0.22, 2.0)) * 0.1 + exp(-pow((r - R0) / 0.045, 2.0)) * 0.16;   // the shell's body and its round rim
   e = (e * streak + wide + shell) * (1.0 + uAmp * 0.6);
   vec3 deep = vec3(0.08, 0.3, 0.55), ice = vec3(0.8, 0.96, 1.0);
   vec3 col = 1.0 - exp(-mix(deep, ice, smoothstep(0.3, 1.8, e)) * e * 1.7);
   col = mix(col, uTint * length(col), uTintK);
   col = sat(col, uSat);
   float al = clamp(max(col.r, max(col.g, col.b)) * 1.15, 0.0, 1.0);
-  // on a light page the light needs a dark pool to be seen in
-  float pool = (1.0 - uDark) * (1.0 - smoothstep(0.92, 1.12, r)) * uHaze;
-  float keep = mix(1.0 - smoothstep(0.9, 1.08, r), 1.0, max(uDark, 1.0 - uHaze));   // in light, the light stays inside its pool
-  col *= keep; al *= keep;
-  vec3 pc = vec3(0.02, 0.03, 0.055);
-  return vec4(col + pc * pool * (1.0 - al), al + pool * (1.0 - al));
+  // no backing in either theme: on a light page the light is drawn as blue ink instead, deepest
+  // where the light is faint and brighter at the hot spots, so it reads on white with nothing behind it
+  if (uDark < 0.5) {
+    float k = 1.0 - exp(-max(e - 0.14, 0.0) * 1.7);                  // faint glow drops out; the rim and streaks stay
+    vec3 ink = mix(vec3(0.07, 0.3, 0.62), vec3(0.2, 0.6, 0.95), smoothstep(0.4, 1.6, e));
+    ink = sat(mix(ink, uTint * 0.8, uTintK), uSat);
+    al = clamp(k, 0.0, 0.9);
+    col = ink * al;
+  }
+  return vec4(col, al);
 }
 vec4 ripple(vec2 p) {
   // a terraced pool, seen from above: rings stepping down to a dark centre, each lip catching the
@@ -4418,9 +4428,8 @@ void main() {
     if (form === 'ripple') {
       for (let i = 8; i >= 1; i--) { const k = i / 8; ctx.fillStyle = `rgba(${Math.round(20 + 200 * k)},${Math.round(40 + 190 * k)},${Math.round(48 + 190 * k)},${(1 - k * 0.5).toFixed(2)})`; ctx.beginPath(); ctx.arc(cx, cy, R * k, 0, TAU); ctx.fill(); }
     } else if (form === 'halo') {
-      if (!dark) { ctx.fillStyle = '#06080f'; ctx.beginPath(); ctx.arc(cx, cy, R * 1.05, 0, TAU); ctx.fill(); }
-      ctx.strokeStyle = 'rgba(150,220,255,0.9)'; ctx.lineWidth = Math.max(1.5, R * 0.08); ctx.shadowColor = 'rgba(80,170,255,0.9)'; ctx.shadowBlur = R * 0.3;
-      ctx.beginPath(); ctx.ellipse(cx, cy, R * 0.32, R * 0.72, 0, 0, TAU); ctx.stroke();
+      ctx.strokeStyle = dark ? 'rgba(150,220,255,0.9)' : 'rgba(20,90,170,0.85)'; ctx.lineWidth = Math.max(1.5, R * 0.08); ctx.shadowColor = dark ? 'rgba(80,170,255,0.9)' : 'rgba(30,110,200,0.45)'; ctx.shadowBlur = R * 0.3;
+      ctx.beginPath(); ctx.arc(cx, cy, R * 0.74, 0, TAU); ctx.stroke();
     } else {
       const hz = ctx.createRadialGradient(cx, cy, R * 0.8, cx, cy, R * 1.3);
       hz.addColorStop(0, 'rgba(240,130,255,0.35)'); hz.addColorStop(1, 'rgba(240,130,255,0)');

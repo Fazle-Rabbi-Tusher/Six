@@ -326,7 +326,9 @@ A ring of cold light spinning about its vertical axis, caught over a short expos
 long-exposure light rings it is modelled on. Each moment of the spin is an ellipse; together they
 make a translucent 3D shell, brightest at the top and bottom where the ring is seen edge-on, with
 a dark seam down the middle, vertical streaks where the spin lingered and the far half dimmer than
-the near one. On a light page it sits in a small dark pool, and its light stays inside it.
+the near one. The exposure always catches at least half a turn, so its outline is always a circle.
+It has no backing: on a dark page it is light, and on a light page it is drawn as blue ink, so it
+sits on the page with nothing behind it.
 
 ![Home with Pip as Halo](../screens/home-halo.png)
 
