@@ -132,7 +132,7 @@ Apps come from Flathub and Fedora as sandboxed Flatpaks (see [17 · SIX on Fedor
 |---|---|
 | Month view | Weekday header; days with up to two event chips (colour bar plus title) and "+N"; today's date in an accent circle; the selected day outlined |
 | Day panel | The selected day's events with time, title and place; *Add event*; and the hint that Pip can add events ("Lunch with Arif tomorrow at one") |
-| Header | Month and year in Instrument Serif; ‹ Today › |
+| Header | Month and year in Share Tech Mono; ‹ Today › |
 
 ## Lock screen
 
@@ -141,7 +141,7 @@ Apps come from Flathub and Fedora as sandboxed Flatpaks (see [17 · SIX on Fedor
 Six menu › *Lock Screen*, `Six + L` (`Ctrl + Alt + L` in the prototype), or after the time set in
 Privacy & security.
 
-- The time in Instrument Serif at 112 px, the date under it, the account picture, name and
+- The time in Share Tech Mono at 112 px, the date under it, the account picture, name and
   password field; Enter unlocks. Fingerprint works when it's set up.
 - The desktop is hidden behind a heavy blur and an 86 % scrim: nothing on screen is readable.
 - **Pip on the lock screen** answers "Hey Pip" only for the time, timers and the weather.

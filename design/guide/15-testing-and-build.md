@@ -62,7 +62,7 @@ Each step ships behind a flag and is tested with the tasks it unlocks before the
 | Step | Build | Unlocks tasks | Done when |
 |---|---|---|---|
 | 0 | The SIX image on Fedora: a Containerfile on the Fedora base with branding replaced, building and booting in CI, with rollback (see [17](17-fedora.md)) | — | CI boots the image in a VM; an update and a rollback both work unattended |
-| 1 | Tokens and type: [`tokens.css`](../tokens/tokens.css) → native toolkit, Geist and fallbacks, contrast check in CI | — | `check_contrast.py` passes in CI, both themes and every accent |
+| 1 | Tokens and type: [`tokens.css`](../tokens/tokens.css) → native toolkit, JetBrains Mono, Share Tech Mono, VT323 and fallbacks, contrast check in CI | — | `check_contrast.py` passes in CI, both themes and every accent |
 | 2 | Menu bar, dock, windows, Snap Layouts, Six Search (with effect lines) | 1, 7 | Tasks 1 and 7 pass with the mouse and with the keyboard |
 | 3 | Control Center, notifications, toasts with Undo | 2 | Task 2 passes; every destructive toast has Undo |
 | 3b | System apps: Settings (every page backed by its Fedora service), Files with the Bin, Software with Flatpak, Calendar, lock screen | 13, 14, 15 | Tasks 13–15 pass; no Settings page edits a file directly |

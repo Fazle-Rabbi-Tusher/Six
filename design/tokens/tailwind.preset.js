@@ -18,6 +18,7 @@ module.exports = {
         ui: v("font-ui"),
         display: v("font-display"),
         mono: v("font-mono"),
+        pixel: v("font-pixel"),
       },
       colors: {
         bg: v("c-bg"),

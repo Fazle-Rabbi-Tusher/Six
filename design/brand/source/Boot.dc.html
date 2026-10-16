@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SIX OS boot animation</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&amp;family=VT323&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FFFFFF}a:hover{color:#C9D3FF}
+.power{animation:fadeout .45s ease-out .15s forwards}
+@keyframes fadeout{to{opacity:0;visibility:hidden}}
+.pop{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:pop .45s cubic-bezier(.3,1.6,.5,1) .5s forwards}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4.5s 1s infinite}
+@keyframes blink{0%,100%{transform:scaleY(1)}4%{transform:scaleY(.1)}8%{transform:scaleY(1)}}
+.draw{stroke-dasharray:100;stroke-dashoffset:100;animation:draw 1.5s cubic-bezier(.65,0,.35,1) 1.3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cursor{opacity:0;animation:cur 1s steps(1) 2.7s infinite}
+@keyframes cur{0%{opacity:1}50%{opacity:0}}
+.ch{display:inline-block;overflow:hidden;width:0;white-space:nowrap;animation:type .01s steps(1) forwards}
+@keyframes type{to{width:1ch}}
+.hx{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:hx .32s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes hx{to{transform:scale(1)}}
+.tb{width:100%;height:100%;background:#FFFFFF;opacity:0;animation:tbon .01s steps(1) forwards}
+@keyframes tbon{to{opacity:1}}
+.glitch{position:relative;display:inline-block;animation:jit 2.8s 3.4s infinite}
+@keyframes jit{0%,7%,100%{transform:none;opacity:1}1%{transform:translate(-3px,1px) skewX(-10deg)}2%{transform:translate(3px,-1px);opacity:.75}3%{transform:translate(-1px,0) skewX(6deg);opacity:1}5%{transform:translate(2px,1px)}6%{transform:none}}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;opacity:0;pointer-events:none}
+.glitch::before{color:#4DF3FF;animation:gA 2.8s 3.4s infinite}
+.glitch::after{color:#FF3E9A;animation:gB 2.8s 3.4s infinite}
+@keyframes gA{0%{opacity:.9;transform:translate(-6px,0);clip-path:inset(8% 0 62% 0)}2%{opacity:.9;transform:translate(4px,0);clip-path:inset(55% 0 18% 0)}4%{opacity:.9;transform:translate(-3px,0);clip-path:inset(30% 0 45% 0)}6%{opacity:.9;transform:translate(6px,0);clip-path:inset(78% 0 4% 0)}7%,100%{opacity:0;transform:none;clip-path:inset(0 0 100% 0)}}
+@keyframes gB{0%{opacity:.9;transform:translate(5px,0);clip-path:inset(60% 0 12% 0)}2%{opacity:.9;transform:translate(-5px,0);clip-path:inset(12% 0 70% 0)}4%{opacity:.9;transform:translate(3px,0);clip-path:inset(40% 0 38% 0)}6%{opacity:.9;transform:translate(-4px,0);clip-path:inset(2% 0 85% 0)}7%,100%{opacity:0;transform:none;clip-path:inset(0 0 100% 0)}}
+.sweep{transform:translateX(-80px);animation:sweep .7s ease-in-out 3.8s 2 both}
+@keyframes sweep{from{transform:translateX(-80px)}to{transform:translateX(280px)}}
+.scanfill{transform:scaleX(0);transform-origin:left center;animation:scanfill .9s cubic-bezier(.65,0,.35,1) 5.2s forwards}
+@keyframes scanfill{to{transform:scaleX(1)}}
+@property --p{syntax:'<integer>';inherits:false;initial-value:0}
+.pct{--p:0;counter-reset:p var(--p);animation:pct 2.2s cubic-bezier(.4,0,.2,1) 3.8s forwards}
+.pct::after{content:"> " counter(p) "%"}
+@keyframes pct{to{--p:100}}
+.say{display:inline-block;overflow:hidden;white-space:nowrap;width:0;animation:say 1.3s steps(20) 3.8s forwards}
+@keyframes say{to{width:20ch}}
+@media (prefers-reduced-motion: reduce){
+.power{display:none}
+.draw{animation:none;stroke-dashoffset:0}
+.pop{animation:none;transform:none}
+.blink{animation:none}
+.cursor{animation:none;opacity:1}
+.ch{animation:none;width:1ch}
+.hx{animation:none;transform:none}
+.tb{animation:none;opacity:1}
+.glitch,.glitch::before,.glitch::after{animation:none}
+.sweep{display:none}
+.scanfill{animation:none;transform:none}
+.pct{animation:none;--p:100}
+.say{animation:none;width:20ch}
+}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 720px; overflow: hidden; background: {{brand}}; color: #FFFFFF; font-family: '{{font}}', monospace">
+<sc-if value="{{show}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; inset: 0; box-sizing: border-box; padding-bottom: 120px; display: flex; align-items: center; justify-content: center">
+<svg viewBox="-200 -200 400 400" width="260" height="260" role="img" aria-label="SIX mark: the eyes open first, then the hex band draws itself around them">
+<path class="draw" pathLength="100" d="M90.9 -97.5 L0 -150 L-129.9 -75 L-129.9 75 L0 150 L129.9 75 L129.9 -20 L0 -92 L-79.67 -46 L-79.67 46 L0 92 L39.84 69" fill="none" stroke="#FFFFFF" stroke-width="34" stroke-linejoin="miter" stroke-miterlimit="4" stroke-linecap="butt"></path>
+<g class="pop">
+<circle class="blink" cx="-24" cy="4" r="14" fill="#FFFFFF"></circle>
+<circle class="blink" cx="24" cy="4" r="14" fill="#FFFFFF"></circle>
+</g>
+</svg>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 64px; display: flex; flex-direction: column; align-items: center; gap: 24px">
+<div style="display: flex; align-items: flex-end; height: 72px; line-height: 1">
+<span class="glitch" data-text="SIX" style="font-size: 72px; font-weight: 700; line-height: 1; white-space: nowrap"><span class="ch" style="animation-delay: 2.9s">S</span><span class="ch" style="animation-delay: 3.02s">I</span><span class="ch" style="animation-delay: 3.14s">X</span></span>
+<span style="font-size: 26px; font-weight: 500; line-height: 1; margin-left: 16px; margin-bottom: 5px; color: #C9D3FF; white-space: nowrap"><span class="ch" style="animation-delay: 3.4s">O</span><span class="ch" style="animation-delay: 3.52s">S</span></span>
+<span class="cursor" aria-hidden="true" style="display: inline-block; width: 16px; height: 30px; margin-left: 10px; margin-bottom: 3px; background: #FFFFFF"></span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+<sc-if value="{{hexLoader}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 12px" aria-hidden="true">
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 3.8s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 4.08s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 4.36s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 4.64s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 4.92s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+<svg viewBox="-12 -12 24 24" width="24" height="24"><polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.6"></polygon><polygon class="hx" style="animation-delay: 5.2s" points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" fill="#FFFFFF"></polygon></svg>
+</div>
+</sc-if>
+<sc-if value="{{scanLoader}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="position: relative; width: 280px; height: 3px; border-radius: 2px; overflow: hidden; background: rgba(255,255,255,0.22)">
+<div class="sweep" style="position: absolute; left: 0; top: 0; width: 80px; height: 100%; background: #FFFFFF"></div>
+<div class="scanfill" style="position: absolute; inset: 0; background: #FFFFFF"></div>
+</div>
+</sc-if>
+<sc-if value="{{countLoader}}" hint-placeholder-val="{{ false }}">
+<div class="pct" aria-hidden="true" style="font-size: 26px; line-height: 1; color: #FFFFFF; white-space: nowrap"></div>
+</sc-if>
+<sc-if value="{{termLoader}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 10px; font-size: 26px; line-height: 1; color: #FFFFFF">
+<span>[</span>
+<div style="display: flex; gap: 4px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="20">
+<div style="width: 6px; height: 16px; background: rgba(255,255,255,0.22)"><div class="tb" style="animation-delay: {{b.delay}}s"></div></div>
+</sc-for>
+</div>
+<span>]</span>
+</div>
+</sc-if>
+<div style="height: 22px; font-size: 18px; color: #C9D3FF">
+<span class="say">bravo six going dark</span>
+</div>
+</div>
+</div>
+<div class="power" aria-hidden="true" style="position: absolute; inset: 0; background: #000000"></div>
+</sc-if>
+<button type="button" onClick="{{replay}}" style="position: absolute; right: 32px; top: 28px; min-height: 44px; padding: 10px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.55); background: transparent; color: #FFFFFF; font-family: '{{font}}', monospace; font-size: 15px; letter-spacing: 0.06em; cursor: pointer">Replay</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;font&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;JetBrains Mono&quot;,&quot;VT323&quot;,&quot;Share Tech Mono&quot;],&quot;default&quot;:&quot;VT323&quot;},&quot;loader&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Terminal&quot;,&quot;Scan&quot;,&quot;Counter&quot;,&quot;Hexagons&quot;],&quot;default&quot;:&quot;Terminal&quot;},&quot;brand&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1B3CFF&quot;,&quot;options&quot;:[&quot;#1B3CFF&quot;,&quot;#2B50FF&quot;,&quot;#1230D6&quot;]},&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:720}}">
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var hidden = !!(this.state && this.state.hidden);
+    var loader = this.props.loader ?? 'Terminal';
+    var known = ['Scan', 'Counter', 'Hexagons', 'Terminal'];
+    if (known.indexOf(loader) < 0) loader = 'Terminal';
+    var bars = [];
+    var t = 3.8;
+    for (var i = 0; i < 20; i++) {
+      bars.push({ delay: Math.round(t * 100) / 100 });
+      t += 0.035 + ((i * 37) % 7) * 0.016;
+    }
+    return {
+      bars: bars,
+      scanLoader: loader === 'Scan',
+      countLoader: loader === 'Counter',
+      hexLoader: loader === 'Hexagons',
+      termLoader: loader === 'Terminal',
+      font: this.props.font ?? 'VT323',
+      brand: this.props.brand ?? '#1B3CFF',
+      show: !hidden,
+      replay: function () {
+        self.setState({ hidden: true });
+        setTimeout(function () { self.setState({ hidden: false }); }, 60);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

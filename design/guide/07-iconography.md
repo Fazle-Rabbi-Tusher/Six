@@ -38,7 +38,7 @@ plain SVG paths, so the shell embeds only the ones it uses.
 
 | App | Tile | Object |
 |---|---|---|
-| Six Menu | Graphite | Six pearl dots in a ring |
+| Six Menu (SIX) | Cobalt | The Hex Face mark in white, a pearl-to-blue band ([18](18-brand.md)) |
 | Files | Paper white | A blue folder with a sheet inside |
 | Browser | Teal to blue | A globe with a coral orbit and a small moon |
 | Mail | Sky to blue | An envelope with a coral seal |

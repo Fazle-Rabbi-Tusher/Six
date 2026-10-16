@@ -39,9 +39,9 @@ This chapter covers how Pip works inside the OS.
 | Part | Spec |
 |---|---|
 | **Pip** | 330 px orb centred above the greeting, drawn as Bloom by default (see [Pip's looks](#pips-looks)). It is a button: click it to talk. Status label in mono caps below it: the state, or what Pip is actually doing ("PIP · SEARCHING DOCUMENTS", "PIP · WAITING FOR YOUR REVIEW") |
-| **Greeting** | `text-headline` in Instrument Serif, by time of day ("Good evening, Nadia."), and one line saying how to talk: "Press the mic in the menu bar, or hold Space, and talk." or, with Hey Pip on, "Say "Hey Pip", then what you need." |
+| **Greeting** | `text-headline` in Share Tech Mono, by time of day ("Good evening, Nadia."), and one line saying how to talk: "Press the mic in the menu bar, or hold Space, and talk." or, with Hey Pip on, "Say "Hey Pip", then what you need." |
 | **Moving Pip** | Pip starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move Pip back to the middle* or *Hide Pip from home*; `Alt + arrows` moves it from the keyboard. Hidden, Pip still listens through the menu bar mic; *Settings › Home & widgets › Pip on home* brings it back. Its place is remembered |
-| **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Instrument Serif. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
+| **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Pip heard ("Open Files and Terminal side by side"), then Pip's reply in Share Tech Mono. Review cards, previews and recovery chips appear inside it. It fades 9 s after the reply (longer when there are chips) |
 | **Try saying** | Up to four example requests as chips. Clicking one plays it as if you had said it, which is also how the prototype is tested without a microphone. Hidden while a caption shows; can be turned off in Settings › Home & widgets |
 | **Hint line** | The listening mode with its shortcut, and **Type instead**, which opens the Pip app |
 | **Widgets** | 284 px plasma clay cards in two columns (see Widgets below). Cards in a column sit 12 px apart, so they fuse. Draggable; drop snaps to the 24 px grid; double-click a moved card to send it back. Drop one card on another to stack them |
@@ -244,7 +244,7 @@ visible.
 | Listening | Pip ripples (*Listening*); the menu-bar mic turns into an amber pill; the caption shows a live waveform and "Listening…" |
 | Hearing | The transcript forms in the caption as you speak, so a misheard word is visible before anything runs |
 | Working | The caption keeps what Pip heard; the orb and status label show what Pip is doing ("PIP · ARRANGING WINDOWS") |
-| Answer | The reply appears under what you said, in Instrument Serif, and is spoken aloud (Settings › Pip & voice › *Speak replies*) |
+| Answer | The reply appears under what you said, in Share Tech Mono, and is spoken aloud (Settings › Pip & voice › *Speak replies*) |
 | Review | Changes to files show the review card inside the caption with "Say "yes" or "no"". Pip waits; you can answer by voice or with the buttons |
 | With windows open | Pip talks from the **notch** at the top centre: it drops down into a panel with what you said, Pip's reply and any review card (see [09 · The Pip notch](09-shell.md#the-pip-notch)) |
 

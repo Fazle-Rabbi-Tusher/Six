@@ -138,6 +138,7 @@ removed; the dock and popovers never cover the focused element. See
 - Thinking Orbs (Product Hunt launch coverage): https://aitoolly.com/ai-news/article/2026-10-05-thinking-orbs-launches-on-product-hunt-enhancing-visual-feedback-and-user-experience-in-modern-ai-in
 - thinking-orbs npm package: https://www.jsdelivr.com/package/npm/thinking-orbs
 - 21st.dev: https://21st.dev
-- Geist and Geist Mono typefaces: https://vercel.com/font
-- Instrument Serif typeface: https://fonts.google.com/specimen/Instrument+Serif
+- JetBrains Mono typeface: https://www.jetbrains.com/lp/mono/
+- Share Tech Mono typeface: https://fonts.google.com/specimen/Share+Tech+Mono
+- VT323 typeface: https://fonts.google.com/specimen/VT323
 - Phosphor icons: https://phosphoricons.com

@@ -47,6 +47,11 @@ pairs as Graphite (`check_contrast.py`):
 | Moss | `#1A6D47` | `#5FD49A` | 6.0 / 9.5:1 |
 | Sun | `#85540E` | `#F2B95A` | 6.1 / 9.9:1 |
 
+## Brand colour
+
+Cobalt (`#1B3CFF`) belongs to the SIX mark, its app icon and the boot screen, not to the UI.
+Buttons, selection and focus follow the accent above. See [18 · Brand](18-brand.md).
+
 ## Pip's colour
 
 Pip is the one warm thing on a graphite screen. `--pip-line` is Bloom's ember, used for Pip's

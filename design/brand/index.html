@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIX Brand Sheet</title>
+<meta name="description" content="The SIX OS mark, app icon, wordmark, colour studies and type, with the boot screen.">
+<link rel="icon" href="six-app-icon-small.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Share+Tech+Mono&family=VT323&display=swap">
+<style>
+:root {
+  --brand: #1b3cff; --brand-ink: #c9d3ff; --night: #0a1440; --paper: #f3f1ec; --ink: #12141a; --muted: #5b5f6b; --line: #dcd9d1;
+  --font-ui: "JetBrains Mono", ui-monospace, monospace; --font-display: "Share Tech Mono", "JetBrains Mono", monospace; --font-pixel: "VT323", monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 14px/1.6 var(--font-ui); letter-spacing: -0.02em; -webkit-font-smoothing: antialiased; }
+main { max-width: 1200px; margin: 0 auto; padding: 48px 24px 80px; }
+h1 { font: 400 56px/1 var(--font-display); letter-spacing: 0; margin: 0; }
+h2 { font: 400 28px/1.1 var(--font-display); letter-spacing: 0; margin: 56px 0 16px; }
+.eyebrow { font: 500 11px/1.4 var(--font-ui); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+p { max-width: 68ch; margin: 8px 0; }
+a { color: var(--brand); }
+.hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; margin-top: 28px; }
+.tile { border-radius: 24px; display: grid; place-items: center; min-height: 300px; padding: 32px; }
+.night { background: var(--night); }
+.cobalt { background: var(--brand); color: #fff; }
+.white { background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+.stack { display: grid; gap: 24px; }
+.stack .tile { min-height: 138px; }
+.icons { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.icons figure { margin: 0; display: grid; justify-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.grid8 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.pal { border-radius: 22px; padding: 22px 12px 18px; display: grid; justify-items: center; gap: 14px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
+.pal svg { width: 110px; height: 110px; }
+.pal b { font: 500 14px/1 var(--font-ui); letter-spacing: 0.02em; }
+.pal small { font-size: 11px; letter-spacing: 0.06em; opacity: 0.8; }
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.rule { background: #fff; border-radius: 16px; padding: 18px 20px; box-shadow: inset 0 0 0 1px var(--line); }
+.rule b { display: block; margin-bottom: 4px; }
+.faces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.face { background: #fff; border-radius: 16px; padding: 20px; box-shadow: inset 0 0 0 1px var(--line); }
+.face .big { display: block; font-size: 44px; line-height: 1.1; margin-bottom: 10px; }
+.bootlink { display: inline-flex; align-items: center; gap: 10px; margin-top: 12px; min-height: 44px; padding: 10px 20px; border-radius: 999px; background: var(--brand); color: #fff; text-decoration: none; font-weight: 500; }
+.bootlink:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+@media (max-width: 860px) {
+  .hero, .rules, .faces { grid-template-columns: 1fr; }
+  .grid8 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  h1 { font-size: 40px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <span class="eyebrow">SIX OS · brand</span>
+  <h1>Hex Face</h1>
+  <p>A hexagonal band that spirals inward like the numeral six, drawn as one stroke the way a line of code is written, with two eyes at its centre. They are Pip's eyes: the mark is the system looking back at you. Source: the <em>SIX OS Logo</em> canvas, direction D.</p>
+
+  <div class="hero">
+    <div class="tile night"><img src="six-app-icon.svg" width="300" height="300" alt="SIX app icon: the white hex face on a cobalt rounded square"></div>
+    <div class="stack">
+      <div class="tile cobalt"><img src="six-lockup-cobalt.svg" height="104" alt="SIX OS lockup, white on cobalt, with the terminal cursor" style="max-width: 100%"></div>
+      <div class="tile white"><img src="six-lockup.svg" height="80" alt="SIX OS lockup, cobalt mark and ink wordmark on white" style="max-width: 100%"></div>
+    </div>
+  </div>
+
+  <h2>App icon sizes</h2>
+  <p>At 32 px and under, use <code>six-app-icon-small.svg</code>: the band is heavier and the eyes bigger, so they survive the pixel grid.</p>
+  <div class="icons">
+    <figure><img src="six-app-icon.svg" width="128" height="128" alt=""><figcaption>128</figcaption></figure>
+    <figure><img src="six-app-icon.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+    <figure><img src="six-app-icon.svg" width="48" height="48" alt=""><figcaption>48 · dock</figcaption></figure>
+    <figure><img src="six-app-icon-small.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+    <figure><img src="six-app-icon-small.svg" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+  </div>
+
+  <h2>Colour studies</h2>
+  <p>Cobalt is the brand. The other seven are studies for themes, editions and wallpapers. Each pairs a mark colour with its own near-black ground, and the eyes can differ from the band, as in Ink on Paper.</p>
+  <div class="grid8" id="pals"></div>
+
+  <h2>Using the mark</h2>
+  <div class="rules">
+    <div class="rule"><b>Clear space</b>Keep one band width (34 units in the 400-unit drawing, about 8 % of the mark) clear on every side.</div>
+    <div class="rule"><b>Minimum size</b>16 px for the mark, with the small drawing at 32 px and under. The lockup needs the wordmark at 24 px or more.</div>
+    <div class="rule"><b>One colour</b>The band and eyes are one flat colour on a flat ground. No gradients on the mark, no outlines, no rotation. The app icon may carry the dock's shared light.</div>
+    <div class="rule"><b>Grounds</b>White on cobalt or night, cobalt on white or paper. On photos, put the mark on a cobalt tile.</div>
+    <div class="rule"><b>The eyes</b>The eyes may blink (every 4.5–5 s, 6 % of the cycle) wherever the mark is large and alive: boot, About, onboarding. Never in the menu bar or dock.</div>
+    <div class="rule"><b>Wordmark</b>SIX in Share Tech Mono, a small OS at 36 % on the same baseline, and a block cursor that blinks once a second when the wordmark is live.</div>
+  </div>
+
+  <h2>Terminal type</h2>
+  <div class="faces">
+    <div class="face"><span class="big" style="font-family: var(--font-ui)">Aa 0O Il1</span><b>JetBrains Mono</b><br>Everything you read · 11–20 px</div>
+    <div class="face"><span class="big" style="font-family: var(--font-display)">SIX 21:04</span><b>Share Tech Mono</b><br>Display, big numbers, the wordmark</div>
+    <div class="face"><span class="big" style="font-family: var(--font-pixel); font-size: 52px">[ ▮▮▮▮ ]</span><b>VT323</b><br>The boot screen only</div>
+  </div>
+
+  <h2>Boot screen</h2>
+  <p>Power-on frame, the eyes open, the band draws itself around them, SIX OS types out and glitches once, and a terminal loader fills while "bravo six going dark" types underneath. About six seconds; any key skips it.</p>
+  <a class="bootlink" href="boot.html">Play the boot screen</a>
+</main>
+<script>
+const BAND = 'M90.9 -97.5 L0 -150 L-129.9 -75 L-129.9 75 L0 150 L129.9 75 L129.9 -20 L0 -92 L-79.67 -46 L-79.67 46 L0 92 L39.84 69';
+const PALS = [
+  ['Mint Signal', '#000000', '#1DE28D', '#1DE28D', '#D8FBE9'],
+  ['Cyan Core', '#06141A', '#22D3EE', '#E6FBFF', '#D4F6FC'],
+  ['Electric Violet', '#0D0B1F', '#8B7CFF', '#F1EEFF', '#E2DEFF'],
+  ['Cobalt', '#1B3CFF', '#FFFFFF', '#FFFFFF', '#FFFFFF'],
+  ['Amber Boot', '#120D05', '#FFB020', '#FFF4DE', '#FFEBC4'],
+  ['Coral', '#160A0D', '#FF5C72', '#FFE9EC', '#FFD9DE'],
+  ['Acid Lime', '#0D0F08', '#C4F03A', '#F7FFE0', '#EEF9C8'],
+  ['Ink on Paper', '#F3F1EC', '#12141A', '#0B8F55', '#12141A'],
+];
+document.getElementById('pals').innerHTML = PALS.map(([name, bg, mark, eyes, ink]) => `<div class="pal" style="background:${bg};color:${ink}${bg === '#F3F1EC' ? ';box-shadow:inset 0 0 0 1px var(--line)' : ''}">
+  <svg viewBox="-200 -200 400 400" role="img" aria-label="SIX mark in ${name}"><path d="${BAND}" fill="none" stroke="${mark}" stroke-width="34" stroke-linejoin="miter" stroke-miterlimit="4"/><circle cx="-24" cy="4" r="14" fill="${eyes}"/><circle cx="24" cy="4" r="14" fill="${eyes}"/></svg>
+  <b>${name}</b><small>${mark} · ${bg}</small></div>`).join('');
+</script>
+</body>
+</html>

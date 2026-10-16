@@ -28,7 +28,7 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 
 | Item | Behaviour |
 |---|---|
-| **Six logo** (left) | Opens the system menu: About SIX, System Settings, Six Search, Edit widgets, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
+| **Six logo** (left) | The Hex Face mark ([18](18-brand.md)), drawn heavier at menu-bar size. Opens the system menu: About SIX, System Settings, Six Search, Edit widgets, Sleep, Restart, Shut Down, Lock Screen, Log Out. Hit area reaches the top-left screen corner |
 | **App name** | Bold name of the focused app ("Home" when none). App menus (File, Edit, View…) follow it |
 | **Search** | Opens Six Search (`Ctrl + K`, `Six + Space`) |
 | **Control Center** | Wi-Fi, a battery that shows its level and percentage, and a two-toggle glyph; opens Control Center (Quick Settings) under the bar |

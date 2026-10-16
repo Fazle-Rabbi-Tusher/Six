@@ -24,7 +24,7 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 |---|---|
 | [01 · Research](guide/01-research.md) | Switcher studies, Fitts's law, window management, glass legibility, claymorphism, WCAG 2.2, references (plasma-ui, thinking orbs, 21st.dev, macOS) |
 | [02 · Principles](guide/02-principles.md) | Five principles and the "never" list |
-| [03 · Typography](guide/03-typography.md) | Geist, Instrument Serif, Geist Mono, Noto fallbacks (incl. Bangla), type scale, rules |
+| [03 · Typography](guide/03-typography.md) | Terminal type: JetBrains Mono, Share Tech Mono, VT323 (boot), Noto fallbacks (incl. Bangla), type scale, rules |
 | [04 · Color](guide/04-color.md) | Graphite and silver: neutral greys, the graphite accent (silver in dark) and its options, Pip's colour, semantic colours, clay pastels, plasma moods, verified contrast |
 | [05 · Materials](guide/05-materials.md) | Clay, plasma glass, paper, wallpaper, plasma clay (the home's surfaces, drawn as water) and tension, elevation scale |
 | [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
@@ -39,12 +39,22 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, seventeen tasks, targets, and the order to build SIX in |
 | [16 · System apps](guide/16-system-apps.md) | Pip, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Pip on the device, security defaults, and the rules for building on Fedora |
+| [18 · Brand](guide/18-brand.md) | The Hex Face mark, the app icon, the SIX OS wordmark, cobalt and the seven colour studies, and the boot screen: its timeline, loaders, rules and the Plymouth theme that runs it |
 
 ## Concepts
 
 | File | What it is |
 |---|---|
 | [`concepts/tension.html`](concepts/tension.html) | **Tension studies**: live concepts for elastic surfaces in SIX, in graphite and silver satin glass (after the *Tensionmorphism* reference; refractive and 3D, rendered with WebGL): a card stretching out of a stack, Pip's notch reaching for the window it's moving, Control Center radios that merge, answers growing out of questions, Files and the Bin, menus budding from the click. With rules, tokens and a build order. All six are now built into the prototype (see [08 · Motion › Tension](guide/08-motion.md#tension)) |
+
+## Brand
+
+| File | What it is |
+|---|---|
+| [`brand/index.html`](brand/index.html) | **Brand sheet**: the Hex Face mark, app icon sizes, lockups, the eight colour studies, rules and type |
+| [`brand/boot.html`](brand/boot.html) | **Boot screen**: the reference animation, with the four loaders and Replay |
+| `brand/*.svg` | The mark, app icons (regular and small), wordmark and lockups, text outlined |
+| `brand/source/` | The originals: the *SIX OS Logo* PDF and the boot-screen mockup (`Boot.dc.html`, a design-tool export; it needs its runtime to play, so use `boot.html`) |
 
 ## Tokens
 

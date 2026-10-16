@@ -133,7 +133,9 @@ Fedora's trademark guidelines decide how a derivative can use the Fedora name an
   of Red Hat, Inc.; SIX is not affiliated with or endorsed by the Fedora Project.*
 - The "Fedora Remix" mark has its own usage rules; SIX doesn't need it, since it has its own name.
 - `fedora-logos` also supplies installer, bootloader and splash artwork, so replacing it means
-  supplying those assets too. Plan the artwork with the package list, not after it.
+  supplying those assets too. Plan the artwork with the package list, not after it. SIX ships
+  `six-logos`: the Hex Face mark, the app icon, the lockups and the `six` Plymouth theme (the
+  boot screen); see [18 · Brand](18-brand.md).
 
 Check the current [Fedora trademark guidelines](https://docs.fedoraproject.org/en-US/legal/trademarks/)
 before any public release; the wiki pages on remixes are older than the guidelines.

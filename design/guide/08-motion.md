@@ -53,6 +53,7 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 
 | Moment | Motion |
 |---|---|
+| Start and restart | The boot screen: the mark's eyes pop open, its hex band draws around them, SIX OS types out and glitches once, a terminal loader fills, then the screen fades to the desktop and the ripple plays from the centre (about 6 s; any key skips; timeline in [18](18-brand.md#the-boot-screen)) |
 | Open app | The window grows out of its dock icon: it starts at the icon's size and place, fades up over the first 30 %, and settles on the precise spring (600 ms). The icon lifts once, 12 px, no second bounce |
 | Minimise | The window folds back into its dock icon (460 ms, ease-in-out) |
 | Close | A short fade to 97 % (200 ms, ease-in). Leaving is quicker than arriving |

@@ -75,5 +75,16 @@ for m in re.finditer(r':root\[data-accent="([a-z]+)"\](\[data-theme="dark"\])?\s
         failures += not ok
         print(f"  {'PASS' if ok else 'FAIL'} {r:5.2f}:1  (min {minimum})  {fg} on {bg}  · {why}")
 
+# brand: boot screen text sits on cobalt; the wordmark's small OS sits on the theme surface
+b = {k: v["$value"] for k, v in TOKENS["brand"].items()}
+print("\nbrand")
+for fg, bg, minimum, why in [("#ffffff", b["base"], 4.5, "boot wordmark and loader on cobalt"), (b["ink"], b["base"], 4.5, "boot status line on cobalt"),
+                             (b["base"], lookup("light", "semantic.surface"), 4.5, "wordmark OS, light"), (b["ink"], lookup("dark", "semantic.surface"), 4.5, "wordmark OS, dark"),
+                             ("#ffffff", b["night"], 4.5, "mark on night")]:
+    r = ratio(fg, bg)
+    ok = r >= minimum
+    failures += not ok
+    print(f"  {'PASS' if ok else 'FAIL'} {r:5.2f}:1  (min {minimum})  {fg} on {bg}  · {why}")
+
 print(f"\n{failures} failing pair(s)")
 sys.exit(1 if failures else 0)

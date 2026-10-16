@@ -34,12 +34,15 @@ tokens = {
     "Generated from tokens.css by build_tokens.py: edit the CSS, then regenerate.",
     "font": {
         "family": {
-            "ui": {"$type": "fontFamily", "$value": ["Geist", "Noto Sans", "Noto Sans Bengali", "system-ui", "sans-serif"]},
-            "display": {"$type": "fontFamily", "$value": ["Instrument Serif", "Noto Serif", "Georgia", "serif"]},
-            "mono": {"$type": "fontFamily", "$value": ["Geist Mono", "Noto Sans Mono", "monospace"]},
+            "ui": {"$type": "fontFamily", "$value": ["JetBrains Mono", "Noto Sans Mono", "Noto Sans Bengali", "monospace"]},
+            "display": {"$type": "fontFamily", "$value": ["Share Tech Mono", "JetBrains Mono", "monospace"]},
+            "mono": {"$type": "fontFamily", "$value": ["JetBrains Mono", "Noto Sans Mono", "monospace"]},
+            "pixel": {"$type": "fontFamily", "$value": ["VT323", "JetBrains Mono", "monospace"], "$description": "boot screen only"},
         },
+        "tracking": {"ui": {"$type": "dimension", "$value": "-0.02em"}},
         "style": {k: {"$type": "typography", "$value": v.strip()} for k, v in re.findall(r"--text-([a-z-]+):\s*([^;]+);", root)},
     },
+    "brand": {k: {"$type": "color", "$value": v.strip()} for k, v in re.findall(r"--brand(?:-([a-z]+))?:\s*(#[0-9a-fA-F]{6});", root) for k in [k or "base"]},
     "space": vals("space", "dimension"),
     "radius": vals("radius", "dimension"),
     "size": {

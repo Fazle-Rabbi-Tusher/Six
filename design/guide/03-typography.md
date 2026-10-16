@@ -2,27 +2,34 @@
 
 ## Typefaces
 
-All system faces are open-licensed (SIL Open Font License), so SIX can ship, embed and modify them.
+SIX is set in **terminal type**: every face is monospaced, the way a shell prompt is. It matches
+the SIX mark (a hex band drawn like a line of code) and the boot screen, and it makes numbers,
+paths and Pip's status lines line up without special handling. All faces are open-licensed (SIL
+Open Font License), so SIX can ship, embed and modify them.
 
 | Role | Face | Why |
 |---|---|---|
-| **UI** (everything by default) | **Geist** (variable, 100–900) | A neutral, precise grotesque in the spirit of SF Pro: open shapes, generous spacing at 12–14 px, calm at any weight. Its clean geometry suits the macOS-style menu bar and dock |
-| **Display** (greetings, page titles ≥ 28 px, lock screen, onboarding) | **Instrument Serif** (roman + italic) | Gives SIX a warm, editorial voice at large sizes, the way the plasma-ui reference sets its panel titles in a serif. One weight only (400), so hierarchy comes from size. Never below 28 px |
-| **Mono** (terminal, code, file hashes, Pip's state labels) | **Geist Mono** | Same skeleton as Geist so mixed lines align; clear 0/O and 1/l/I |
-| **Script fallback** | **Noto Sans** family: Noto Sans Bengali, Arabic, Devanagari, CJK, etc. | Every language renders in a matching sans, never as boxes |
+| **UI** (everything by default) | **JetBrains Mono** (variable, 100–800, roman + italic) | A monospace drawn for reading all day: tall x-height, open apertures, slashed zero, clear `Il1` and `0O`. Readable at 11–14 px in menus and lists, where most monospace faces turn to texture |
+| **Display** (greetings, page titles ≥ 24 px, big numbers, lock-screen clock, the wordmark) | **Share Tech Mono** | Squared, slightly condensed terminal letters; the SIX wordmark is set in it. One weight (400), so hierarchy comes from size. Never below 24 px |
+| **Pixel** (the boot screen only) | **VT323** | A VT320 terminal face. Used while SIX starts and restarts, where it reads as a machine waking up. Never in the running UI |
+| **Mono** (terminal, code, file hashes) | **JetBrains Mono** | The UI face already is monospace; code just turns ligatures off |
+| **Script fallback** | **Noto Sans Mono**, then Noto Sans Bengali, Arabic, Devanagari, CJK, etc. | Every language renders, never as boxes |
 
-Geist covers Latin and Latin Extended; every other script falls back to Noto. For Bangla UI, pair
-Geist with **Noto Sans Bengali** (system default) or **Hind Siliguri** (optional, slightly more
-compact). Set Bangla text 1 px larger and with +2 px line height compared
-to the Latin tokens; conjuncts need the room.
+The mono faces cover Latin, Latin Extended, Greek and Cyrillic; every other script falls back to
+Noto. For Bangla UI, pair JetBrains Mono with **Noto Sans Bengali**, set 1 px larger and with
++2 px line height compared with the Latin tokens; conjuncts need the room. Bangla is
+proportional, and that is fine: monospace is a voice, not a grid every script must keep.
 
-### Font features to enable
-- `tnum` (tabular figures) for the clock, battery %, file sizes, tables, timers: numbers that
-  change must not jiggle.
-- `case` for all-caps labels (overline style).
-- **Geist Mono** for revealed passwords, Wi-Fi keys and file hashes, where `Il1` and `0O`
-  confusion costs users time.
-- `liga` off in the terminal by default (on as a user option).
+### Tracking and features
+- Body text tracks in by **-0.02em** (`--tracking-ui`). Monospace runs about 15 % wider than a
+  grotesque at the same size; the tracking brings lines close to their old length so layouts
+  keep their breaks. Caps eyebrows keep their positive tracking.
+- **Ligatures off** in the UI (`font-variant-ligatures: none`): `->` and `!=` should read as typed.
+  The terminal and code editors offer them as a user option.
+- Every figure is already tabular in a monospace face, so clocks, battery % and timers never
+  jiggle.
+- Long words cost more width in monospace. Prefer short labels ("Night light", not "Night light
+  schedule") and let tiles wrap to two lines rather than shrinking type.
 
 ## Type scale
 
@@ -31,7 +38,7 @@ Desktop base size is **14 px**. A *Text size* setting scales everything from 100
 
 | Token | Face | Size / line | Weight | Use |
 |---|---|---|---|---|
-| `text-hero` | Display | 96 / 96 | 400 | Lock-screen clock only |
+| `text-hero` | Display | 96 / 96 | 400 | Lock-screen clock only (112 px in the prototype) |
 | `text-display` | Display | 56 / 60 | 400 | Onboarding, empty-state heroes |
 | `text-headline` | Display | 40 / 46 | 400 | Home greeting, Settings page titles, app hero titles |
 | `text-title-lg` | Display | 28 / 34 | 400 | Dialog titles, section titles in apps |
@@ -44,12 +51,13 @@ Desktop base size is **14 px**. A *Text size* setting scales everything from 100
 | `text-caption` | UI | 12 / 16 | 500 | Timestamps, dock labels, metadata |
 | `text-overline` | UI | 11 / 16 | 600, caps, +0.08em | Section eyebrows in menus and settings |
 
-Display sizes use `letter-spacing: -0.01em`. UI sizes use 0. Caps use +0.08em.
+Display sizes use `letter-spacing: -0.01em`. UI sizes use -0.02em. Caps use +0.08em. The boot
+screen sets VT323 at 72 px (SIX), 26 px (OS, loader) and 18 px (status line), with no tracking.
 
 ## Rules
 - **Nothing smaller than 12 px** for anything a user must read; 11 px is reserved for caps eyebrows.
 - **Line length:** 45–75 characters for reading text (`--measure: 68ch`).
-- **Weights:** 400 for reading, 600 for emphasis and labels; the display serif is always 400 (use its italic for emphasis). Avoid 300
+- **Weights:** 400 for reading, 600 for emphasis and labels; Share Tech Mono is always 400 (use size for emphasis). Avoid 300
   and below in the UI; thin strokes vanish on low-DPI screens and on glass.
 - **Sentence case** everywhere ("Turn on Wi-Fi", not "Turn On Wi-Fi"). Caps only for overlines.
 - **Truncation:** truncate in the middle for file names (`Quarterly-rep…final.xlsx`) so the

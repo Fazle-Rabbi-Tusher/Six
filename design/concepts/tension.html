@@ -7,7 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&family=Share+Tech+Mono&display=swap">
 <style>
 /* Layout: one reading column for the argument, opening onto a two-up grid of live studies.
    Each study is a stage (the elastic surface, drawn as SIX liquid glass) above a caption that
@@ -19,9 +19,9 @@
   --on-ink: #ffffff; --on-muted: rgba(255, 255, 255, 0.72); --on-shadow: rgba(0, 0, 0, 0.35);
   --thread: rgba(17, 18, 20, 0.35); --win: rgba(255, 255, 255, 0.72); --win-edge: rgba(17, 18, 20, 0.12); --hover: rgba(17, 18, 20, 0.07);
   --act-bg: linear-gradient(180deg, #3d4048, #1b1d21); --act-ink: #ffffff; --act-edge: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -8px rgba(0, 0, 0, 0.6);
-  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-ui: Geist, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Share Tech Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-ui: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -44,7 +44,7 @@
     color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-ui); -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.6 var(--font-ui); letter-spacing: -0.02em; -webkit-font-smoothing: antialiased; }
 .wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 72px; }
 h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 400; }
 p { margin: 0; }
