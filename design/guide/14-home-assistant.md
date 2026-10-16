@@ -303,7 +303,7 @@ look is replaced by the dotted orb in the OS.
 
 ## Six's looks
 
-*Settings › Six & voice › Look: Bloom / Halo / Ripple / Dotted* sets Six everywhere at once (home,
+*Settings › Six & voice › Look: Bloom / Halo / Ripple / Dotted / Ink / Mosaic* sets Six everywhere at once (home,
 the menu bar, the dock, the menu-bar capsule, the task card). **Bloom** is the default. On a graphite and
 silver screen Six is the one thing with colour, so it can be found at a glance and has a character
 of its own. On home Six is 330 px (230 px when moved out of the middle, 240 px on a phone).
@@ -344,6 +344,59 @@ shift further than the outer ones as Six looks around, so it reads in depth. The
 outward, like ripples.
 
 ![Home with Six as Ripple](../screens/home-ripple.png)
+
+### Ink: the look that shows what Six is saying
+
+A paragraph out of focus, after a blurred-text poster: six rows of soft ink blots, wider than tall,
+overlapping their neighbours, about one in four paler as if further out of focus. Every blot drifts
+sideways on its own slow sine and breathes in width, so the cloud is never still.
+
+**It shows Six's words.** When Six speaks, each word of the reply comes into focus in turn, about
+three words a second, where a blot dissolves to make room for it. Words land in reading order
+(top row to bottom, left to right, three blots on for each word, so the few words in focus at once
+never share a blot), sharpen in 200 ms and blur back out over 420 ms as later words arrive, so
+three or four are readable at any moment. A streamed reply keeps its place as it grows. Listening,
+Ink shows the words it heard, faster. At rest it says a short line of its own every few seconds
+(*I walk with you.*, *Ready when you are.*, *Say the word.*). Words are set in Share Tech Mono at
+21 % of the cloud's radius: navy ink (`#0E123E`) and near-black words on light, pale periwinkle
+blots and white words on dark.
+
+| State | Ink |
+|---|---|
+| Listening | Rows pulse in a wave from top to bottom with your voice; the words it heard come into focus |
+| Thinking | The rows slide past each other, as if the paragraph were being rearranged |
+| Speaking | Blots swell with the voice; the reply comes into focus word by word |
+| Working | Blots above the fill line fade, so the paragraph fills from the bottom as the task runs |
+| Searching | A band of focus sweeps across, the rest stays faint |
+| Failed | Blots fade and the words turn red |
+| Resting, Cancelled | Pale and almost still |
+
+In the menu bar and the dock (under 60 px) Ink is three rows of blots in the orb's own colour, with
+no words.
+
+![Home with Six as Ink, speaking](../screens/home-ink.png)
+
+### Mosaic
+
+A ball of square tiles, after an optical-illusion study. The tiles sit on a cube projected onto the
+sphere (11 × 11 per face on home), so every tile is close to square and none crowd at a pole. Each
+tile is its own hinged particle: a travelling wave tilts every tile in turn while one light rakes
+across from the upper left, so the ball shimmers between solid and see-through, and the rim fades
+to nothing. The ball turns slowly and leans toward the pointer.
+
+| State | Mosaic |
+|---|---|
+| Ready | A slow diagonal wave runs through the tiles |
+| Listening | Rings of tilt run out from the middle |
+| Thinking | A fast diagonal sweep, with tiles twinkling across it |
+| Speaking | The wave grows with the voice |
+| Working | Tiles settle flat and bright from the bottom up as the task fills |
+| Searching | The light roams around the ball |
+| Compacting | Every tile folds in and out together |
+| Complete, Failed | A green flash once; a red cast while failed |
+| Resting, Cancelled | Dim, the wave almost still |
+
+![Home with Six as Mosaic](../screens/home-mosaic.png)
 
 ### What each state does
 

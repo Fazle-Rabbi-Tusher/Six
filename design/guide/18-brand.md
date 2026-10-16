@@ -36,7 +36,7 @@ back at you.
 - **The eyes may blink** (every 4.5–5 s, 6 % of the cycle) where the mark is large and alive: the
   boot screen, About, onboarding. Never in the menu bar, dock or anything a user reads past.
 - **The mark is not the assistant.** Six, the assistant, keeps its own orb (Bloom, Halo, Ripple,
-  Dotted; see [14](14-home-assistant.md)). The mark stands for SIX, the system: the menu-bar button, the Six Menu
+  Dotted, Ink, Mosaic; see [14](14-home-assistant.md)). The mark stands for SIX, the system: the menu-bar button, the Six Menu
   app icon, About, the boot screen, the installer, the login screen and documentation.
 
 ## The wordmark

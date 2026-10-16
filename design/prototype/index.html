@@ -660,6 +660,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 #pipBtn[data-live]:hover { background: #18181c; }
 .six-live { display: inline-flex; align-items: center; gap: 7px; max-width: 0; margin-right: 0; overflow: hidden; opacity: 0; white-space: nowrap; font: 600 12px/1 var(--font-ui); letter-spacing: -0.01em; transition: max-width 560ms var(--ease-detent), margin 560ms var(--ease-detent), opacity 220ms var(--ease-out); }
 #pipBtn[data-live] .six-live { max-width: 260px; margin-right: 7px; opacity: 1; }
+#pipBtn[data-live] .dotorb { color: #f3f3f7; }
 .six-live-txt { overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 .six-live .isl-ring, .six-live .isl-eq { display: none; }
 #pipBtn[data-act="task"] .isl-ring { display: block; width: 16px; height: 16px; transform: rotate(-90deg); flex: none; }
@@ -1870,8 +1871,8 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
           <h2>Six lives on the home screen</h2>
-          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Six”. Six answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Six app at the top right. Six has four looks (Settings › Six &amp; voice › Look): Bloom, the default; Halo; Ripple; and the dotted sphere. Every state moves Six's colour differently, never its shape. Pick one to set Six everywhere.</p>
-          <div class="seg" role="group" aria-label="Six’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Six”. Six answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Six app at the top right. Six has six looks (Settings › Six &amp; voice › Look): Bloom, the default; Halo; Ripple; the dotted sphere; Ink, which shows the words Six is saying; and Mosaic, a sphere of moving tiles. Every state moves Six's colour differently, never its shape. Pick one to set Six everywhere.</p>
+          <div class="seg" role="group" aria-label="Six’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="ink" aria-pressed="false">Ink</button><button data-v="tiles" aria-pressed="false">Mosaic</button></div>
           <h3>Bloom</h3>
           <p>A soft ball of warm colour: orange and red flowing over violet, with a pink haze lighting the air around it and a fine film grain, so it reads as a material and not a gradient. It is shaded as a matte ball, lit from the side Six is looking at, and the only colour in an otherwise graphite and silver system. Thinking stirs it and sends a spark across; listening ripples it; working fills it like a glass of water as the task progresses; Complete warms it green once; Failed cools it red.</p>
           <div class="pips" id="pipStates"></div>
@@ -1881,6 +1882,12 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <h3>Ripple</h3>
           <p>A terraced pool seen from above, from the teal rings it is modelled on: steps of colour falling to a dark centre, each lip lit on the side toward the light and shading the step below. The deeper rings shift further as Six looks around, so it reads in depth, and the rings flow slowly outward like ripples. Listening sends waves through it; thinking winds the rings into a spiral; working fills it from the centre out.</p>
           <div class="pips" id="rippleStates"></div>
+          <h3>Ink</h3>
+          <p>A paragraph out of focus: rows of soft ink that drift and breathe, after a blurred-text poster. This look shows what Six is saying. As it speaks, each word comes into focus where a blot dissolves, in reading order, and blurs back as the next arrives; listening, it shows the words it heard; at rest it says a short line of its own now and then (“I walk with you.”). Words are set in Share Tech Mono.</p>
+          <div class="pips" id="inkStates"></div>
+          <h3>Mosaic</h3>
+          <p>A sphere of square tiles, after an optical-illusion study: every tile sits on its own hinge, a travelling wave tilts them in turn and one light rakes across, so the ball shimmers between solid and see-through. Listening sends rings out from the middle; thinking, a fast diagonal sweep; working, the tiles settle flat from the bottom up as the task fills; searching, the light roams.</p>
+          <div class="pips" id="tileStates"></div>
           <h3>Personality</h3>
           <ul class="principles">
             <li><span class="n">1</span><div><b>Six looks at you.</b> <span>The light on Bloom and the tilt of Halo turn toward the pointer.</span></div></li>
@@ -2128,7 +2135,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Six only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Six”</button></div></div>
-              <div class="srow"><span class="sl"><b>Look</b><small>How Six appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Six’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Six appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Six’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button><button data-v="ink" aria-pressed="false">Ink</button><button data-v="tiles" aria-pressed="false">Mosaic</button></div></div>
               <div class="srow"><span class="sl"><b>Talk to Six</b><small>The mic in the menu bar, clicking Six on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
               <label class="srow"><span class="sl"><b>Type replies like a terminal</b><small>Words arrive a few at a time behind a cursor. Off: the whole reply appears at once</small></span><input class="sw" type="checkbox" data-bind="typeout" checked></label>
@@ -4156,7 +4163,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
   function mountOrb(el, still) { el._col = rgbOf(el); el._hi = el.classList.contains('orb-hi'); if (!still) orbs.add(el); drawAnyOrb(el, 1500); }
   function recolorOrbs() { orbs.forEach(o => { o._col = rgbOf(o); o._key = ''; o._sprites = null; }); }
-  const drawAnyOrb = (el, t) => { const f = formOf(el); return f === 'bloom' || f === 'halo' || f === 'ripple' ? drawFluidOrb(el, t, f) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t); };
+  const drawAnyOrb = (el, t) => { const f = formOf(el); return f === 'bloom' || f === 'halo' || f === 'ripple' ? drawFluidOrb(el, t, f) : f === 'tiles' ? drawTileOrb(el, t) : f === 'ink' ? drawInkOrb(el, t) : el._hi ? drawHiOrb(el, t) : drawOrb(el, t); };
   // Complete and Failed take their semantic colour; everything else draws in the orb's own colour
   const colOf = (el, look) => look === 'done' ? hex(tok('--c-success')).map(v => Math.round(v * 255)) : look === 'failed' ? hex(tok('--c-danger')).map(v => Math.round(v * 255)) : el._col;
   const progressOf = el => (el.dataset.progress !== undefined && el.dataset.progress !== '' ? Math.max(0, Math.min(1, +el.dataset.progress)) : null);
@@ -4606,6 +4613,181 @@ void main() {
     }
     ctx.restore();
   }
+  /* ── Mosaic: a sphere of square tiles, each on its own hinge ───────────
+     After the optical-illusion sphere: a latitude-longitude grid of tiles on a turning ball. Every
+     tile tilts on its own, a travelling wave runs through them and one light rakes across, so the
+     ball shimmers between solid and see-through. Each state moves the wave or the light. */
+  const smooth = (a, b, x) => { const k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+  function drawTileOrb(el, t) {
+    const s = setupCanvas(el); if (!s) return;
+    const [ctx, size] = s, hi = el._hi, look = lookOf(el), base = look.split('-')[0], still = calm(), dark = isDark();
+    const prog = progressOf(el), ring = !hi && prog !== null && prog < 1;
+    const body = ring ? size * 0.75 : size, cx = size / 2, cy = size / 2, R = body * (hi ? 0.4 : 0.46);
+    // tiles on a cube projected onto the ball, so every tile is near square and none crowd at a pole
+    const small = size < 40, NG = small ? 4 : hi ? 11 : 7;
+    const amp = base === 'speak' ? parseFloat(el.style.getPropertyValue('--amp')) || 0 : 0;
+    const now = still ? 4000 : performance.now(), tau = (still ? 1500 : t) / 1000;
+    // it turns slowly, and leans toward the pointer
+    const tg = el._tg || (el._tg = [0, 0]);
+    if (!still && (hi || size >= 40) && orbPtr) {
+      const r = el.getBoundingClientRect(), gx = Math.max(-1, Math.min(1, (orbPtr[0] - r.left - r.width / 2) / 420)), gy = Math.max(-1, Math.min(1, (orbPtr[1] - r.top - r.height / 2) / 420));
+      tg[0] += (gx - tg[0]) * 0.05; tg[1] += (gy - tg[1]) * 0.05;
+    }
+    const spin = { reasoning: 2.6, working: 1.5, searching: 1.3, compacting: 1.8, retrying: 1.4, rest: 0.25, cancelled: 0.3, failed: 0.4 }[base] ?? 1;
+    const rotY = now * 0.00011 * spin + tg[0] * 0.7, rotX = -0.42 + tg[1] * 0.45, cX = Math.cos(rotX), sX = Math.sin(rotX), cY = Math.cos(rotY), sY = Math.sin(rotY);
+    // the light: upper left, roaming while Six searches
+    let la = -0.55, lb = 0.62;
+    if (base === 'searching') { la = Math.cos(tau * 1.6) * 0.8; lb = 0.3 + Math.sin(tau * 1.1) * 0.5; }
+    const Ln = Math.hypot(la, lb, 0.7), L = [la / Ln, lb / Ln, 0.7 / Ln], Hn = Math.hypot(L[0], L[1], L[2] + 1), H = [L[0] / Hn, L[1] / Hn, (L[2] + 1) / Hn];
+    const A = { base: 0.55, listen: 0.2, speak: 0.25 + amp * 0.95, reasoning: 0.95, working: 0.5, searching: 0.4, rest: 0.12, cancelled: 0.15, failed: 0.22, done: 0.3, compacting: 0.35 }[base] ?? 0.5;
+    const tint = base === 'done' ? [[90, 220, 140], 0.15 + 0.6 * Math.max(0, 1 - t / 1600)] : base === 'failed' ? [[240, 96, 96], 0.45] : null;
+    const dim = base === 'rest' || base === 'cancelled' ? 0.5 : 1;
+    const tiles = [];
+    const FACES = [[[1, 0, 0], [0, 0, -1], [0, 1, 0]], [[-1, 0, 0], [0, 0, 1], [0, 1, 0]], [[0, 1, 0], [1, 0, 0], [0, 0, -1]], [[0, -1, 0], [1, 0, 0], [0, 0, 1]], [[0, 0, 1], [1, 0, 0], [0, 1, 0]], [[0, 0, -1], [-1, 0, 0], [0, 1, 0]]];
+    const view = v => { const x = v[0] * cY + v[2] * sY, z = -v[0] * sY + v[2] * cY; return [x, v[1] * cX - z * sX, v[1] * sX + z * cX]; };
+    const norm = v => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+    for (const [fn, fu, fv] of FACES) for (let i = 0; i < NG; i++) for (let j = 0; j < NG; j++) {
+      {
+        const ua = -1 + (i + 0.5) * 2 / NG, vb = -1 + (j + 0.5) * 2 / NG, q = [fn[0] + fu[0] * ua + fv[0] * vb, fn[1] + fu[1] * ua + fv[1] * vb, fn[2] + fu[2] * ua + fv[2] * vb];
+        const ql = Math.hypot(q[0], q[1], q[2]), P = [q[0] / ql, q[1] / ql, q[2] / ql], du = fu[0] * P[0] + fu[1] * P[1] + fu[2] * P[2], dv = fv[0] * P[0] + fv[1] * P[1] + fv[2] * P[2];
+        const half = R * (2 / NG) / ql * (small ? 0.36 : 0.4);
+        let N = view(P), E = view(norm([fu[0] - P[0] * du, fu[1] - P[1] * du, fu[2] - P[2] * du])), U = view(norm([fv[0] - P[0] * dv, fv[1] - P[1] * dv, fv[2] - P[2] * dv]));
+        if (N[2] < -0.2) continue;
+        // how this tile tilts: a wave per state, in the ball's own coordinates so it turns with it
+        let a = 0, b = 0;
+        if (base === 'listen') { const d = Math.acos(Math.max(-1, Math.min(1, N[2]))); a = 0.75 * Math.sin(d * 7 - tau * 6); }
+        else if (base === 'reasoning') { const w = Math.sin(P[1] * 3 + P[0] * 5 - tau * 4.5); a = A * w * w * w; b = 0.35 * Math.sin(P[0] * 9 + P[2] * 7 + tau * 3); }
+        else if (base === 'compacting') { a = 1.15 * (0.5 + 0.5 * Math.sin(tau * 2.2 - P[1] * 2)); }
+        else if (base === 'working') {
+          const lvl = prog !== null ? -1 + 2 * prog : Math.sin(tau * 1.2);   // settles flat from the bottom like a glass filling
+          if (N[1] < lvl) { a = 0; b = 0; } else { a = A * Math.sin(P[1] * 4 + P[0] * 3 - tau * 2); b = A * 0.5 * Math.sin(P[2] * 4 + tau); }
+        } else { a = A * Math.sin(P[1] * 4 + P[0] * 3 - tau * 1.6); b = A * 0.6 * Math.sin(P[2] * 4 - P[1] * 3 + tau * 1.1); }
+        const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
+        const E2 = [E[0] * cb + N[0] * sb, E[1] * cb + N[1] * sb, E[2] * cb + N[2] * sb], N1 = [N[0] * cb - E[0] * sb, N[1] * cb - E[1] * sb, N[2] * cb - E[2] * sb];
+        const U2 = [U[0] * ca + N1[0] * sa, U[1] * ca + N1[1] * sa, U[2] * ca + N1[2] * sa], N2 = [N1[0] * ca - U[0] * sa, N1[1] * ca - U[1] * sa, N1[2] * ca - U[2] * sa];
+        const C = [N[0] * R, N[1] * R, N[2] * R];
+        const diff = Math.max(0, N2[0] * L[0] + N2[1] * L[1] + N2[2] * L[2]), spec = Math.pow(Math.max(0, N2[0] * H[0] + N2[1] * H[1] + N2[2] * H[2]), 26);
+        let v = (0.04 + 0.6 * diff + 1.0 * spec) * (N2[2] < 0 ? 0.2 : 1) * dim * (0.35 + 0.65 * smooth(0, 0.85, N[2]));
+        if (base === 'working' && N[1] < (prog !== null ? -1 + 2 * prog : -2)) v = Math.min(1, v + 0.18);
+        const al = smooth(-0.15, 0.55, N[2]);
+        const pts = [[1, 1], [-1, 1], [-1, -1], [1, -1]].map(([e, u]) => [cx + C[0] + (E2[0] * e + U2[0] * u) * half, cy - (C[1] + (E2[1] * e + U2[1] * u) * half)]);
+        tiles.push([C[2], pts, Math.min(1, v), al]);
+      }
+    }
+    tiles.sort((x, y) => x[0] - y[0]);
+    for (const [, pts, v, al] of tiles) {
+      let r = 255 * v, g = 255 * v, bl = 255 * v;
+      if (!dark) { r = 18 + r * 0.93; g = 18 + g * 0.93; bl = 22 + bl * 0.93; }
+      if (tint) { const [c, w] = tint; r += (c[0] * v - r) * w; g += (c[1] * v - g) * w; bl += (c[2] * v - bl) * w; }
+      ctx.fillStyle = `rgba(${r | 0},${g | 0},${bl | 0},${al.toFixed(3)})`;
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let k = 1; k < 4; k++) ctx.lineTo(pts[k][0], pts[k][1]); ctx.closePath(); ctx.fill();
+    }
+    if (ring) drawRing(ctx, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, el._col);
+  }
+
+  /* ── Ink: soft words, and the words Six is saying ──────────────────────
+     After the blurred-text poster: rows of soft ink, like a paragraph out of focus. The blots drift
+     and breathe; when Six speaks, its words come into focus one at a time where a blot dissolves,
+     in reading order, and blur back as the next arrives. Listening, it shows what it heard; at
+     rest, now and then, a short line of its own. */
+  const INK_IDLE = ['I walk with you.', 'Ready when you are.', 'Say the word.'];
+  const orbWords = { list: INK_IDLE[0].split(' '), text: INK_IDLE[0], at: performance.now() + 1200, per: 560, kind: 'idle', idle: 0 };
+  function orbSay(text, kind = 'say') {
+    text = String(text || '').replace(/[“”"]/g, '').trim(); if (!text) return;
+    const list = text.split(/\s+/).slice(0, 80);
+    // a streamed reply grows: keep the words already shown in place
+    if (kind === orbWords.kind && orbWords.text && text.startsWith(orbWords.text)) { orbWords.list = list; orbWords.text = text; return; }
+    Object.assign(orbWords, { list, text, at: performance.now(), per: kind === 'heard' ? 300 : 340, kind });
+  }
+  const inkSprites = new Map();
+  function inkSprite(col) {
+    let c = inkSprites.get(col); if (c) return c;
+    c = document.createElement('canvas'); c.width = 260; c.height = 140;
+    const x = c.getContext('2d');
+    // a capsule well out of focus: drawn off canvas, only its blurred shadow lands
+    x.shadowColor = col; x.shadowBlur = 34; x.shadowOffsetX = 1000; x.fillStyle = '#000';
+    x.beginPath(); x.roundRect(60 - 1000, 48, 140, 44, 22); x.fill();
+    inkSprites.set(col, c); return c;
+  }
+  function inkLayout(el, R, small) {
+    if (el._ink && el._ink.R === R) return el._ink;
+    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    // a wide cloud of rows, like lines of a paragraph; blots overlap their neighbours, and about one
+    // in four is pale, as if further out of focus
+    const rows = small ? 3 : 6, blobs = [];
+    for (let r = 0; r < rows; r++) {
+      const y = (r - (rows - 1) / 2) * R * (small ? 0.55 : 0.3), chord = Math.min(R * 1.22, Math.sqrt(Math.max(0, R * R - y * y)) * (small ? 1.1 : 1.4));   // wide, but clear of the canvas edge
+      let x = -chord + rnd() * R * 0.2;
+      while (x < chord - R * 0.15) {
+        const w = Math.max(R * 0.3, Math.min(chord - x, (small ? 0.5 : 0.3) * R + rnd() * R * (small ? 0.4 : 0.55)));
+        blobs.push({ x: x + w / 2, y, w, ph: rnd() * TAU, sp: 0.5 + rnd(), d: rnd() < 0.25 ? 0.2 + rnd() * 0.3 : 0.7 + rnd() * 0.3, row: r });
+        x += w + (0.02 + rnd() * 0.18) * R;
+      }
+    }
+    return (el._ink = { R, blobs });
+  }
+  function drawInkOrb(el, t) {
+    const s = setupCanvas(el); if (!s) return;
+    const [ctx, size] = s, hi = el._hi, look = lookOf(el), base = look.split('-')[0], still = calm(), dark = isDark();
+    const prog = progressOf(el), ring = !hi && prog !== null && prog < 1;
+    const body = ring ? size * 0.75 : size, cx = size / 2, cy = size / 2, small = size < 60, R = body * (hi ? 0.35 : 0.38);
+    const amp = base === 'speak' ? parseFloat(el.style.getPropertyValue('--amp')) || 0 : 0;
+    const now = performance.now(), tau = (still ? 1500 : now) / 1000;
+    const { blobs } = inkLayout(el, R, small);
+    // small orbs (menu bar, dock) draw in the orb's own colour, so they read on the black capsule too
+    if (small && (!el._colAt || now - el._colAt > 500)) { el._col = rgbOf(el); el._colAt = now; }
+    const ink = small ? `rgb(${el._col.join(',')})` : dark ? 'rgb(200,206,255)' : 'rgb(14,18,62)', sprite = inkSprite(ink), bh = R * (small ? 0.42 : 0.27);
+    // the words in focus right now, each where a blot dissolves to make room for it
+    const W = orbWords, words = [];
+    if (hi && !small) {
+      const life = Math.max(1100, W.per * 3.4);
+      if (W.kind !== 'say' && W.kind !== 'heard' || now - W.at > W.list.length * W.per + life + 2500) {
+        // back at rest: every so often Six says a short line of its own
+        if (now - W.at > W.list.length * W.per + life + 7000) { W.idle = (W.idle + 1) % INK_IDLE.length; Object.assign(W, { text: INK_IDLE[W.idle], list: INK_IDLE[W.idle].split(' '), at: now, per: 560, kind: 'idle' }); }
+      }
+      // reading order (rows top to bottom), three blots on for each word, so the few words in focus
+      // at once never share a blot
+      const n = blobs.length, stride = n % 3 ? 3 : 2;
+      W.list.forEach((wd, i) => {
+        const age = still ? life / 2 : now - (W.at + i * W.per);
+        if (age < 0 || age > life) return;
+        const k = Math.min(1, age / 200, (life - age) / 420), bi = (i * stride + 1) % n;
+        words.push({ wd, k, b: blobs[bi] });
+      });
+    }
+    const gz = el._tg || (el._tg = [0, 0]);
+    if (!still && hi && orbPtr) { const r = el.getBoundingClientRect(); gz[0] += (Math.max(-1, Math.min(1, (orbPtr[0] - r.left - r.width / 2) / 420)) - gz[0]) * 0.05; gz[1] += (Math.max(-1, Math.min(1, (orbPtr[1] - r.top - r.height / 2) / 420)) - gz[1]) * 0.05; }
+    ctx.save(); ctx.translate(cx + gz[0] * R * 0.06, cy + gz[1] * R * 0.05);
+    const lvl = base === 'working' && prog !== null ? R - 2 * R * prog : null;
+    for (const b of blobs) {
+      let x = b.x + Math.sin(tau * 0.45 * b.sp + b.ph) * R * 0.05, y = b.y, w = b.w * (0.92 + 0.08 * Math.sin(tau * 0.7 + b.ph)), a = b.d;
+      if (base === 'listen') a *= 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(tau * 6 - b.row * 0.9));
+      else if (base === 'speak') { w *= 1 + amp * 0.25; a = Math.min(1, a * (0.85 + amp * 0.4)); }
+      else if (base === 'reasoning') x += Math.sin(tau * 2.2 + b.y / R * 4) * R * 0.12;
+      else if (base === 'searching') a *= 0.35 + 0.65 * Math.exp(-(((x / R) - Math.sin(tau * 1.3) * 0.9) ** 2) / 0.12);
+      else if (base === 'compacting') { x *= 0.75 + 0.25 * Math.cos(tau * 2); w *= 0.8; }
+      else if (base === 'rest' || base === 'cancelled') a *= 0.4;
+      else if (base === 'failed') a *= 0.6;
+      if (lvl !== null && y < lvl) a *= 0.3;   // fills from the bottom while a task runs
+      const wd = words.find(q => q.b === b); if (wd) { a *= 1 - 0.95 * wd.k; w *= 1 - 0.4 * wd.k; }
+      const sx = w / 140, sy = bh / 44;
+      ctx.globalAlpha = Math.max(0, Math.min(1, a));
+      ctx.drawImage(sprite, x - 130 * sx, y - 70 * sy, 260 * sx, 140 * sy);
+    }
+    ctx.globalAlpha = 1;
+    if (words.length) {
+      const fs = Math.round(R * 0.21), blur = 'filter' in ctx;
+      ctx.font = `400 ${fs}px "Share Tech Mono", "JetBrains Mono", monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = base === 'failed' ? (dark ? '#ffb3b3' : '#8a1c1c') : dark ? '#f4f5ff' : '#111216';
+      for (const { wd, k, b } of words) {
+        ctx.globalAlpha = k; if (blur) ctx.filter = `blur(${((1 - k) * R * 0.035).toFixed(1)}px)`;
+        ctx.fillText(wd, b.x + Math.sin(tau * 0.45 * b.sp + b.ph) * R * 0.05, b.y);
+      }
+      if (blur) ctx.filter = 'none'; ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+    if (ring) drawRing(ctx, cx, cy, size * 0.45, Math.max(1.6, size * 0.085), prog, el._col);
+  }
   const formOf = el => el.dataset.form || root.dataset.orbForm || 'bloom';   // Bloom is Six's default look
   let lastOrb = 0, orbsShown = 0;
   function tickOrbs(now) {
@@ -4617,7 +4799,7 @@ void main() {
       if (!o.isConnected) { orbs.delete(o); return; }
       if (o.offsetParent === null || ((!o._hi || o.clientWidth < 200) && !small)) return;
       if (small) orbsShown++;
-      const form = formOf(o), look = lookOf(o), key = form + look + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth + (root.dataset.theme || '');
+      const form = formOf(o), look = lookOf(o), key = form + look + (form === 'ink' ? orbWords.at + orbWords.text.length : '') + (o.style.getPropertyValue('--amp') || '') + (o.dataset.progress || '') + o.clientWidth + (root.dataset.theme || '');
       // a state just entered starts its own clock from zero (Complete glows once on entry)
       if (o._look !== look || o._form !== form) {
         // a change of state crossfades: the last frame of the old look fades out over the new one
@@ -4688,8 +4870,8 @@ void main() {
     if ($('#pipStates').children.length) return;
     const cards = form => Object.entries(PIP_STATES).map(([k, [n, d]]) => `
       <button class="pip-card" data-state="${k}" aria-pressed="${k === pipNow}"><span class="pip" aria-hidden="true"><canvas class="dotorb orb-hi" data-form="${form}" data-state="${k}"${k === 'working' ? ' data-progress="0.6"' : ''}></canvas></span><b>${n}</b>${form === 'bloom' ? `<small>${d}</small>` : ''}</button>`).join('');
-    $('#pipStates').innerHTML = cards('bloom'); $('#haloStates').innerHTML = cards('halo'); $('#rippleStates').innerHTML = cards('ripple');
-    $$('#pipStates .dotorb, #haloStates .dotorb, #rippleStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
+    $('#pipStates').innerHTML = cards('bloom'); $('#haloStates').innerHTML = cards('halo'); $('#rippleStates').innerHTML = cards('ripple'); $('#inkStates').innerHTML = cards('ink'); $('#tileStates').innerHTML = cards('tiles');
+    $$('#pipStates .dotorb, #haloStates .dotorb, #rippleStates .dotorb, #inkStates .dotorb, #tileStates .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
     $('#orbTiles').innerHTML = ORB_GALLERY
       .map(([k, v, n, sub = '']) => `<div class="orb-tile"><div><canvas class="dotorb" data-form="dots" data-state="${k}"${v ? ` data-variant="${v}"` : ''} aria-hidden="true"></canvas></div><span>${n}<small>${sub}</small></span></div>`).join('');
     $$('#orbTiles .dotorb').forEach(o => { if (o.dataset.state === 'speaking') o.style.setProperty('--amp', '0.6'); mountOrb(o); });
@@ -4697,9 +4879,10 @@ void main() {
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#rippleStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#haloStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
+  ['#inkStates', '#tileStates'].forEach(id => $(id).addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); }));
   // Six's look, everywhere at once
   function setOrbForm(v) {
-    if (v === 'halo' || v === 'ripple' || v === 'dots') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'bloom'; }
+    if (['halo', 'ripple', 'dots', 'ink', 'tiles'].includes(v)) root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'bloom'; }
     $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   }
   $('#segOrbGuide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setOrbForm(b.dataset.v); });
@@ -6813,7 +6996,7 @@ Current prototype state: ${stateSummary()}`;
     let reply = '', local = null, outcome = 'complete', label = '', fixes = null;
     try { local = localIntent(text); } catch (e) { local = { fail: "That didn't work. " + (e.message || ''), label: 'couldn’t do that' }; }
     setPip('thinking', local ? 'on this device' : sample ? 'asking Claude' : '');
-    const say = r => { txt.classList.remove('wait'); typeOut(txt, r, { onDone: () => { thread.scrollTop = thread.scrollHeight; } }); thread.scrollTop = thread.scrollHeight; if (cap) typeOut(cap.pip, r); };
+    const say = r => { orbSay(r); txt.classList.remove('wait'); typeOut(txt, r, { onDone: () => { thread.scrollTop = thread.scrollHeight; } }); thread.scrollTop = thread.scrollHeight; if (cap) typeOut(cap.pip, r); };
     if (local && local.review) {
       await wait(300);
       note(m, 'local');
@@ -6925,6 +7108,7 @@ Current prototype state: ${stateSummary()}`;
   }
   function speak(text, keepState) {
     try {
+      orbSay(text);
       if (!('speechSynthesis' in window) || !text) return false;
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text.replace(/[“”]/g, ''));
@@ -7078,6 +7262,7 @@ Current prototype state: ${stateSummary()}`;
     if (voice.dictate) { ask.value = t; if (final) { stopListening(); $('#composer').requestSubmit(); } return; }
     waveTalk = true;
     if (voice.cap) voice.cap.you.textContent = `“${t}”`;
+    orbSay(t, 'heard');
     if (!final) return;
     stopListening();
     const s = t.trim().replace(/[.!?]+$/, '');
