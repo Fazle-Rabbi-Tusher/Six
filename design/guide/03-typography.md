@@ -4,7 +4,7 @@
 
 SIX is set in **terminal type**: every face is monospaced, the way a shell prompt is. It matches
 the SIX mark (a hex band drawn like a line of code) and the boot screen, and it makes numbers,
-paths and Pip's status lines line up without special handling. All faces are open-licensed (SIL
+paths and Six's status lines line up without special handling. All faces are open-licensed (SIL
 Open Font License), so SIX can ship, embed and modify them.
 
 | Role | Face | Why |

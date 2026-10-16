@@ -1,7 +1,7 @@
 # 04 · Color
 
 SIX is **graphite and silver**: neutral greys with no colour cast, and a graphite accent that
-turns silver in the dark. The colour in the system comes from Pip (Bloom's ember and violet), from
+turns silver in the dark. The colour in the system comes from Six (Bloom's ember and violet), from
 the four semantic colours, and from the pastel clay set for tiles and icons. All values live in
 [`tokens/tokens.css`](../tokens/tokens.css). Never use a hex value in a component; use the token.
 
@@ -52,12 +52,12 @@ pairs as Graphite (`check_contrast.py`):
 Cobalt (`#1B3CFF`) belongs to the SIX mark, its app icon and the boot screen, not to the UI.
 Buttons, selection and focus follow the accent above. See [18 · Brand](18-brand.md).
 
-## Pip's colour
+## Six's colour
 
-Pip is the one warm thing on a graphite screen. `--pip-line` is Bloom's ember, used for Pip's
-state label, its progress bars and the notch's progress ring: `#9A3C1C` in light (5.9:1 on the
+Six is the one warm thing on a graphite screen. `--pip-line` is Bloom's ember, used for Six's
+state label, its progress bars and the menu-bar capsule's progress ring: `#9A3C1C` in light (5.9:1 on the
 background) and `#FFA064` in dark (9.7:1). The orb itself is drawn, not tokenised; see
-[14 · Home](14-home-assistant.md#pips-looks).
+[14 · Home](14-home-assistant.md#sixs-looks).
 
 Any other user accent is auto-adjusted in lightness until it passes 4.5:1 on `--c-surface` and
 with `--c-text-on-accent`.
@@ -92,7 +92,7 @@ pastel is always `--c-text` (8:1 or better in both themes).
 
 ## Wallpapers
 
-The default wallpaper is **Matte**: no colour, so the interface and Pip stay the focus. Five drawn
+The default wallpaper is **Matte**: no colour, so the interface and Six stay the focus. Five drawn
 wallpapers are the alternatives. Each is generated live by the home's shader (nothing is a
 picture), moves slowly, and was made after a reference image.
 
@@ -105,7 +105,7 @@ picture), moves slowly, and was made after a reference image.
 | **Strata** | Teal paper layers: the field cut into 13 terraces, each shading the one below, its cut edge catching the light, with paper grain; paler to the right | Deep teal `#062023` → mint `#C9EFE9` |
 | **Velvet** | Deep blue soft layers: broad terraces with soft shadows and a velvet grain | Navy `#030722` → sky `#7FB0FF` |
 
-**Readability.** The greeting, Pip's label and the examples sit directly on the wallpaper, so a soft
+**Readability.** The greeting, Six's label and the examples sit directly on the wallpaper, so a soft
 scrim darkens (in dark) or lightens (in light) the wallpaper behind the centre column. In light
 mode the drawn wallpapers are shown as a pale print of themselves (40 % strength), so dark text
 keeps its contrast. Cards and panels sit on their own fill and are unaffected.

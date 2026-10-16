@@ -1,6 +1,6 @@
 # 16 · System apps
 
-The apps that come with SIX and make it a whole system: **Pip**, **Settings**, **Files**,
+The apps that come with SIX and make it a whole system: **Six**, **Settings**, **Files**,
 **Software**, **Calendar**, plus the **lock screen**. They share one window anatomy (see
 [06 · Layout](06-layout.md#window-anatomy)): a sidebar for places or sections, a toolbar or
 header that says where you are, and content. Every one of them is in the prototype.
@@ -9,29 +9,29 @@ header that says where you are, and content. Every one of them is in the prototy
 
 | Rule | Why |
 |---|---|
-| **The sidebar is the map.** Places (Files), sections (Settings), categories (Software) and conversations (Pip) are always visible on the left; the current one is highlighted in the accent soft colour | People coming from Windows look for a left navigation pane; nothing important hides behind a hamburger menu |
+| **The sidebar is the map.** Places (Files), sections (Settings), categories (Software) and conversations (Six) are always visible on the left; the current one is highlighted in the accent soft colour | People coming from Windows look for a left navigation pane; nothing important hides behind a hamburger menu |
 | **The header says where you are.** A path bar (Files) or a breadcrumb (Settings › Display) in plain words; every segment is clickable | Answers "where am I?" and gives a one-click way back up |
 | **Back and forward work everywhere.** ‹ › in the toolbar, `Alt + ←/→` from the keyboard | One habit across all apps, as in a browser |
 | **Search is local first.** Each app's search field finds things in that app; a "Search everywhere" link hands off to Six Search | Keeps results relevant without making people learn two searches |
-| **Deep links.** Any part of SIX can open an app at a place: Control Center's ⚙ opens Settings, Pip opens *Settings › Display*, the Bin icon opens *Files › Bin* | No hunting for a page that was mentioned |
+| **Deep links.** Any part of SIX can open an app at a place: Control Center's ⚙ opens Settings, Six opens *Settings › Display*, the Bin icon opens *Files › Bin* | No hunting for a page that was mentioned |
 | **Empty states explain.** "Documents is empty. Files you save or download land here; deleted files wait in the Bin." | An empty view is a moment to teach, never a blank |
 
-## Pip
+## Six
 
 The written side of the assistant (home is the spoken side, see [14 · Home](14-home-assistant.md)).
 
-![The Pip app](../screens/pip-app.png)
+![The Six app](../screens/pip-app.png)
 
 | Part | Spec |
 |---|---|
 | Sidebar | **New chat**, then *Today* and *Earlier* conversations. A mic glyph marks conversations that include spoken requests |
 | Header | The conversation's title (its first request) and where answers come from ("Simple commands run on this device. Everything else asks Claude on your account.") |
-| Empty state | Pip's orb, "Ask Pip anything", one line on what Pip can do, and four example requests |
-| Thread | Your messages on the right in accent clay; spoken ones marked *Said aloud*. Pip's replies on the left, labelled PIP, with action chips, review cards, previews and recovery chips |
-| Composer | Text field, a dictation mic (speech typed into the field, then sent) and Send, which becomes Stop while Pip answers |
+| Empty state | Six's orb, "Ask Six anything", one line on what Six can do, and four example requests |
+| Thread | Your messages on the right in accent clay; spoken ones marked *Said aloud*. Six's replies on the left, labelled PIP, with action chips, review cards, previews and recovery chips |
+| Composer | Text field, a dictation mic (speech typed into the field, then sent) and Send, which becomes Stop while Six answers |
 
 **Answers grow out of questions.** Your message buds off the Send button and rises into place.
-While Pip works a drop leaves your message and swells into Pip's answer, which sits in a soft well
+While Six works a drop leaves your message and swells into Six's answer, which sits in a soft well
 and hangs from the question by a hairline while it's the latest exchange; ask again and the old
 hairline parts in the middle and draws back. Bubbles are revealed, never scaled, and nothing plays
 while another window covers the conversation.
@@ -46,7 +46,7 @@ while another window covers the conversation.
 |---|---|
 | Connect | Wi-Fi · Bluetooth |
 | Device | Display · Sound · Battery & power · Storage |
-| You | Pip & voice · Appearance · Home & widgets · Desktop & dock · Notifications & Focus |
+| You | Six & voice · Appearance · Home & widgets · Desktop & dock · Notifications & Focus |
 | System | Apps · Privacy & security · Accessibility · Users · Language & region · Keyboard & touchpad · Updates · About |
 
 **Pages** are columns of rounded groups; each row has a title, an optional plain-language line
@@ -59,17 +59,17 @@ two controls.
 | Wi-Fi | Switch; networks with their security in words ("Open network · not secure"); ask to join; airplane mode |
 | Bluetooth | Switch; my devices with battery; add a device |
 | Display | Brightness; night light and its schedule; scale; resolution; refresh rate |
-| Sound | Output; volume; input (the mic Pip uses); alert sound |
+| Sound | Output; volume; input (the mic Six uses); alert sound |
 | Battery & power | Charge and time left; power mode (Saver, Balanced, Performance); battery protection at 80 %; screen off and sleep |
 | Storage | Used of total with a breakdown; free up space (empty the Bin, clear caches) |
-| Pip & voice | Listening (*Press to talk* or *Always · "Hey Pip"*); Look (*Bloom*, the default, *Halo*, *Ripple* or *Dotted*); shortcuts; speak replies; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Pip may change (files always ask first) |
+| Six & voice | Listening (*Press to talk* or *Always · "Hey Six"*); Look (*Bloom*, the default, *Halo*, *Ripple* or *Dotted*); shortcuts; speak replies; type replies like a terminal; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Six may change (files always ask first) |
 | Appearance | Theme (Light, Dark, Auto); accent (Graphite, the default, Iris, Tide, Moss, Sun); wallpaper (Matte, Obsidian, Signal, Contour, Strata, Velvet, as thumbnails); plasma clay viscosity, frost, refraction and rim |
-| Home & widgets | Edit widgets; greeting; "Try saying" examples; what happens when home is full |
+| Home & widgets | Edit widgets; Six on home; *Keep the intro on home* (the greeting and "Try saying" examples, otherwise shown only when you ask Six what it can do); what happens when home is full |
 | Desktop & dock | Layout (*Menu bar + dock* or *Taskbar*, see [12](12-windows-migration.md)); magnification; hot corner |
 | Notifications & Focus | Focus; per-app notifications; previews on the lock screen |
 | Apps | Default apps; running Windows programs (Bottles); app permissions |
 | Privacy & security | Disk encryption, firewall, Secure Boot, system protection (SELinux) as plain status rows; microphone and location access; screen lock |
-| Accessibility | Reduce motion, reduce transparency, more contrast, touch mode; screen reader; captions for Pip; sticky keys |
+| Accessibility | Reduce motion, reduce transparency, more contrast, touch mode; screen reader; captions for Six; sticky keys |
 | Users | Your account and sign-in (password, fingerprint); other users; online accounts |
 | Language & region | Language (English, বাংলা); formats; time zone; keyboard layouts (Bangla Probhat) |
 | Keyboard & touchpad | The shortcut list; tap to click; natural scrolling; gestures |
@@ -131,7 +131,7 @@ Apps come from Flathub and Fedora as sandboxed Flatpaks (see [17 · SIX on Fedor
 | Part | Spec |
 |---|---|
 | Month view | Weekday header; days with up to two event chips (colour bar plus title) and "+N"; today's date in an accent circle; the selected day outlined |
-| Day panel | The selected day's events with time, title and place; *Add event*; and the hint that Pip can add events ("Lunch with Arif tomorrow at one") |
+| Day panel | The selected day's events with time, title and place; *Add event*; and the hint that Six can add events ("Lunch with Arif tomorrow at one") |
 | Header | Month and year in Share Tech Mono; ‹ Today › |
 
 ## Lock screen
@@ -144,6 +144,6 @@ Privacy & security.
 - The time in Share Tech Mono at 112 px, the date under it, the account picture, name and
   password field; Enter unlocks. Fingerprint works when it's set up.
 - The desktop is hidden behind a heavy blur and an 86 % scrim: nothing on screen is readable.
-- **Pip on the lock screen** answers "Hey Pip" only for the time, timers and the weather.
+- **Six on the lock screen** answers "Hey Six" only for the time, timers and the weather.
   Everything else waits until you unlock, and the lock screen says so.
 - Notifications show the app only, unless Settings › Notifications says otherwise.

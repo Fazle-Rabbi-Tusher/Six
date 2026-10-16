@@ -172,12 +172,12 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
         </div>
       </article>
       <article class="study">
-        <div class="stage" id="sPip" tabindex="0" aria-label="Pip's notch reaching for a window it is moving."><div class="goo"></div><div class="ui"></div></div>
+        <div class="stage" id="sPip" tabindex="0" aria-label="Six's menu-bar orb reaching for a window it is moving."><div class="goo"></div><div class="ui"></div></div>
         <div class="cap">
-          <span class="eyebrow">Pip · the notch</span>
-          <h3>Pip reaches for what it changes</h3>
-          <p>When Pip acts on a window, the notch drops a tendril to it and holds on while the window moves, so you see exactly what Pip is touching. When it's done, the tendril thins, lets go and draws back into the notch, and the notch leaves.</p>
-          <dl><dt>In SIX</dt><dd>The notch while Pip opens, snaps or closes windows, or edits a widget. One tether at a time.</dd><dt>Try</dt><dd>Ask Pip to snap Files to the left.</dd></dl>
+          <span class="eyebrow">Six · the menu-bar orb</span>
+          <h3>Six reaches for what it changes</h3>
+          <p>When Six acts on a window, its menu-bar orb grows into a capsule that drops a tendril to it and holds on while the window moves, so you see exactly what Six is touching. When it's done, the tendril thins, lets go and draws back into the notch, and the notch leaves.</p>
+          <dl><dt>In SIX</dt><dd>The menu-bar orb while Six opens, snaps or closes windows, or edits a widget. One tether at a time.</dd><dt>Try</dt><dd>Ask Six to snap Files to the left.</dd></dl>
         </div>
       </article>
       <article class="study">
@@ -190,12 +190,12 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
         </div>
       </article>
       <article class="study">
-        <div class="stage" id="sChat" tabindex="0" aria-label="The Pip app: answers grow out of questions."><div class="goo"></div><div class="ui"></div></div>
+        <div class="stage" id="sChat" tabindex="0" aria-label="The Six app: answers grow out of questions."><div class="goo"></div><div class="ui"></div></div>
         <div class="cap">
-          <span class="eyebrow">The Pip app</span>
+          <span class="eyebrow">The Six app</span>
           <h3>Answers grow out of questions</h3>
-          <p>Your message buds off the composer and rises into place. While Pip works, a drop travels out of your message; it swells into Pip's answer, which stays linked to the question by a hairline while it's the latest exchange.</p>
-          <dl><dt>In SIX</dt><dd>The Pip app and the notch's voice panel; review cards hang from the answer that raised them.</dd><dt>Try</dt><dd>Ask Pip a few times and watch older exchanges let go.</dd></dl>
+          <p>Your message buds off the composer and rises into place. While Six works, a drop travels out of your message; it swells into Six's answer, which stays linked to the question by a hairline while it's the latest exchange.</p>
+          <dl><dt>In SIX</dt><dd>The Six app and the panel that drips from Six's menu-bar orb; review cards hang from the answer that raised them.</dd><dt>Try</dt><dd>Ask Six a few times and watch older exchanges let go.</dd></dl>
         </div>
       </article>
       <article class="study">
@@ -224,7 +224,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
       <span class="eyebrow">Rules</span>
       <h2 id="rulesH">How tension behaves in SIX</h2>
       <ol>
-        <li><b>Tension means a real relationship.</b><span>A neck only ever joins things that belong together (a card and its stack, Pip and what it's changing, a reply and its question). Nothing stretches for decoration.</span></li>
+        <li><b>Tension means a real relationship.</b><span>A neck only ever joins things that belong together (a card and its stack, Six and what it's changing, a reply and its question). Nothing stretches for decoration.</span></li>
         <li><b>Necks thin with distance, then snap.</b><span>Thickness falls off as the gap grows; at the snap distance it lets go. The snap is the commit: before it, letting go cancels.</span></li>
         <li><b>Content never stretches.</b><span>Text, icons and images stay rigid on top of the surface. Only the glass bends.</span></li>
         <li><b>Springs, not wobble.</b><span>Moves use SIX's precise spring; a snap or a landing gets one detent, with a recoil under 4 %. Nothing jiggles on its own.</span></li>
@@ -259,7 +259,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
     <h2 id="firstH">What to build into the prototype first</h2>
     <ol>
       <li><b>Pull a card out of a stack.</b> <span>It fixes a real problem (pulling a card out today is instant and easy to do by accident) and it extends the plasma clay home already has, so it costs little.</span></li>
-      <li><b>Pip reaches for what it changes.</b> <span>It makes Pip's actions legible: you see which window Pip is touching before it moves it. That's a trust feature, not decoration.</span></li>
+      <li><b>Six reaches for what it changes.</b> <span>It makes Six's actions legible: you see which window Six is touching before it moves it. That's a trust feature, not decoration.</span></li>
       <li><b>Related controls fuse.</b> <span>A small, contained place to prove the merge rule with real state.</span></li>
       <li><b>Files hold on, the Bin reaches out.</b> <span>Valuable, but it needs drag and drop between Files and the dock first.</span></li>
       <li><b>Answers grow out of questions, and menus bud.</b> <span>Polish once the first three have been tested with people; both run often, so they need to stay quick.</span></li>
@@ -605,13 +605,13 @@ void main() {
     };
   });
 
-  /* ── Pip · the notch reaches for the window it's moving ── */
+  /* ── Six · the menu-bar orb reaches for the window it's moving ── */
   study('sPip', s => {
-    const notch = el(s.goo, 'b ink'), grip = el(s.goo, 'b ink'), tendril = el(s.goo, 'b ink');
+    const capsule = el(s.goo, 'b ink'), orb = el(s.goo, 'b ink'), grip = el(s.goo, 'b ink'), tendril = el(s.goo, 'b ink');
     const term = el(s.ui, 'win', '<i>Terminal</i><s></s><s></s>'), files = el(s.ui, 'win', '<i>Files</i><s></s><s></s><s></s>');
     const said = el(s.ui, 'lab', ''); said.style.color = '#fff'; said.style.fontSize = '12px';
-    const note = el(s.ui, 'lab note', 'Pip only shows the notch while it works.');
-    const go = el(s.ui, 'act', 'Ask Pip: snap Files to the left', 'button');
+    const note = el(s.ui, 'lab note', 'At rest Six is just its orb in the menu bar.');
+    const go = el(s.ui, 'act', 'Ask Six: snap Files to the left', 'button');
     const nw = new Sp(0), nh = new Sp(0), ext = new Sp(0), thick = new Sp(0);
     const F = { x: new Sp(0), y: new Sp(0), w: new Sp(0), h: new Sp(0) };
     const start = () => ({ x: s.W * 0.4, y: s.H * 0.36, w: Math.min(260, s.W * 0.5), h: 150 });
@@ -624,13 +624,13 @@ void main() {
       if (running) return; running = true; timers.forEach(clearTimeout); timers = [];
       setF(start(), false);
       go.disabled = true; note.textContent = '“Snap Files to the left.”';
-      later(300, () => { nw.to(186); nh.to(44); said.textContent = 'Snapping Files to the left'; });
-      later(800, () => { thick.to(18); ext.to(1); note.textContent = 'Pip takes hold of the window it is about to move.'; });
+      later(300, () => { nw.to(200); nh.to(26); said.textContent = 'Snapping Files to the left'; });
+      later(800, () => { thick.to(18); ext.to(1); note.textContent = 'Six takes hold of the window it is about to move.'; });
       later(1500, () => setF(snapped(), false));
       later(2600, () => { said.textContent = 'Done · Files on the left'; thick.to(6); note.textContent = 'Done. It lets go and draws back.'; });
       later(2900, () => ext.to(0));
       later(3500, () => { nw.to(0); nh.to(0); thick.to(0); });
-      later(4300, () => { running = false; go.disabled = false; go.textContent = 'Again'; note.textContent = 'The notch has gone: Pip is idle.'; });
+      later(4300, () => { running = false; go.disabled = false; go.textContent = 'Again'; note.textContent = 'The capsule has gone back into the orb: Six is idle.'; });
       later(5200, () => { if (!running) setF(start(), false); });
     }
     go.addEventListener('click', run);
@@ -641,16 +641,18 @@ void main() {
       step(dt) {
         [nw, nh].forEach(v => v.step(dt, ...DET)); ext.step(dt, ...PRE); thick.step(dt, ...PRE);
         Object.values(F).forEach(v => v.step(dt, ...PRE));
-        const cx = s.W / 2;
-        shape(notch, cx, 0, nw.v, nh.v, 18);
+        // the orb sits at the right of the menu bar; the capsule grows out of it to the left
+        const cx = s.W - 30, cy = 18, cw = Math.max(0, nw.v);
+        shape(orb, cx, cy, 22, 22);
+        shape(capsule, cx + 13 - cw / 2, cy, cw, nh.v, 13);
         const gx = F.x.v + F.w.v / 2, gy = F.y.v - 4, k = clamp(ext.v, 0, 1.05);
-        const ex = lerp(cx, gx, k), ey = lerp(nh.v / 2 - 4, gy, k);
-        neck(tendril, cx, Math.max(0, nh.v / 2 - 8), ex, ey, thick.v > 1 && k > 0.02 ? thick.v : 0);
+        const ex = lerp(cx, gx, k), ey = lerp(cy + 6, gy, k);
+        neck(tendril, cx, cy + 6, ex, ey, thick.v > 1 && k > 0.02 ? thick.v : 0);
         shape(grip, ex, ey, k > 0.6 ? 26 * Math.min(1, (k - 0.6) / 0.4) : 0, k > 0.6 ? 22 * Math.min(1, (k - 0.6) / 0.4) : 0);
         Object.assign(files.style, { width: F.w.v + 'px', height: F.h.v + 'px' }); place(files, F.x.v, F.y.v);
         const tw = Math.min(220, s.W * 0.42); Object.assign(term.style, { width: tw + 'px', height: '120px' }); place(term, s.W - tw - 16, s.H - 196);
         said.style.opacity = nw.v > 150 ? Math.min(1, (nw.v - 150) / 30) : 0;
-        place(said, cx - said.offsetWidth / 2, 6);
+        place(said, cx + 13 - cw + 14, cy - 7);
         place(go, 16, s.H - 84);
       },
     };
@@ -713,10 +715,10 @@ void main() {
     };
   });
 
-  /* ── The Pip app: answers grow out of questions ── */
+  /* ── The Six app: answers grow out of questions ── */
   study('sChat', s => {
     s.k = 7;
-    const comp = el(s.goo, 'b'), compLab = el(s.ui, 'lab', 'Ask Pip…'); compLab.style.color = 'var(--muted)';
+    const comp = el(s.goo, 'b'), compLab = el(s.ui, 'lab', 'Ask Six…'); compLab.style.color = 'var(--muted)';
     const threads = el(s.ui, '', '', 'div'); threads.innerHTML = '<svg class="threads"></svg>'; const svg = threads.firstChild; threads.style.inset = '0';
     const ask = el(s.ui, 'act', 'Ask', 'button');
     const PAIRS = [
@@ -749,7 +751,7 @@ void main() {
       const me = bubble(true, q);
       me.x.jump(s.W - 60); me.y.jump(compY()); me.w.jump(30); me.h.jump(30); me.fromComp = true;
       layout(); setTimeout(() => (me.lab.style.opacity = 1), still() ? 0 : 260);
-      setTimeout(() => {   // Pip works: a drop leaves the question
+      setTimeout(() => {   // Six works: a drop leaves the question
         drop.x.jump(me.x.t - me.tw / 2 + 10); drop.y.jump(me.y.t + me.th / 2 - 6); drop.r.jump(0); drop.r.to(20); drop.host = me;
         drop.x.to(56); drop.y.to(me.y.t + me.th / 2 + 36);
       }, still() ? 0 : 700);

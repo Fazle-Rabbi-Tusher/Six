@@ -22,22 +22,22 @@ Each task starts from the home screen with no window open. Give the goal, never 
 
 | # | Task (what you say) | Pass when | Watch for |
 |---|---|---|---|
-| 1 | "Open your files and the terminal next to each other." | Both windows snapped side by side, by any route (Pip, drag to edge, Snap Layouts, Six Search) | Which route they pick first; hunting for a Start button |
+| 1 | "Open your files and the terminal next to each other." | Both windows snapped side by side, by any route (Six, drag to edge, Snap Layouts, Six Search) | Which route they pick first; hunting for a Start button |
 | 2 | "Turn on night light." | Night light on | Whether they find Control Center in the menu bar |
-| 3 | "Tell Pip to delete *Interview notes*, then change your mind." (by voice) | Review card read, Cancel pressed, file still in Documents | Whether they read the target and effect lines; whether *Move to Bin* is mistaken for permanent deletion |
-| 4 | "Ask Pip to open Photoshop." | They take a recovery chip, or say what they would do next | Dead ends; blaming themselves |
-| 5 | "The slides Pip is making: stop them." Then: "Where did the half-made outline go?" | Stopped from the task card; they can say what was kept | Whether the stop message answers the second question without help |
+| 3 | "Tell Six to delete *Interview notes*, then change your mind." (by voice) | Review card read, Cancel pressed, file still in Documents | Whether they read the target and effect lines; whether *Move to Bin* is mistaken for permanent deletion |
+| 4 | "Ask Six to open Photoshop." | They take a recovery chip, or say what they would do next | Dead ends; blaming themselves |
+| 5 | "The slides Six is making: stop them." Then: "Where did the half-made outline go?" | Stopped from the task card; they can say what was kept | Whether the stop message answers the second question without help |
 | 6 | "Put the *Today* and *This device* cards together, then see both." | Stacked, then both seen, by flipping through with the previews or with **Show all** | Whether the previews under the stack are noticed; drag versus click; whether anyone moves the mouse to chase a preview (they shouldn't need to) |
-| 7 | "Find the budget file." | File opened from Pip's result chip or Six Search | Search in Pip versus Six Search |
-| 8 | "What is Pip doing right now?" (during a long task) | They read the status label or the task card | Whether the orb's look alone is enough (it should not need to be) |
+| 7 | "Find the budget file." | File opened from Six's result chip or Six Search | Search in Six versus Six Search |
+| 8 | "What is Six doing right now?" (during a long task) | They read the status label or the task card | Whether the orb's look alone is enough (it should not need to be) |
 | 9 | Keyboard only: tasks 1, 2 and 3 | Same pass criteria | Focus order, visible focus, the review card reachable with `Tab` |
 | 10 | Screen reader: tasks 3 and 5 | Hears the review target and effect, and the stop result | Live region noise (the task line must speak only on change) |
-| 11 | "Put a clock on your home screen, then make one that counts down to your next holiday." | Clock added from the gallery or by asking; countdown previewed and added | Whether they find *Add widgets* or ask Pip; whether the preview is read before adding |
-| 12 | From home, with no instructions: "Ask the computer to open your settings." | They find the mic (menu bar, clicking Pip, or Space) and Settings opens | How long until they try talking; whether "Type instead" is found by people who'd rather not talk; whether anyone moves or hides Pip, and why |
+| 11 | "Put a clock on your home screen, then make one that counts down to your next holiday." | Clock added from the gallery or by asking; countdown previewed and added | Whether they find *Add widgets* or ask Six; whether the preview is read before adding |
+| 12 | From home, with no instructions: "Ask the computer to open your settings." | They find the mic (menu bar, clicking Six, or Space) and Settings opens | How long until they try talking; whether "Type instead" is found by people who'd rather not talk; whether anyone moves or hides Six, and why |
 | 13 | "Find the photo from Cox's Bazar, then put back the file you deleted earlier." | Files › Pictures found through the sidebar; Bin › *Put back* used | Sidebar versus path bar; whether "From Documents" in the Bin is noticed |
-| 14 | "Turn the screen brightness down and make the accent colour green." | Both done in Settings (or by asking Pip) | Sidebar versus search in Settings; whether the section colours help |
+| 14 | "Turn the screen brightness down and make the accent colour green." | Both done in Settings (or by asking Six) | Sidebar versus search in Settings; whether the section colours help |
 | 15 | "Install LibreOffice, then find out whether your Windows accounting program will run." | LibreOffice installed; they reach *Windows apps* and can say what Bottles does | Whether "Coming from Windows?" is noticed; trust in sandboxed installs |
-| 16 | With Files open: "Ask Pip what's on your calendar, then check how the slides task is going." | Asked from the notch (or mic); task progress read from the notch | Whether the notch is noticed as Pip; whether they click the compact notch for details |
+| 16 | With Files open: "Ask Six what's on your calendar, then check how the slides task is going." | Asked from the menu-bar orb (or mic); task progress read from the capsule | Whether the capsule is noticed as Six; whether they click the compact notch for details |
 | 17 | "Keep the timer visible while you work in Settings, then put it back." | Timer floated from its right-click menu, then *Stop floating* | Whether they right-click at all (Windows habit) or look for a pin button |
 
 ## What to measure
@@ -49,7 +49,7 @@ Each task starts from the home screen with no window open. Give the goal, never 
 | Wrong actions on task 3 | 0 files deleted by mistake |
 | Single Ease Question (1–7) | ≥ 5.5 per task |
 | SUS after the session | ≥ 75 |
-| "Did Pip do what you asked?" | Yes, and they can say what it did, for every Pip task |
+| "Did Six do what you asked?" | Yes, and they can say what it did, for every Six task |
 
 Record what people say about the orb in their own words. If more than one person in a round
 reads a state wrongly (for example *Waiting* as frozen), change the status label first, the
@@ -67,10 +67,10 @@ Each step ships behind a flag and is tested with the tasks it unlocks before the
 | 3 | Control Center, notifications, toasts with Undo | 2 | Task 2 passes; every destructive toast has Undo |
 | 3b | System apps: Settings (every page backed by its Fedora service), Files with the Bin, Software with Flatpak, Calendar, lock screen | 13, 14, 15 | Tasks 13–15 pass; no Settings page edits a file directly |
 | 4 | Home screen: matte wallpaper, cards, drag, stacks with previews that stay put and open in place, widget gallery | 6, 11 | Task 6 passes; Reduce motion makes it jump, not spring |
-| 5 | Pip's orb engine (one clock per look, every state, small and realistic renderers, the Bloom and Halo shaders with grain), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU, every look; task 8 passes with every look |
-| 6 | Pip on device: local commands, review cards, failures with recovery, stop that reports what happened, widget specs | 3, 4, 5, 11 | Tasks 3–5 pass; nothing changes a file without a review |
+| 5 | Six's orb engine (one clock per look, every state, small and realistic renderers, the Bloom and Halo shaders with grain), status label, live region | 8 | Orbs hold 60 fps on the lowest supported GPU, every look; task 8 passes with every look |
+| 6 | Six on device: local commands, review cards, failures with recovery, stop that reports what happened, widget specs | 3, 4, 5, 11 | Tasks 3–5 pass; nothing changes a file without a review |
 | 7 | Cloud model behind consent, provider note on every reply, waiting and retrying states | 3–5 again | No request leaves the device before consent; outages read as *Waiting*, not as broken |
-| 8 | Voice-only home: press to talk, "Hey Pip" on the device, captions, review by voice, the Pip notch over windows; the Pip app for typing | 12, and 1–7 by voice | Every voice task can be done by typing in the Pip app too |
+| 8 | Voice-only home: press to talk, "Hey Six" on the device, captions, review by voice, Six's menu-bar capsule and panel over windows; the Six app for typing | 12, and 1–7 by voice | Every voice task can be done by typing in the Six app too |
 | 9 | Accessibility pass: screen reader, magnifier, More contrast, Reduce transparency | 9, 10 | Tasks 9 and 10 pass |
 | 10 | Windows migration: app compatibility labels, Taskbar layout option, shortcut parity | 1, 2 with Windows habits | Long-time Windows users pass tasks 1 and 2 first try |
 

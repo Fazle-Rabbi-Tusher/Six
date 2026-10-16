@@ -1,9 +1,9 @@
 # 09 · The SIX shell
 
 The shell is everything outside app content: the menu bar, the dock, Six Menu, Six Search,
-windows, Control Center, notifications, Pip's small orb, Overview, the lock screen and the
+windows, Control Center, notifications, Six's small orb, Overview, the lock screen and the
 first-run setup.
-The home screen itself, where Pip lives, has its own chapter: [14 · Home](14-home-assistant.md).
+The home screen itself, where Six lives, has its own chapter: [14 · Home](14-home-assistant.md).
 
 ## Menu bar and dock (macOS-style layout)
 
@@ -32,8 +32,8 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 | **App name** | Bold name of the focused app ("Home" when none). App menus (File, Edit, View…) follow it |
 | **Search** | Opens Six Search (`Ctrl + K`, `Six + Space`) |
 | **Control Center** | Wi-Fi, a battery that shows its level and percentage, and a two-toggle glyph; opens Control Center (Quick Settings) under the bar |
-| **Mic** | Talk to Pip from anywhere (`Six + Space`). Amber pill while Pip hears you; a small green dot when *Listen for "Hey Pip"* is on |
-| **Pip** | The small dotted orb at the top right; shows Pip's state and a progress ring while a task runs; click → the Pip app (the written conversation) |
+| **Mic** | Talk to Six from anywhere (`Six + Space`). Amber pill while Six hears you; a small green dot when *Listen for "Hey Six"* is on |
+| **Six** | The small dotted orb at the top right; shows Six's state and a progress ring while a task runs; click → the Six app (the written conversation) |
 | **Clock** | "Mon 12 Oct 10:42" in tabular figures; click → calendar and notifications |
 
 **Dock** (glass, 68 px tall, centred, 8 px above the bottom edge, 24 px radius)
@@ -42,10 +42,10 @@ default when someone imports their data from Windows (see [12](12-windows-migrat
 |---|---|
 | **Six Menu** | First icon (graphite squircle with the six-dot mark); opens the Six Menu above the dock |
 | **Apps** | Pinned and running apps. Running = a 4 px dot under the icon |
-| **Separator** | Thin line before Pip and the Bin |
-| **Pip** | Pip's dotted orb on a dark tile; click → the Pip app |
+| **Separator** | Thin line before Six and the Bin |
+| **Six** | Six's dotted orb on a dark tile; click → the Six app |
 | **Bin** | Deleted files; shows a count |
-| **Notch** | Pip's notch at the top centre of the menu bar; see [The Pip notch](#the-pip-notch) |
+| **Six in the menu bar** | Six's orb, capsule and panel at the right of the menu bar; see [Six in the menu bar](#six-in-the-menu-bar) |
 | **Magnification** | Icons near the pointer grow up to 1.5× with a smooth falloff (160 px radius), each on its own spring, so the dock flows rather than snaps (see [08](08-motion.md#choreography)). Off under Reduce motion, on touch, and on narrow screens |
 | **Launch lift** | An opening app's icon lifts once, 12 px, while its window grows out of it; never repeatedly for attention (a badge does that) |
 | **Labels** | A small glass label above the hovered icon |
@@ -54,40 +54,40 @@ Maximized windows fill the space between menu bar and dock; the dock can be set 
 Fitts's law still applies: the menu bar items reach the top edge, and the dock's bottom edge
 extends to the screen edge.
 
-## The Pip notch
+## Six in the menu bar
 
-A black notch at the top centre of the screen, in both themes, flat against the edge with concave
-"ears", like a laptop's camera notch. **It only exists while Pip is working:** it slides down from
-the top edge when Pip has something in progress, grows to show it, and slides back up into the
-edge when Pip is done. With nothing in progress there is no notch at all.
+There is no notch. Six, the assistant, lives in its orb at the right of the menu bar, and
+everything it does grows out of that orb. **When Six is idle it is just the orb.**
 
-| Size | When | What it shows |
+| State | When | What it shows |
 |---|---|---|
-| **Hidden** | Pip isn't doing anything (music playing, timers and other apps don't count) | Nothing: the menu bar is clear |
-| **Compact** | Pip is working | It slides down: on the left Pip's orb, on the right what Pip is doing: its task with a progress ring ("Slides · 46 %"), "Slides are ready" for a few seconds when a task finishes, or the request it's working on ("searching Documents", "asking Claude"), including ones typed in the Pip app |
-| **Expanded** | You talk to Pip with windows open, or click the compact notch | It drops down into a panel: Pip's state and source ("Asking · waiting for your review", "on this device"), a voice wave, what you said, Pip's reply and review cards; below that the running task (with **Stop task**) and, if music is playing, its controls (play/pause, next) |
+| **Orb** | Six isn't doing anything (music playing, timers and other apps don't count) | Six's orb; click it to open the Six app |
+| **Capsule** | Six is working, listening or talking over your windows | The orb grows into a terminal-black capsule that slides out to its left, pushing the status icons over, and types what Six is doing like a terminal line: its task with a progress ring ("Slides · 46 %"), "Slides are ready" for a few seconds when a task finishes, "Listening", or the request it's working on ("searching Documents", "asking Claude"), including ones typed in the Six app. A number that ticks over (46 → 47 %) just changes; new words type in |
+| **Panel** | You talk to Six with windows open, or click the capsule | A panel drips down out of the orb: Six's state and source ("Asking · waiting for your review", "on this device"), a voice wave, what you said, Six's reply typed in like terminal output (`> …`) and review cards; below that the running task (with **Stop task**) and, if music is playing, its controls (play/pause, next) |
 
-The voice panel closes 6 s after Pip answers (longer while a review waits), or at once with
-`Esc` or ×; a click outside closes an activity panel. Right-click the notch for *Talk to Pip*,
-*Open the Pip app* and Pip's settings. It appears at every screen size.
+The panel hangs under the orb, right-aligned to it (as far right as the screen allows), 420 px
+wide. It closes 6 s after Six answers (longer while a review waits), or at once with `Esc`, its
+×, or a second click on the capsule; a click outside closes an activity panel. Right-click the
+orb for *Talk to Six*, *Open the Six app*, *What can Six do?* and Six's settings. It works at
+every screen size.
 
 | Moment | Motion |
 |---|---|
-| Appears | Slides down out of the top edge, its height growing from nothing on the detent spring; leaving, it slides back up into the edge (320 ms) and fades as it goes |
-| Grows (compact, expanded) | Width and height on the detent spring, so it lands with a hint of overshoot (460–560 ms); the bottom corners round out from 14 to 28 px |
-| Contents arrive | Fade in with a 4–6 px focus pull after the shape has started moving (140 ms later); the panel's contents scale up from 94 % |
-| Shrinks | Contents leave first (140 ms, ease-in), then the shape closes on the precise spring |
+| Capsule grows | The orb's button widens to the left on the detent spring (560 ms), its ground darkens to terminal black, and the words type in at about 70 characters a second; the status icons slide over with it |
+| Panel drips down | A black neck buds from the orb's underside and stretches to the panel (460 ms) while the panel opens as a circle spreading from the orb's position (`clip-path`, 640 ms on the detent spring); its contents fade in with a 6 px focus pull 170 ms later |
+| Panel grows | Its height follows the conversation on the precise spring as the reply types in |
+| Panel closes | Contents leave first (140 ms), then the circle draws back up into the orb (360 ms, ease-in) and the neck pulls back into it |
 
-![The notch expanded while Pip asks for a review](../screens/notch-voice.png)
+![Six's capsule in the menu bar, and its panel dripping from the orb](../screens/six-panel.png)
 
-**Pip reaches for what it changes.** When Pip opens, snaps or closes a window, or adds or removes
-a widget, the notch drops a black tendril to the window's title bar (or the widget) and holds on
-while it moves, so you can see what Pip is touching. It then thins in the middle, lets go, and the
-two halves draw back into the notch and into the window (about 1.6 s in all). When the notch isn't
-showing, the tendril comes from Pip's orb in the menu bar. One tendril at a time; a second action
-waits its turn. See [08 · Motion › Tension](08-motion.md#tension).
+**Six reaches for what it changes.** When Six opens, snaps or closes a window, or adds or removes
+a widget, a black tendril drops from the orb (or from the open panel) to the window's title bar
+(or the widget) and holds on while it moves, so you can see what Six is touching. It then thins in
+the middle, lets go, and the two halves draw back into the orb and into the window (about 1.6 s
+in all). One tendril at a time; a second action waits its turn. See
+[08 · Motion › Tension](08-motion.md#tension).
 
-![The notch reaching for the window Pip opened](../screens/notch-reach.png)
+![Six reaching from the menu bar for the window it opened](../screens/six-reach.png)
 
 ## Right-click menus
 
@@ -98,12 +98,12 @@ the Menu key opens the menu for whatever has focus; arrows move, `←` or `Esc` 
 
 | Where | Menu |
 |---|---|
-| Home (empty space) | Add widgets…, Talk to Pip · *View ›* Pip on home, Greeting, "Try saying" examples, Put Pip back in the middle, Put cards back in their columns · Refresh · *Wallpaper ›* Matte, Obsidian, Signal, Contour, Strata, Velvet · Display settings, Personalise · Open in Terminal |
+| Home (empty space) | Add widgets…, Talk to Six, What can Six do? · *View ›* Six on home, Keep the intro on home, Put Six back in the middle, Put cards back in their columns · Refresh · *Wallpaper ›* Matte, Obsidian, Signal, Contour, Strata, Velvet · Display settings, Personalise · Open in Terminal |
 | A widget | Float on top of everything / Stop floating · *Size ›* (video) · Show all in this stack, Unstack, Put back in its column · Edit widgets…, Remove |
-| Pip on home, the notch | Talk to Pip, Open the Pip app · Move Pip back to the middle, Hide Pip from home · Pip & voice settings |
+| Six on home, the menu-bar orb | Talk to Six, Open the Six app, What can Six do? · Move Six back to the middle, Hide Six from home · Six & voice settings |
 | A window | Restore, Minimise, Maximise, *Snap ›* halves, thirds, quarters · Close (`Alt F4`) |
 | A dock icon | Open / Show, Minimise · Keep in dock · Quit; the Bin: Open Bin, Empty Bin…; Six Menu: Six Search, Settings, Lock screen. Dock menus open upward, above the dock |
-| A file in Files | Open, Ask Pip about this · Copy name, Move to Bin (in the Bin: Put back, Delete permanently…) · Properties |
+| A file in Files | Open, Ask Six about this · Copy name, Move to Bin (in the Bin: Put back, Delete permanently…) · Properties |
 | Menu bar, anywhere else | Control Center, Six Search, Settings · Lock screen |
 
 ![The home menu with the Wallpaper submenu](../screens/menu-desktop.png)
@@ -150,7 +150,7 @@ iridescent rim, results appear as you type (< 50 ms target for local results).
 | Settings | "night light" → toggle inline | Toggles without opening Settings |
 | Actions | "restart", "empty bin", "new note" | Runs (destructive ones ask first) |
 | Answers | `12*18`, `20 usd in bdt`, `time in tokyo` | Copies result |
-| Ask Pip | Anything else | Shows home and sends it to Pip |
+| Ask Six | Anything else | Shows home and sends it to Six |
 
 **Every result says what Enter will do before it runs.** Settings show their current state and the
 change ("Off now · Enter turns it on"); actions name their effect ("Opens it on the left half of
@@ -185,7 +185,7 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 ```
 ╭────────────────────────────────╮
 │  (Wi-Fi)=(BT)  (✈)   (☾)   (☀)    │  round satin buttons, name and state under them;
-│  (☝)   (🔕)  [🎙 Listen for "Hey Pip"]│  on = the accent's satin; Wi-Fi + Bluetooth fuse
+│  (☝)   (🔕)  [🎙 Listen for "Hey Six"]│  on = the accent's satin; Wi-Fi + Bluetooth fuse
 │ (☀ ▓▓▓▓▓▓▓▓▓▓▓▓●        100 %)│  pill sliders: icon and value inside
 │ (🔊 ▓▓▓▓▓▓▓●           64 %) │
 │ 🔋 64 % · 3 h 10 m left    ⚙   │
@@ -203,7 +203,7 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 - Tiles can be added/removed/reordered (edit mode via the ✎ button).
 - *Accessibility* tile is always pinnable and opens the accessibility quick panel (text size,
   contrast, reduce motion, reduce transparency, screen reader, magnifier).
-- A wide **Listen for "Hey Pip"** tile switches Pip between press to talk and always listening;
+- A wide **Listen for "Hey Six"** tile switches Six between press to talk and always listening;
   its line says which ("Always listening, on this device" / "Off · press the mic to talk").
 - The ⚙ button opens Settings at the page you last used. Wallpaper mood and plasma clay controls
   live in Settings › Appearance, not here: Control Center holds only what people change often.
@@ -219,12 +219,12 @@ Opens from the menu bar, under the bar on the right. Glass, 380 px wide.
 - Each notification has: app icon, title (`text-title-sm`), one-line body, up to 2 actions,
   and a ⋯ menu with "Turn off notifications from this app" (one step to stop spam).
 
-## Pip's small orb
+## Six's small orb
 
-Pip, the assistant, lives on the home screen as the big realistic orb (see [14 · Home](14-home-assistant.md)).
-Everywhere else (menu bar, dock, task cards, message labels) Pip is a **dotted sphere**: points on
+Six, the assistant, lives on the home screen as the big realistic orb (see [14 · Home](14-home-assistant.md)).
+Everywhere else (menu bar, dock, task cards, message labels) Six is a **dotted sphere**: points on
 a slowly turning globe whose light moves differently in each state. It stands in for generic
-spinners whenever SIX or Pip works on something for more than 2 s without a known percentage.
+spinners whenever SIX or Six works on something for more than 2 s without a known percentage.
 
 The motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh
 ([MIT](https://github.com/yogesharc/thinking-orbs)), which gives three rules every orb follows:
@@ -246,7 +246,7 @@ The motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yoge
 | | · Twins | Two sparks that keep apart | Comparing or planning |
 | Searching | Searching | A lens hops between spots on the face and magnifies them | Looking through files or the web |
 | Asking | Searching · Lighthouse | A leaning beam circles every 2.5 s with a fading trail | Waiting for your review |
-| Waiting | Waiting | A comet circles and spirals pole to pole | A service made Pip wait (rate limit, queue) |
+| Waiting | Waiting | A comet circles and spirals pole to pole | A service made Six wait (rate limit, queue) |
 | Retrying | Retrying | Turns, brakes, springs back 60 %, goes again | Trying a failed step once more |
 | | · Surge | Each turn launches fast and eases out | Alternative |
 | Compacting | Compacting | A line sweeps left to right, packing the dots, then they spring loose | Tidying history, freeing space |
@@ -263,17 +263,17 @@ A view sets the look with `data-state` and, where a state has alternatives, `dat
 
 **Progress.** While a task runs, the menu bar and dock orbs draw a thin ring around the sphere
 that fills clockwise with the task's progress (like a dock progress bar on macOS); the tooltip and
-accessible name say it in words ("Pip · Slides from my notes, 64 %"). The ring disappears when
+accessible name say it in words ("Six · Slides from my notes, 64 %"). The ring disappears when
 the task finishes or is stopped.
 
 **Never colour alone.** Complete and Failed change colour, but every state also moves
-differently, the tooltip names it, and the label under the home orb says what Pip is actually
-doing ("Pip · searching Documents"). Under Reduce motion the orb is drawn still on a fixed frame
+differently, the tooltip names it, and the label under the home orb says what Six is actually
+doing ("Six · searching Documents"). Under Reduce motion the orb is drawn still on a fixed frame
 and only redraws when its state changes.
 
-**Listening is impossible to miss.** The menu-bar mic turns into an amber pill whenever Pip is
-hearing you, separate from Pip's orb, so it shows even when Pip is busy with something else. With
-*Listen for "Hey Pip"* on, the mic carries a small green dot: listening for the wake word only,
+**Listening is impossible to miss.** The menu-bar mic turns into an amber pill whenever Six is
+hearing you, separate from Six's orb, so it shows even when Six is busy with something else. With
+*Listen for "Hey Six"* on, the mic carries a small green dot: listening for the wake word only,
 on this device.
 
 ## Overview and desktops

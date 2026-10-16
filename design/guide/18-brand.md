@@ -9,7 +9,7 @@ sheet and [`brand/boot.html`](../brand/boot.html) plays the boot screen.
 ## The mark: Hex Face
 
 A hexagonal band that spirals inward like the numeral six, drawn as one stroke the way a line of
-code is written, with two eyes at its centre. The eyes are Pip's: the mark is the system looking
+code is written, with two eyes at its centre. The eyes are the assistant's: the mark is the system looking
 back at you.
 
 | Part | Drawing (400-unit box, centred on 0,0) |
@@ -35,8 +35,8 @@ back at you.
   photo, put the mark on a cobalt tile.
 - **The eyes may blink** (every 4.5–5 s, 6 % of the cycle) where the mark is large and alive: the
   boot screen, About, onboarding. Never in the menu bar, dock or anything a user reads past.
-- **The mark is not Pip.** Pip keeps its own orb (Bloom, Halo, Ripple, Dotted; see
-  [14](14-home-assistant.md)). The mark stands for SIX itself: the menu-bar button, the Six Menu
+- **The mark is not the assistant.** Six, the assistant, keeps its own orb (Bloom, Halo, Ripple,
+  Dotted; see [14](14-home-assistant.md)). The mark stands for SIX, the system: the menu-bar button, the Six Menu
   app icon, About, the boot screen, the installer, the login screen and documentation.
 
 ## The wordmark

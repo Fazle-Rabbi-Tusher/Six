@@ -2,9 +2,9 @@
 
 SIX is built on **Fedora Linux**. Fedora gives SIX a current kernel and drivers, a security model
 that is on by default, a large set of maintained packages, and the tools to ship the whole system
-as one image. SIX adds the shell (menu bar, dock, home, Pip), the system apps, the design
+as one image. SIX adds the shell (menu bar, dock, home, Six), the system apps, the design
 language and the defaults. This chapter is the system design: which part of SIX is which piece of
-Fedora, how updates work, how apps and Windows programs run, how Pip works on the device, and the
+Fedora, how updates work, how apps and Windows programs run, how Six works on the device, and the
 branding rules for building on Fedora.
 
 > This chapter describes the target architecture. The prototype in this repository is the
@@ -14,13 +14,13 @@ branding rules for building on Fedora.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│ Apps          SIX apps (Files, Settings, Pip, Software, Calendar…)    │
+│ Apps          SIX apps (Files, Settings, Six, Software, Calendar…)    │
 │               Flatpak apps from Flathub · Windows programs in Bottles │
 ├──────────────────────────────────────────────────────────────────────┤
-│ SIX Shell     menu bar · dock · home and widgets · Pip · Six Search   │
+│ SIX Shell     menu bar · dock · home and widgets · Six · Six Search   │
 │               Control Center · notifications · lock screen            │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Pip services  wake word · speech to text · text to speech             │
+│ Six services  wake word · speech to text · text to speech             │
 │               on-device model · consented cloud model · tool bridge   │
 ├──────────────────────────────────────────────────────────────────────┤
 │ Desktop       Wayland compositor · xdg-desktop-portal · PipeWire      │
@@ -38,7 +38,7 @@ branding rules for building on Fedora.
 |---|---|---|
 | Wi-Fi, VPN, hotspot (Settings › Wi-Fi) | NetworkManager over D-Bus | Settings never edits config files directly |
 | Bluetooth | BlueZ | |
-| Sound, mic for Pip, screen sharing | PipeWire with WirePlumber | One audio and video graph for apps, Pip and portals |
+| Sound, mic for Six, screen sharing | PipeWire with WirePlumber | One audio and video graph for apps, Six and portals |
 | Battery, power modes | UPower, power-profiles-daemon | *Saver / Balanced / Performance* map to its three profiles |
 | Display scale, night light | The compositor's display configuration | Fractional scaling on Wayland |
 | Users, sign-in, fingerprint | accountsservice, fprintd, systemd-logind | |
@@ -50,7 +50,7 @@ branding rules for building on Fedora.
 | Disk encryption | LUKS2, unlocked by the TPM plus the password | systemd-cryptenroll |
 | Firewall | firewalld | Shown as a status row, not a configuration screen |
 | System protection | SELinux, enforcing | Shown as "System protection · Enforcing" |
-| Install | Fedora's Anaconda installer, with SIX branding and a short first-run | First run: language, Wi-Fi, account, Pip's listening mode, privacy |
+| Install | Fedora's Anaconda installer, with SIX branding and a short first-run | First run: language, Wi-Fi, account, Six's listening mode, privacy |
 
 ## Updates: the whole system, all at once
 
@@ -67,7 +67,7 @@ build reproducible and reviewable, and lets the image be tested in CI before rel
 
 | Step | What happens |
 |---|---|
-| Build | A Containerfile starts from the Fedora base image, adds SIX Shell, the SIX apps, Pip services, fonts, branding and defaults |
+| Build | A Containerfile starts from the Fedora base image, adds SIX Shell, the SIX apps, Six services, fonts, branding and defaults |
 | Test | CI boots the image in a VM and runs the shell's smoke tests and the [usability tasks](15-testing-and-build.md) that can be automated |
 | Release | The image is signed and published; machines check for it overnight when plugged in |
 | Apply | The new image is staged; *Restart to update* or the overnight window switches to it |
@@ -77,7 +77,7 @@ Apps (Flatpaks) and firmware (fwupd) update separately, shown in the same Settin
 
 ## The shell
 
-SIX Shell is the Wayland compositor's user interface: menu bar, dock, home and widgets, Pip's
+SIX Shell is the Wayland compositor's user interface: menu bar, dock, home and widgets, Six's
 orb, Six Search, Control Center, notifications, the lock screen and the window chrome. Two ways to
 build it on Fedora:
 
@@ -86,7 +86,7 @@ build it on Fedora:
 | **Qt Quick (QML) shell on KWin** | A GPU scene graph with shader effects suits plasma clay, the orb and the liquid surfaces; QML is how custom shells are already built on KWin; the design tokens export to QML (see [`tokens.json`](../tokens/tokens.json)) | KDE's settings and apps need SIX equivalents or theming |
 | **GJS shell on Mutter** (as GNOME Shell does) | Mutter is Fedora Workstation's compositor; libadwaita apps fit naturally | Deeper changes mean maintaining a fork of the shell |
 
-**Recommendation:** a Qt Quick shell on KWin. The home screen's liquid surfaces and Pip's orb are
+**Recommendation:** a Qt Quick shell on KWin. The home screen's liquid surfaces and Six's orb are
 GPU shaders in any case, and QML keeps the design tokens, motion specs and the shell in one
 toolkit. SIX apps use Qt 6 with Kirigami where they need adaptive layouts; GTK apps are styled
 from the same tokens so third-party apps don't look foreign.
@@ -94,19 +94,19 @@ from the same tokens so third-party apps don't look foreign.
 Whichever compositor is chosen, the shell talks to the system only through D-Bus services and
 portals, never by editing files, so the system image stays read-only and updates stay atomic.
 
-## Pip on the device
+## Six on the device
 
 | Piece | Runs | Notes |
 |---|---|---|
-| Wake word ("Hey Pip") | On device, always when turned on | A small keyword model on the PipeWire mic stream; audio is never stored or sent until the wake word is heard |
+| Wake word ("Hey Six") | On device, always when turned on | A small keyword model on the PipeWire mic stream; audio is never stored or sent until the wake word is heard |
 | Speech to text | On device | A Whisper-class model, with English and Bangla |
 | Simple commands | On device | The same rules as the prototype's local intents: open, snap, settings, widgets, file review |
-| Language model | On device where the hardware allows; the cloud model only with consent | Settings › Pip & voice › *Cloud model: Ask each time / Allow / Never* |
+| Language model | On device where the hardware allows; the cloud model only with consent | Settings › Six & voice › *Cloud model: Ask each time / Allow / Never* |
 | Text to speech | On device | A neural voice per language |
-| Acting on the system | A **tool bridge** service on D-Bus | Pip can only call listed tools (open and arrange windows, change listed settings, make widgets, search files). File changes always go through a review card; the bridge refuses anything not on the list |
-| Widgets Pip makes | A declarative spec, drawn by the shell | Never code; see [14 · Widgets Pip makes](14-home-assistant.md#widgets-pip-makes) |
+| Acting on the system | A **tool bridge** service on D-Bus | Six can only call listed tools (open and arrange windows, change listed settings, make widgets, search files). File changes always go through a review card; the bridge refuses anything not on the list |
+| Widgets Six makes | A declarative spec, drawn by the shell | Never code; see [14 · Widgets Six makes](14-home-assistant.md#widgets-six-makes) |
 
-Pip runs as the person's own systemd user services, confined by SELinux, with access to the mic
+Six runs as the person's own systemd user services, confined by SELinux, with access to the mic
 only through PipeWire and to files only through the portal the person approves.
 
 ## Security defaults
@@ -124,7 +124,7 @@ On by default, explained in words in Settings › Privacy & security:
 
 Fedora's trademark guidelines decide how a derivative can use the Fedora name and logo:
 
-- A distribution that combines Fedora with non-Fedora software (SIX Shell, Pip, SIX branding)
+- A distribution that combines Fedora with non-Fedora software (SIX Shell, Six, SIX branding)
   is a **Remix**, not a Fedora Spin. It must replace Fedora's branding packages
   (`fedora-logos`, `fedora-release`) with its own or with the `generic-*` packages, and must not
   use Fedora logos.

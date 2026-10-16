@@ -22,7 +22,7 @@ This page summarizes the research behind the SIX design language. Each finding e
 
 **Decision:** SIX keeps the Windows *map*: launcher in the bottom-left, taskbar at the bottom,
 window controls top-right in the order minimize, maximize, close, right-click menus everywhere, and
-the same keyboard shortcuts. Everything new (Six Search, Pip on the home screen, Overview) is added on top of that
+the same keyboard shortcuts. Everything new (Six Search, Six on the home screen, Overview) is added on top of that
 map and never replaces it. See [12 · Coming from Windows](12-windows-migration.md).
 
 *Update:* by product direction, the default bottom bar is now a macOS-style dock with a menu
@@ -95,7 +95,7 @@ removed; the dock and popovers never cover the focused element. See
 
 | Heuristic | Where it shows up in SIX |
 |---|---|
-| Visibility of system status | Pip's states, progress in dock icons, clear battery/network glyphs |
+| Visibility of system status | Six's states, progress in dock icons, clear battery/network glyphs |
 | Match with the real world | Plain names: "Files", "Settings", "Bin" (not "Nautilus", "Trash" vs "Recycle Bin" confusion) |
 | User control & freedom | Undo toasts for delete/move, "Restore" for closed windows, Esc always backs out |
 | Consistency & standards | One menu component, one dialog pattern, Windows shortcuts |
@@ -111,7 +111,7 @@ removed; the dock and popovers never cover the focused element. See
 | Reference | What it is | What SIX borrows | What SIX avoids |
 |---|---|---|---|
 | **plasma-ui** (cruxgarden) | WebGL "liquid" React components inspired by Liquid Glass: surfaces refract what is behind them, fuse when they touch, snap to a 24 px grid, springy motion; materials plasma, crystal, metal, wood, stone, cloud; falls back to a CSS frosted panel without WebGL2 | The **plasma glass** material for floating chrome, the 24 px snap grid for windows/widgets, spring motion, iridescent rim, a CSS fallback path | GPU-heavy effects on every surface; fusing/stretching on functional UI (kept for the wallpaper and widgets only) |
-| **thinking orbs** | Animated status orbs for AI agents: distinct states (idle, thinking, working…) instead of a spinner | **Pip's states**: one presence for the assistant and long-running tasks, with states that differ in shape and motion, not just colour | Many variants; Pip never replaces a progress bar where a percentage is known |
+| **thinking orbs** | Animated status orbs for AI agents: distinct states (idle, thinking, working…) instead of a spinner | **Six's states**: one presence for the assistant and long-running tasks, with states that differ in shape and motion, not just colour | Many variants; Six never replaces a progress bar where a percentage is known |
 | **21st.dev** | Community registry of React + Tailwind (shadcn-style) components | Fast prototyping: pull a component, re-skin it with `tailwind.preset.js` | Shipping a component that fails the checklist in [10 · Components](10-components.md#adopting-community-components) |
 | **macOS** | Coherent materials, Spotlight, Quick Look, consistent menus | Six Search (Spotlight), space-bar preview, one menu style, attention to typography | Global top menu bar, window controls on the left, Cmd-based shortcuts |
 | **Claymorphism** | Soft 3D shapes: filled pastel, coloured drop shadow, inner highlight and shade | The **clay** material for buttons, toggles, tiles and app icons | Clay on large surfaces (windows, documents), pastel-on-pastel low contrast |

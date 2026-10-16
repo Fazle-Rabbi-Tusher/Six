@@ -17,7 +17,7 @@ touch density.
 
 - Heights 28 / 36 / 44 px; horizontal padding 12 / 16 / 20 px; `text-label`; pill radius.
 - Labels are verbs: "Save", "Install", "Delete 3 files". Never "OK" when a verb fits.
-- Loading: label stays, a small Pip "thinking" glyph replaces the leading icon; width doesn't change.
+- Loading: label stays, a small Six "thinking" glyph replaces the leading icon; width doesn't change.
 - Dialog button order: secondary left, **primary right**; Enter = primary, Esc = cancel. The
   destructive button is never the default Enter action.
 - Tension: pressed, a button sinks to 97 %; held and pulled it leans after the pointer, rigidly,
@@ -87,7 +87,7 @@ touch density.
 
 ## Progress
 - Known duration: linear bar, 4 px, accent, with "2 of 5 · 1 min left" text.
-- Unknown < 2 s: nothing (avoid flicker). Unknown > 2 s: Pip's "working" state or an inline
+- Unknown < 2 s: nothing (avoid flicker). Unknown > 2 s: Six's "working" state or an inline
   thinking glyph with a status word ("Indexing…").
 
 ## Tooltips

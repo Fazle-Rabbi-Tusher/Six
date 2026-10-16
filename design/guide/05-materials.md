@@ -106,7 +106,7 @@ to the 24 px grid). Functional UI never stretches or wobbles.
 Water, not glass. The home's cards are drawn as clear, shallow water standing on the wallpaper:
 you see the floor through them, bent at the edge and wavering a little in the middle, light
 caught in caustics underneath, a thin meniscus line inside the edge and a bright lip on the side
-facing the light. Used **only** on the home screen and desktop widgets: home cards, Pip's
+facing the light. Used **only** on the home screen and desktop widgets: home cards, Six's
 conversation thread and composer. Never inside windows, menus or dialogs.
 
 ![Plasma clay on the home screen](../screens/home-dark.png)
@@ -151,11 +151,11 @@ that and it springs back into the stack with nothing changed. A click is never a
 
 **Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark
 mode and white fading to soft gray in light mode, with a faint grain and no colour, so content and
-Pip carry the colour. **Obsidian**, **Signal**, **Contour**, **Strata** and **Velvet** are the drawn
+Six carry the colour. **Obsidian**, **Signal**, **Contour**, **Strata** and **Velvet** are the drawn
 alternatives. The default rim is **Soft**, a neutral highlight; the
 iridescent rim is an option. Users pick the wallpaper (from
 thumbnails), viscosity, frost, refraction and rim in Settings › Appearance; the wallpaper is also
-in the home's right-click menu and Pip can switch it ("switch to the strata wallpaper").
+in the home's right-click menu and Six can switch it ("switch to the strata wallpaper").
 
 **Rules**
 - Text sits on the fill, never on raw refraction: the fill floor above keeps body text above
@@ -170,7 +170,7 @@ in the home's right-click menu and Pip can switch it ("switch to the strata wall
 | z | Surface | Material | Shadow |
 |---|---|---|---|
 | 0 | Wallpaper | Plasma wallpaper | none |
-| 1 | Home cards, Pip's conversation, desktop widgets | Plasma clay | drawn by the shader |
+| 1 | Home cards, Six's conversation, desktop widgets | Plasma clay | drawn by the shader |
 | 2 | Inactive windows | Paper | `--shadow-2` |
 | 3 | Active window | Paper | `--shadow-3` |
 | 4 | Menu bar, dock | Glass | `--shadow-3` |

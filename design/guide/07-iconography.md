@@ -49,13 +49,13 @@ plain SVG paths, so the shell embeds only the ones it uses.
 | Software | Mint to green | A shopping bag with a download arrow |
 | Settings | Silver | A steel gear |
 | Design guide | Lilac to violet | A palette with four paints |
-| Pip | Near-black | Pip's live dotted orb, the only animated icon |
+| Six | Near-black | Six's live dotted orb, the only animated icon |
 | Bin | Glass | A silver bin |
 
 - Third-party and Windows apps keep their own icon, placed on a neutral squircle so the row stays
   consistent. Software shows apps that have no icon as their initial on a tile in their colour.
 - Settings sections use small 24 px tiles in a section colour with a white Phosphor glyph, like
-  the sections of a system settings app (Wi-Fi blue, Display orange, Sound red, Pip violet…). Each
+  the sections of a system settings app (Wi-Fi blue, Display orange, Sound red, Six violet…). Each
   colour keeps 3:1 against the white glyph.
 
 ## Place icons
@@ -72,7 +72,7 @@ plain SVG paths, so the shell embeds only the ones it uses.
   symbols.
 - The battery is drawn, not an icon: an outline whose fill matches the charge, followed by the
   percentage in tabular figures.
-- Control Center is a two-toggle glyph; Pip is the small orb, with a progress ring while a task
+- Control Center is a two-toggle glyph; Six is the small orb, with a progress ring while a task
   runs.
 - While the microphone is on, a mic glyph on an amber pill appears left of Control Center. It is
   never folded into another icon.

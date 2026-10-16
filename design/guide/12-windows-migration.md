@@ -28,7 +28,7 @@ the same in both layouts.
 | Delete | Del → Recycle Bin; Shift + Del permanently | Del → Bin; Shift + Del permanently (with confirm) |
 | Close / quit | Alt + F4 | Alt + F4 |
 | Switch apps | Alt + Tab | Alt + Tab (glass switcher with live previews) |
-| Show desktop | Win + D, bottom-right corner | Six + D, or Pip in the dock / menu bar (shows home) |
+| Show desktop | Win + D, bottom-right corner | Six + D, or Six in the dock / menu bar (shows home) |
 | Lock | Win + L | Six + L |
 | File manager | Win + E | Six + E (Files) |
 | Settings | Win + I | Six + I |
@@ -46,7 +46,7 @@ the same in both layouts.
 |---|---|
 | **Six Search** (apps, files, settings, actions, answers) | The search icon in the menu bar, the Six Menu, or `Ctrl + K`; in the Taskbar layout, the search field where Windows has it |
 | **Quick Look** (Space previews a file) | Hint in the Files status bar for the first week |
-| **Pip on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask Pip anything…" |
+| **Six on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask Six anything…" |
 | **Undo for file operations** | Every delete/move toast has "Undo" |
 | **Window groups / auto-arrange** | Offered after the user snaps windows three times |
 

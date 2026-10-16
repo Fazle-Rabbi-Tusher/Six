@@ -20,7 +20,7 @@ Every pixel belongs to one of four materials:
 | **Clay** | things you press | buttons, toggles, quick-setting tiles, app icons |
 | **Satin** | things that float above content for a moment, and every control | menu bar, dock, menus, popovers, notifications, Six Search; buttons, switches, sliders |
 | **Paper** (flat) | things you read and work in | window content, documents, lists, settings pages |
-| **Plasma clay** | the living surfaces of home | home cards, Pip's conversation and composer, desktop widgets |
+| **Plasma clay** | the living surfaces of home | home cards, Six's conversation and composer, desktop widgets |
 
 If you can't say which material an element is, it's a design bug.
 
@@ -29,8 +29,8 @@ Each screen has one primary action, and it looks like it: accent fill, clay elev
 Everything else is quieter. If two things are shouting, one of them is wrong.
 
 ### 4. Calm by default, alive on purpose
-Motion and colour explain what happened (a window came *from* its dock icon, Pip is
-*thinking*). Ambient effects (plasma wallpaper, Pip's slowly turning globe) are slow and can be
+Motion and colour explain what happened (a window came *from* its dock icon, Six is
+*thinking*). Ambient effects (plasma wallpaper, Six's slowly turning globe) are slow and can be
 turned off. Nothing blinks for attention unless the user must act.
 
 ### 5. Everyone, every setting

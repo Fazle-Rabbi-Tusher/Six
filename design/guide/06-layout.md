@@ -78,7 +78,7 @@ Apps respond to **window width**, not screen width:
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │ ⁘ Home                                   ⌕ wifi ▮▮▯ ◐  ⁘  Mon 10:42  │ menu bar, 32px
-│  home cards                       Pip                    home cards  │
+│  home cards                       Six                    home cards  │
 │                          windows / conversation                      │
 │                                                                      │
 │            ╭───────────────────────────────────────────╮             │

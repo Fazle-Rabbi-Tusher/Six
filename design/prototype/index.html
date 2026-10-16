@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SIX OS Prototype</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-200 -200 400 400'%3E%3Crect x='-200' y='-200' width='400' height='400' rx='90' fill='%231B3CFF'/%3E%3Cpath d='M90.9%20-97.5%20L0%20-150%20L-129.9%20-75%20L-129.9%2075%20L0%20150%20L129.9%2075%20L129.9%20-20%20L0%20-92%20L-79.67%20-46%20L-79.67%2046%20L0%2092%20L39.84%2069' fill='none' stroke='white' stroke-width='40'/%3E%3Ccircle cx='-25' cy='4' r='17' fill='white'/%3E%3Ccircle cx='25' cy='4' r='17' fill='white'/%3E%3C/svg%3E">
-<meta name="description" content="Interactive prototype of SIX, a desktop OS built on Fedora Linux: voice-first home with Pip, the Pip app, Settings, Files, Software, Calendar and the lock screen.">
+<meta name="description" content="Interactive prototype of SIX, a desktop OS built on Fedora Linux: voice-first home with Six, the Six app, Settings, Files, Software, Calendar and the lock screen.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,400..600&family=Share+Tech+Mono&family=VT323&family=Noto+Sans+Bengali:wght@400;600&display=swap">
@@ -433,7 +433,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .task-file small { display: block; font: var(--text-caption); color: var(--c-text-3); }
 .task-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .frow.empty-row { display: block; padding: 28px 12px; text-align: center; color: var(--c-text-2); cursor: default; }
-/* Pip can live anywhere on home: drag it out of the middle, and it stays where you put it */
+/* Six can live anywhere on home: drag it out of the middle, and it stays where you put it */
 .pip-spot { display: grid; justify-items: center; gap: 6px; touch-action: none; }
 .pip-spot.floating { position: absolute; z-index: 22; }
 .pip-spot.floating .pip { --size: 230px; }
@@ -466,7 +466,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .msg .note svg.i { width: 13px; height: 13px; }
 .fixes { display: flex; flex-wrap: wrap; gap: 6px; }
 .fixes .sugg { height: 30px; padding: 0 12px; font: var(--text-caption); font-weight: 600; }
-/* review card: names the exact target and effect before Pip changes anything */
+/* review card: names the exact target and effect before Six changes anything */
 .review { display: grid; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: var(--c-surface-2); border: 1px solid var(--c-line-strong); max-width: 420px; }
 .review .rv-head { display: flex; align-items: center; gap: 6px; font: var(--text-label); color: var(--c-text); }
 .review .rv-item { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -541,6 +541,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 #stackPop::-webkit-scrollbar { display: none; }
 #stackPop:focus { outline: none; }
 .stack-pop-head { position: sticky; top: 0; z-index: 120; display: flex; align-items: center; gap: 6px; padding: 6px 0 8px; }
+.stack-pop-head > b { margin-right: auto; }
 .stack-pop-head b { margin-right: auto; font: var(--text-title-sm); color: var(--c-text); }
 .stack-pop-list { display: flex; flex-direction: column; gap: 10px; }
 .widget.in-pop { position: relative; left: auto !important; top: auto !important; width: var(--side-w); flex: none; cursor: pointer;
@@ -601,7 +602,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .month span { height: 28px; display: grid; place-items: center; border-radius: 50%; font-variant-numeric: tabular-nums; }
 .month .dow { color: var(--c-text-3); font-weight: 600; }
 .month .today { background: var(--c-accent); color: var(--c-text-on-accent); font-weight: 700; }
-/* widgets Pip makes: drawn from a spec with the same parts */
+/* widgets Six makes: drawn from a spec with the same parts */
 .wb { display: grid; }
 .wb-stat { display: grid; gap: 4px; padding: 12px 14px; }
 .wb-stat b { font: 400 40px/1 var(--font-display); }
@@ -620,10 +621,6 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .wb .stat .meta, .wb .stat b { font-variant-numeric: tabular-nums; }
 .wprev { width: min(284px, 100%); border-radius: var(--radius-lg); background: var(--c-surface); padding: 8px; box-shadow: var(--shadow-2); }
 .review.done .wprev { pointer-events: none; }
-#addWidget { position: absolute; z-index: 4; display: inline-flex; align-items: center; gap: 6px; }
-#addWidget svg.i { width: 15px; height: 15px; }
-#addWidget[hidden] { display: none; }
-#home.stack #addWidget { position: static; justify-self: start; }
 /* widget gallery */
 #galScrim { position: absolute; inset: 0; z-index: 970; background: var(--scrim); opacity: 0; transition: opacity var(--dur-base); }
 #galScrim.open { opacity: 1; }
@@ -650,51 +647,45 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .gal-tile b { font: var(--text-label); }
 .gal-tile small { grid-column: 2; font: var(--text-caption); color: var(--c-text-3); }
 .gal-tile .btn { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
-#wMenu { position: absolute; z-index: 972; width: 220px; padding: 6px; border-radius: var(--radius-lg); }
+#wMenu { position: absolute; z-index: 972; width: max-content; min-width: 220px; max-width: 340px; padding: 6px; border-radius: var(--radius-lg); }
 #wMenu[hidden] { display: none; }
-/* ── The Pip notch ──────────────────────────────────────────────────
-   Hardware-black in both themes, flat against the top edge with concave "ears"; it changes size
-   on springs (a detent when it grows, so it lands; precise when it shrinks) and its contents
-   cross-fade with a short focus pull. */
-#island {
-  --isl-h: calc(var(--menubar-h) + 2px); position: absolute; top: 0; left: 50%; z-index: 958; width: 190px; height: var(--isl-h);
-  transform: translateX(-50%); background: #000; color: #f3f3f7; border-radius: 0 0 14px 14px;
-  --c-text: #f3f3f7; --c-text-2: #b9bbc1; --c-text-3: #8e9098; --c-surface: #1c1d20; --c-surface-2: #151619; --c-surface-3: #27282c; --c-line: rgba(255,255,255,0.1); --c-line-strong: rgba(255,255,255,0.18);
-  transition: width 460ms var(--ease-spring), height 460ms var(--ease-spring), border-radius 460ms var(--ease-spring), box-shadow 300ms var(--ease-out), opacity 160ms var(--ease-out);
-}
-#island[data-mode="expanded"] { border-radius: 0 0 28px 28px; box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.55); transition-timing-function: var(--ease-detent); transition-duration: 560ms; }
-#island[data-mode="compact"] { transition-timing-function: var(--ease-detent); }
-#island::before, #island::after { content: ""; position: absolute; top: 0; width: 10px; height: 10px; pointer-events: none; }
-#island::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent 9.5px, #000 10px); }
-#island::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent 9.5px, #000 10px); }
-#island[data-mode="hidden"] { height: 0; opacity: 0; pointer-events: none; transition: width 320ms var(--ease-spring), height 320ms var(--ease-spring), opacity 200ms var(--ease-in) 120ms; }
-#island[data-mode="hidden"]::before, #island[data-mode="hidden"]::after { opacity: 0; }
-#island:has(.isl-hit:hover)[data-mode="compact"] { height: calc(var(--isl-h) + 3px) !important; }
-.isl-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
-.isl-hit { position: absolute; inset: 0; border: 0; background: transparent; border-radius: inherit; cursor: pointer; }
-.isl-hit:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
-#island[data-mode="expanded"] .isl-hit { display: none; }
-.isl-compact { position: absolute; inset: 0 12px 0 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; opacity: 0; filter: blur(4px); transition: opacity 160ms var(--ease-in), filter 160ms var(--ease-in); }
-#island[data-mode="compact"] .isl-compact { opacity: 1; filter: none; transition: opacity 280ms var(--ease-out) 140ms, filter 280ms var(--ease-out) 140ms; }
-.isl-l { display: grid; place-items: center; width: 22px; height: 22px; }
-.isl-l .dotorb { width: 22px; height: 22px; color: #fff; }
-.isl-l .isl-art { display: none; }
-.isl-l[data-show="art"] .dotorb { display: none; }
-.isl-l[data-show="art"] .isl-art { display: block; }
-.isl-art { width: 22px; height: 22px; border-radius: 6px; }
-.isl-r { display: flex; align-items: center; gap: 8px; min-width: 0; font: 600 12px/1 var(--font-ui); }
-.isl-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-.isl-eq, .isl-ring { display: none; }
-#island[data-act="music"] .isl-eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+/* ── Six in the menu bar ─────────────────────────────────────────────
+   No notch. Six lives in its menu-bar orb. While it works, the orb grows into a terminal-black
+   capsule that slides out to the left of it and types what Six is doing; the status icons shift
+   over to make room. Click the capsule (or talk over your windows) and a panel drips down out of
+   the orb: a dark neck buds from the orb and the panel opens as a circle spreading from that
+   point. Closing draws it back up into the orb. */
+#pipBtn { position: relative; padding: 0 4px; border-radius: 999px; gap: 0; transition: background 260ms var(--ease-out), padding 520ms var(--ease-detent), box-shadow 260ms var(--ease-out); }
+#pipBtn[data-live] { background: #0b0b0d; color: #f3f3f7; padding: 0 3px 0 10px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 10px -6px rgba(0, 0, 0, 0.6); }
+#pipBtn[data-live]:hover { background: #18181c; }
+.six-live { display: inline-flex; align-items: center; gap: 7px; max-width: 0; margin-right: 0; overflow: hidden; opacity: 0; white-space: nowrap; font: 600 12px/1 var(--font-ui); letter-spacing: -0.01em; transition: max-width 560ms var(--ease-detent), margin 560ms var(--ease-detent), opacity 220ms var(--ease-out); }
+#pipBtn[data-live] .six-live { max-width: 260px; margin-right: 7px; opacity: 1; }
+.six-live-txt { overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.six-live .isl-ring, .six-live .isl-eq { display: none; }
+#pipBtn[data-act="task"] .isl-ring { display: block; width: 16px; height: 16px; transform: rotate(-90deg); flex: none; }
+#pipBtn[data-act="music"] .isl-eq { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+#pipBtn[data-act="done"] .six-live-txt { color: #7be3a6; }
 .isl-eq i { width: 3px; height: 100%; border-radius: 2px; background: #ff7f99; transform-origin: bottom; animation: isl-eq 0.9s ease-in-out infinite alternate; }
 .isl-eq i:nth-child(2) { animation-delay: -0.3s; } .isl-eq i:nth-child(3) { animation-delay: -0.6s; } .isl-eq i:nth-child(4) { animation-delay: -0.15s; }
 @keyframes isl-eq { from { transform: scaleY(0.2); } to { transform: scaleY(1); } }
-#island[data-act="task"] .isl-ring { display: block; width: 18px; height: 18px; transform: rotate(-90deg); }
 .isl-ring circle { fill: none; stroke-width: 2.6; stroke: rgba(255, 255, 255, 0.18); }
 .isl-ring circle:last-child { stroke: #ffa064; stroke-linecap: round; transition: stroke-dashoffset 600ms var(--ease-spring); }
-#island[data-act="done"] .isl-txt { color: #7be3a6; }
-.isl-body { position: absolute; left: 0; right: 0; top: 0; padding: 8px 18px 16px; display: grid; gap: 10px; opacity: 0; filter: blur(6px); transform: scale(0.94); transform-origin: 50% 0; pointer-events: none; transition: opacity 140ms var(--ease-in), filter 140ms var(--ease-in), transform 160ms var(--ease-in); }
-#island[data-mode="expanded"] .isl-body { opacity: 1; filter: none; transform: none; pointer-events: auto; transition: opacity 300ms var(--ease-out) 150ms, filter 300ms var(--ease-out) 150ms, transform 560ms var(--ease-detent) 60ms; }
+/* the panel that drips out of the orb */
+#island {
+  position: absolute; top: calc(var(--menubar-h) + 8px); left: var(--isl-x, auto); z-index: 958; width: var(--isl-w, 420px); height: var(--isl-hh, 72px);
+  background: linear-gradient(180deg, #141418, #0b0b0d 42%); color: #f3f3f7; border-radius: 22px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 26px 50px -18px rgba(0, 0, 0, 0.6);
+  --c-text: #f3f3f7; --c-text-2: #b9bbc1; --c-text-3: #8e9098; --c-surface: #1c1d20; --c-surface-2: #151619; --c-surface-3: #27282c; --c-line: rgba(255,255,255,0.1); --c-line-strong: rgba(255,255,255,0.18);
+  clip-path: circle(140% at var(--ox, 90%) -10px); visibility: visible;
+  transition: clip-path 640ms var(--ease-detent), height 460ms var(--ease-spring), visibility 0s;
+}
+#island[data-mode="hidden"] { clip-path: circle(0px at var(--ox, 90%) -10px); visibility: hidden; pointer-events: none; transition: clip-path 360ms var(--ease-in), height 300ms var(--ease-spring), visibility 0s linear 360ms; }
+.isl-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
+.isl-body { position: absolute; left: 0; right: 0; top: 0; padding: 10px 16px 16px; display: grid; gap: 10px; opacity: 0; filter: blur(6px); transform: translateY(-8px); pointer-events: none; transition: opacity 140ms var(--ease-in), filter 140ms var(--ease-in), transform 160ms var(--ease-in); }
+#island[data-mode="expanded"] .isl-body { opacity: 1; filter: none; transform: none; pointer-events: auto; transition: opacity 300ms var(--ease-out) 170ms, filter 300ms var(--ease-out) 170ms, transform 560ms var(--ease-detent) 90ms; }
+#tensionLayer .neck.ink { fill: #0b0b0d; }
+/* a reply being typed: a block cursor rides the end of the line, then blinks out */
+.typing::after { content: ""; display: inline-block; width: 0.55em; height: 1.05em; margin-left: 0.12em; vertical-align: -0.16em; background: currentColor; animation: cursor-blink 1.06s steps(1) infinite; }
 .isl-head { display: flex; align-items: center; gap: 10px; min-height: 30px; font: var(--text-caption); }
 .isl-head .dotorb { width: 26px; height: 26px; color: #fff; flex: none; }
 .isl-head b { font: 600 13px/1 var(--font-ui); }
@@ -704,10 +695,12 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 .isl-wave i { width: 3px; height: 18px; border-radius: 2px; background: #8fd3ff; transform: scaleY(0.12); transition: transform 90ms linear; }
 .isl-x { width: 26px; height: 26px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #fff; font: 500 16px/1 var(--font-ui); display: grid; place-items: center; flex: none; }
 .isl-x:hover { background: rgba(255, 255, 255, 0.2); }
+.isl-open { flex: none; }
+.isl-btn:hover { background: rgba(255, 255, 255, 0.2); }
 .isl-voice { display: grid; gap: 6px; }
 .isl-voice[hidden], .isl-task[hidden], .isl-music[hidden] { display: none; }
 #islYou { margin: 0; font: var(--text-body-sm); color: #b9bbc1; }
-#islPip { margin: 0; font: 400 19px/1.3 var(--font-display); color: #fff; }
+#islPip { margin: 0; font: 400 19px/1.3 var(--font-display); color: #fff; text-wrap: pretty; }
 #islYou:empty, #islPip:empty, #islCard:empty { display: none; }
 #islCard { display: grid; gap: 8px; }
 #islCard .review { max-width: none; background: #151619; }
@@ -783,7 +776,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 #home.stack .widgets { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; width: min(640px, 100%); margin: 24px auto 0; }
 #home.stack .widget { position: static; width: auto; cursor: default; }
 
-/* ── Pip, the SIX assistant (globe form, from the character canvas) ── */
+/* ── Six, the SIX assistant (globe form, from the character canvas) ── */
 :root { --pip-line: #9a3c1c; --pip-deep: #e0402a; --pip-glow: #ff9a3c; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --pip-line: #ffa064; } }
 :root[data-theme="dark"] { --pip-line: #ffa064; }
@@ -795,7 +788,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
 :root[data-motion="reduced"] .pip *, :root[data-motion="reduced"] .pip *::before { animation: none !important; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-motion="full"]) .pip *, :root:not([data-motion="full"]) .pip *::before { animation: none !important; } }
 
-/* guide: Pip state cards */
+/* guide: Six state cards */
 .pips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .pip-card { border: 1px solid var(--c-line); border-radius: var(--radius-lg); padding: 10px 10px 14px; display: grid; justify-items: center; gap: 4px; text-align: center; background: transparent; color: var(--c-text); }
 .pip-card:hover { background: var(--c-surface-2); }
@@ -990,7 +983,7 @@ input[type="range"].bending::-moz-range-thumb { opacity: 0; }
   .qs-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* ══ Full system: icons, voice home, Pip app, Settings, Files, Software, Calendar, lock ══ */
+/* ══ Full system: icons, voice home, Six app, Settings, Files, Software, Calendar, lock ══ */
 /* app icons: clay illustrations fill the squircle */
 .appicon .art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .fold-ic { display: block; flex: none; overflow: visible; }
@@ -1022,17 +1015,29 @@ button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6p
 .vwave[hidden] { display: none; }
 .vwave i { width: 4px; height: 20%; border-radius: 4px; background: var(--pip-line); box-shadow: 0 0 6px color-mix(in srgb, var(--pip-line) 60%, transparent); transition: height 90ms linear; }
 .vyou { margin: 0; font: var(--text-body-lg); color: var(--c-text-2); }
-.vpip { margin: 0; font: 400 24px/31px var(--font-display); color: var(--c-text); text-wrap: balance; }
+.vpip { margin: 0; font: 400 24px/31px var(--font-display); color: var(--c-text); text-wrap: pretty; }
+/* Six's words read like terminal output: a prompt mark, then the line typing in */
+.vpip:not(:empty)::before, #islPip:not(:empty)::before { content: "> "; color: var(--pip-line); }
+.vcap { position: relative; }
+.vcap-x { position: absolute; top: 10px; right: 10px; z-index: 2; }
 .vyou:empty, .vpip:empty, .vcard:empty { display: none; }
 .vcard { width: 100%; display: grid; justify-items: center; gap: 8px; }
 .vcard .review { text-align: left; width: 100%; max-width: 440px; }
 .vtry { display: grid; justify-items: center; gap: 8px; }
+/* Home is just Six and your widgets. The greeting, the examples and the talk hint are an intro
+   that appears when you ask Six what it can do (or pick it from the right-click menu), and goes
+   when you close it or start talking. Settings › Home can keep it on screen. */
+#home:not(.intro) #greet, #home:not(.intro) #greetSub, #home:not(.intro) #vTry, #home:not(.intro) #center > .hint { display: none !important; }
+.pip-state { transition: opacity 260ms var(--ease-out); }
+#home:not(.intro) .pip-state[data-idle] { opacity: 0; }
+.intro-x { width: 24px; height: 24px; margin-left: 2px; }
+#home.intro-pinned .intro-x { display: none; }
 .vtry.away, .vtry[hidden] { display: none; }
 .vmode { display: inline-flex; align-items: center; gap: 6px; }
 .vmode svg.i { width: 14px; height: 14px; color: var(--pip-line); }
 .vmode .demo { color: var(--c-warning); font-weight: 600; }
 .review .say { margin-left: auto; font: var(--text-caption); color: var(--c-text-3); }
-/* menu bar mic: amber while it hears you; a green dot while it only waits for “Hey Pip” */
+/* menu bar mic: amber while it hears you; a green dot while it only waits for “Hey Six” */
 .mb-micbtn { position: relative; }
 .mb-micbtn[data-mode="wake"]::after { content: ""; position: absolute; right: 3px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--c-success); }
 .mb-micbtn[aria-pressed="true"] { background: var(--c-warning); color: var(--c-surface); border-radius: 999px; }
@@ -1047,7 +1052,7 @@ button.pip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 6p
 #hudYou:empty, #hudPip:empty, .hud-card:empty { display: none; }
 .hud-card .review { max-width: none; }
 
-/* Pip app */
+/* Six app */
 .pip-side { width: 232px; }
 .side-h { font: var(--text-overline); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-3); padding: 12px 10px 4px; }
 .new-chat { margin: 2px 2px 4px; justify-content: flex-start; }
@@ -1651,14 +1656,15 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     <div class="center" id="center">
       <div class="stage">
         <div class="pip-spot" id="pipSpot">
-          <button type="button" class="pip" id="pipHome" data-state="ready" aria-label="Pip, ready. Press to talk. Drag to move, or right-click to hide"></button>
-          <div class="pip-state" id="pipState" aria-live="polite">Pip · ready</div>
+          <button type="button" class="pip" id="pipHome" data-state="ready" aria-label="Six, ready. Press to talk. Drag to move, or right-click to hide"></button>
+          <div class="pip-state" id="pipState" aria-live="polite" data-idle>Six · ready</div>
         </div>
         <h1 class="greet" id="greet">Good morning, Nadia.</h1>
         <p class="greet-sub" id="greetSub">Press the mic in the menu bar, or hold Space, and talk.</p>
       </div>
-      <!-- voice only: what you said and what Pip answered, as captions; review cards appear here too -->
+      <!-- voice only: what you said and what Six answered, as captions; review cards appear here too -->
       <div id="vcap" class="vcap liquid" data-liquid="1" hidden>
+        <button type="button" class="cap close vcap-x" id="vcapX" aria-label="Dismiss"><svg class="i sm"><use href="#i-close"/></svg></button>
         <div class="vwave" id="wave" aria-hidden="true"></div>
         <p class="vyou" id="vYou"></p>
         <p class="vpip" id="vPip" aria-live="polite"></p>
@@ -1673,11 +1679,10 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <button type="button" class="sugg">Open display settings</button>
         </div>
       </div>
-      <div class="hint"><span class="vmode" id="vMode"></span><button type="button" class="histlink" id="openChat">Type instead</button></div>
+      <div class="hint"><span class="vmode" id="vMode"></span><button type="button" class="histlink" id="openChat">Type instead</button><button type="button" class="cap close intro-x" id="introX" aria-label="Hide what Six can do"><svg class="i sm"><use href="#i-close"/></svg></button></div>
     </div>
 
     <div class="widgets" id="widgets">
-      <button type="button" class="sugg" id="addWidget" aria-haspopup="dialog"><svg class="i"><use href="#i-plus"/></svg>Add widgets</button>
       <section class="widget liquid" data-liquid="0" data-slot="L0" aria-label="Pick up where you left off">
         <h3>Pick up where you left off</h3>
         <div class="well">
@@ -1694,7 +1699,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
         </div>
       </section>
       <section class="widget liquid" data-liquid="0" data-slot="R0" aria-label="Current task">
-        <h3>Current task <small>Pip</small></h3>
+        <h3>Current task <small>Six</small></h3>
         <div class="well" style="padding: 14px; display: grid; gap: 12px">
           <div class="task-head"><canvas class="dotorb" data-state="background" style="width: 40px; height: 40px" aria-hidden="true"></canvas><div><b>Slides from my notes</b><span id="taskLine" role="status">Building the outline</span></div></div>
           <div class="bar" role="progressbar" aria-label="Task progress" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><i id="taskBar" style="width: 40%"></i></div>
@@ -1716,7 +1721,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     </div>
     <div id="stackScrim" hidden></div>
     <div id="stackPop" role="dialog" aria-label="Stack" tabindex="-1" hidden>
-      <div class="stack-pop-head"><b id="stackPopCount">Stack</b><button type="button" class="stack-btn" id="stackPopLess">Show less</button><button type="button" class="stack-btn" id="stackPopUnstack">Unstack</button></div>
+      <div class="stack-pop-head"><b id="stackPopCount">Stack</b><button type="button" class="stack-btn" id="stackPopLess">Show less</button><button type="button" class="stack-btn" id="stackPopUnstack">Unstack</button><button type="button" class="cap close" id="stackPopX" aria-label="Close stack"><svg class="i sm"><use href="#i-close"/></svg></button></div>
       <div class="stack-pop-list" id="stackPopList"></div>
     </div>
   </main>
@@ -1739,18 +1744,18 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
         <button class="navbtn" role="tab" aria-selected="false" aria-controls="p-color" id="t-color"><svg class="i"><use href="#i-palette"/></svg><span>Color</span></button>
         <button class="navbtn" role="tab" aria-selected="false" aria-controls="p-mat" id="t-mat"><svg class="i"><use href="#i-layers"/></svg><span>Materials</span></button>
         <button class="navbtn" role="tab" aria-selected="false" aria-controls="p-comp" id="t-comp"><svg class="i"><use href="#i-grid"/></svg><span>Components</span></button>
-        <button class="navbtn" role="tab" aria-selected="false" aria-controls="p-pip" id="t-pip"><svg class="i"><use href="#i-spark"/></svg><span>Pip</span></button>
+        <button class="navbtn" role="tab" aria-selected="false" aria-controls="p-pip" id="t-pip"><svg class="i"><use href="#i-spark"/></svg><span>Six</span></button>
       </nav>
       <div class="main">
         <section id="p-overview" role="tabpanel" aria-labelledby="t-overview">
           <span class="overline">SIX OS design language</span>
           <h2>Soft Matter</h2>
-          <p class="lead">A familiar Windows map rendered in soft materials: clay you press, glass that floats, paper you work on, and plasma clay that melts together on the home screen, where Pip, the assistant, waits for you.</p>
+          <p class="lead">A familiar Windows map rendered in soft materials: clay you press, glass that floats, paper you work on, and plasma clay that melts together on the home screen, where Six, the assistant, waits for you.</p>
           <div class="mats">
             <div class="mat clay"><span class="overline">Touch it</span><div><b>Clay</b><p>Buttons, toggles, tiles, app icons</p></div></div>
             <div class="mat glassy"><div class="glass"><span class="overline">Float it</span><b>Plasma glass</b><p>Shelf, menus, popovers, search</p></div></div>
             <div class="mat paper"><span class="overline">Read it</span><div><b>Paper</b><p>Window content, documents, lists</p></div></div>
-            <div class="mat glassy" style="background: linear-gradient(135deg, #05262c, #0e4c55 55%, #7b6cff)"><div class="glass"><span class="overline">Melt it</span><b>Plasma clay</b><p>Home widgets and Pip’s captions. Liquid, fuses when close</p></div></div>
+            <div class="mat glassy" style="background: linear-gradient(135deg, #05262c, #0e4c55 55%, #7b6cff)"><div class="glass"><span class="overline">Melt it</span><b>Plasma clay</b><p>Home widgets and Six’s captions. Liquid, fuses when close</p></div></div>
           </div>
           <ul class="principles">
             <li><span class="n">1</span><div><b>Familiar map, fresh materials.</b> <span>Start bottom-left, controls top-right, Windows shortcuts. We change how it feels, not where things are.</span></div></li>
@@ -1761,7 +1766,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           </ul>
           <h3>Try it</h3>
           <div class="chips">
-            <span class="chip">Ask Pip: "open Files and Terminal side by side"</span>
+            <span class="chip">Ask Six: "open Files and Terminal side by side"</span>
             <span class="chip">Drag two home cards together to fuse them</span>
             <span class="chip">Drag a title bar to a screen edge to snap</span>
             <span class="chip">Hover ▢ for snap layouts</span>
@@ -1812,7 +1817,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             <div class="row"><span class="chip">0 Wallpaper</span><span class="chip">1 Widgets</span><span class="chip">2 Inactive window</span><span class="chip">3 Active window</span><span class="chip">4 Shelf</span><span class="chip">5 Menus</span><span class="chip">6 Toasts</span><span class="chip">7 Dialogs</span><span class="chip">8 Search, Overview</span></div>
           </div>
           <h3>Plasma clay</h3>
-          <p>Home widgets and Pip’s voice captions are one liquid: rounded shapes joined with a smooth union, so cards closer than the blend distance (40 px) melt into each other. The surface bends the wallpaper behind it, frosts it, lights it like clay from the top left, and wears an iridescent rim. Viscosity sets how cards follow your hand: water wobbles, honey drags, solid doesn't move at all. Try it in Settings › Appearance.</p>
+          <p>Home widgets and Six’s voice captions are one liquid: rounded shapes joined with a smooth union, so cards closer than the blend distance (40 px) melt into each other. The surface bends the wallpaper behind it, frosts it, lights it like clay from the top left, and wears an iridescent rim. Viscosity sets how cards follow your hand: water wobbles, honey drags, solid doesn't move at all. Try it in Settings › Appearance.</p>
           <h3>Rules</h3>
           <div class="comp-grid">
             <div class="banner info"><svg class="i"><use href="#i-info"/></svg><div><b>Do</b> put text on glass only above a 78 % fill; turn on <b>Reduce transparency</b> and check it still works.</div></div>
@@ -1864,26 +1869,26 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
 
         <section id="p-pip" role="tabpanel" aria-labelledby="t-pip" hidden>
           <span class="overline">The SIX assistant</span>
-          <h2>Pip lives on the home screen</h2>
-          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Pip”. Pip answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Pip app at the top right. Pip has four looks (Settings › Pip &amp; voice › Look): Bloom, the default; Halo; Ripple; and the dotted sphere. Every state moves Pip's colour differently, never its shape. Pick one to set Pip everywhere.</p>
-          <div class="seg" role="group" aria-label="Pip’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div>
+          <h2>Six lives on the home screen</h2>
+          <p class="lead">Home is voice first: press the mic and talk, or say “Hey Six”. Six answers aloud and in a caption, opens and arranges windows, and changes settings; the written conversation is in the Six app at the top right. Six has four looks (Settings › Six &amp; voice › Look): Bloom, the default; Halo; Ripple; and the dotted sphere. Every state moves Six's colour differently, never its shape. Pick one to set Six everywhere.</p>
+          <div class="seg" role="group" aria-label="Six’s look" id="segOrbGuide"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div>
           <h3>Bloom</h3>
-          <p>A soft ball of warm colour: orange and red flowing over violet, with a pink haze lighting the air around it and a fine film grain, so it reads as a material and not a gradient. It is shaded as a matte ball, lit from the side Pip is looking at, and the only colour in an otherwise graphite and silver system. Thinking stirs it and sends a spark across; listening ripples it; working fills it like a glass of water as the task progresses; Complete warms it green once; Failed cools it red.</p>
+          <p>A soft ball of warm colour: orange and red flowing over violet, with a pink haze lighting the air around it and a fine film grain, so it reads as a material and not a gradient. It is shaded as a matte ball, lit from the side Six is looking at, and the only colour in an otherwise graphite and silver system. Thinking stirs it and sends a spark across; listening ripples it; working fills it like a glass of water as the task progresses; Complete warms it green once; Failed cools it red.</p>
           <div class="pips" id="pipStates"></div>
           <h3>Halo</h3>
           <p>A ring of cold light spinning about its vertical axis, caught over a short exposure, so it reads as a 3D shell: brightest at the top and bottom where you see the ring edge-on, with long-exposure streaks running through the light. Its outline is always a circle, and it has no backing: on a light page it is drawn as blue ink. Working lights it from the bottom up as the task progresses; searching and waiting send a bright knot round it.</p>
           <div class="pips" id="haloStates"></div>
           <h3>Ripple</h3>
-          <p>A terraced pool seen from above, from the teal rings it is modelled on: steps of colour falling to a dark centre, each lip lit on the side toward the light and shading the step below. The deeper rings shift further as Pip looks around, so it reads in depth, and the rings flow slowly outward like ripples. Listening sends waves through it; thinking winds the rings into a spiral; working fills it from the centre out.</p>
+          <p>A terraced pool seen from above, from the teal rings it is modelled on: steps of colour falling to a dark centre, each lip lit on the side toward the light and shading the step below. The deeper rings shift further as Six looks around, so it reads in depth, and the rings flow slowly outward like ripples. Listening sends waves through it; thinking winds the rings into a spiral; working fills it from the centre out.</p>
           <div class="pips" id="rippleStates"></div>
           <h3>Personality</h3>
           <ul class="principles">
-            <li><span class="n">1</span><div><b>Pip looks at you.</b> <span>The light on Bloom and the tilt of Halo turn toward the pointer.</span></div></li>
-            <li><span class="n">2</span><div><b>Pip blinks.</b> <span>While idle, Pip squashes for a moment every few seconds, then springs back.</span></div></li>
-            <li><span class="n">3</span><div><b>Pip is water.</b> <span>Poke it and it squashes; drag it across home and it stretches the way it's moving and wobbles to a stop.</span></div></li>
-            <li><span class="n">4</span><div><b>Pip reacts.</b> <span>It hops when a task completes, shakes its head when something fails, nods when it asks you something, and says hello with a hop when it first appears.</span></div></li>
-            <li><span class="n">5</span><div><b>Pip is curious.</b> <span>Bring the pointer close and it leans in, looks harder and brightens; start typing and it glances at the field.</span></div></li>
-            <li><span class="n">6</span><div><b>Pip gets drowsy.</b> <span>Left alone on home for a while it dims, breathes slower and looks down; move the mouse and it wakes with a little hop.</span></div></li>
+            <li><span class="n">1</span><div><b>Six looks at you.</b> <span>The light on Bloom and the tilt of Halo turn toward the pointer.</span></div></li>
+            <li><span class="n">2</span><div><b>Six blinks.</b> <span>While idle, Six squashes for a moment every few seconds, then springs back.</span></div></li>
+            <li><span class="n">3</span><div><b>Six is water.</b> <span>Poke it and it squashes; drag it across home and it stretches the way it's moving and wobbles to a stop.</span></div></li>
+            <li><span class="n">4</span><div><b>Six reacts.</b> <span>It hops when a task completes, shakes its head when something fails, nods when it asks you something, and says hello with a hop when it first appears.</span></div></li>
+            <li><span class="n">5</span><div><b>Six is curious.</b> <span>Bring the pointer close and it leans in, looks harder and brightens; start typing and it glances at the field.</span></div></li>
+            <li><span class="n">6</span><div><b>Six gets drowsy.</b> <span>Left alone on home for a while it dims, breathes slower and looks down; move the mouse and it wakes with a little hop.</span></div></li>
           </ul>
           <h3>The dotted look</h3>
           <p>The third look, and the orb in the gallery below: a sphere of dots whose light moves differently in each state, so it reads at 18 px and in grayscale.</p>
@@ -1891,9 +1896,9 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <p><small style="color: var(--c-text-2)">The orb's motion is ported from <a href="https://www.thinkingorbs.com/">Thinking Orbs</a> by Yogesh (MIT): one shared clock per look, so every orb in a state moves in step, and dots that fade toward the back instead of leaving a grey haze.</small></p>
           <h3>Voice</h3>
           <ul class="principles">
-            <li><span class="n">1</span><div><b>Press to talk, or say “Hey Pip”.</b> <span>The mic in the menu bar, clicking Pip, holding Space or Six + Space. “Hey Pip” is a choice in Control Center, detected on this device. Amber mic = hearing you; a green dot = waiting for “Hey Pip”.</span></div></li>
-            <li><span class="n">2</span><div><b>See what Pip heard.</b> <span>The live transcript forms in the caption under Pip, so a wrong word is caught before anything runs.</span></div></li>
-            <li><span class="n">3</span><div><b>Hear the answer, read it too.</b> <span>Every spoken reply is also a caption and a message in the Pip app. Changes to files wait for your “yes”.</span></div></li>
+            <li><span class="n">1</span><div><b>Press to talk, or say “Hey Six”.</b> <span>The mic in the menu bar, clicking Six, holding Space or Six + Space. “Hey Six” is a choice in Control Center, detected on this device. Amber mic = hearing you; a green dot = waiting for “Hey Six”.</span></div></li>
+            <li><span class="n">2</span><div><b>See what Six heard.</b> <span>The live transcript forms in the caption under Six, so a wrong word is caught before anything runs.</span></div></li>
+            <li><span class="n">3</span><div><b>Hear the answer, read it too.</b> <span>Every spoken reply is also a caption and a message in the Six app. Changes to files wait for your “yes”.</span></div></li>
           </ul>
         </section>
       </div>
@@ -1964,9 +1969,9 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     <div class="win-body">
 <pre class="term"><span class="p">nadia@six ~ $</span> six-info
 <span class="g">SIX OS</span>      prototype · Soft Matter design language
-<span class="d">shell</span>       menu bar · dock · six search · pip
+<span class="d">shell</span>       menu bar · dock · six search · six (assistant)
 <span class="d">fonts</span>       JetBrains Mono · Share Tech Mono · VT323
-<span class="d">home</span>        pip · voice first · widgets · plasma clay
+<span class="d">home</span>        six · voice first · widgets · plasma clay
 <span class="d">base</span>        Fedora Linux 44 · image-based updates
 <span class="d">accent</span>      Graphite #34373E (light) / Silver #D4D7DD (dark)
 <span class="d">targets</span>     32 px pointer · 44 px touch
@@ -1977,11 +1982,11 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     <div class="grip" aria-hidden="true"></div>
   </section>
 
-  <!-- Window: Pip, the chat app (the top-right Pip icon opens it) -->
-  <section class="win" id="w-pip" data-app="pip" aria-label="Pip window" hidden>
+  <!-- Window: Six, the chat app (the top-right Six icon opens it) -->
+  <section class="win" id="w-pip" data-app="pip" aria-label="Six window" hidden>
     <header class="titlebar">
       <span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span>
-      <span class="title">Pip</span>
+      <span class="title">Six</span>
       <div class="capbtns">
         <button class="cap min" aria-label="Minimize"><svg class="i sm"><use href="#i-min"/></svg></button>
         <button class="cap max" aria-label="Maximize (hover for snap layouts)"><svg class="i sm"><use href="#i-max"/></svg></button>
@@ -1999,11 +2004,11 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
       <div class="pip-main">
         <div class="pip-head"><b id="convTitle">New chat</b><span id="aiNote">Simple commands run on this device.</span></div>
         <div class="threads" id="threads">
-          <div class="thread" id="thread" role="log" aria-label="Conversation with Pip"></div>
+          <div class="thread" id="thread" role="log" aria-label="Conversation with Six"></div>
           <div class="pip-empty" id="pipEmpty">
             <canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>
-            <b>Ask Pip anything</b>
-            <span>Pip can open and arrange windows, change settings, find files and make widgets. Voice works from anywhere: press the mic in the menu bar.</span>
+            <b>Ask Six anything</b>
+            <span>Six can open and arrange windows, change settings, find files and make widgets. Voice works from anywhere: press the mic in the menu bar.</span>
             <div class="chips-row" id="chatSuggest">
               <button type="button" class="sugg">Open Files and Terminal side by side</button>
               <button type="button" class="sugg">Make a widget: a countdown to my exam on 14 December</button>
@@ -2013,8 +2018,8 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           </div>
         </div>
         <form id="composer" autocomplete="off">
-          <label class="sr-only" for="ask">Message Pip</label>
-          <input id="ask" placeholder="Message Pip…" enterkeyhint="send">
+          <label class="sr-only" for="ask">Message Six</label>
+          <input id="ask" placeholder="Message Six…" enterkeyhint="send">
           <button type="button" class="iconbtn" id="micBtn" aria-label="Dictate" aria-pressed="false"><svg class="i"><use href="#i-mic"/></svg></button>
           <button type="submit" class="iconbtn send" id="sendBtn" aria-label="Send"><svg class="i"><use href="#i-send"/></svg></button>
         </form>
@@ -2090,7 +2095,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Output</b></span><select class="ssel" aria-label="Output"><option>Speakers (built-in)</option><option>Nadia’s earbuds</option><option>HDMI · Monitor</option></select></div>
               <div class="srow col"><span class="sl"><b>Volume</b></span><input type="range" min="0" max="100" value="64" data-bind="vol" aria-label="Volume"></div>
-              <div class="srow"><span class="sl"><b>Input</b><small>Pip listens through this microphone</small></span><select class="ssel" aria-label="Input"><option>Built-in microphone</option><option>Nadia’s earbuds</option></select></div>
+              <div class="srow"><span class="sl"><b>Input</b><small>Six listens through this microphone</small></span><select class="ssel" aria-label="Input"><option>Built-in microphone</option><option>Nadia’s earbuds</option></select></div>
               <div class="srow"><span class="sl"><b>Alert sound</b></span><select class="ssel" aria-label="Alert sound"><option>Pebble</option><option>Glass</option><option>None</option></select></div>
             </div>
           </section>
@@ -2122,11 +2127,12 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
 
           <section class="spage" data-page="pip" hidden>
             <div class="sgroup">
-              <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Pip only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Pip”</button></div></div>
-              <div class="srow"><span class="sl"><b>Look</b><small>How Pip appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Pip’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div></div>
-              <div class="srow"><span class="sl"><b>Talk to Pip</b><small>The mic in the menu bar, clicking Pip on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
+              <div class="srow"><span class="sl"><b>Listening</b><small id="wakeNote">Six only hears you after you press the mic</small></span><div class="seg" role="group" aria-label="Listening" id="segWake"><button data-v="ptt" aria-pressed="true">Press to talk</button><button data-v="wake" aria-pressed="false">Always · “Hey Six”</button></div></div>
+              <div class="srow"><span class="sl"><b>Look</b><small>How Six appears on home, in the menu bar and in the dock</small></span><div class="seg" role="group" aria-label="Six’s look" id="segOrb"><button data-v="bloom" aria-pressed="true">Bloom</button><button data-v="halo" aria-pressed="false">Halo</button><button data-v="ripple" aria-pressed="false">Ripple</button><button data-v="dots" aria-pressed="false">Dotted</button></div></div>
+              <div class="srow"><span class="sl"><b>Talk to Six</b><small>The mic in the menu bar, clicking Six on home, or the keyboard</small></span><span class="meta"><kbd>Ctrl</kbd> <kbd>Space</kbd> · hold <kbd>Space</kbd> on home</span></div>
               <label class="srow"><span class="sl"><b>Speak replies</b><small>Every reply is also shown as a caption</small></span><input class="sw" type="checkbox" id="speakToggle" checked></label>
-              <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Pip language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
+              <label class="srow"><span class="sl"><b>Type replies like a terminal</b><small>Words arrive a few at a time behind a cursor. Off: the whole reply appears at once</small></span><input class="sw" type="checkbox" data-bind="typeout" checked></label>
+              <div class="srow"><span class="sl"><b>Language</b></span><select class="ssel" aria-label="Six language"><option>English</option><option>বাংলা (Bangla)</option><option>English and বাংলা</option></select></div>
             </div>
             <span class="overline">Privacy</span>
             <div class="sgroup">
@@ -2134,7 +2140,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
               <div class="srow"><span class="sl"><b>Cloud model</b><small>For questions the device can’t answer</small></span><div class="seg" role="group" aria-label="Cloud model"><button aria-pressed="true">Ask each time</button><button aria-pressed="false">Allow</button><button aria-pressed="false">Never</button></div></div>
               <div class="srow"><span class="sl"><b>Voice history</b><small>Kept on this device for 7 days</small></span><button type="button" class="btn btn-secondary sm" data-toast="Voice history deleted.">Delete…</button></div>
             </div>
-            <span class="overline">What Pip can do</span>
+            <span class="overline">What Six can do</span>
             <div class="sgroup">
               <label class="srow"><span class="sl"><b>Open and arrange windows</b></span><input class="sw" type="checkbox" checked></label>
               <label class="srow"><span class="sl"><b>Change settings</b></span><input class="sw" type="checkbox" checked></label>
@@ -2160,9 +2166,8 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <section class="spage" data-page="home" hidden>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Widgets</b><small id="wCount">4 on home</small></span><button type="button" class="btn btn-secondary sm" data-act="widgets">Edit widgets…</button></div>
-              <label class="srow"><span class="sl"><b>Pip on home</b><small>Drag Pip anywhere on home; right-click it to move it back or hide it</small></span><input class="sw" type="checkbox" data-bind="pip" id="pipShow" checked></label>
-              <label class="srow"><span class="sl"><b>Greeting</b><small>“Good morning, Nadia.” under Pip</small></span><input class="sw" type="checkbox" data-bind="greet" checked></label>
-              <label class="srow"><span class="sl"><b>“Try saying” examples</b><small>Shown on home until you’ve talked to Pip a few times</small></span><input class="sw" type="checkbox" data-bind="tries" checked></label>
+              <label class="srow"><span class="sl"><b>Six on home</b><small>Drag Six anywhere on home; right-click it to move it back or hide it</small></span><input class="sw" type="checkbox" data-bind="pip" id="pipShow" checked></label>
+              <label class="srow"><span class="sl"><b>Keep the intro on home</b><small>The greeting, “Try saying” examples and how to talk. Off: they appear when you ask Six “what can you do?”</small></span><input class="sw" type="checkbox" data-bind="intro"></label>
               <div class="srow"><span class="sl"><b>When home is full</b><small>New cards go into the stack at the foot of their column</small></span><span class="chip">Stack</span></div>
             </div>
           </section>
@@ -2176,7 +2181,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           </section>
 
           <section class="spage" data-page="notif" hidden>
-            <div class="sgroup"><label class="srow"><span class="sl"><b>Focus</b><small>Silences notifications; Pip still answers when you talk</small></span><input class="sw" type="checkbox" data-bind="focus"></label></div>
+            <div class="sgroup"><label class="srow"><span class="sl"><b>Focus</b><small>Silences notifications; Six still answers when you talk</small></span><input class="sw" type="checkbox" data-bind="focus"></label></div>
             <span class="overline">Allow notifications from</span>
             <div class="sgroup">
               <label class="srow"><span class="sl"><b>Mail</b></span><input class="sw" type="checkbox" checked></label>
@@ -2212,7 +2217,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             </div>
             <span class="overline">Access</span>
             <div class="sgroup">
-              <div class="srow"><span class="sl"><b>Microphone</b><small>Pip (while listening) · Browser asks</small></span><button type="button" class="btn btn-secondary sm" data-page="pip">Pip settings</button></div>
+              <div class="srow"><span class="sl"><b>Microphone</b><small>Six (while listening) · Browser asks</small></span><button type="button" class="btn btn-secondary sm" data-page="pip">Six settings</button></div>
               <label class="srow"><span class="sl"><b>Location</b><small>Used for time zone and weather</small></span><input class="sw" type="checkbox"></label>
               <div class="srow"><span class="sl"><b>Lock the screen after</b></span><select class="ssel" aria-label="Lock the screen after"><option>5 minutes</option><option>1 minute</option><option>15 minutes</option></select></div>
             </div>
@@ -2220,14 +2225,14 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
 
           <section class="spage" data-page="access" hidden>
             <div class="sgroup">
-              <label class="srow"><span class="sl"><b>Reduce motion</b><small>Things jump instead of spring; Pip stops turning</small></span><input class="sw" type="checkbox" data-bind="motion"></label>
+              <label class="srow"><span class="sl"><b>Reduce motion</b><small>Things jump instead of spring; Six stops turning</small></span><input class="sw" type="checkbox" data-bind="motion"></label>
               <label class="srow"><span class="sl"><b>Reduce transparency</b><small>Glass and plasma surfaces turn solid</small></span><input class="sw" type="checkbox" data-bind="transp"></label>
               <label class="srow"><span class="sl"><b>More contrast</b></span><input class="sw" type="checkbox" data-bind="contrast"></label>
               <label class="srow"><span class="sl"><b>Touch mode</b><small>44 px targets everywhere</small></span><input class="sw" type="checkbox" data-bind="touch"></label>
             </div>
             <div class="sgroup">
               <label class="srow"><span class="sl"><b>Screen reader</b><small>Reads everything aloud; <kbd>Six</kbd> <kbd>Alt</kbd> <kbd>S</kbd></small></span><input class="sw" type="checkbox" data-toast-on="The screen reader is part of SIX; this prototype can’t turn it on."></label>
-              <label class="srow"><span class="sl"><b>Captions for Pip</b><small>Every spoken reply is written on screen</small></span><input class="sw" type="checkbox" checked disabled></label>
+              <label class="srow"><span class="sl"><b>Captions for Six</b><small>Every spoken reply is written on screen</small></span><input class="sw" type="checkbox" checked disabled></label>
               <label class="srow"><span class="sl"><b>Sticky keys</b><small>Press shortcut keys one at a time</small></span><input class="sw" type="checkbox"></label>
             </div>
           </section>
@@ -2236,7 +2241,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
             <div class="sgroup"><div class="srow big"><span class="avatar lg">N</span><span class="sl"><b>Nadia Rahman</b><small>Administrator · signs in with password or fingerprint</small></span><button type="button" class="btn btn-secondary sm" data-toast="Account details aren’t part of this prototype.">Edit</button></div></div>
             <div class="sgroup">
               <div class="srow"><span class="sl"><b>Fingerprint</b><small>1 finger set up</small></span><button type="button" class="btn btn-secondary sm" data-toast="Touch the sensor…">Add finger</button></div>
-              <div class="srow"><span class="sl"><b>Other users</b><small>Each person gets their own files, settings and Pip</small></span><button type="button" class="btn btn-secondary sm" data-toast="Adding users isn’t part of this prototype.">Add user…</button></div>
+              <div class="srow"><span class="sl"><b>Other users</b><small>Each person gets their own files, settings and Six</small></span><button type="button" class="btn btn-secondary sm" data-toast="Adding users isn’t part of this prototype.">Add user…</button></div>
               <div class="srow"><span class="sl"><b>Online accounts</b><small>Mail, calendar and files from Google, Microsoft or Nextcloud</small></span><button type="button" class="btn btn-secondary sm" data-toast="Online accounts aren’t part of this prototype.">Add…</button></div>
             </div>
           </section>
@@ -2258,7 +2263,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
           <section class="spage" data-page="keyboard" hidden>
             <span class="overline">Shortcuts</span>
             <div class="sgroup">
-              <div class="srow"><span class="sl"><b>Talk to Pip</b></span><span class="meta"><kbd>Six</kbd> <kbd>Space</kbd></span></div>
+              <div class="srow"><span class="sl"><b>Talk to Six</b></span><span class="meta"><kbd>Six</kbd> <kbd>Space</kbd></span></div>
               <div class="srow"><span class="sl"><b>Six Search</b></span><span class="meta"><kbd>Ctrl</kbd> <kbd>K</kbd></span></div>
               <div class="srow"><span class="sl"><b>Show home</b></span><span class="meta"><kbd>Six</kbd> <kbd>D</kbd></span></div>
               <div class="srow"><span class="sl"><b>Snap left or right</b></span><span class="meta"><kbd>Six</kbd> <kbd>←</kbd> <kbd>→</kbd></span></div>
@@ -2275,7 +2280,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
 
           <section class="spage" data-page="updates" hidden>
             <div class="sgroup">
-              <div class="srow big"><span class="sl"><b>SIX 1.0.3 is ready</b><small>412 MB · security fixes and a faster Pip · prepared in the background</small></span><span class="row-btns"><button type="button" class="btn btn-primary sm" data-act="update">Restart to update</button><button type="button" class="btn btn-secondary sm" data-toast="The update will install tonight at 02:00.">Tonight</button></span></div>
+              <div class="srow big"><span class="sl"><b>SIX 1.0.3 is ready</b><small>412 MB · security fixes and a faster Six · prepared in the background</small></span><span class="row-btns"><button type="button" class="btn btn-primary sm" data-act="update">Restart to update</button><button type="button" class="btn btn-secondary sm" data-toast="The update will install tonight at 02:00.">Tonight</button></span></div>
               <div class="srow"><span class="sl"><b>Running now</b><small>SIX 1.0.2 · built on Fedora Linux 44</small></span><span class="chip ok">Healthy</span></div>
               <div class="srow"><span class="sl"><b>Previous version</b><small>SIX 1.0.1 is kept so you can go back if something breaks</small></span><button type="button" class="btn btn-secondary sm" data-toast="Rolling back restarts into SIX 1.0.1. Your files and settings stay.">Roll back…</button></div>
               <label class="srow"><span class="sl"><b>Install updates automatically</b><small>Overnight, only when plugged in</small></span><input class="sw" type="checkbox" checked></label>
@@ -2391,7 +2396,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
       <button class="qtile" aria-pressed="false" data-qs="dark"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-sun"/></svg></span><div><b>Dark mode</b><small data-on="On" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="touch"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span><div><b>Touch</b><small data-on="Large targets" data-off="Off">Off</small></div></button>
       <button class="qtile" aria-pressed="false" data-qs="focus"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-focus"/></svg></span><div><b>Focus</b><small data-on="Silenced" data-off="Off">Off</small></div></button>
-      <button class="qtile wide" aria-pressed="false" data-qs="wake"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-mic"/></svg></span><div><b>Listen for “Hey Pip”</b><small data-on="Always listening, on this device" data-off="Off · press the mic to talk">Off · press the mic to talk</small></div></button>
+      <button class="qtile wide" aria-pressed="false" data-qs="wake"><span class="qb" aria-hidden="true"><svg class="i"><use href="#i-mic"/></svg></span><div><b>Listen for “Hey Six”</b><small data-on="Always listening, on this device" data-off="Off · press the mic to talk">Off · press the mic to talk</small></div></button>
     </div>
     <div class="slider-row big"><label for="bright" aria-label="Brightness"><svg class="i"><use href="#i-sun"/></svg></label><input type="range" id="bright" min="30" max="100" value="100"><output class="sl-val" for="bright" aria-hidden="true">100 %</output></div>
     <div class="slider-row big"><label for="vol" aria-label="Volume"><svg class="i"><use href="#i-volume"/></svg></label><input type="range" id="vol" min="0" max="100" value="64"><output class="sl-val" for="vol" aria-hidden="true">64 %</output></div>
@@ -2407,12 +2412,12 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   <!-- Six Search -->
   <div id="galScrim" hidden></div>
   <div id="gallery" class="glass rim" role="dialog" aria-modal="true" aria-labelledby="galTitle" hidden>
-    <div class="gal-head"><div><h2 id="galTitle">Widgets</h2><p>Glanceable cards for home, one job each. Drag them anywhere, or onto each other to stack.</p></div><button type="button" class="iconbtn" id="galClose" aria-label="Close widgets"><svg class="i"><use href="#i-close"/></svg></button></div>
-    <form class="gal-make" id="galMake"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><input id="galAsk" aria-label="Describe a widget for Pip to make" placeholder="Describe any widget and Pip makes it…"><button type="submit" class="btn btn-primary sm">Make it</button></form>
+    <div class="gal-head"><div><h2 id="galTitle">Widgets</h2><p>Glanceable cards for home, one job each. Drag them anywhere, or onto each other to stack.</p></div><button type="button" class="cap close" id="galClose" aria-label="Close widgets"><svg class="i sm"><use href="#i-close"/></svg></button></div>
+    <form class="gal-make" id="galMake"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><input id="galAsk" aria-label="Describe a widget for Six to make" placeholder="Describe any widget and Six makes it…"><button type="submit" class="btn btn-primary sm">Make it</button></form>
     <div id="galIdeas" aria-label="Ideas"></div>
     <span class="overline">On SIX</span>
     <div class="gal-grid" id="galGrid"></div>
-    <span class="overline" id="galMineH" hidden>Made by Pip</span>
+    <span class="overline" id="galMineH" hidden>Made by Six</span>
     <div class="gal-grid" id="galMine" hidden></div>
   </div>
   <div id="wMenu" class="glass" role="menu" aria-label="Widget" hidden></div>
@@ -2431,26 +2436,21 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     <span class="mb-btn mb-app" id="mbApp">Home</span>
     <div class="mb-right">
       <button class="mb-btn" id="mbSearch" aria-label="Search (Ctrl K)"><svg class="i"><use href="#i-search-b"/></svg></button>
-      <button class="mb-btn mb-micbtn" id="mbMic" data-mode="ptt" aria-pressed="false" aria-label="Talk to Pip (Ctrl Space)" title="Talk to Pip · Ctrl Space"><svg class="i"><use href="#i-mic"/></svg></button><button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
-      <button class="mb-btn" id="pipBtn" aria-label="Pip: Ready. Open Pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
+      <button class="mb-btn mb-micbtn" id="mbMic" data-mode="ptt" aria-pressed="false" aria-label="Talk to Six (Ctrl Space)" title="Talk to Six · Ctrl Space"><svg class="i"><use href="#i-mic"/></svg></button><button class="mb-btn" id="trayBtn" aria-label="Control Center. Wi-Fi Home-5G, battery 64 %" aria-expanded="false" aria-controls="qs"><svg class="i mb-hide"><use href="#i-wifi-b"/></svg><span class="mb-batt"><span class="batt" aria-hidden="true"><i style="width: 64%"></i></span><span class="mb-hide tnum">64%</span></span><svg class="i"><use href="#i-cc"/></svg></button>
+      <button class="mb-btn" id="pipBtn" aria-label="Six: Ready. Open Six" aria-controls="island" aria-expanded="false"><span class="six-live" aria-hidden="true"><svg class="isl-ring" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" pathLength="100"/><circle cx="10" cy="10" r="7.5" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60"/></svg><span class="isl-eq"><i></i><i></i><i></i><i></i></span><span class="six-live-txt"></span></span><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></button>
       <button class="mb-btn mb-clock" id="clock" aria-label="Clock"><span id="clockD" class="mb-hide">Mon 12 Oct</span><span id="clockT">10:42</span></button>
     </div>
   </header>
-  <!-- the Pip notch: Pip while you work in other apps; grows with what's running -->
+  <!-- Six's panel: drips out of the menu-bar orb while Six talks over your windows, or when you click its capsule -->
   <div id="island" data-mode="hidden" aria-hidden="true">
     <div class="isl-clip">
-      <div class="isl-compact" aria-hidden="true">
-        <span class="isl-l" data-show="orb"><canvas class="dotorb" data-follow="1" data-state="ready"></canvas><span class="isl-art"></span></span>
-        <span class="isl-r"><span class="isl-txt"></span><span class="isl-eq"><i></i><i></i><i></i><i></i></span><svg class="isl-ring" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" pathLength="100"/><circle cx="10" cy="10" r="7.5" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60"/></svg></span>
-      </div>
       <div class="isl-body" role="status">
-        <div class="isl-head"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><b id="islHeadState">Pip</b><span id="islHeadLabel"></span><span class="isl-wave" id="islWave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="isl-x" id="islClose" aria-label="Close">×</button></div>
+        <div class="isl-head"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><b id="islHeadState">Six</b><span id="islHeadLabel"></span><span class="isl-wave" id="islWave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="isl-btn isl-open" id="islOpenApp">Open Six</button><button type="button" class="isl-x" id="islClose" aria-label="Close">×</button></div>
         <div class="isl-voice" hidden><p id="islYou"></p><p id="islPip" aria-live="polite"></p><div id="islCard"></div></div>
         <div class="isl-task" hidden><div class="isl-row"><b>Slides from my notes</b><span id="islTaskLine"></span></div><div class="isl-bar"><i id="islTaskBar"></i></div><button type="button" class="isl-btn" id="islTaskStop">Stop task</button></div>
         <div class="isl-music" hidden><span class="isl-art"></span><span class="isl-row"><b id="islTrack"></b><span id="islArtist"></span></span><button type="button" class="isl-round" id="islPlay" aria-label="Play or pause"><svg class="i"><use href="#i-f-play"/></svg></button><button type="button" class="isl-round" id="islNext" aria-label="Next track"><svg class="i"><use href="#i-f-skip-forward"/></svg></button></div>
       </div>
     </div>
-    <button type="button" class="isl-hit" id="islHit" aria-label="Pip. Click to talk"></button>
   </div>
   <div id="pins" aria-label="Floating widgets"></div>
 
@@ -2474,7 +2474,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   <nav id="dock" class="glass" aria-label="Dock">
     <div class="dock-apps" id="dockApps"></div>
     <span class="dock-sep" aria-hidden="true"></span>
-    <button class="dk" id="dockPip" aria-label="Pip"><span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span><span class="dot"></span><span class="tip">Pip</span></button>
+    <button class="dk" id="dockPip" aria-label="Six"><span class="appicon ai-pip"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas></span><span class="dot"></span><span class="tip">Six</span></button>
     <button class="dk" id="dockBin" aria-label="Bin"><span class="appicon ai-bin"><svg class="art" viewBox="0 0 64 64"><use href="#app-bin"/></svg></span><span class="tip">Bin</span></button>
   </nav>
 
@@ -2482,7 +2482,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   <div id="lock" hidden>
     <div class="lock-time"><span id="lockT">10:42</span><span id="lockD">Tuesday 13 October</span></div>
     <form class="lock-user" id="lockForm"><span class="avatar xl">N</span><b>Nadia Rahman</b><label class="lock-pw"><input type="password" id="lockPw" placeholder="Password" aria-label="Password" autocomplete="off"><button type="submit" class="iconbtn" aria-label="Unlock"><svg class="i"><use href="#i-chev"/></svg></button></label><small>Prototype: any password, or none, unlocks.</small></form>
-    <div class="lock-foot"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><span>“Hey Pip” works here for the time, timers and weather. Everything else waits until you unlock.</span></div>
+    <div class="lock-foot"><canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas><span>“Hey Six” works here for the time, timers and weather. Everything else waits until you unlock.</span></div>
   </div>
   <div id="night"></div>
   <div id="dim"></div>
@@ -2748,6 +2748,24 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     glint(el, 90);
   }
   // text arrives like a display waking: a short focus pull, not a slide
+  // terminal typing: text arrives a few characters at a time behind a block cursor. Reduced
+  // motion (or Settings › Six & voice › Type replies off) puts it all down at once
+  function typeOut(el, text, { cps = 55, cursor = true, onDone } = {}) {
+    const instant = reducedMotion() || (cursor && !typeReplies);
+    // a streamed reply grows: keep typing toward the longer text instead of starting over
+    if (el._typeT && text.startsWith(el._target || '')) { el._target = text; return; }
+    clearInterval(el._typeT); el._typeT = null; el._target = text;
+    if (instant || !text) { el.textContent = text; el.classList.remove('typing'); onDone && onDone(); return; }
+    // paced by the clock, not by ticks, so a busy moment never slows it down; long replies speed
+    // up so nothing takes more than about 2.4 s to type
+    const t0 = performance.now(); el.textContent = ''; el.classList.toggle('typing', cursor);
+    el._typeT = setInterval(() => {
+      const t = el._target, n = t.length, rate = Math.max(cps, n / 2.4);
+      const k = Math.min(n, Math.floor((performance.now() - t0) / 1000 * rate)); el.textContent = t.slice(0, k);
+      if (k >= n) { clearInterval(el._typeT); el._typeT = null; setTimeout(() => { if (!el._typeT) el.classList.remove('typing'); }, 1600); onDone && onDone(); }
+    }, 30);
+  }
+  let typeReplies = true;
   const textIn = (el, delay = 0) => anim(el, [{ opacity: 0, filter: 'blur(6px)', transform: 'translateY(4px)' }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }], { duration: 560, delay, easing: EASE.out });
   const surfaceIn = (el, dy = 10) => anim(el, [{ opacity: 0, transform: `translateY(${dy}px) scale(0.97)` }, { opacity: 1, transform: 'none' }], { duration: 520 });
   const pageIn = (el, dir = 1) => anim(el, [{ opacity: 0, transform: `translateX(${dir * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 420 });
@@ -2797,7 +2815,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     { id: 'software', name: 'Software', icon: 'download', win: true },
     { id: 'settings', name: 'Settings', icon: 'gear', win: true },
     { id: 'guide', name: 'Design guide', icon: 'palette', win: true },
-    { id: 'pip', name: 'Pip', icon: 'spark', win: true, noDock: true },
+    { id: 'pip', name: 'Six', icon: 'spark', win: true, noDock: true },
   ];
   const appById = Object.fromEntries(APPS.map(a => [a.id, a]));
   const FILE_TYPES = { xlsx: ['XLS', '#1d8a4e'], ods: ['ODS', '#1d8a4e'], pdf: ['PDF', '#d93a3a'], jpg: ['JPG', '#7c4ddb'], png: ['PNG', '#7c4ddb'], md: ['MD', '#4a6585'], mp3: ['MP3', '#d9771a'] };
@@ -2805,7 +2823,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     const [label, c] = FILE_TYPES[(name.split('.').pop() || '').toLowerCase()] || ['DOC', '#3a6fd8'];
     return `<svg class="fico" width="${Math.round(h * 0.8)}" height="${h}" viewBox="0 0 24 30" aria-hidden="true"><path d="M3 1.5h12.5l7 7V27a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 27V3A1.5 1.5 0 0 1 3 1.5Z" fill="var(--fico-page)" stroke="var(--fico-edge)"/><path d="M15.5 1.5V7A1.5 1.5 0 0 0 17 8.5h5.5" fill="var(--fico-fold)" stroke="var(--fico-edge)"/><rect x="1.5" y="17" width="21" height="8" rx="1.5" fill="${c}"/><text x="12" y="23.2" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="6.2" font-weight="700" fill="#fff">${label}</text></svg>`;
   };
-  // app icons are clay illustrations (see the #app-* symbols); Calendar shows today's date, Pip is its live orb
+  // app icons are clay illustrations (see the #app-* symbols); Calendar shows today's date, Six is its live orb
   const calArt = () => { const d = new Date(); return `<svg class="art" viewBox="0 0 64 64"><use href="#app-calendar"/><text x="32" y="13.6" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9" font-weight="700" letter-spacing="1" fill="#fff">${d.toLocaleDateString('en', { month: 'short' }).toUpperCase()}</text><text x="32" y="50" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="28" font-weight="300" fill="#1a1923">${d.getDate()}</text></svg>`; };
   const appIcon = (id, size) => `<span class="appicon ai-${id}"${size ? ` style="--ic:${size}px"` : ''}>${id === 'pip' ? '<canvas class="dotorb" data-follow="1" data-state="ready" aria-hidden="true"></canvas>' : id === 'calendar' ? calArt() : `<svg class="art" viewBox="0 0 64 64"><use href="#app-${id}"/></svg>`}</span>`;
   const folderIcon = (em, size = 56) => `<svg class="fold-ic" width="${size}" height="${Math.round(size * 0.875)}" viewBox="0 0 64 56" aria-hidden="true"><use href="#fold"/>${em ? `<use class="em hi" href="#em-${em}"/><use class="em" href="#em-${em}"/>` : ''}</svg>`;
@@ -3235,7 +3253,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     if (files.length) groups.push(['Files', files]);
     if (sets.length && s) groups.push(['Settings', sets]);
     if (acts.length) groups.push(['Actions', acts]);
-    if (s && !c) groups.push(['Ask', [{ name: `Ask Pip: "${q.trim()}"`, sub: 'Send to the assistant on the home screen', icon: 'spark', tile: 't-sky', run: () => askPip(q.trim()) }]]);
+    if (s && !c) groups.push(['Ask', [{ name: `Ask Six: "${q.trim()}"`, sub: 'Send to the assistant on the home screen', icon: 'spark', tile: 't-sky', run: () => askPip(q.trim()) }]]);
     return groups;
   }
   function renderResults() {
@@ -3294,7 +3312,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   /* ── Files: folders you can walk through ───────────────────────
      Back, forward and up; a path bar where every segment is a button; icons or a list; search in
      the folder; tags; and a Bin that keeps where each file came from so it can go back. */
-  let files = FILES.slice(), fsel = -1;   // Documents: Pip finds, opens and bins files here
+  let files = FILES.slice(), fsel = -1;   // Documents: Six finds, opens and bins files here
   const files_ = () => files;
   const escF = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const capF = t => t.replace(/^./, c => c.toUpperCase());
@@ -3588,7 +3606,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   const SET_PAGES = [
     ['Connect', [['wifi', 'Wi-Fi', 'wifi', '#2f6fd6'], ['bt', 'Bluetooth', 'bt', '#2f6fd6']]],
     ['Device', [['display', 'Display', 'monitor', '#c4561f'], ['sound', 'Sound', 'volume', '#d23a55'], ['power', 'Battery & power', 'battery', '#1f8a57'], ['storage', 'Storage', 'layers', '#5b6170']]],
-    ['You', [['pip', 'Pip & voice', 'mic', '#6a4df0'], ['appearance', 'Appearance', 'palette', '#6a4df0'], ['home', 'Home & widgets', 'squares-four', '#a36a12'], ['dock', 'Desktop & dock', 'grid', '#2f6fd6'], ['notif', 'Notifications & Focus', 'bell', '#d23a55']]],
+    ['You', [['pip', 'Six & voice', 'mic', '#6a4df0'], ['appearance', 'Appearance', 'palette', '#6a4df0'], ['home', 'Home & widgets', 'squares-four', '#a36a12'], ['dock', 'Desktop & dock', 'grid', '#2f6fd6'], ['notif', 'Notifications & Focus', 'bell', '#d23a55']]],
     ['System', [['apps', 'Apps', 'download', '#0d8a5e'], ['privacy', 'Privacy & security', 'lock', '#475569'], ['access', 'Accessibility', 'access', '#2f6fd6'], ['users', 'Users', 'user', '#5b6170'], ['lang', 'Language & region', 'globe', '#0a7f9c'], ['keyboard', 'Keyboard & touchpad', 'type', '#5b6170'], ['updates', 'Updates', 'download', '#0d8a5e'], ['about', 'About', 'info', '#5b6170']]],
   ];
   const SET_ALL = SET_PAGES.flatMap(g => g[1]);
@@ -3627,7 +3645,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     const R = $('#setResults'); R.hidden = false;
     $('#setCrumb').innerHTML = `Settings <span aria-hidden="true">›</span> <b>Results for “${escF(e.target.value.trim())}”</b>`;
     R.innerHTML = hits.length ? `<div class="sgroup">${hits.map((x, i) => `<button type="button" class="srow sres" data-hit="${i}"><span class="sl"><b>${escF(x.title)}</b><small>${escF(pageName(x.page))}${x.sub ? ' · ' + escF(x.sub) : ''}</small></span><svg class="i sm"><use href="#i-chev"/></svg></button>`).join('')}</div>`
-      : `<p class="snote">No setting matches “${escF(e.target.value.trim())}”. Try “wifi”, “dark”, “battery” or “Hey Pip”. Or ask Pip.</p>`;
+      : `<p class="snote">No setting matches “${escF(e.target.value.trim())}”. Try “wifi”, “dark”, “battery” or “Hey Six”. Or ask Six.</p>`;
     R._hits = hits;
   });
   $('#setResults').addEventListener('click', e => { const b = e.target.closest('[data-hit]'); if (!b) return; const x = $('#setResults')._hits[+b.dataset.hit]; showPage(x.page, true, x.row); });
@@ -3646,7 +3664,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     const ac = root.dataset.accent || 'graphite';
     $$('#accents button').forEach(b => b.setAttribute('aria-checked', b.dataset.v === ac));
     $$('#segWake button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === voice.mode));
-    $('#wakeNote').textContent = voice.mode === 'wake' ? 'Listens for “Hey Pip” on this device; nothing is recorded until you say it' : 'Pip only hears you after you press the mic';
+    $('#wakeNote').textContent = voice.mode === 'wake' ? 'Listens for “Hey Six” on this device; nothing is recorded until you say it' : 'Six only hears you after you press the mic';
     $('#wCount').textContent = `${widgetEls.length} on home`;
   }
   $('#w-settings').addEventListener('change', e => {
@@ -3656,8 +3674,8 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     if (BIND_QS.includes(k)) { if (pressed(k) !== el.checked) qsTile(k).click(); }
     else if (BIND_A11Y[k]) { const t = $(BIND_A11Y[k]); if (t.checked !== el.checked) t.click(); }
     else if (k === 'pip') setPipShown(el.checked, true);
-    else if (k === 'greet') { $('#greet').hidden = $('#greetSub').hidden = !el.checked; }
-    else if (k === 'tries') $('#vTry').hidden = !el.checked;
+    else if (k === 'intro') { $('#home').classList.toggle('intro-pinned', el.checked); if (el.checked) showIntro(); else hideIntro(); }
+    else if (k === 'typeout') typeReplies = el.checked;
     else if (k === 'mag') dockMag = el.checked;
   });
   $('#w-settings').addEventListener('input', e => {
@@ -3781,7 +3799,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
         <h3>Editors’ picks</h3><div class="st-grid">${['libreoffice', 'gimp', 'krita', 'thunderbird', 'obs', 'steam'].map(id => swCard(APPSTORE.find(a => a.id === id))).join('')}</div>`;
     } else if (swCat === 'installed') {
       const ins = APPSTORE.filter(a => a.installed);
-      M.innerHTML = `<h2>Installed</h2><div class="sgroup">${ins.map(a => `<div class="srow">${swIcon(a, 36)}<span class="sl"><b>${escF(a.name)}</b><small>${a.size} · Flathub</small></span><button type="button" class="btn btn-secondary sm" data-sw="remove" data-id="${a.id}">Remove</button></div>`).join('')}</div><p class="snote">Built-in apps (Files, Settings, Pip, Terminal…) are part of the system image and update with it.</p>`;
+      M.innerHTML = `<h2>Installed</h2><div class="sgroup">${ins.map(a => `<div class="srow">${swIcon(a, 36)}<span class="sl"><b>${escF(a.name)}</b><small>${a.size} · Flathub</small></span><button type="button" class="btn btn-secondary sm" data-sw="remove" data-id="${a.id}">Remove</button></div>`).join('')}</div><p class="snote">Built-in apps (Files, Settings, Six, Terminal…) are part of the system image and update with it.</p>`;
     } else if (swCat === 'updates') {
       M.innerHTML = `<h2>Updates</h2>${ups.length ? `<div class="sgroup">${ups.map(a => `<div class="srow">${swIcon(a, 36)}<span class="sl"><b>${escF(a.name)} ${a.update}</b><small>Security and stability fixes</small></span>${a.busy != null ? swBtn(a) : `<button type="button" class="btn btn-secondary sm" data-sw="update" data-id="${a.id}">Update</button>`}</div>`).join('')}</div><button type="button" class="btn btn-primary sm" data-sw="updateall">Update all</button>` : '<p class="snote">All apps are up to date.</p>'}
         <div class="sgroup" style="margin-top:16px"><div class="srow"><span class="sl"><b>SIX system update</b><small>The system updates as one piece, from Settings</small></span><button type="button" class="btn btn-secondary sm" data-sw="sysupd">Open Updates</button></div></div>`;
@@ -3831,7 +3849,7 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     $('#calGrid').innerHTML = head + cells;
     const ev = EVENTS[dkey(calSel)] || [];
     $('#calDay').innerHTML = `<h3>${calSel.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}</h3>` + (ev.length ? ev.map(e => `<div class="cal-item" style="--c:${e.c}"><time>${e.t}</time><div><b>${escF(e.x)}</b><span>${escF(e.sub)}</span></div></div>`).join('') : '<p class="snote">Nothing planned.</p>')
-      + `<button type="button" class="btn btn-secondary sm" id="calAdd"><svg class="i sm"><use href="#i-plus"/></svg>Add event</button><p class="snote">Or tell Pip: “Lunch with Arif tomorrow at one.”</p>`;
+      + `<button type="button" class="btn btn-secondary sm" id="calAdd"><svg class="i sm"><use href="#i-plus"/></svg>Add event</button><p class="snote">Or tell Six: “Lunch with Arif tomorrow at one.”</p>`;
   }
   $('#calGrid').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; calSel = new Date(calMonth.getFullYear(), calMonth.getMonth(), +b.dataset.d); renderCalendar(); });
   $('#calPrev').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() - 1); renderCalendar(); });
@@ -3919,17 +3937,17 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
   $('#demoToast').addEventListener('click', () => toast('Moved "Interview notes.md" to Bin', () => toast('Restored "Interview notes.md"', null)));
   $$('.seg button').forEach(b => b.addEventListener('click', () => $$('button', b.parentElement).forEach(x => x.setAttribute('aria-pressed', x === b))));
 
-  /* ── Pip's orb: one dotted-sphere design at every size ─────────
+  /* ── Six's orb: one dotted-sphere design at every size ─────────
      The motion engine is ported from Thinking Orbs by Yogesh (MIT, github.com/yogesharc/thinking-orbs):
      one shared clock per look so every orb in a state moves in step, dots that fade out toward the
-     back instead of leaving a grey haze, and a look per thing Pip does. SIX adds Listening, Speaking,
+     back instead of leaving a grey haze, and a look per thing Six does. SIX adds Listening, Speaking,
      Complete, Failed, Cancelled and Resting, and draws the home orb realistically: perspective, depth
      of field, a glass shell, core light and a soft floor shadow. */
   const TAU = Math.PI * 2, GOLDEN = Math.PI * (3 - Math.sqrt(5));
   const ease = x => (1 - Math.cos(Math.PI * x)) / 2;
   const hash = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
   const dist2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
-  // Pip's state → the look its orb takes; data-variant picks an alternative look where one exists
+  // Six's state → the look its orb takes; data-variant picks an alternative look where one exists
   const ORB_LOOK = { ready: 'base', listening: 'listen', thinking: 'reasoning', speaking: 'speak', searching: 'searching', working: 'working', complete: 'done',
     asking: 'searching-lighthouse', resting: 'rest', background: 'background', retrying: 'retrying', compacting: 'compacting', waiting: 'waiting', failed: 'failed', cancelled: 'cancelled' };
   const ORB_VARIANTS = { working: ['gyro'], reasoning: ['twins'], searching: ['lighthouse'], background: ['spiral'], retrying: ['surge'], compacting: ['squeeze', 'fuse'] };
@@ -4229,12 +4247,12 @@ input[type="range"]::-moz-range-thumb { width: var(--rh); height: var(--rh); bor
     ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, R * 0.6, 0, TAU); ctx.fill();
     if (prog !== null && prog < 1) drawRing(ctx, cx, cy, R * 1.24, 2, prog, col);
   }
-  /* ── Bloom and Halo: Pip's looks ──────────────────────────────────
+  /* ── Bloom and Halo: Six's looks ──────────────────────────────────
      Bloom (the default) is a soft, grainy sphere of warm colour: orange and red flowing over violet,
-     with a pink haze around it, shaded as a ball lit from the side Pip is looking at. Halo is a ring
+     with a pink haze around it, shaded as a ball lit from the side Six is looking at. Halo is a ring
      of cold light turning in the dark, brightest where you see it edge-on. Both are drawn by one
      shader on one shared WebGL canvas and copied into each orb's own canvas.
-     Personality: Pip looks toward the pointer, blinks now and then when idle, squashes when poked,
+     Personality: Six looks toward the pointer, blinks now and then when idle, squashes when poked,
      and wobbles like a drop of water when it is dragged or flung. A state changes how the colour
      moves, never the shape, and every change eases in. */
   const ORB_FS = `precision highp float;
@@ -4276,7 +4294,7 @@ vec4 bloom(vec2 p) {
   col = mix(col, red, smoothstep(0.25, 0.55, hot));
   col = mix(col, orange, smoothstep(0.55, 0.85, hot));
   col = mix(col, amber, smoothstep(0.85, 1.05, hot));
-  // lit from where Pip is looking; the far side sinks into violet
+  // lit from where Six is looking; the far side sinks into violet
   vec3 L = normalize(vec3(-0.45 + uGaze.x * 0.6, 0.35 - uGaze.y * 0.6, 0.85));
   float dif = dot(n, L);
   col = mix(col, violet * 0.7, smoothstep(0.1, -0.7, dif) * 0.75);
@@ -4368,14 +4386,14 @@ vec4 halo(vec2 p) {
 }
 vec4 ripple(vec2 p) {
   // a terraced pool, seen from above: rings stepping down to a dark centre, each lip catching the
-  // light on one side and shading the step below it. Deeper rings shift further as Pip looks
+  // light on one side and shading the step below it. Deeper rings shift further as Six looks
   // around, so it reads in depth; the rings flow outward like ripples
   float r0 = length(p);
   vec2 q = p - uGaze * 0.1 * (1.0 - smoothstep(0.0, 1.0, r0));
   float r = length(q), ang = atan(q.y, q.x);
   float N = 8.0;
   // the rings flow outward: only the fraction of the flow matters, so a ring's colour depends on
-  // where it is (deep at the centre, pale at the rim), never on how long Pip has been running
+  // where it is (deep at the centre, pale at the rim), never on how long Six has been running
   float ph = fract(uFlowA * 0.9);
   float s = r * N - ph + uSwirl * ang / 6.28318 * 2.0 + uRipple * 0.25 * sin(uT * 5.0 - r * 9.0);
   float idx = floor(s), f = fract(s);
@@ -4442,7 +4460,7 @@ void main() {
       g.clearColor(0, 0, 0, 0);
       cv.addEventListener('webglcontextlost', () => { OGL = false; });
       OGL = { cv, g, U };
-    } catch (e) { console.warn('Pip: WebGL unavailable, drawing the orb with gradients', e); OGL = false; }
+    } catch (e) { console.warn('Six: WebGL unavailable, drawing the orb with gradients', e); OGL = false; }
     return OGL;
   }
   // how each state moves the colour; every value eases from one state into the next
@@ -4467,7 +4485,7 @@ void main() {
     return tg;
   }
   const ORB_TINT = { green: [0.25, 0.85, 0.5], red: [1.0, 0.3, 0.26] };
-  // the pointer, for Pip's gaze; the last time anyone did anything, for drowsiness; and a glance at
+  // the pointer, for Six's gaze; the last time anyone did anything, for drowsiness; and a glance at
   // the field you're typing into
   let orbPtr = null, orbActive = performance.now(), orbGlance = null;
   addEventListener('pointermove', e => { orbPtr = [e.clientX, e.clientY]; orbActive = performance.now(); }, { passive: true });
@@ -4477,7 +4495,7 @@ void main() {
     const t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') && t.type !== 'range' && t.type !== 'checkbox') { const r = t.getBoundingClientRect(); orbGlance = { pt: [r.left + Math.min(r.width, 40 + (t.value || '').length * 7), r.top + r.height / 2], at: performance.now() }; }
   }, true);
-  // a poke: Pip squashes and springs back
+  // a poke: Six squashes and springs back
   addEventListener('pointerdown', e => {
     const host = e.target.closest && e.target.closest('#pipHome, #pipBtn, #dockPip, .pip-card, .isl-l, .isl-head');
     const o = host && (host.matches('.dotorb') ? host : host.querySelector('.dotorb'));
@@ -4517,8 +4535,8 @@ void main() {
       st.x += st.vx * dt; st.y += st.vy * dt;
       st.x = Math.max(-0.35, Math.min(0.35, st.x)); st.y = Math.max(-0.35, Math.min(0.35, st.y));
     }
-    // more personality, for Pip at a size where you can see it, never under Reduce motion:
-    // a hop when a task completes, a shake of the head when something fails, a nod when Pip asks you
+    // more personality, for Six at a size where you can see it, never under Reduce motion:
+    // a hop when a task completes, a shake of the head when something fails, a nod when Six asks you
     // something, a hello when it first appears; drowsy when left alone, waking with a little hop
     let off = [0, 0];
     if (big) {
@@ -4536,10 +4554,10 @@ void main() {
           else if (g.kind === 'nod') off[1] = -0.05 * Math.sin(k * 4 * Math.PI) * (1 - k);
         }
       }
-      // curious: with the pointer close, Pip leans toward it
+      // curious: with the pointer close, Six leans toward it
       if (el._cur > 0.01) { off[0] += gz[0] * 0.05 * el._cur; off[1] -= gz[1] * 0.05 * el._cur; }
     }
-    // blink: idle Pip squashes for a moment every few seconds (not while drowsy)
+    // blink: idle Six squashes for a moment every few seconds (not while drowsy)
     if (!still && look === 'base' && (hi || size >= 40) && drowsy < 0.5) {
       if (!el._blink) el._blink = now + 3000 + Math.random() * 5000;
       if (now > el._blink) { el._sqv = (el._sqv || 0) - 3.2; el._blink = now + 4500 + Math.random() * 6000; }
@@ -4588,7 +4606,7 @@ void main() {
     }
     ctx.restore();
   }
-  const formOf = el => el.dataset.form || root.dataset.orbForm || 'bloom';   // Bloom is Pip's default look
+  const formOf = el => el.dataset.form || root.dataset.orbForm || 'bloom';   // Bloom is Six's default look
   let lastOrb = 0, orbsShown = 0;
   function tickOrbs(now) {
     // small orbs draw every frame while only a few are on screen (the menu bar, dock and a card),
@@ -4619,38 +4637,39 @@ void main() {
     });
   }
 
-  /* ── Pip ─────────────────────────────────────────────────────── */
+  /* ── Six ─────────────────────────────────────────────────────── */
   const PIP_STATES = {
-    ready: ['Ready', 'The colour drifts slowly. Pip looks toward the pointer and blinks now and then.'],
+    ready: ['Ready', 'The colour drifts slowly. Six looks toward the pointer and blinks now and then.'],
     listening: ['Listening', 'Ripples run out from the centre with your voice.'],
     thinking: ['Thinking', 'The colour stirs into a swirl and a spark crosses it.'],
     speaking: ['Speaking', 'Swells and brightens with each word.'],
     searching: ['Searching', 'A bright spot roams across the face.'],
     working: ['Working', 'Fills like a glass of water as the task progresses.'],
     asking: ['Asking', 'A beam of light turns round the rim until you answer.'],
-    waiting: ['Waiting', 'A slower beam circles while a service makes Pip wait.'],
+    waiting: ['Waiting', 'A slower beam circles while a service makes Six wait.'],
     retrying: ['Retrying', 'Wobbles, settles, then tries again.'],
     compacting: ['Compacting', 'The colour winds tightly in on itself.'],
     complete: ['Complete', 'Warms green once, then settles.'],
     failed: ['Failed', 'Cools red and slows. The reason is always written beside it.'],
-    cancelled: ['Cancelled', 'Fades to grey. Pip says what did and didn’t happen.'],
+    cancelled: ['Cancelled', 'Fades to grey. Six says what did and didn’t happen.'],
     resting: ['Resting', 'Grey, dim and almost still.'],
   };
   const pipHome = $('#pipHome');
   pipHome.innerHTML = '<canvas class="dotorb orb-hi" data-follow="1" data-state="ready" aria-hidden="true"></canvas>';
   $$('.dotorb').forEach(o => mountOrb(o));
   let pipNow = 'ready', pipLabel = '', ampTimer = null, pipBack = null;
-  let islandHook = null;   // the Pip notch follows Pip's state (set up with the notch, below)
-  // label: what Pip is doing right now, in words ("searching Documents"), shown under the orb
+  let islandHook = null;   // Six's menu-bar capsule follows its state (set up with the capsule, below)
+  // label: what Six is doing right now, in words ("searching Documents"), shown under the orb
   function setPip(state, label = '') {
     pipNow = state; pipLabel = label;
     if (islandHook) islandHook();
     clearTimeout(pipBack);
     const [name] = PIP_STATES[state];
     [pipHome, ...$$('.dotorb[data-follow]')].forEach(p => { p.dataset.state = state; });
-    pipHome.setAttribute('aria-label', 'Pip, ' + name.toLowerCase() + (label ? ', ' + label : '') + (state === 'listening' ? '. Press to stop' : '. Press to talk'));
-    $('#pipState').textContent = 'Pip · ' + (label || name.toLowerCase());
-    if (typeof syncTaskOrbs === 'function') syncTaskOrbs(); else $('#pipBtn').setAttribute('aria-label', 'Pip: ' + name + '. Open Pip');
+    pipHome.setAttribute('aria-label', 'Six, ' + name.toLowerCase() + (label ? ', ' + label : '') + (state === 'listening' ? '. Press to stop' : '. Press to talk'));
+    $('#pipState').textContent = 'Six · ' + (label || name.toLowerCase());
+    if (typeof syncTaskOrbs === 'function') syncTaskOrbs();
+    $('#pipState').toggleAttribute('data-idle', state === 'ready');
     $$('.pip-card').forEach(c => c.setAttribute('aria-pressed', c.dataset.state === state));
     clearInterval(ampTimer);
     if (state === 'speaking') {
@@ -4678,7 +4697,7 @@ void main() {
   $('#pipStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#rippleStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
   $('#haloStates').addEventListener('click', e => { const c = e.target.closest('.pip-card'); if (c) setPip(c.dataset.state); });
-  // Pip's look, everywhere at once
+  // Six's look, everywhere at once
   function setOrbForm(v) {
     if (v === 'halo' || v === 'ripple' || v === 'dots') root.dataset.orbForm = v; else { delete root.dataset.orbForm; v = 'bloom'; }
     $$('#segOrb button, #segOrbGuide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
@@ -4716,7 +4735,7 @@ void main() {
   function unpinWidget(el) {
     if (!el.classList.contains('pinned')) return;
     const dr = desk.getBoundingClientRect(), r = el.getBoundingClientRect(), ph = phys.get(el);
-    el.classList.remove('pinned'); $('#widgets').insertBefore(el, $('#addWidget'));
+    el.classList.remove('pinned'); $('#widgets').append(el);
     Object.assign(ph, { x: r.left - dr.left, y: r.top - dr.top, vx: 0, vy: 0, moved: false });
     layoutHome(); markDirty();
   }
@@ -4762,7 +4781,7 @@ void main() {
   function layoutHome() {
     const wide = isWide();
     home.classList.toggle('stack', !wide);
-    if (!wide) { homeCards().forEach(el => { el.style.left = ''; el.style.top = ''; }); Object.assign($('#addWidget').style, { left: '', top: '' }); $('#addWidget').hidden = false; applyPip(); return; }
+    if (!wide) { homeCards().forEach(el => { el.style.left = ''; el.style.top = ''; }); applyPip(); return; }
     const pad = 24, gap = 12, sideW = 284, top = mbH() + 16;
     let yL = top, yR = top;
     const H = desk.clientHeight - dockSpace() - 8;
@@ -4793,16 +4812,7 @@ void main() {
       if (!ph.init) { ph.x = ph.tx; ph.y = ph.ty; ph.init = true; }
       el.style.left = ph.x + 'px'; el.style.top = ph.y + 'px';
     });
-    // Add widgets sits at the foot of the shorter column while there is room for it
-    const add = $('#addWidget');
-    const foot = col => Math.max(top, ...homeCards().filter(c => !c.classList.contains('stack-hidden') && sideOf(c) === col).map(c => {
-      const ph = phys.get(c), st = stackOf(c);
-      return ph.ty + c.offsetHeight + (st && st.cards[0] === c ? peekSpace(st) : 0) + gap;
-    }));
     applyPip();
-    const fl = foot('L'), fr = foot('R'), aL = fl <= fr, ay = Math.min(fl, fr);
-    add.hidden = ay + 40 > H;
-    add.style.left = (aL ? pad : desk.clientWidth - pad - sideW) + 'px'; add.style.top = ay + 'px';
     // a card that no longer fits its column (another card grew, or a stack sits below) goes into
     // the stack at the foot of that column instead of overlapping it
     if (!fitting && !tucking) {
@@ -4815,15 +4825,15 @@ void main() {
     }
   }
   let fitting = false, tucking = false;
-  /* Pip on home: in the middle by default, but it's yours to move. Drag it anywhere (it keeps a
+  /* Six on home: in the middle by default, but it's yours to move. Drag it anywhere (it keeps a
      clear edge from the menu bar and dock), and it stays there, smaller, like something you set
      down; right-click to send it back to the middle or hide it. Alt + arrows move it too. */
   const pipSpot = $('#pipSpot'), pipStage = $('.stage');
-  let pipPlace = null, pipDragged = false;   // where Pip sits, as fractions of home, or null for the middle
+  let pipPlace = null, pipDragged = false;   // where Six sits, as fractions of home, or null for the middle
   try { pipPlace = JSON.parse(localStorage.getItem('six.pipPlace')) || null; } catch { pipPlace = null; }
   const savePip = () => { try { localStorage.setItem('six.pipPlace', JSON.stringify(pipPlace)); } catch {} };
   const pipBounds = () => ({ x0: 8, y0: mbH() + 8, x1: desk.clientWidth - pipSpot.offsetWidth - 8, y1: desk.clientHeight - dockSpace() - pipSpot.offsetHeight - 8 });
-  // the greeting and captions slide up or down when Pip leaves or comes back, instead of jumping
+  // the greeting and captions slide up or down when Six leaves or comes back, instead of jumping
   function centreFlip(fn) {
     const els = $$('#greet, #greetSub, #vcap, #vTry').filter(e => e.offsetParent), before = els.map(e => e.getBoundingClientRect());
     fn();
@@ -4852,7 +4862,7 @@ void main() {
     if (on) { pipSpot.hidden = false; anim(pipSpot, [{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'none' }], { duration: 520 }); return; }
     const a = anim(pipSpot, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.9)' }], { duration: 220, easing: EASE.in, fill: 'forwards' });
     settled(a).then(() => { if (!$('#pipShow').checked) { centreFlip(() => { pipSpot.hidden = true; }); a && a.cancel(); } });
-    if (!quiet) toast('Pip is hidden from home. Talk with the mic in the menu bar; bring Pip back in Settings › Home & widgets.', () => setPipShown(true), 'Undo');
+    if (!quiet) toast('Six is hidden from home. Talk with the mic in the menu bar; bring Six back in Settings › Home & widgets.', () => setPipShown(true), 'Undo');
   }
   pipSpot.addEventListener('pointerdown', e => {
     if (e.button !== 0 || !isWide()) return;
@@ -4862,7 +4872,7 @@ void main() {
       if (!on) {
         if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
         on = true; pipDragged = true;
-        if (!pipSpot.classList.contains('floating')) {   // lift Pip out of the middle, keeping it under the pointer
+        if (!pipSpot.classList.contains('floating')) {   // lift Six out of the middle, keeping it under the pointer
           const dr = desk.getBoundingClientRect();
           pipPlace = { x: (r0.left - dr.left) / desk.clientWidth, y: (r0.top - dr.top) / desk.clientHeight }; applyPip();
         }
@@ -5123,6 +5133,7 @@ void main() {
   }
   stackScrim.addEventListener('click', () => closeStack());
   $('#stackPopLess').addEventListener('click', () => closeStack());
+  $('#stackPopX').addEventListener('click', () => closeStack());
   $('#stackPopUnstack').addEventListener('click', () => { const st = popStack; closeStack(true, () => unstack(st)); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && popStack) closeStack(); });
   // in the pop-up: click a card to bring it to the top; drag a card to pull just that one out
@@ -5249,7 +5260,7 @@ void main() {
   }
   widgetEls.forEach(wireWidget);
   // a card that changes size (a date is picked, a list grows, a task finishes) re-flows home, so
-  // nothing overlaps it and Add widgets stays below the last card
+  // nothing overlaps it
   let reflowQ = 0, reflowStacks = false;
   const cardSizes = typeof ResizeObserver === 'function' ? new ResizeObserver(entries => {
     if (entries.some(e => stackOf(e.target))) reflowStacks = true;
@@ -5263,9 +5274,9 @@ void main() {
   }) : null;
   widgetEls.forEach(el => cardSizes?.observe(el));
 
-  /* ── Widgets: a gallery of glanceable cards, and ones Pip makes ──
+  /* ── Widgets: a gallery of glanceable cards, and ones Six makes ──
      Every widget does one job and can be read at a glance; the few controls it has (play, check
-     off, start a timer) work in place. Widgets Pip makes are data, not code: Pip writes a small
+     off, start a timer) work in place. Widgets Six makes are data, not code: Six writes a small
      spec (title, icon, up to four blocks) and SIX draws it with its own components, so a made
      widget always looks native and can't run anything. */
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -5287,7 +5298,7 @@ void main() {
   const W_KINDS = {
     recent: { name: 'Pick up where you left off', short: 'Recent', desc: 'Files and apps you used last', icon: 'file', tile: 't-sky', el: $('.widget[data-slot="L0"]') },
     today: { name: 'Today', desc: 'Your next meetings', icon: 'calendar', tile: 't-peach', el: $('.widget[data-slot="L1"]') },
-    task: { name: 'Current task', desc: 'What Pip is working on, with Stop', icon: 'spark', tile: 't-lilac', el: $('.widget[data-slot="R0"]') },
+    task: { name: 'Current task', desc: 'What Six is working on, with Stop', icon: 'spark', tile: 't-lilac', el: $('.widget[data-slot="R0"]') },
     device: { name: 'This device', desc: 'Battery, storage and updates', icon: 'monitor', tile: 't-mint', el: $('.widget[data-slot="R1"]') },
     clock: {
       name: 'Clock', desc: 'The time here and in two other cities', icon: 'clock-face', tile: 't-butter',
@@ -5429,7 +5440,7 @@ void main() {
         });
         el._tick = () => { if (!s.on) return; if (++s.pos >= TRACKS[s.i].len) { s.i = (s.i + 1) % TRACKS.length; s.pos = 0; } draw(); };
         el._peek = () => `${s.on ? 'Playing' : 'Paused'} · ${TRACKS[s.i].t}, ${TRACKS[s.i].a}`;
-        el._playing = () => s.on; el._track = () => TRACKS[s.i];   // for the Pip notch
+        el._playing = () => s.on; el._track = () => TRACKS[s.i];   // for the Six notch
         draw();
         return el;
       },
@@ -5501,7 +5512,7 @@ void main() {
     },
   };
   Object.entries(W_KINDS).forEach(([k, v]) => { if (v.el) v.el.dataset.kind = k; });
-  // a checklist block, shared by Reminders and widgets Pip makes
+  // a checklist block, shared by Reminders and widgets Six makes
   function checklist(box, items, onChange) {
     const draw = () => {
       box.innerHTML = items.map((it, i) => `<button type="button" class="todo" role="checkbox" aria-checked="${it.d}" data-i="${i}">${icon(it.d ? 'f-check-square' : 'square')}<span></span></button>`).join('')
@@ -5518,7 +5529,7 @@ void main() {
     $$('[data-z]').forEach(b => { b.textContent = tnow(b.dataset.z); });
   }, 1000);
 
-  // ── widgets Pip makes: a small, checked spec drawn with SIX components ──
+  // ── widgets Six makes: a small, checked spec drawn with SIX components ──
   const SPEC_ICONS = ['spark', 'clock-face', 'hourglass-medium', 'drop', 'list-checks', 'note-pencil', 'calendar', 'globe-hemisphere-west', 'music', 'timer', 'squares-four', 'sun', 'moon', 'book', 'bell', 'user'];
   const SPEC_APPS = APPS.map(a => a.id);
   const clip = (t, n) => String(t ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
@@ -5586,7 +5597,7 @@ void main() {
   let pipWidgets = 0;
   function mkCustom(spec) {
     const key = 'pip' + (++pipWidgets);
-    const el = shell('pip', spec.title, 'Made by Pip', '<div class="well wb"></div>');
+    const el = shell('pip', spec.title, 'Made by Six', '<div class="well wb"></div>');
     el.dataset.kind = key;
     renderBlocks(spec, $('.well', el), el);
     W_KINDS[key] = { name: spec.title, desc: spec.blocks.map(b => b.type).join(', '), icon: spec.icon, tile: 't-lilac', el, custom: true };
@@ -5599,7 +5610,7 @@ void main() {
     if (widgetEls.includes(el)) return { already: true };
     if (popStack) closeStack(true);
     const id = 'x' + (++wSeq);
-    $('#widgets').insertBefore(el, $('#addWidget'));
+    $('#widgets').append(el);
     widgetEls.push(el); cardSizes?.observe(el);
     phys.set(el, { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, moved: false });
     wireWidget(el);
@@ -5697,7 +5708,6 @@ void main() {
   $('#galClose').addEventListener('click', closeGallery);
   galScrim.addEventListener('click', closeGallery);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGallery(); hideWMenu(); } });
-  $('#addWidget').addEventListener('click', openGallery);
 
   /* ── Right-click menus, everywhere ─────────────────────────────────
      Like Windows: a right-click anywhere in SIX gives the actions for what's under the pointer,
@@ -5809,14 +5819,14 @@ void main() {
   function deskItems() {
     return [
       { label: 'Add widgets…', icon: 'plus', run: openGallery },
-      { label: 'Talk to Pip', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
+      { label: 'Talk to Six', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
+      { label: 'What can Six do?', icon: 'info', run: () => showIntro(true) },
       '-',
       { label: 'View', icon: 'grid', sub: [
-        { label: 'Pip on home', checked: !pipSpot.hidden, run: () => setPipShown(pipSpot.hidden) },
-        { label: 'Greeting', checked: !$('#greet').hidden, run: () => { const s = $('#w-settings [data-bind="greet"]'); s.checked = !s.checked; s.dispatchEvent(new Event('change', { bubbles: true })); } },
-        { label: '“Try saying” examples', checked: !$('#vTry').hidden, run: () => { const s = $('#w-settings [data-bind="tries"]'); s.checked = !s.checked; s.dispatchEvent(new Event('change', { bubbles: true })); } },
+        { label: 'Six on home', checked: !pipSpot.hidden, run: () => setPipShown(pipSpot.hidden) },
+        { label: 'Keep the intro on home', checked: $('#home').classList.contains('intro-pinned'), run: () => { const s = $('#w-settings [data-bind="intro"]'); s.checked = !s.checked; s.dispatchEvent(new Event('change', { bubbles: true })); } },
         '-',
-        { label: 'Put Pip back in the middle', disabled: !pipPlace, run: () => placePip(null) },
+        { label: 'Put Six back in the middle', disabled: !pipPlace, run: () => placePip(null) },
         { label: 'Put cards back in their columns', run: () => { stacks.slice().forEach(unstack); homeCards().forEach(c => { phys.get(c).moved = false; }); layoutHome(); } },
       ] },
       { label: 'Refresh', icon: 'arrow-counter-clockwise', kbd: 'F5', run: () => { layoutHome(); paintWall(true); homeCards().filter(c => c.offsetParent && !c.classList.contains('stack-hidden')).forEach((c, i) => glint(c, i * 70)); } },
@@ -5844,13 +5854,14 @@ void main() {
   }
   function pipItems() {
     return [
-      { label: 'Talk to Pip', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
-      { label: 'Open the Pip app', icon: 'spark', run: () => openPip() },
+      { label: 'Talk to Six', icon: 'mic', kbd: 'Ctrl Space', run: () => startListening() },
+      { label: 'Open the Six app', icon: 'spark', run: () => openPip() },
+      { label: 'What can Six do?', icon: 'info', run: () => showIntro(true) },
       '-',
-      { label: 'Move Pip back to the middle', disabled: !pipPlace, run: () => placePip(null) },
-      { label: 'Hide Pip from home', run: () => setPipShown(false) },
+      { label: 'Move Six back to the middle', disabled: !pipPlace, run: () => placePip(null) },
+      { label: 'Hide Six from home', run: () => setPipShown(false) },
       '-',
-      { label: 'Pip & voice settings', icon: 'gear', run: () => openSettings('pip') },
+      { label: 'Six & voice settings', icon: 'gear', run: () => openSettings('pip') },
     ];
   }
   function winItems(id) {
@@ -5867,7 +5878,7 @@ void main() {
   }
   function dockItems(b) {
     const id = b.dataset.app;
-    if (b.id === 'dockPip') return pipItems().filter(it => !it.label || !/middle|Hide Pip/.test(it.label));
+    if (b.id === 'dockPip') return pipItems().filter(it => !it.label || !/middle|Hide Six/.test(it.label));
     if (b.id === 'dockBin') return [{ label: 'Open Bin', icon: 'trash', run: () => openFilesAt('bin') }, '-', { label: 'Empty Bin…', danger: true, run: emptyBin }];
     if (b.id === 'launchBtn') return [{ label: 'Open Six Menu', icon: 'grid', run: () => openPop('six') }, { label: 'Six Search', icon: 'search', kbd: 'Ctrl K', run: () => openSearch() }, '-', { label: 'Settings', icon: 'gear', run: () => openSettings() }, { label: 'Lock screen', icon: 'lock', run: lockScreen }];
     const w = wins[id], open = w && !w.el.hidden, running = w && (open || w.min);
@@ -5885,7 +5896,7 @@ void main() {
     const inBin = FTREE[cur]?.bin;
     return [
       { label: 'Open', icon: 'f-file', kbd: 'Enter', run: () => openEntry(x) },
-      x.kind === 'file' && !inBin ? { label: 'Ask Pip about this', icon: 'spark', run: () => askPip(`Tell me about “${x.f.name}”`) } : null,
+      x.kind === 'file' && !inBin ? { label: 'Ask Six about this', icon: 'spark', run: () => askPip(`Tell me about “${x.f.name}”`) } : null,
       '-',
       x.kind === 'file' ? { label: 'Copy name', icon: 'file', run: () => { try { navigator.clipboard.writeText(x.f.name); } catch {} toast(`Copied “${x.f.name}”`, null); } } : null,
       x.kind === 'file' && !inBin ? { label: 'Move to Bin', icon: 'trash', kbd: 'Delete', danger: true, run: () => { selectRow(i); deleteSel(); } } : null,
@@ -5909,7 +5920,7 @@ void main() {
     e.preventDefault();
     const x = e.clientX, y = e.clientY;
     let items;
-    if (t.closest('#island')) items = pipItems().filter(it => !it.label || !/middle|Hide Pip/.test(it.label));
+    if (t.closest('#island')) items = pipItems().filter(it => !it.label || !/middle|Hide Six/.test(it.label));
     else if (t.closest('#pipSpot')) items = pipItems();
     else if (t.closest('.widget')) items = widgetItems(t.closest('.widget'));
     else if (t.closest('.peek')) items = widgetItems(t.closest('.peek')._card);
@@ -5931,7 +5942,7 @@ void main() {
     a.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: r.left + 12, clientY: r.top + Math.min(r.height, 28) }));
   });
 
-  // ── Pip designs a widget from a description ──
+  // ── Six designs a widget from a description ──
   const CITY_TZ = { dhaka: 'Asia/Dhaka', chattogram: 'Asia/Dhaka', chittagong: 'Asia/Dhaka', sylhet: 'Asia/Dhaka', london: 'Europe/London', paris: 'Europe/Paris', berlin: 'Europe/Berlin', madrid: 'Europe/Madrid', rome: 'Europe/Rome', istanbul: 'Europe/Istanbul', moscow: 'Europe/Moscow',
     'new york': 'America/New_York', toronto: 'America/Toronto', chicago: 'America/Chicago', 'los angeles': 'America/Los_Angeles', 'san francisco': 'America/Los_Angeles', seattle: 'America/Los_Angeles', 'mexico city': 'America/Mexico_City', 'sao paulo': 'America/Sao_Paulo', 'são paulo': 'America/Sao_Paulo',
     tokyo: 'Asia/Tokyo', seoul: 'Asia/Seoul', beijing: 'Asia/Shanghai', shanghai: 'Asia/Shanghai', 'hong kong': 'Asia/Hong_Kong', singapore: 'Asia/Singapore', 'kuala lumpur': 'Asia/Kuala_Lumpur', bangkok: 'Asia/Bangkok', jakarta: 'Asia/Jakarta',
@@ -5992,7 +6003,7 @@ Request: ${JSON.stringify(d)}`;
     const spec = cleanSpec(j);
     return spec || { fail: clip(j && j.note, 160) || 'I couldn’t turn that into a widget.' };
   }
-  // the preview Pip shows before adding: the real widget, drawn small, with Add / Cancel
+  // the preview Six shows before adding: the real widget, drawn small, with Add / Cancel
   function previewCard(m, spec, host) {
     return new Promise(res => {
       const box = document.createElement('div');
@@ -6064,8 +6075,7 @@ Request: ${JSON.stringify(d)}`;
     $$('.peek').forEach(p => { const l = $('.peek-line', p); if (l) l.textContent = peekLine(p._card); });
     if (islandHook) islandHook();
     const label = taskLive && taskPct < 100 ? `Slides from my notes, ${taskPct} %` : '';
-    $('#pipBtn').title = label ? 'Pip · ' + label : 'Pip';
-    $('#pipBtn').setAttribute('aria-label', `Pip: ${PIP_STATES[pipNow][0]}${label ? '. ' + label : ''}. Open Pip`);
+    $('#pipBtn').title = label ? 'Six · ' + label : 'Six';
   }
   syncTaskOrbs();
   $('#taskStop').addEventListener('click', () => {
@@ -6193,7 +6203,7 @@ vec3 bg(vec2 p, float oct){
   }
   float t = u_time;
   vec3 c = u_wall < 1.5 ? wObsidian(p, oct, t) : u_wall < 2.5 ? wSignal(p, t) : u_wall < 3.5 ? wContour(p, oct, t) : u_wall < 4.5 ? wStrata(p, oct, t) : wVelvet(p, oct, t);
-  // the greeting, Pip's label and the examples sit on the wallpaper itself: a soft scrim behind the
+  // the greeting, Six's label and the examples sit on the wallpaper itself: a soft scrim behind the
   // centre column keeps them readable. In light, the wallpaper is a pale print of itself
   vec2 dd = (p - sc * vec2(.5, .58)) / vec2(sc.x * .24, sc.y * .3);
   float k = exp(-dot(dd, dd));
@@ -6432,8 +6442,8 @@ void main(){
   new MutationObserver(() => { paintWall(true); recolorOrbs(); }).observe(root, { attributes: true, attributeFilter: ['data-transparency', 'data-contrast', 'data-theme'] });
   darkMQ.addEventListener('change', recolorOrbs);
 
-  /* ── Pip: voice on home, chat in the Pip app ──────────────────────
-     Home has no text box: you talk to Pip. The Pip app (the Pip icon at the top right) is the
+  /* ── Six: voice on home, chat in the Six app ──────────────────────
+     Home has no text box: you talk to Six. The Six app (the Six icon at the top right) is the
      written conversation: every request, typed or spoken, lands here as history. */
   const center = $('#center'), ask = $('#ask');
   let thread = $('#thread');
@@ -6494,7 +6504,7 @@ void main(){
     if (!$('.msg', live.el)) { ask.focus(); return; }
     if (busy) busy.abort();
     live.el.removeAttribute('id');
-    const el = document.createElement('div'); el.className = 'thread'; el.id = 'thread'; el.setAttribute('role', 'log'); el.setAttribute('aria-label', 'Conversation with Pip');
+    const el = document.createElement('div'); el.className = 'thread'; el.id = 'thread'; el.setAttribute('role', 'log'); el.setAttribute('aria-label', 'Conversation with Six');
     $('#threads').insertBefore(el, $('#pipEmpty'));
     live = { title: 'New chat', when: 'Today', el, voice: false }; convs.unshift(live);
     thread = el; turns = [];
@@ -6516,7 +6526,7 @@ void main(){
     return m;
   }
   /* Answers grow out of questions. Your message buds off the composer and rises into place; while
-     Pip works a drop travels out of it and swells into Pip's answer, which hangs from the question by
+     Six works a drop travels out of it and swells into Six's answer, which hangs from the question by
      a hairline while it's the latest exchange. Older exchanges let go. Content never stretches: the
      bubbles are revealed, not scaled. */
   // a chat animation only runs while the conversation is what you see there
@@ -6572,13 +6582,13 @@ void main(){
   if (typeof ResizeObserver === 'function') new ResizeObserver(() => $$('.msg.from-pip', thread).forEach(drawLink)).observe($('#threads'));
   const actChip = (m, text, warn) => { const c = document.createElement('span'); c.className = 'act' + (warn ? ' warn' : ''); c.innerHTML = icon(warn ? 'info' : 'check', 'i sm'); c.append(text); $('.acts', m).append(c); };
 
-  // what Pip can do in the prototype (used by local commands and by Claude's tools)
+  // what Six can do in the prototype (used by local commands and by Claude's tools)
   const APP_NAMES = { files: 'files', file: 'files', explorer: 'files', 'file manager': 'files', terminal: 'terminal', guide: 'guide', 'design guide': 'guide', settings: 'settings', software: 'software', 'app store': 'software', store: 'software', calendar: 'calendar', pip: 'pip', chat: 'pip' };
   const ZONES = { left: 'L50', right: 'R50', maximize: 'MAX', max: 'MAX', 'top-left': 'TL', 'top-right': 'TR', 'bottom-left': 'BL', 'bottom-right': 'BR', 'left-two-thirds': 'L66', 'right-third': 'R33' };
   function ensureOpen(id) { const w = wins[id]; if (w.el.hidden) { w.el.hidden = false; w.min = false; } focusWin(id); }
-  /* Pip reaches for what it changes: when Pip opens, snaps or closes a window, or adds or removes a
-     widget, the notch (or Pip's menu-bar orb, when the notch isn't showing) drops a tendril to it and
-     holds on while it moves, so you see exactly what Pip is touching. Then the tendril thins, lets go
+  /* Six reaches for what it changes: when Six opens, snaps or closes a window, or adds or removes a
+     widget, the notch (or Six's menu-bar orb, when the notch isn't showing) drops a tendril to it and
+     holds on while it moves, so you see exactly what Six is touching. Then the tendril thins, lets go
      and draws back. One tether at a time: a second action waits for the first to let go. */
   const reachQ = [];
   let reaching = false;
@@ -6674,7 +6684,7 @@ void main(){
 
   // simple commands understood on-device (instant, no Claude needed)
   function localIntent(raw) {
-    const s = raw.toLowerCase().replace(/[.!?,]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(please |pip |hey pip )+/, '').replace(/ please$/, '');
+    const s = raw.toLowerCase().replace(/[.!?,]+/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(please |six |pip |hey six |hey pip )+/, '').replace(/ please$/, '');
     const app = '(files?|file manager|explorer|terminal|design guide|guide|settings|software|app store|calendar)';
     let m;
     const done = (reply, acts) => ({ reply, acts });
@@ -6701,8 +6711,8 @@ void main(){
     }
     if (/^(?:open |show )?(?:the )?settings$/.test(s)) { openSettings(); return done('Settings is open.', ['Opened Settings']); }
     if (/^(?:lock|lock (?:the )?screen|lock my (?:pc|computer|laptop))$/.test(s)) { setTimeout(lockScreen, 900); return done('Locking the screen.', ['Locked the screen']); }
-    // widgets: add or remove one from the gallery, or describe a new one and Pip designs it
-    const rawT = raw.trim().replace(/^(?:please |pip,? |hey pip,? )+/i, '');
+    // widgets: add or remove one from the gallery, or describe a new one and Six designs it
+    const rawT = raw.trim().replace(/^(?:please |six,? |pip,? |hey six,? |hey pip,? )+/i, '');
     if ((m = rawT.match(/^(?:can you |could you )?(?:make|create|build|design|add)(?: me)?(?: a| an)?(?: new)?(?: custom)? widget(?: that| which| for| to| with| showing|:)?\s+(.+)$/i))) return { widget: m[1] };
     if (/^(?:edit|add|open|show|change)(?: the| my)? widgets?(?: gallery)?$/.test(s)) { openGallery(); return done('Here are the widgets. Add one, or describe a new one and I’ll make it.', []); }
     if ((m = s.match(/^(?:add|show|put|give me|i want)(?: me)?(?: a| an| the| my)? (.+?) widget(?: (?:to|on) (?:the |my )?home(?: screen)?)?$/))) {
@@ -6717,7 +6727,7 @@ void main(){
       pipReach(W_KINDS[k].el); removeKind(k);
       return done('Removed. It’s back in one click from the toast or the widget gallery.', [`Removed ${W_KINDS[k].name}`]);
     }
-    // changes to files never run straight away: Pip shows a review card naming the file and the effect
+    // changes to files never run straight away: Six shows a review card naming the file and the effect
     if ((m = s.match(/^(?:delete|remove|trash|throw away|bin) (?:the )?(?:file )?(.+)$/)) || (m = s.match(/^move (?:the )?(?:file )?(.+?) (?:to|into) (?:the )?(?:bin|trash)$/))) {
       const q = m[1].replace(/["“”']/g, '').trim(), f = files.find(x => x.name.toLowerCase() === q) || files.find(x => x.name.toLowerCase().includes(q));
       if (f) return { review: f };
@@ -6731,10 +6741,10 @@ void main(){
       return { fail: `I couldn’t find an app called “${name}” on this PC. Nothing was opened.`, label: 'app not found', fixes: [[`Search for “${name}”`, () => openSearch(m[1])], ['Show all apps', () => setTimeout(() => openPop('six'), 0)]] };
     }
     if (/(calendar|schedule|meetings?|today)/.test(s) && s.length < 60) return done('Two things today: the design review at 10:00, then a call with Arif at 14:30.', []);
-    if (/^(what can you do|help|what do you do)$/.test(s)) return done('I can open, close and snap windows, change settings like dark mode or night light, and switch the plasma mood. Ask in plain words, or tap the mic and talk.', []);
+    if (/^(what can you do|what can you do for me|what else can you do|help|what do you do)$/.test(s)) { setTimeout(() => showIntro(true), 400); return done('I can open, close and snap windows, change settings like dark mode or night light, and switch the plasma mood. Ask in plain words, or tap the mic and talk.', []); }
     return null;
   }
-  const RULES = () => `You are Pip, the assistant built into SIX, a desktop operating system. You are running inside an interactive design prototype in a web page.
+  const RULES = () => `You are Six, the assistant built into SIX, a desktop operating system. You are running inside an interactive design prototype in a web page.
 Personality: calm, curious, a little dry, straight. Short, plain sentences (usually 1 to 3). No exclamation marks, no emoji, no fake cheer, no markdown formatting. Say what you did and what you did not do. If unsure, say so.
 ${sampleTools ? 'You can operate the prototype with the tools provided (open, close and snap app windows, change settings, change the plasma surface mood or viscosity, show home). Use them when the person asks for something they cover, then confirm in one short sentence. Never claim an action you did not take with a tool.' : 'You cannot operate the prototype from this view. If asked to, say which control to use instead (Control Center in the menu bar, the dock, or Six Search with Ctrl + K).'}
 For anything else (questions, writing help, explanations), answer helpfully and briefly.
@@ -6774,7 +6784,7 @@ Current prototype state: ${stateSummary()}`;
   function reviewCard(m, f, host) {
     return new Promise(res => {
       const box = document.createElement('div');
-      box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Review before Pip acts');
+      box.className = 'review'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Review before Six acts');
       box.innerHTML = `<div class="rv-head">${icon('info', 'i sm')}Review before I do this</div>
         <div class="rv-item">${fileIcon(f.name, 30)}<span><b></b><small>Documents · ${f.size} · changed ${f.mod}</small></span></div>
         <ul><li>Moves this one file to the Bin. Nothing else changes.</li><li>You can put it back from the Bin for 30 days.</li></ul>
@@ -6795,7 +6805,7 @@ Current prototype state: ${stateSummary()}`;
     if (busy) busy.abort();
     if (voice.pending) voice.pending.no();   // a new request closes an open review
     const cap = viaVoice ? (voice.cap || capHost()) : null;
-    if (cap) { cap.you.textContent = `“${text}”`; cap.pip.textContent = ''; cap.card.replaceChildren(); }
+    if (cap) { cap.you.textContent = `“${text}”`; typeOut(cap.pip, ''); cap.card.replaceChildren(); }
     addMsg('user', text, viaVoice);
     const m = addMsg('pip', 'Thinking…');
     const txt = $('.txt', m);
@@ -6803,7 +6813,7 @@ Current prototype state: ${stateSummary()}`;
     let reply = '', local = null, outcome = 'complete', label = '', fixes = null;
     try { local = localIntent(text); } catch (e) { local = { fail: "That didn't work. " + (e.message || ''), label: 'couldn’t do that' }; }
     setPip('thinking', local ? 'on this device' : sample ? 'asking Claude' : '');
-    const say = r => { txt.classList.remove('wait'); txt.textContent = r; thread.scrollTop = thread.scrollHeight; if (cap) { const first = !cap.pip.textContent; cap.pip.textContent = r; if (first) textIn(cap.pip); } };
+    const say = r => { txt.classList.remove('wait'); typeOut(txt, r, { onDone: () => { thread.scrollTop = thread.scrollHeight; } }); thread.scrollTop = thread.scrollHeight; if (cap) typeOut(cap.pip, r); };
     if (local && local.review) {
       await wait(300);
       note(m, 'local');
@@ -6936,9 +6946,9 @@ Current prototype state: ${stateSummary()}`;
   $('#chatSuggest').addEventListener('click', e => { const b = e.target.closest('.sugg'); if (b) send(b.textContent, false); });
 
   /* ── Voice: home is voice only; the mic is always one press away ──────────
-     Press to talk (the menu-bar mic, clicking Pip on home, Ctrl + Space, or holding Space on
-     home) or Always listening for “Hey Pip”. Uses the browser's speech recognition when it can;
-     where it can't (most embedded previews), Pip hears sample requests and says so. */
+     Press to talk (the menu-bar mic, clicking Six on home, Ctrl + Space, or holding Space on
+     home) or Always listening for “Hey Six”. Uses the browser's speech recognition when it can;
+     where it can't (most embedded previews), Six hears sample requests and says so. */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const voice = { mode: 'ptt', on: false, real: !!SR, rec: null, wakeRec: null, pending: null, demoN: 0, timers: [], cap: null, dictate: false, hold: false };
   const VOICE_SAMPLES = ['Open Files and Terminal side by side', 'What’s on my calendar today?', 'Add a clock widget', 'Turn on night light', 'Open display settings', 'Make a widget that counts down to my exam on 14 December', 'Switch to the velvet wallpaper'];
@@ -6951,7 +6961,34 @@ Current prototype state: ${stateSummary()}`;
     wave.hidden = false;
   }
   function waveOff() { clearInterval(waveTimer); waveTalk = false; wave.hidden = true; }
-  // captions go under Pip on home; when windows cover home, into the small voice panel at the top right
+  // captions go under Six on home; when windows cover home, into the small voice panel at the top right
+  // the intro (greeting, examples, how to talk) comes up on request and goes when you close it,
+  // press Escape or start talking; the greeting types itself like a terminal line
+  function showIntro(fromAsk) {
+    const h = $('#home');
+    if (h.classList.contains('intro')) { if (fromAsk) glint($('#vTry')); return; }
+    h.classList.add('intro'); $('#vTry').classList.remove('away'); markDirty();
+    typeOut($('#greet'), $('#greet').textContent, { cps: 40, cursor: true });
+    [$('#greetSub'), $('#vTry'), $('#center > .hint')].forEach((el, i) => el && textIn(el, 260 + i * 120));
+  }
+  function hideIntro() {
+    const h = $('#home');
+    if (!h.classList.contains('intro') || h.classList.contains('intro-pinned')) return;
+    const els = [$('#greet'), $('#greetSub'), $('#vTry'), $('#center > .hint')];
+    Promise.all(els.map(el => settled(anim(el, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-4px)' }], { duration: 220, easing: EASE.in, fill: 'forwards' })))).then(() => {
+      if (h.classList.contains('intro-pinned')) return;
+      h.classList.remove('intro'); els.forEach(el => el.getAnimations().forEach(a => a.cancel())); markDirty();
+    });
+  }
+  $('#introX').addEventListener('click', hideIntro);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#home').classList.contains('intro') && !topVisible()) hideIntro(); });
+  // a reply on home can be put away at once: speech stops, an open review is cancelled
+  $('#vcapX').addEventListener('click', () => {
+    try { speechSynthesis.cancel(); } catch {}
+    if (voice.on) stopListening();
+    if (voice.pending) voice.pending.no();
+    capDone(0);
+  });
   function capHost() {
     clearTimeout(capT);
     if (!topVisible() && $('#lock').hidden) {
@@ -6960,7 +6997,7 @@ Current prototype state: ${stateSummary()}`;
       if (was) surfaceIn($('#vcap'));
       return { you: $('#vYou'), pip: $('#vPip'), card: $('#vCard') };
     }
-    islVoice(true);   // over your windows, Pip talks from the notch
+    islVoice(true);   // over your windows, Six talks from the notch
     return { you: $('#islYou'), pip: $('#islPip'), card: $('#islCard') };
   }
   function capDone(ms = 9000) {
@@ -6984,17 +7021,17 @@ Current prototype state: ${stateSummary()}`;
   function syncVoiceUI() {
     const mic = $('#mbMic');
     mic.dataset.mode = voice.mode; mic.setAttribute('aria-pressed', voice.on && !voice.dictate);
-    mic.setAttribute('aria-label', voice.on ? 'Stop listening' : voice.mode === 'wake' ? 'Talk to Pip. Listening for “Hey Pip”' : 'Talk to Pip (Ctrl Space)');
-    mic.title = voice.on ? 'Pip is listening · click to stop' : voice.mode === 'wake' ? 'Listening for “Hey Pip” on this device' : 'Talk to Pip · Ctrl Space';
-    $('#vMode').innerHTML = (voice.mode === 'wake' ? `${icon('mic', 'i sm')}Listening for “Hey Pip” on this device` : `${icon('mic', 'i sm')}Press to talk · <kbd>Ctrl</kbd> <kbd>Space</kbd>`) + (voice.real ? '' : ' · <span class="demo">demo voice</span>');
-    $('#greetSub').textContent = voice.mode === 'wake' ? 'Say “Hey Pip”, then what you need.' : 'Press the mic in the menu bar, or hold Space, and talk.';
+    mic.setAttribute('aria-label', voice.on ? 'Stop listening' : voice.mode === 'wake' ? 'Talk to Six. Listening for “Hey Six”' : 'Talk to Six (Ctrl Space)');
+    mic.title = voice.on ? 'Six is listening · click to stop' : voice.mode === 'wake' ? 'Listening for “Hey Six” on this device' : 'Talk to Six · Ctrl Space';
+    $('#vMode').innerHTML = (voice.mode === 'wake' ? `${icon('mic', 'i sm')}Listening for “Hey Six” on this device` : `${icon('mic', 'i sm')}Press to talk · <kbd>Ctrl</kbd> <kbd>Space</kbd>`) + (voice.real ? '' : ' · <span class="demo">demo voice</span>');
+    $('#greetSub').textContent = voice.mode === 'wake' ? 'Say “Hey Six”, then what you need.' : 'Press the mic in the menu bar, or hold Space, and talk.';
     setTile(qsTile('wake'), voice.mode === 'wake');
     $('#micBtn').setAttribute('aria-pressed', voice.on && voice.dictate);
   }
   function setVoiceMode(m) {
     voice.mode = m; syncVoiceUI();
     if (!wins.settings.el.hidden) syncSettings();
-    if (m === 'wake') { startWake(); toast(voice.real ? 'Pip listens for “Hey Pip” now. The microphone stays on this device until you say it.' : 'Pip listens for “Hey Pip” now. This preview can’t use the microphone, so click Pip or a “Try saying” example to talk.', null); }
+    if (m === 'wake') { startWake(); toast(voice.real ? 'Six listens for “Hey Six” now. The microphone stays on this device until you say it.' : 'Six listens for “Hey Six” now. This preview can’t use the microphone, so click Six or a “Try saying” example to talk.', null); }
     else stopWake();
   }
   const newRec = continuous => { const r = new SR(); r.lang = navigator.language || 'en-US'; r.interimResults = true; r.continuous = continuous; return r; };
@@ -7002,7 +7039,7 @@ Current prototype state: ${stateSummary()}`;
   function realFail(err) {
     if (!voice.real) return;
     voice.real = false; syncVoiceUI();
-    toast(`This preview can’t use your microphone${err ? ` (${err})` : ''}, so Pip hears sample requests instead.`, null);
+    toast(`This preview can’t use your microphone${err ? ` (${err})` : ''}, so Six hears sample requests instead.`, null);
   }
   const clearDemo = () => { voice.timers.forEach(clearTimeout); voice.timers = []; };
   function startListening(opts = {}) {
@@ -7011,7 +7048,8 @@ Current prototype state: ${stateSummary()}`;
     stopWake();
     voice.on = true; voice.dictate = !!opts.dictate; voice.hold = !!opts.hold; syncVoiceUI(); setPip('listening');
     voice.cap = voice.dictate ? null : capHost();
-    if (voice.cap) { voice.cap.you.textContent = 'Listening…'; voice.cap.pip.textContent = ''; }
+    if (!voice.dictate) hideIntro();
+    if (voice.cap) { voice.cap.you.textContent = 'Listening…'; typeOut(voice.cap.pip, ''); }
     waveOn();
     if (voice.real && !opts.phrase) {
       try {
@@ -7026,7 +7064,7 @@ Current prototype state: ${stateSummary()}`;
       } catch (err) { voice.rec = null; realFail(err.message); demoListen(opts); }
     } else demoListen(opts);
   }
-  // the demo types a sample request (or the example you clicked) as if Pip were hearing it
+  // the demo types a sample request (or the example you clicked) as if Six were hearing it
   function demoListen(opts) {
     clearDemo();
     const phrase = opts.phrase || VOICE_SAMPLES[voice.demoN++ % VOICE_SAMPLES.length];
@@ -7058,14 +7096,14 @@ Current prototype state: ${stateSummary()}`;
     if (was && voice.cap && /^Listening/.test(voice.cap.you.textContent)) { voice.cap.you.textContent = ''; capDone(500); }
     if (voice.mode === 'wake') setTimeout(startWake, 300);
   }
-  // Always listening: a continuous recogniser waits for “Hey Pip”; what follows is the request
+  // Always listening: a continuous recogniser waits for “Hey Six”; what follows is the request
   function startWake() {
     if (voice.mode !== 'wake' || voice.on || voice.wakeRec || !voice.real) return;
     try {
       const r = voice.wakeRec = newRec(true);
       r.onresult = e => {
         const res = e.results[e.results.length - 1]; if (!res.isFinal) return;
-        const m = res[0].transcript.trim().match(/\b(?:hey|hi|okay|ok)[ ,]+pip\b[ ,.!]*(.*)$/i); if (!m) return;
+        const m = res[0].transcript.trim().match(/\b(?:hey|hi|okay|ok)[ ,]+(?:six|pip)\b[ ,.!]*(.*)$/i); if (!m) return;
         stopWake();
         if (m[1]) { voice.cap = capHost(); voice.on = true; heard(m[1], true); } else startListening();
       };
@@ -7090,18 +7128,18 @@ Current prototype state: ${stateSummary()}`;
   });
   document.addEventListener('keyup', e => { if (e.code === 'Space' && voice.hold && voice.rec) { try { voice.rec.stop(); } catch {} } });
   syncVoiceUI();
-  /* ── The Pip notch ─────────────────────────────────────────────────
-     A black notch at the top centre of the screen, where Pip lives while you work in other apps.
+  /* ── The Six notch ─────────────────────────────────────────────────
+     A black notch at the top centre of the screen, where Six lives while you work in other apps.
      It grows to show what's going on and shrinks back when it's done, on springs:
-       hidden    nothing for Pip to show: there's no notch at all
-       compact   it slides down from the top edge with what Pip is doing: its task and a progress
+       hidden    nothing for Six to show: there's no notch at all
+       compact   it slides down from the top edge with what Six is doing: its task and a progress
                  ring, a task that just finished, or a request it's working on
-       expanded  it drops down into a panel: talking to Pip over your windows (what you said,
-                 Pip's reply, review cards), or the details of an activity when you click it */
-  const isl = { el: $('#island'), mode: 'hidden', voice: false, open: false, doneAt: 0, doneSeen: false, waveT: 0 };
+       expanded  it drops down into a panel: talking to Six over your windows (what you said,
+                 Six's reply, review cards), or the details of an activity when you click it */
+  const isl = { el: $('#island'), mode: 'hidden', voice: false, open: false, doneAt: 0, doneSeen: false, waveT: 0, live: '' };
   const islMusic = () => { const m = W_KINDS.music.el; return m && widgetEls.includes(m) && m._playing?.() ? m : null; };
-  // the notch only appears while Pip is doing something: a task in progress (or just finished),
-  // a request it's working on, or a conversation over your windows. Otherwise it isn't there.
+  // Six only shows itself while it is doing something: a task in progress (or just finished),
+  // a request it's working on, or a conversation over your windows. Otherwise it's just the orb.
   const PIP_BUSY = ['thinking', 'working', 'searching', 'asking', 'waiting', 'retrying', 'compacting', 'speaking'];
   function islActivity() {
     if (taskLive && taskPct < 100) return 'task';
@@ -7109,27 +7147,40 @@ Current prototype state: ${stateSummary()}`;
     if (!isl.voice && PIP_BUSY.includes(pipNow)) return 'pip';
     return null;
   }
-  function islSize() {
-    const el = isl.el, m = isl.mode;
-    if (m === 'expanded') {
-      el.style.width = Math.min(440, desk.clientWidth - 16) + 'px';
-      el.style.height = Math.max(64, Math.ceil($('.isl-body', el).scrollHeight)) + 'px';
-    } else { el.style.width = (m === 'compact' ? (desk.clientWidth < 720 ? 184 : Math.min(340, desk.clientWidth - 16)) : 150) + 'px'; el.style.height = ''; }
+  // the panel hangs under the orb, as far right as the screen allows, and opens from the orb
+  function islPlace() {
+    const el = isl.el, b = $('#pipBtn').getBoundingClientRect(), d = desk.getBoundingClientRect();
+    const w = Math.min(420, d.width - 16), cx = (b.width > 40 ? b.right - 14 : b.left + b.width / 2) - d.left;   // the orb sits at the capsule's right end
+    const x = Math.max(8, Math.min(d.width - w - 8, b.right - d.left + 6 - w));
+    el.style.setProperty('--isl-w', w + 'px'); el.style.setProperty('--isl-x', x + 'px'); el.style.setProperty('--ox', (cx - x) + 'px');
+    if (isl.mode === 'expanded') el.style.setProperty('--isl-hh', Math.max(64, Math.ceil($('.isl-body', el).scrollHeight)) + 'px');
+  }
+  const islSize = islPlace;
+  // the capsule's words type in like a terminal line; a number that ticks over just changes
+  function liveText(t) {
+    const el = $('.six-live-txt'), was = isl.live; isl.live = t;
+    if (t === was) return;
+    if (was && t.replace(/\d+/g, '#') === was.replace(/\d+/g, '#')) { el.textContent = t; return; }
+    typeOut(el, t, { cps: 70, cursor: false });
+  }
+  function islNeck(back) {
+    // from the orb (the capsule's right end) down to where the panel opens
+    const b = $('#pipBtn').getBoundingClientRect(), A = [b.width > 40 ? b.right - 14 : b.left + b.width / 2, b.bottom - 3];
+    const r = isl.el.getBoundingClientRect(), ox = parseFloat(isl.el.style.getPropertyValue('--ox')) || r.width - 20;
+    budNeck(A, 9, () => [r.left + Math.min(r.width - 18, Math.max(18, ox)), r.top + 10], 16, back ? 300 : 460, back, 'ink');
   }
   function islSync() {
     if (!isl.el) return;
     if (taskPct >= 100 && !isl.doneSeen) { isl.doneSeen = true; isl.doneAt = Date.now(); setTimeout(islSync, 6100); }
-    const act = islActivity(), el = isl.el, mus = islMusic();
-    // compact: one thing on the left, its state on the right
-    const L = $('.isl-l', el), R = $('.isl-r', el);
-    el.dataset.act = act || '';
-    if (act === 'music') { const tr = mus._track(); $('.isl-art', el).style.background = tr.g; $('.isl-txt', el).textContent = tr.t; }
-    else if (act === 'task') { $('.isl-txt', el).textContent = `Slides · ${taskPct} %`; $('.isl-ring circle:last-child', el).style.strokeDashoffset = (100 - taskPct).toFixed(1); }
-    else if (act === 'done') $('.isl-txt', el).textContent = 'Slides are ready';
-    else if (act === 'pip') $('.isl-txt', el).textContent = pipLabel || PIP_STATES[pipNow][0];
-    L.dataset.show = act === 'music' ? 'art' : 'orb';
-    // expanded: the conversation, and the details of what's running
-    $('#islHeadState').textContent = isl.voice ? (voice.on ? 'Listening' : PIP_STATES[pipNow][0]) : act === 'music' ? 'Now playing' : act ? 'Pip' : 'Pip';
+    const act = islActivity(), el = isl.el, mus = islMusic(), pb = $('#pipBtn');
+    // the capsule in the menu bar: what Six is doing, next to its orb
+    const live = isl.voice ? (voice.on ? 'Listening' : (PIP_STATES[pipNow] || ['Ready'])[0]) : act === 'task' ? `Slides · ${taskPct} %` : act === 'done' ? 'Slides are ready' : act === 'pip' ? (pipLabel || PIP_STATES[pipNow][0]) : '';
+    pb.dataset.act = isl.voice ? 'pip' : act || '';
+    pb.toggleAttribute('data-live', !!live);
+    if (live) liveText(live); else isl.live = '';
+    if (act === 'task') $('.isl-ring circle:last-child', pb).style.strokeDashoffset = (100 - taskPct).toFixed(1);
+    // the panel: the conversation, and the details of what's running
+    $('#islHeadState').textContent = isl.voice ? (voice.on ? 'Listening' : PIP_STATES[pipNow][0]) : act === 'music' ? 'Now playing' : 'Six';
     $('#islHeadLabel').textContent = isl.voice ? (voice.on ? 'on this device' : pipLabel || '') : '';
     $('.isl-voice', el).hidden = !isl.voice;
     $('.isl-task', el).hidden = !(taskLive && taskPct < 100) && act !== 'done';
@@ -7139,37 +7190,41 @@ Current prototype state: ${stateSummary()}`;
     }
     $('.isl-music', el).hidden = !mus;
     if (mus) { const tr = mus._track(); $('#islTrack').textContent = tr.t; $('#islArtist').textContent = tr.a; $('.isl-music .isl-art', el).style.background = tr.g; }
-    const mode = isl.voice || (isl.open && act) ? 'expanded' : act ? 'compact' : 'hidden';
+    const mode = isl.voice || (isl.open && act) ? 'expanded' : 'hidden';
     if (!act && !isl.voice) isl.open = false;
+    islPlace();
     if (mode !== isl.mode) {
+      const was = isl.mode;
       isl.mode = mode; el.dataset.mode = mode;
-      $('#islHit').setAttribute('aria-label', mode === 'compact' ? 'Show what Pip is doing' : 'Pip');
-      isl.el.setAttribute('aria-hidden', mode === 'hidden');
+      el.setAttribute('aria-hidden', mode === 'hidden');
+      pb.setAttribute('aria-expanded', mode === 'expanded');
+      islPlace();
+      if (mode === 'expanded') requestAnimationFrame(() => islNeck(false));
+      else if (was === 'expanded') islNeck(true);
     }
-    islSize();
+    pb.setAttribute('aria-label', live ? `Six: ${live}. ${mode === 'expanded' ? 'Close the panel' : act ? 'Show what Six is doing' : 'Open Six'}` : 'Six: Ready. Open Six');
   }
   islandHook = islSync;
   function islVoice(on) {
     isl.voice = on;
-    if (on) { $('#islYou').textContent = ''; $('#islPip').textContent = ''; $('#islCard').replaceChildren(); }
+    if (on) { $('#islYou').textContent = ''; typeOut($('#islPip'), ''); $('#islCard').replaceChildren(); }
     islSync();
   }
   // the conversation's text grows the panel as it arrives
-  if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (isl.mode === 'expanded') islSize(); }).observe($('.isl-body', isl.el));
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (isl.mode === 'expanded') islPlace(); }).observe($('.isl-body', isl.el));
+  addEventListener('resize', () => islPlace());
   // a voice wave while you talk
   setInterval(() => {
     const on = isl.voice && voice.on;
     $$('#islWave i').forEach((b, i) => { b.style.transform = `scaleY(${on ? (waveTalk ? 0.25 + Math.random() * 0.75 : 0.18 + 0.08 * Math.sin(Date.now() / 200 + i)) : 0.12})`; });
   }, 90);
   setInterval(islSync, 1000);   // task progress and music
-  $('#islHit').addEventListener('click', () => {
-    if (isl.mode === 'compact') { isl.open = true; islSync(); }
-  });
-  $('#islClose').addEventListener('click', () => { if (isl.voice) { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); isl.voice = false; } isl.open = false; islSync(); });
+  $('#islClose').addEventListener('click', () => { if (isl.voice) { if (voice.on) stopListening(); if (voice.pending) voice.pending.no(); try { speechSynthesis.cancel(); } catch {} isl.voice = false; } isl.open = false; islSync(); });
   $('#islTaskStop').addEventListener('click', () => $('#taskStop').click());
+  $('#islOpenApp').addEventListener('click', () => { isl.open = false; if (!isl.voice) islSync(); openPip(); });
   $('#islPlay').addEventListener('click', () => { const m = islMusic(); if (m) $('[data-m="play"]', m).click(); islSync(); });
   $('#islNext').addEventListener('click', () => { const m = islMusic(); if (m) $('[data-m="next"]', m).click(); islSync(); });
-  document.addEventListener('pointerdown', e => { if (isl.open && !isl.voice && !e.target.closest('#island, #wMenu, #wSub')) { isl.open = false; islSync(); } });
+  document.addEventListener('pointerdown', e => { if (isl.open && !isl.voice && !e.target.closest('#island, #pipBtn, #wMenu, #wSub')) { isl.open = false; islSync(); } });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && isl.mode === 'expanded' && !voice.on) $('#islClose').click(); });
   islSync();
 
@@ -7182,7 +7237,12 @@ Current prototype state: ${stateSummary()}`;
     if (w.el.hidden || !w.el.classList.contains('active')) openApp('pip');
     setTimeout(() => { shown.el.scrollTop = shown.el.scrollHeight; ask.focus(); }, 60);
   }
-  $('#pipBtn').addEventListener('click', () => openPip());
+  // the orb opens the Six app; while Six is busy, the capsule opens (and closes) its panel instead
+  $('#pipBtn').addEventListener('click', () => {
+    if (isl.mode === 'expanded') { $('#islClose').click(); return; }
+    if (islActivity()) { isl.open = true; islSync(); return; }
+    openPip();
+  });
   function askPip(q) { openPip(); send(q, false); }
 
   /* ── Clock ──────────────────────────────────── */
