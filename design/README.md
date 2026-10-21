@@ -56,6 +56,13 @@ one setting away), with Settings, Files, Software and Calendar as the system app
 | `brand/*.svg` | The mark, app icons (regular and small), wordmark and lockups, text outlined |
 | `brand/source/` | The originals: the *SIX OS Logo* PDF and the boot-screen mockup (`Boot.dc.html`, a design-tool export; it needs its runtime to play, so use `boot.html`) |
 
+## Design skill
+
+| File | What it is |
+|---|---|
+| [`../.claude/skills/tension/`](../.claude/skills/tension/SKILL.md) | **Tension**, a Claude skill that carries this design language to any project: satin, holding on and snapping, water, terminal type, the assistant. Claude Code uses it automatically in this repo |
+| [`skills/tension.skill`](skills/tension.skill) | The same skill packaged for Claude apps: open it and choose **Save skill** to use it in every chat |
+
 ## Tokens
 
 | File | Use |

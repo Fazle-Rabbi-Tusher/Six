@@ -352,6 +352,12 @@
 :root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
 :root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
 /* follow the system theme too: dark values apply under prefers-color-scheme: dark unless the person chose light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-accent="iris"] { --c-accent: #9c8fff; --c-accent-hover: #b0a6ff; --c-accent-soft: #2e2a55; --c-focus: #b0a6ff; --c-text-on-accent: #111214; }
+  :root:not([data-theme="light"])[data-accent="tide"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111214; }
+  :root:not([data-theme="light"])[data-accent="moss"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
+  :root:not([data-theme="light"])[data-accent="sun"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
+}
 
 /* ── Accessibility modes (user settings, not decoration) ── */
 :root[data-transparency="reduced"] {

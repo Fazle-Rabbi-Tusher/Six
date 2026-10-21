@@ -2,6 +2,15 @@
 
 Pick every element's material by role. If you can't say which it is, that's a design bug.
 
+> **Current mapping (read this first).** SIX moved its controls from clay to satin, and some
+> older passages below still mention clay for buttons. What holds now:
+> - **Satin** = every control (buttons, switches, sliders, segmented controls, round toggles) and
+>   everything that floats (menus, popovers, toasts, bars). In code: `satin.css` (`.t-panel`,
+>   `.t-btn`, …). Where the text says `.glass`, read `.t-panel`.
+> - **Paper** = window content, lists, forms (`.t-paper`).
+> - **Water** = the home/dashboard cards. The guide calls this "plasma clay"; it is water, not clay.
+> - **Clay** = app icons, folder icons and gallery tiles only.
+
 ## The four materials
 Every pixel belongs to one of four materials:
 
@@ -23,7 +32,7 @@ so you see colour and light rather than what's behind it, with a bevel: a 1 px r
 along the top, a soft shade inside the bottom edge, a glint where the key light catches it, and a
 soft drop shadow. Graphite in light, silver in dark; anything that is **on** takes the accent.
 
-| Part | Panels (`.glass`) | Controls |
+| Part | Panels (`.t-panel`; `.glass` in the SIX prototype) | Controls |
 |---|---|---|
 | Fill | `--sat-a` → `--sat-b`, top to bottom, 94–95 % opaque, 16 px blur behind | `--ctl-a` → `--ctl-b`, opaque, with a radial glint at the top left (`--ctl-glint`) |
 | Edge | `--sat-rim` 1 px, `--sat-lip` along the top, `--sat-shade` inside the bottom | `--ctl-rim`, `--ctl-lip`, `--ctl-shade`, and a drop shadow (`--ctl-drop`) |

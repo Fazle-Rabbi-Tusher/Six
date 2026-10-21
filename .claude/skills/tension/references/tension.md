@@ -47,10 +47,15 @@ implementation is in `design/prototype/index.html` (search for `TENSION`, `budNe
 | **Draw back** | The reverse: a menu closing into the point it came from, a panel returning into its icon | `budNeck(A, ra, () => B, rb, ms, { back: true })` with the thing shrinking toward A (ease-in, ~0.6 × the opening time) |
 | **Tendril** | The assistant acting on something far away (opening, snapping, closing a window) | A thick tube from the assistant's orb down to the target's title bar: grows tip-first (320 ms), holds while the target moves (760 ms), thins in the middle and parts (300 ms), each half draws back (260 ms). One at a time; queue the rest |
 | **Fuse** | Two related things side by side that are both on (Wi-Fi and Bluetooth radios) | A bridge of the same "on" material grows between them; turning one off thins and snaps it with a recoil on both tiles |
-| **Membrane** | A pull on something constrained (a slider thumb dragged off its track) | The track bends after it as a gaussian bump (`y = bend · e^(−((x−xt)/w)²)`, w ≈ 20 % of the track); past 100 px it lets go and springs flat. The value only follows along the track |
+| **Membrane** | A pull on something constrained (a slider thumb dragged off its track) | `membrane(range)`: the track bends after it as a gaussian bump (`y = bend · e^(−((x−xt)/w)²)`, w ≈ 20 % of the track); past 100 px it lets go and springs flat. The value only follows along the track |
+| **Flow** | A selection moving between options (segmented controls, tabs) | `segFlow(seg)`: one drop of selection stretches across to the new option (to the far edge at 40 % of the way) and settles there in 560 ms, instead of jumping |
 | **Hairline** | A relationship too thin for a neck (an answer and its question in a chat) | A 1 px line while it's the latest exchange; when a newer one arrives, it parts in the middle and each half draws back |
 | **Lean** | A pressed control being pulled | Held and pulled, a button leans rigidly toward the pointer (translate, never skew), up to ~6 px; past 100 px it lets go with a recoil and the press is cancelled |
 
 Draw necks on one fixed SVG overlay (`layer()`), and fill them with the material they join
 (`.neck` → `--c-surface`, `.neck.accent` → the accent, `.neck.ink` → near-black for the
-assistant). Under Reduce motion none of these animate: the change just happens.
+assistant). **A neck must read against what's behind it.** Over paper (a list, a settings page) a
+neck the colour of paper disappears: when a row is pulled, lift it into satin (`.t-lifted`) and
+give its neck the well colour (`cls: 'neck well'`), so the row reads as picked up and the neck
+as the stretch between it and its slot. `tether()` draws the neck under the pulled element, so
+its content is never covered. Under Reduce motion none of these animate: the change just happens.

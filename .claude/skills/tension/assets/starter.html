@@ -22,7 +22,7 @@ body { padding: 0 16px 48px; }
 main { max-width: 960px; margin: 0 auto; display: grid; gap: 32px; }
 h1 { font: 400 clamp(32px, 6vw, 56px)/1.05 var(--font-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .lead { margin: 8px 0 0; max-width: 62ch; color: var(--c-text-2); }
-.overline { font: var(--text-overline); letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-text-3); }
+.overline { font: var(--text-overline); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-text-3); }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .t-paper { padding: 20px; display: grid; gap: 14px; align-content: start; }
 .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -52,7 +52,7 @@ h1 { font: 400 clamp(32px, 6vw, 56px)/1.05 var(--font-display); margin: 0; lette
   <div>
     <span class="overline">Design language</span>
     <h1>Things that belong together hold on.</h1>
-    <p class="lead">Pull the card out of its slot: it follows reluctantly, joined by a neck that thins as you pull, and lets go at 150 px. Let go sooner and it springs back. Right-click anywhere for a menu that buds from the pointer.</p>
+    <p class="lead">Pull the card out of its slot: it follows reluctantly, joined by a neck that thins as you pull, and lets go at 150 px. Let go sooner and it springs back. Right-click anywhere for a menu that buds from the pointer. Pull the volume thumb off its track, and switch the theme.</p>
   </div>
 
   <div class="grid">
@@ -91,7 +91,7 @@ h1 { font: 400 clamp(32px, 6vw, 56px)/1.05 var(--font-display); margin: 0; lette
 
 <script src="tension.js"></script>
 <script>
-const { tether, budNeck, typeOut, springTo, EASE } = window.Tension;
+const { tether, budNeck, typeOut, springTo, segFlow, membrane, EASE } = window.Tension;
 const $ = s => document.querySelector(s);
 
 // theme: auto follows the system; tokens.css switches on data-theme
@@ -105,6 +105,8 @@ $('#theme').addEventListener('click', e => {
 document.querySelectorAll('.t-round').forEach(b => b.addEventListener('click', () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true')));
 const vol = $('#vol'), fill = () => vol.style.setProperty('--pf', vol.value / vol.max);
 vol.addEventListener('input', fill); fill();
+membrane(vol);                 // pull the thumb up or down off the track
+segFlow($('#theme'));           // the selection flows from option to option
 
 // the card holds on to its slot; past 150 px it is free, and dropped it lands back on a recoil
 const card = $('#card'), note = $('#cardNote');

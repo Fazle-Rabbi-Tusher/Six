@@ -82,7 +82,9 @@ version.
 - **Springs, not wobble.** A release settles with one recoil under 4 %; nothing jiggles on its own.
 - **One tether per thing**; budding goes at most two levels deep (menu → submenu).
 - **Necks are made of what they join**: a menu's surface, a tile's accent, the assistant's black.
-  Draw them on one overlay above everything so they can cross between layers.
+  Draw them on one overlay above everything so they can cross between layers, but under the
+  thing being pulled. A neck must read against its background: over paper, lift the pulled row
+  into satin (`.t-lifted`) and use the well colour (`neck well`).
 - **Every stretch has a plain alternative** (a button, a menu item, a shortcut).
 - **Text never sits on raw refraction or wallpaper**; satin and water fills keep 4.5:1.
 - **Never**: ads or upsells in system UI, "Are you sure?" for something undoable (offer Undo),
@@ -115,8 +117,10 @@ little dry, and names every action it took.
 - `assets/tokens.css` — the source-of-truth tokens (light, dark, accents, satin, tension, motion,
   accessibility modes). Import first.
 - `assets/satin.css` — satin components built on the tokens (`.t-panel`, `.t-btn`, `.t-btn.on`,
-  `.t-round`, `.t-switch`, `.t-slider`, `.t-seg`, `.t-menu`, `.t-cap` window buttons).
-- `assets/tension.js` — dependency-free plain script exposing `window.Tension`: `tubeD`, `neckD`,
-  `neckWidth`, `layer`, `path`, `budNeck`, `tether`, `springTo`, `springEase`, `EASE`, `typeOut`,
-  `calm`, `TENSION`. Works from `file://` and with `require()`.
+  `.t-round`, `.t-switch`, `.t-slider`, `.t-seg`, `.t-menu`, `.t-cap` window buttons, `.t-paper`,
+  `.t-lifted`, neck colours, the typing cursor). Caps eyebrows track +0.08em.
+- `assets/tension.js` — dependency-free plain script exposing `window.Tension`: `tether`,
+  `budNeck`, `membrane` (slider), `segFlow` (segmented control), `typeOut`, `springTo`,
+  `springEase`, `EASE`, `tubeD`, `neckD`, `neckWidth`, `layer`, `path`, `calm`, `TENSION`.
+  Works from `file://` and with `require()`.
 - `assets/starter.html` — a runnable page using all three. Open it in a browser to see the feel.

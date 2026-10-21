@@ -171,7 +171,71 @@ function typeOut(el, text, { cps = 55, cursor = true, onDone } = {}) {
   }, 30);
 }
 
-const Tension = { TENSION, calm, springEase, EASE, springTo, tubeD, neckD, neckWidth, layer, path, budNeck, tether, typeOut };
+/* ── Segmented controls: the selection flows ──────────────────────────── */
+// Give a segmented control (buttons with aria-pressed) one raised drop of selection that stretches
+// across to the new option and settles there, instead of jumping. Style the drop with .t-seg-blob.
+function segFlow(seg) {
+  const blob = document.createElement('i'); blob.className = 't-seg-blob'; blob.setAttribute('aria-hidden', 'true');
+  seg.prepend(blob); seg.classList.add('has-blob');
+  let L0, W0;
+  const place = instant => {
+    const on = seg.querySelector(':scope > button[aria-pressed="true"]'); if (!on) { blob.style.opacity = '0'; return; }
+    const L = on.offsetLeft, W = on.offsetWidth;
+    Object.assign(blob.style, { opacity: '1', left: L + 'px', width: W + 'px', top: on.offsetTop + 'px', height: on.offsetHeight + 'px' });
+    if (!instant && L0 !== undefined && (L0 !== L || W0 !== W) && !calm()) {
+      const lo = Math.min(L0, L), hi = Math.max(L0 + W0, L + W);
+      blob.animate([{ left: L0 + 'px', width: W0 + 'px' }, { left: (L > L0 ? L0 + 4 : lo) + 'px', width: (hi - lo - 4) + 'px', offset: 0.4 }, { left: L + 'px', width: W + 'px' }], { duration: 560, easing: 'cubic-bezier(0.3, 0, 0.2, 1)' });
+    }
+    L0 = L; W0 = W;
+  };
+  new MutationObserver(() => place(false)).observe(seg, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => place(true)).observe(seg);
+  place(true);
+  return place;
+}
+
+/* ── Sliders: the membrane ────────────────────────────────────────────── */
+// Pull a range input's thumb off its track and the track bends after it like a membrane (a
+// gaussian bump under the thumb); past `snap` px it lets go and springs flat. The value only ever
+// follows along the track. Needs .t-slider styling; draws an SVG inside the slider's parent.
+function membrane(range, { snap = TENSION.snapSm, max = 34 } = {}) {
+  const SV = 'http://www.w3.org/2000/svg';
+  let m = null;
+  const draw = () => {
+    const b = range.getBoundingClientRect(), rh = (parseFloat(getComputedStyle(range).getPropertyValue('--rh')) || 26), rr = rh / 2;
+    const lo = +range.min || 0, hi = range.max === '' ? 100 : +range.max, fr = (+range.value - lo) / ((hi - lo) || 1);
+    const x0 = b.left + rr, x1 = b.right - rr, xt = x0 + (x1 - x0) * fr, cy = b.top + b.height / 2, w = Math.max(36, b.width * 0.2);
+    const yAt = x => cy + m.bend * Math.exp(-(((x - xt) / w) ** 2));
+    const line = (a, z) => { const pts = [], hw = []; for (let i = 0; i <= 28; i++) { const x = a + (z - a) * i / 28; pts.push([x, yAt(x)]); hw.push(rr); } return tubeD(pts, hw); };
+    if (!m.svg) {
+      const host = range.parentElement; if (getComputedStyle(host).position === 'static') { host.style.position = 'relative'; m.posd = true; }
+      m.svg = document.createElementNS(SV, 'svg'); m.svg.setAttribute('aria-hidden', 'true');
+      Object.assign(m.svg.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', overflow: 'visible', pointerEvents: 'none' });
+      m.p = ['t-mem-off', 't-mem-on', 't-mem-thumb'].map(c => { const q = document.createElementNS(SV, 'path'); q.setAttribute('class', c); m.svg.append(q); return q; });
+      host.append(m.svg); range.classList.add('bending');
+    }
+    const hb = m.svg.getBoundingClientRect(); m.svg.setAttribute('viewBox', `${hb.left} ${hb.top} ${hb.width || 1} ${hb.height || 1}`);
+    m.p[0].setAttribute('d', line(x0, x1)); m.p[1].setAttribute('d', line(x0, Math.max(x0 + 0.5, xt)));
+    m.p[2].setAttribute('d', `M${xt - rr},${yAt(xt)}a${rr},${rr} 0 1,0 ${2 * rr},0a${rr},${rr} 0 1,0 ${-2 * rr},0Z`);
+  };
+  const end = () => {
+    const mm = m; if (!mm) return; m = null;
+    if (!mm.svg) return;
+    springTo(mm.bend, 0, 560, v => { mm.bend = v; m = mm; draw(); m = null; }, () => { mm.svg.remove(); if (mm.posd) range.parentElement.style.position = ''; range.classList.remove('bending'); });
+  };
+  range.addEventListener('pointerdown', e => { if (e.button === 0 && !calm()) m = { y0: e.clientY, bend: 0 }; });
+  addEventListener('pointermove', e => {
+    if (!m) return;
+    const dy = e.clientY - m.y0;
+    if (Math.abs(dy) > snap) { end(); return; }   // past the snap: the membrane lets go
+    m.bend = Math.sign(dy) * Math.min(Math.abs(dy) * 0.6, max) * Math.max(0, 1 - Math.abs(dy) / snap * 0.6) ** TENSION.falloff;
+    if (Math.abs(m.bend) > 0.5 || m.svg) draw();
+  });
+  range.addEventListener('input', () => { if (m && m.svg) draw(); });
+  addEventListener('pointerup', end, true); addEventListener('pointercancel', end, true);
+}
+
+const Tension = { segFlow, membrane, TENSION, calm, springEase, EASE, springTo, tubeD, neckD, neckWidth, layer, path, budNeck, tether, typeOut };
 global.Tension = Tension;
 if (typeof module !== 'undefined' && module.exports) module.exports = Tension;
 })(typeof window !== 'undefined' ? window : globalThis);
