@@ -1,0 +1,402 @@
+/*
+ * SIX OS — Design tokens ("Soft Matter" design language)
+ * Source of truth for CSS-based shells, web apps and prototypes.
+ * tokens.json mirrors these values for native toolkits (Qt/QML, GTK, Flutter…).
+ *
+ * Theme switching:
+ *   - default follows the OS preference (prefers-color-scheme)
+ *   - [data-theme="light" | "dark"] on <html> forces a theme
+ *   - [data-transparency="reduced"], [data-motion="reduced"], [data-contrast="more"],
+ *     [data-density="touch"] are user accessibility modes (see guide/11-accessibility.md)
+ */
+
+:root {
+  /* ── Typography ───────────────────────────────────────── */
+  /* Terminal type. Every face is monospaced and open-licensed (OFL): JetBrains Mono for all
+     reading text, Share Tech Mono for display sizes and the wordmark, VT323 for the boot screen
+     only. Scripts the mono faces lack fall back to Noto. */
+  --font-ui: "JetBrains Mono", "Noto Sans Mono", "Noto Sans Bengali", "Noto Sans Arabic",
+    "Noto Sans Devanagari", "Noto Sans CJK SC", ui-monospace, monospace;
+  --font-display: "Share Tech Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", "Noto Sans Mono", ui-monospace, monospace;
+  --font-pixel: "VT323", "JetBrains Mono", monospace;
+  --tracking-ui: -0.02em; /* monospace runs wide; body text tracks in slightly */
+
+  /* ── Brand ─────────────────────────────────────────────── */
+  /* The SIX mark and boot screen. Brand colour is for the logo, app icon and boot, not for UI
+     accents (those follow the user's accent setting). */
+  --brand: #1b3cff;
+  --brand-hi: #2b50ff;
+  --brand-lo: #1230d6;
+  --brand-ink: #c9d3ff;
+  --brand-night: #0a1440;
+
+  /* size / line-height pairs — desktop base is 14px (scaled by the user's Text size setting) */
+  --text-overline: 600 11px/16px var(--font-ui);
+  --text-caption: 500 12px/16px var(--font-ui);
+  --text-body-sm: 400 13px/18px var(--font-ui);
+  --text-body: 400 14px/20px var(--font-ui);
+  --text-body-lg: 400 16px/24px var(--font-ui);
+  --text-label: 600 13px/16px var(--font-ui);
+  --text-title-sm: 600 16px/22px var(--font-ui);
+  --text-title: 600 20px/28px var(--font-ui);
+  --text-title-lg: 400 28px/34px var(--font-display);
+  --text-headline: 400 40px/46px var(--font-display);
+  --text-display: 400 56px/60px var(--font-display);
+  --text-hero: 400 96px/96px var(--font-display); /* lock-screen clock only */
+
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-caps: 0.08em;
+
+  /* ── Spacing (4px grid) ───────────────────────────────── */
+  --space-0: 0;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 48px;
+  --space-11: 64px;
+
+  /* ── Radii ─────────────────────────────────────────────── */
+  --radius-xs: 6px;   /* chips, checkboxes */
+  --radius-sm: 8px;   /* inputs, list rows */
+  --radius-md: 12px;  /* buttons, menus, popovers */
+  --radius-lg: 16px;  /* windows, cards */
+  --radius-xl: 22px;  /* clay tiles, quick-settings tiles */
+  --radius-2xl: 28px; /* dock, Six Search, large sheets */
+  --radius-full: 999px;
+  --radius-icon: 24%; /* app-icon squircle, relative to icon size */
+
+  /* ── Sizes ─────────────────────────────────────────────── */
+  --control-sm: 28px;
+  --control-md: 36px;
+  --control-lg: 44px;
+  --target-min: 32px;     /* pointer mode (WCAG 2.2 AA requires 24) */
+  --titlebar-h: 44px;
+  --menubar-h: 32px;
+  --dock-h: 68px;
+  --dock-icon: 48px;
+  --dock-magnify: 1.5;     /* max icon scale under the pointer */
+  --dock-gap: 8px;         /* dock floats 8px above the screen edge */
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --appicon-radius: 23%;
+  --appicon-grid: 56px;
+  --measure: 68ch;        /* max line length for reading */
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --dur-instant: 80ms;    /* press feedback */
+  --dur-fast: 140ms;      /* hover, toggles */
+  --dur-base: 240ms;      /* popovers, menus */
+  --dur-slow: 420ms;      /* windows, stacks, overview */
+  --dur-ambient: 9s;      /* wallpaper / orb idle loops */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* precise: a spring with damping ratio 0.86, overshoots 0.5 %; reads as a machined part, not a ball */
+  --ease-spring: linear(0, 0.021, 0.075, 0.148, 0.232, 0.321, 0.408, 0.492, 0.57, 0.64, 0.703, 0.757,
+    0.805, 0.845, 0.879, 0.907, 0.93, 0.948, 0.963, 0.974, 0.983, 0.99, 0.995, 0.999, 1.002, 1.003, 1.004,
+    1.005, 1.005, 1.005, 1.005, 1.004, 1.004, 1.003, 1);
+  /* detent: damping ratio 0.68, overshoots 5 %; only where something lands (a card into a stack) */
+  --ease-detent: linear(0, 0.034, 0.118, 0.232, 0.359, 0.487, 0.607, 0.714, 0.806, 0.882, 0.941, 0.985,
+    1.017, 1.037, 1.049, 1.054, 1.054, 1.05, 1.045, 1.038, 1.031, 1.024, 1.018, 1.013, 1.008, 1.005, 1.002,
+    1, 0.998, 0.998, 0.997, 0.997, 0.997, 0.997, 1);
+  /* recoil: damping ratio 0.72, overshoots 3.7 %; tension only: a control, a neck or a card let go */
+  --ease-recoil: linear(0, 0.026, 0.093, 0.185, 0.29, 0.399, 0.506, 0.606, 0.695, 0.774, 0.84,
+    0.895, 0.939, 0.973, 0.998, 1.016, 1.028, 1.035, 1.038, 1.038, 1.037, 1.034, 1.03, 1.026,
+    1.022, 1.018, 1.014, 1.011, 1.008, 1.005, 1.003, 1.002, 1.001, 1, 0.999, 0.999, 0.999, 0.999,
+    0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 1);
+  /* membrane: damping ratio 0.64; what leans after a pull (cards behind, the Bin bulging) */
+  --ease-membrane: linear(0, 0.027, 0.095, 0.191, 0.302, 0.418, 0.533, 0.641, 0.738, 0.822, 0.893,
+    0.95, 0.995, 1.027, 1.05, 1.064, 1.071, 1.073, 1.07, 1.065, 1.058, 1.05, 1.041, 1.033, 1.025,
+    1.018, 1.012, 1.007, 1.003, 1, 0.998, 0.996, 0.995, 0.995, 0.995, 0.995, 0.995, 0.996, 0.996,
+    0.997, 0.998, 0.998, 0.999, 0.999, 1);
+
+  /* ── Tension (guide/08-motion.md › Tension) ─────────────── */
+  --tension-snap: 150px;     /* a card leaves its stack */
+  --tension-snap-sm: 100px;  /* files, buttons, chips, toggles, slider membranes */
+  --neck-max: 0.7;           /* × the short side: the thickest a neck gets */
+  --neck-min: 8px;           /* below this the surface can't hold; a hairline thread takes over */
+  --neck-falloff: 0.8;       /* thickness × (1 − d / snap) ^ falloff */
+  --merge-gap: 40px;         /* plasma clay's fusing distance */
+
+  /* ── Color: light ─────────────────────────────────────── */
+  color-scheme: light;
+  --c-bg: #ebecee;            /* "Porcelain" — app background, desktop fallback */
+  --c-surface: #f9f9fa;       /* windows, cards */
+  --c-surface-2: #e2e3e6;     /* sunken wells, sidebars, inputs */
+  --c-surface-3: #d5d7db;     /* hovered rows, pressed wells */
+  --c-line: #cdd0d5;          /* hairlines, dividers */
+  --c-line-strong: #868a93;   /* input borders (3:1 non-text contrast) */
+  --c-text: #16171a;
+  --c-text-2: #43464d;
+  --c-text-3: #5a5e66;
+  --c-text-on-accent: #ffffff;
+
+  --c-accent: #34373e;        /* "Graphite" — the default; silver in dark. Colour comes from Six and the accent options */
+  --c-accent-hover: #1f2126;
+  --c-accent-soft: #dfe1e5;
+  --c-focus: #34373e;
+
+  --c-info: #066a75;          /* Tide */
+  --c-success: #1a6d47;       /* Moss */
+  --c-warning: #85540e;       /* Sun */
+  --c-danger: #b13a2a;        /* Ember */
+  --c-info-soft: #cdeef1;
+  --c-success-soft: #cfeedd;
+  --c-warning-soft: #fbeac6;
+  --c-danger-soft: #fbdcd5;
+
+  /* clay tile pastels (app icons, quick tiles, illustrations) — always with --c-text on top */
+  --clay-lilac: #d9d2ff;
+  --clay-mint: #c4eedb;
+  --clay-peach: #ffd8c9;
+  --clay-sky: #c7e6f7;
+  --clay-butter: #ffebb3;
+  --clay-rose: #ffd1e3;
+
+  /* plasma wallpaper moods */
+  --plasma-1: #7b6cff;
+  --plasma-2: #39c6d4;
+  --plasma-3: #ff8a6b;
+  --plasma-4: #f6c9ff;
+
+  /* plasma clay moods: deep, mid, vein, glint (dark theme values; light theme mixes toward white) */
+  --mood-matte-1: #060607; --mood-matte-2: #151517; --mood-matte-3: #d4d4d9; --mood-matte-4: #2a2a2e; /* default; light: #d4d4d8 → #f7f7f8 */
+  --mood-tidal-1: #05262c; --mood-tidal-2: #0e4c55; --mood-tidal-3: #5fd8cb; --mood-tidal-4: #7b6cff;
+  --mood-aurora-1: #17123f; --mood-aurora-2: #3a2f8f; --mood-aurora-3: #9ef0ff; --mood-aurora-4: #ff8a6b;
+  --mood-ember-1: #240c18; --mood-ember-2: #6b2236; --mood-ember-3: #ffb86b; --mood-ember-4: #ff6b4a;
+
+  /* Six, the assistant (from the SIX assistant character canvas) */
+  --pip-line: #9a3c1c;        /* Bloom's ember, as text */
+  --pip-deep: #e0402a;
+  --pip-glow: #ff9a3c;
+  --pip-core: #ffd9b0;
+
+  /* ── Materials ────────────────────────────────────────── */
+  /* Clay: things you touch */
+  --clay-highlight: rgba(255, 255, 255, 0.75);
+  --clay-shade: rgba(20, 22, 28, 0.14);
+  --clay-drop: rgba(20, 22, 28, 0.2);
+  --clay-1: 0 2px 4px -1px var(--clay-drop), inset 0 1px 0 var(--clay-highlight),
+    inset 0 -2px 3px var(--clay-shade);
+  --clay-2: 0 8px 16px -6px var(--clay-drop), inset 2px 3px 4px var(--clay-highlight),
+    inset -3px -4px 8px var(--clay-shade);
+  --clay-3: 0 16px 28px -10px var(--clay-drop), inset 3px 4px 6px var(--clay-highlight),
+    inset -5px -6px 12px var(--clay-shade);
+  --clay-pressed: inset 2px 3px 6px var(--clay-shade), inset -1px -1px 2px var(--clay-highlight);
+
+  /* Plasma glass: things that float over content */
+  --glass-fill: rgba(249, 249, 250, 0.78);
+  --glass-fill-strong: rgba(249, 249, 250, 0.9);
+  --glass-blur: 28px;
+  --glass-saturate: 1.6;
+  --glass-rim: rgba(255, 255, 255, 0.7);
+  --glass-edge: rgba(20, 22, 28, 0.12);
+
+  /* Elevation shadows for flat surfaces (windows, cards) */
+  --shadow-1: 0 1px 2px rgba(16, 18, 22, 0.08), 0 1px 1px rgba(16, 18, 22, 0.04);
+  --shadow-2: 0 4px 12px -2px rgba(16, 18, 22, 0.12), 0 2px 4px rgba(16, 18, 22, 0.06);
+  --shadow-3: 0 18px 40px -12px rgba(16, 18, 22, 0.28), 0 4px 10px rgba(16, 18, 22, 0.08);
+  --shadow-4: 0 32px 64px -16px rgba(16, 18, 22, 0.38), 0 8px 18px rgba(16, 18, 22, 0.12);
+
+  /* Plasma clay: home surfaces drawn by one shader (guide/05-materials.md §5) */
+  --liquid-blend: 40px;      /* smooth-union distance; viscosity presets 54 / 40 / 32 / off */
+  --liquid-bevel: 24px;
+  --liquid-fill: 0.78;       /* surface fill floor over the refracted wallpaper */
+  --liquid-frost: 0.55;
+  --liquid-refraction: 1;
+  --liquid-max-surfaces: 12;
+  --liquid-grid: 24px;
+
+  --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--c-focus);
+  --scrim: rgba(12, 12, 14, 0.4);
+}
+
+/* ── Color: dark (system preference, unless forced light) ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --pip-line: #ffa064;
+    --pip-deep: #e0402a;
+    --liquid-fill: 0.72;
+    --c-bg: #0c0c0e;
+    --c-surface: #18191c;
+    --c-surface-2: #222327;
+    --c-surface-3: #2d2f33;
+    --c-line: #303236;
+    --c-line-strong: #6b6e75;
+    --c-text: #f3f4f6;
+    --c-text-2: #bfc2c8;
+    --c-text-3: #979ba3;
+    --c-text-on-accent: #111214;
+    --c-accent: #d4d7dd;
+    --c-accent-hover: #e8eaee;
+    --c-accent-soft: #2c2e33;
+    --c-focus: #e8eaee;
+    --c-info: #4fd1dc;
+    --c-success: #5fd49a;
+    --c-warning: #f2b95a;
+    --c-danger: #ff8a78;
+    --c-info-soft: #113a3f;
+    --c-success-soft: #123a28;
+    --c-warning-soft: #3d2c0f;
+    --c-danger-soft: #45201b;
+    --clay-lilac: #3b3470;
+    --clay-mint: #1e4a3a;
+    --clay-peach: #5a3227;
+    --clay-sky: #1f4256;
+    --clay-butter: #54451b;
+    --clay-rose: #5a2840;
+    --clay-highlight: rgba(255, 255, 255, 0.14);
+    --clay-shade: rgba(0, 0, 0, 0.35);
+    --clay-drop: rgba(0, 0, 0, 0.5);
+    --glass-fill: rgba(24, 25, 28, 0.72);
+    --glass-fill-strong: rgba(24, 25, 28, 0.88);
+    --glass-rim: rgba(255, 255, 255, 0.12);
+    --glass-edge: rgba(0, 0, 0, 0.4);
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+    --shadow-3: 0 18px 40px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --pip-line: #ffa064;
+  --pip-deep: #e0402a;
+  --liquid-fill: 0.72;
+  --c-bg: #0c0c0e;
+  --c-surface: #18191c;
+  --c-surface-2: #222327;
+  --c-surface-3: #2d2f33;
+  --c-line: #303236;
+  --c-line-strong: #6b6e75;
+  --c-text: #f3f4f6;
+  --c-text-2: #bfc2c8;
+  --c-text-3: #979ba3;
+  --c-text-on-accent: #111214;
+  --c-accent: #d4d7dd;
+  --c-accent-hover: #e8eaee;
+  --c-accent-soft: #2c2e33;
+  --c-focus: #e8eaee;
+  --c-info: #4fd1dc;
+  --c-success: #5fd49a;
+  --c-warning: #f2b95a;
+  --c-danger: #ff8a78;
+  --c-info-soft: #113a3f;
+  --c-success-soft: #123a28;
+  --c-warning-soft: #3d2c0f;
+  --c-danger-soft: #45201b;
+  --clay-lilac: #3b3470;
+  --clay-mint: #1e4a3a;
+  --clay-peach: #5a3227;
+  --clay-sky: #1f4256;
+  --clay-butter: #54451b;
+  --clay-rose: #5a2840;
+  --clay-highlight: rgba(255, 255, 255, 0.14);
+  --clay-shade: rgba(0, 0, 0, 0.35);
+  --clay-drop: rgba(0, 0, 0, 0.5);
+  --glass-fill: rgba(24, 25, 28, 0.72);
+  --glass-fill-strong: rgba(24, 25, 28, 0.88);
+  --glass-rim: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(0, 0, 0, 0.4);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 18px 40px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-4: 0 32px 64px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* ── Satin: floating panels and every control (guide/05-materials.md §2) ── */
+:root {
+  --sat-a: rgba(252, 252, 253, 0.95); --sat-b: rgba(234, 235, 238, 0.94);
+  --sat-rim: rgba(16, 18, 22, 0.11); --sat-lip: rgba(255, 255, 255, 0.95); --sat-shade: rgba(16, 18, 22, 0.1); --sat-drop: rgba(16, 18, 22, 0.26);
+  --ctl-a: #ffffff; --ctl-b: #e5e7ea; --ctl-rim: rgba(16, 18, 22, 0.15); --ctl-lip: #ffffff; --ctl-shade: rgba(16, 18, 22, 0.13); --ctl-drop: rgba(16, 18, 22, 0.28); --ctl-glint: rgba(255, 255, 255, 0.9);
+  --trk-a: #d9dbdf; --trk-b: #e9eaed; --trk-shade: rgba(16, 18, 22, 0.18);
+  --on-a: color-mix(in srgb, var(--c-accent) 78%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 82%, #000); --on-glint: rgba(255, 255, 255, 0.35);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+    --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+    --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+    --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+    --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+  }
+}
+:root[data-theme="dark"] {
+  --sat-a: rgba(42, 44, 49, 0.94); --sat-b: rgba(21, 22, 25, 0.95);
+  --sat-rim: rgba(255, 255, 255, 0.13); --sat-lip: rgba(255, 255, 255, 0.2); --sat-shade: rgba(0, 0, 0, 0.5); --sat-drop: rgba(0, 0, 0, 0.62);
+  --ctl-a: #3a3c42; --ctl-b: #18191c; --ctl-rim: rgba(255, 255, 255, 0.22); --ctl-lip: rgba(255, 255, 255, 0.3); --ctl-shade: rgba(0, 0, 0, 0.55); --ctl-drop: rgba(0, 0, 0, 0.7); --ctl-glint: rgba(255, 255, 255, 0.55);
+  --trk-a: #111214; --trk-b: #1c1d21; --trk-shade: rgba(0, 0, 0, 0.6);
+  --on-a: color-mix(in srgb, var(--c-accent) 80%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 78%, #000); --on-glint: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Accent options (Settings › Appearance). Graphite is the default; each option keeps the same
+   contrast as Graphite (checked by check_contrast.py) and borrows its hue from a semantic colour. ── */
+:root[data-accent="iris"] { --c-accent: #5340d9; --c-accent-hover: #4733c9; --c-accent-soft: #e3dfff; --c-focus: #5340d9; --c-text-on-accent: #ffffff; }
+:root[data-accent="tide"] { --c-accent: #066a75; --c-accent-hover: #05555e; --c-accent-soft: #cdeef1; --c-focus: #066a75; --c-text-on-accent: #ffffff; }
+:root[data-accent="moss"] { --c-accent: #1a6d47; --c-accent-hover: #145a3a; --c-accent-soft: #cfeedd; --c-focus: #1a6d47; --c-text-on-accent: #ffffff; }
+:root[data-accent="sun"] { --c-accent: #85540e; --c-accent-hover: #6e450b; --c-accent-soft: #fbeac6; --c-focus: #85540e; --c-text-on-accent: #ffffff; }
+:root[data-accent="iris"][data-theme="dark"] { --c-accent: #9c8fff; --c-accent-hover: #b0a6ff; --c-accent-soft: #2e2a55; --c-focus: #b0a6ff; --c-text-on-accent: #111214; }
+:root[data-accent="tide"][data-theme="dark"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111214; }
+:root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
+:root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
+/* follow the system theme too: dark values apply under prefers-color-scheme: dark unless the person chose light */
+
+/* ── Accessibility modes (user settings, not decoration) ── */
+:root[data-transparency="reduced"] {
+  --liquid-fill: 1;
+  --liquid-refraction: 0;
+  --glass-fill: var(--c-surface);
+  --glass-fill-strong: var(--c-surface);
+  --glass-blur: 0px;
+  --glass-saturate: 1;
+}
+
+:root[data-contrast="more"] {
+  --c-text-2: var(--c-text);
+  --c-text-3: var(--c-text-2);
+  --c-line: var(--c-line-strong);
+  --glass-fill: var(--c-surface);
+  --glass-blur: 0px;
+}
+
+:root[data-motion="reduced"] {
+  --dur-fast: 0ms;
+  --dur-base: 120ms; /* cross-fades only, no movement */
+  --dur-slow: 160ms;
+  --ease-spring: var(--ease-standard);
+  --ease-recoil: var(--ease-standard);
+  --ease-membrane: var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) {
+    --dur-fast: 0ms;
+    --dur-base: 120ms;
+    --dur-slow: 160ms;
+    --ease-spring: var(--ease-standard);
+    --ease-recoil: var(--ease-standard);
+    --ease-membrane: var(--ease-standard);
+  }
+}
+
+:root[data-density="touch"] {
+  --target-min: 44px;
+  --control-sm: 36px;
+  --control-md: 44px;
+  --control-lg: 52px;
+  --titlebar-h: 52px;
+  --menubar-h: 40px;
+  --dock-h: 76px;
+}

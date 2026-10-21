@@ -1,0 +1,93 @@
+/* Satin: the material of every control and of things that float (menus, popovers, toasts, bars).
+   Less glass: 94–95 % opaque, with a bevel (rim, lip, inner shade), a glint, a soft drop.
+   Graphite in light, silver in dark; anything on takes the accent. Import after tokens.css. */
+
+:root {
+  --fill-a: color-mix(in srgb, var(--on-a) 46%, var(--trk-b));
+  --fill-b: color-mix(in srgb, var(--on-a) 38%, var(--trk-b));
+  --sat-panel: linear-gradient(180deg, var(--sat-a), var(--sat-b));
+  --sat-edge: inset 0 0 0 1px var(--sat-rim), inset 0 1px 0 var(--sat-lip), inset 0 -14px 22px -16px var(--sat-shade);
+  --ctl: radial-gradient(60% 46% at 30% 16%, var(--ctl-glint, rgba(255,255,255,.6)), transparent 72%), linear-gradient(180deg, var(--ctl-a), var(--ctl-b));
+  --ctl-edge: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--ctl-lip), inset 0 -3px 6px -2px var(--ctl-shade), 0 6px 14px -7px var(--ctl-drop), 0 1px 2px var(--ctl-drop);
+  --ctl-on: radial-gradient(60% 46% at 30% 16%, var(--on-glint), transparent 72%), linear-gradient(180deg, var(--on-a), var(--on-b));
+  --ctl-on-edge: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--on-glint), inset 0 -3px 6px -2px rgba(0, 0, 0, 0.3), 0 6px 14px -7px var(--ctl-drop);
+  --trk: linear-gradient(180deg, var(--trk-a), var(--trk-b));
+  --trk-edge: inset 0 0 0 1px var(--ctl-rim), inset 0 2px 5px var(--trk-shade);
+}
+
+/* type: terminal. Body tracks in a little; ligatures off so -> and != read as typed */
+body { font: var(--text-body); letter-spacing: -0.02em; font-variant-ligatures: none; color: var(--c-text); background: var(--c-bg); -webkit-font-smoothing: antialiased; }
+
+/* panels: menus, popovers, toasts, bars */
+.t-panel {
+  background: var(--sat-panel); border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15); backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: var(--sat-edge), 0 22px 44px -18px var(--sat-drop), 0 2px 6px -2px var(--sat-drop);
+}
+:root[data-transparency="reduced"] .t-panel, :root[data-contrast="more"] .t-panel { background: var(--c-surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* buttons: satin pills; primary (or anything on) takes the accent */
+.t-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--control-md, 36px); padding: 0 16px;
+  border: 0; border-radius: 999px; font: var(--text-label); letter-spacing: inherit; color: var(--c-text);
+  background: var(--ctl); box-shadow: var(--ctl-edge); cursor: pointer;
+  transition: filter var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast);
+}
+.t-btn:hover { filter: brightness(1.05); }
+.t-btn:active { box-shadow: var(--trk-edge); }                 /* a press sinks into the surface */
+.t-btn.primary, .t-btn.on, .t-btn[aria-pressed="true"] { background: var(--ctl-on); color: var(--c-text-on-accent); box-shadow: var(--ctl-on-edge); }
+.t-btn:focus-visible, .t-round:focus-visible, .t-seg button:focus-visible, .t-cap:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+
+/* round toggles (Control Center style): a satin button with its name and state under it */
+.t-round { width: 54px; height: 54px; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--ctl); box-shadow: var(--ctl-edge); color: var(--c-text); cursor: pointer; }
+.t-round[aria-pressed="true"] { background: var(--ctl-on); color: var(--c-text-on-accent); box-shadow: var(--ctl-on-edge); }
+.t-round:active { transform: scale(0.96); }
+
+/* switches: a satin well, a glossy bead */
+.t-switch { appearance: none; -webkit-appearance: none; position: relative; width: 46px; height: 26px; margin: 0; border-radius: 999px; background: var(--trk); box-shadow: var(--trk-edge); cursor: pointer; flex: none; transition: background var(--dur-fast); }
+.t-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--ctl); box-shadow: inset 0 0 0 1px var(--ctl-rim), 0 2px 5px -1px var(--ctl-drop); transition: transform var(--dur-base) var(--ease-spring); }
+.t-switch:checked { background: var(--ctl-on); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 2px 5px rgba(0, 0, 0, 0.25); }
+.t-switch:checked::after { transform: translateX(20px); }
+.t-switch:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 3px; }
+
+/* sliders: a sunken pill, a fill of the accent's light whose round end is the thumb.
+   Set --pf (0–1) from JS on input so the fill follows: el.style.setProperty('--pf', value / max) */
+.t-slider { -webkit-appearance: none; appearance: none; --rh: 26px; width: 100%; height: var(--rh); background: transparent; margin: 0; cursor: pointer; }
+.t-slider::-webkit-slider-runnable-track { height: var(--rh); border-radius: 999px; box-shadow: var(--trk-edge);
+  --fw: calc(var(--rh) / 2 + (100% - var(--rh)) * var(--pf, 0.5));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 52%) 0 0 / var(--fw) 100% no-repeat,
+    linear-gradient(90deg, var(--fill-a), var(--fill-b)) 0 0 / var(--fw) 100% no-repeat, var(--trk); }
+.t-slider::-webkit-slider-thumb { -webkit-appearance: none; width: var(--rh); height: var(--rh); border-radius: 50%; background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 52%), var(--fill-b); box-shadow: 4px 0 10px -6px var(--ctl-drop); }
+.t-slider::-moz-range-track { height: var(--rh); border-radius: 999px; background: var(--trk); box-shadow: var(--trk-edge); }
+.t-slider::-moz-range-progress { height: var(--rh); border-radius: 999px; background: linear-gradient(90deg, var(--fill-a), var(--fill-b)); }
+.t-slider::-moz-range-thumb { width: var(--rh); height: var(--rh); border: 0; border-radius: 50%; background: var(--fill-b); }
+.t-slider:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 4px; border-radius: 999px; }
+
+/* segmented controls: a satin well with one raised drop of selection */
+.t-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--trk); box-shadow: var(--trk-edge); }
+.t-seg button { border: 0; background: transparent; height: 30px; padding: 0 14px; border-radius: 999px; font: var(--text-label); letter-spacing: inherit; color: var(--c-text-2); cursor: pointer; }
+.t-seg button[aria-pressed="true"] { background: var(--ctl); color: var(--c-text); box-shadow: inset 0 0 0 1px var(--ctl-rim), inset 0 1px 0 var(--ctl-lip), 0 3px 8px -4px var(--ctl-drop); }
+:root[data-contrast="more"] .t-seg, :root[data-contrast="more"] .t-switch { box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+
+/* menus: a satin panel; the hovered row takes the accent */
+.t-menu { position: fixed; min-width: 220px; max-width: 340px; padding: 6px; z-index: 2000; }
+.t-menu button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; height: 30px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: var(--c-text); font: var(--text-body); letter-spacing: inherit; text-align: left; cursor: pointer; }
+.t-menu button:hover, .t-menu button:focus-visible { background: var(--ctl-on); color: var(--c-text-on-accent); outline: none; }
+.t-menu hr { border: 0; height: 1px; background: var(--c-line); margin: 5px 8px; }
+
+/* window buttons: 28 px satin circles, on the right; close turns red on hover */
+.t-cap { width: 28px; height: 28px; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--ctl); box-shadow: var(--ctl-edge); color: var(--c-text-2); cursor: pointer; }
+.t-cap.close:hover { background: var(--c-danger); color: #fff; }
+
+/* paper: where work happens. Flat, opaque, separated by whitespace and hairlines, never shadows */
+.t-paper { background: var(--c-surface); border-radius: var(--radius-lg); }
+
+/* necks and tendrils on the overlay: made of what they join */
+.neck { fill: var(--c-surface); }
+.neck.accent { fill: var(--c-accent); }
+.neck.ink { fill: #0b0b0d; }
+
+/* terminal typing: a block cursor rides the end of the line, then blinks out */
+.typing::after { content: ""; display: inline-block; width: 0.55em; height: 1.05em; margin-left: 0.12em; vertical-align: -0.16em; background: currentColor; animation: t-cursor 1.06s steps(1) infinite; }
+@keyframes t-cursor { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .typing::after { animation: none; } }
