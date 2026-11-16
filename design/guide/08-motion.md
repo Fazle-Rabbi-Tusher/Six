@@ -3,6 +3,44 @@
 Motion in SIX answers two questions: **where did this come from** and **what is happening now**.
 If an animation answers neither, cut it.
 
+## Two designs, two feels (today)
+
+**Sculpted** (the default) moves like a machined instrument: short, ease-out, no overshoot.
+**Soft Matter** moves on springs with a little give, and its surfaces hold on to each other
+(tension). Both use the same spring engine, the same role names and the same reduced-motion rule;
+only the numbers differ.
+
+| | Soft Matter | Sculpted |
+|---|---|---|
+| `--dur-instant` (press) | 80 ms | 120 ms |
+| `--dur-fast` (hover, toggles) | 140 ms | 120 ms |
+| `--dur-base` (menus, panels, Control Center) | 240 ms | 180 ms |
+| `--dur-slow` (windows, stacks) | 420 ms | 240 ms |
+| Curves | the four below, and `linear()` springs | one ease-out, `cubic-bezier(0.22, 0.61, 0.36, 1)`, for every role |
+| Tension (necks, buds, stretch) | yes | no: panels slide 6 px and fade |
+
+**Spring roles.** Things that move position or size (windows, cards, the dock's icons) are driven
+by springs, each named for its role. The values (response in seconds, damping ratio) are the
+product's:
+
+| Role | Soft Matter | Sculpted | Used for |
+|---|---|---|---|
+| press | 0.24 s, 0.60 | 0.12 s, 1.0 | a control being pressed |
+| quick | 0.30 s, 0.86 | 0.12 s, 1.0 | small moves, hover growth |
+| base | 0.40 s, 0.86 | 0.18 s, 1.0 | panels, cards moving |
+| slow | 0.46 s, 0.82 | 0.24 s, 1.0 | windows opening, maximising |
+| throw | 0.42 s, 0.84 | 0.24 s, 1.0 | a window or card flicked |
+| detent | 0.40 s, 0.68 | 0.18 s, 1.0 | a card landing in a stack |
+| recoil | 0.37 s, 0.72 | 0.18 s, 1.0 | something let go (tension) |
+| membrane | 0.35 s, 0.64 | 0.18 s, 1.0 | what leans after a pull |
+
+A damping ratio of 1.0 is critically damped: it arrives without overshoot. **Reduced motion**
+(SIX's setting, or the system's) makes hover and toggle changes instant, and panels and windows
+cross-fade in 120 and 160 ms with no travel, scale or spring, in both designs. Only `transform`
+and `opacity` are animated; a window's size and place are never animated through layout.
+
+The rest of this chapter describes the Soft Matter feel, where it began.
+
 ## The feel: precise, continuous, lit
 
 SIX's motion takes its feel from the **Ferrari Luce** interior, designed by LoveFrom (Jony Ive and
@@ -17,7 +55,7 @@ yellow spreads through the interface. SIX borrows the feel, not the look or the 
 | Controls that move like machined parts: they stop exactly where they should | **Precise springs.** Everything settles with a damping ratio of 0.86, overshooting by 0.5 %. Nothing wobbles or bounces like rubber |
 | Physical switches with a click at the end of their travel | **One detent.** Only something that *lands* (a card dropped into a stack) uses the detent spring: it lifts a hair, overshoots 5 % and clicks into place |
 | Two display planes give real depth; needles move with the wheel | **Continuity.** Things move from where they are: a stack opens in place with its cards sliding out from behind the top card, a window grows out of its dock icon and folds back into it, a menu unfolds from what opened it, a page slides in the direction you travelled |
-| The start-up ceremony: colour spreads through the interface | **Light as feedback.** A band of light crosses a card when it lands or is added; unlocking sends a ring of accent light out from the password field; Six's words arrive with a short focus pull, like a display waking |
+| The start-up ceremony: colour spreads through the interface | **Light as feedback.** A band of light crosses a card when it lands or is added; unlocking sends a ring of accent light out from the password field; SIX's words arrive with a short focus pull, like a display waking |
 | Glass and aluminium, little decoration | **Restraint.** One thing moves big at a time; no confetti, no shaking, no rubber-ball bounces anywhere in the system |
 | (SIX's own) Things that hold on to each other | **Tension.** Things that belong together stay joined by a neck that thins as they part, and letting go is the commit. A release settles with one **recoil** under 4 %; nothing jiggles on its own. See [Tension](#tension) |
 
@@ -35,7 +73,7 @@ Sources: [Dezeen · Ferrari Luce interior by LoveFrom](https://www.dezeen.com/?p
 | `--dur-fast` | 140 ms | Hover, toggles, tooltips |
 | `--dur-base` | 240 ms | Menus, popovers, Control Center |
 | `--dur-slow` | 420 ms | Windows, stacks, Overview |
-| `--dur-ambient` | 9 s+ | Six idle, wallpaper drift |
+| `--dur-ambient` | 9 s+ | SIX idle, wallpaper drift |
 | `--ease-standard` | `cubic-bezier(.2,0,0,1)` | Colour and opacity changes |
 | `--ease-out` | `cubic-bezier(.16,1,.3,1)` | Text and light arriving; scrims |
 | `--ease-in` | `cubic-bezier(.55,0,.75,.2)` | Things leaving (and leaving is faster: about ×0.6) |
@@ -53,7 +91,7 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 
 | Moment | Motion |
 |---|---|
-| Start and restart | The boot screen: the mark's eyes pop open, its hex band draws around them, SIX OS types out and glitches once, a terminal loader fills, then the screen fades to the desktop and the ripple plays from the centre (about 6 s; any key skips; timeline in [18](18-brand.md#the-boot-screen)) |
+| Start and restart | (October design, not built: SIX's boot is a quiet dark screen, [18](18-brand.md#boot).) The mark's eyes pop open, its hex band draws around them, SIX types out and glitches once, a terminal loader fills, then the screen fades to the desktop and the ripple plays from the centre (about 6 s; any key skips; timeline in [18](18-brand.md#the-boot-screen)) |
 | Open app | The window grows out of its dock icon: it starts at the icon's size and place, fades up over the first 30 %, and settles on the precise spring (600 ms). The icon lifts once, 12 px, no second bounce |
 | Minimise | The window folds back into its dock icon (460 ms, ease-in-out) |
 | Close | A short fade to 97 % (200 ms, ease-in). Leaving is quicker than arriving |
@@ -65,19 +103,19 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 | Stack: choose a card in the open stack | One motion: the chosen card travels to the top of the stack while the others tuck in behind it; nothing plays twice |
 | Widget added | It slides up into its column on the card spring and light crosses it |
 | Pages (Settings, Files) | The new page slides 18 px in from the side you travelled toward; back and up come from the left |
-| Six in the menu bar | The orb grows into a black capsule to its left on the detent spring (560 ms) and types what Six is doing; the panel drips out of the orb: a black neck buds from it (460 ms) while the panel opens as a circle spreading from the orb (640 ms, detent), contents 170 ms later; closing draws it back up into the orb (360 ms, ease-in). See [09](09-shell.md#six-in-the-menu-bar) |
+| SIX in the menu bar | The orb grows into a black capsule to its left on the detent spring (560 ms) and types what SIX is doing; the panel drips out of the orb: a black neck buds from it (460 ms) while the panel opens as a circle spreading from the orb (640 ms, detent), contents 170 ms later; closing draws it back up into the orb (360 ms, ease-in). See [09](09-shell.md#six-in-the-menu-bar) |
 | Floating a widget | It lifts off home on a detent and catches the light; it follows the pointer exactly when dragged and settles on a detent when dropped |
 | Right-click menu | Scales up from where you clicked (from below, for dock menus) on the precise spring (360 ms); rows fade in 12 ms apart; submenus open after 140 ms of hover |
-| Six's caption | Rise 10 px and scale from 97 %; Six's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
+| SIX's caption | Rise 10 px and scale from 97 %; SIX's reply arrives with a 6 px focus pull (blur to sharp), then fades away 9 s later |
 | Chat messages | Rise 10 px as they arrive; your own also grow from 98 % |
 | Review card, widget preview | Rise into place under the reply |
-| Six changes state | The dotted orb crossfades from the old look into the new one over 420 ms; Bloom and Halo instead ease their colour, speed and light into the new state over about 0.5 s. The orb never jumps |
-| Six's personality | Bloom, Halo and Ripple turn toward the pointer (0.35 s lag) and lean in when it comes close; they glance at a field you type into; while idle Six blinks (a 0.2 s squash) every 4.5–10 s; a poke squashes it; dragged or flung it stretches the way it moves. It hops on Complete (520 ms, landing with a squash), shakes its head on Failed (700 ms), nods when it asks (900 ms) and hops hello when it appears. After 40 s with no input it gets drowsy (dims, breathes slower, looks down) and wakes with a small hop. All off under Reduce motion |
-| Moving Six | Six follows the pointer exactly, lifted 4 %; on release it lands on a detent; the greeting and examples slide to close (or open) the space in the middle (520 ms). *Move back to the middle* glides it home (620 ms); hiding it fades and shrinks it (220 ms, ease-in) |
+| SIX changes state | The dotted orb crossfades from the old look into the new one over 420 ms; Bloom and Halo instead ease their colour, speed and light into the new state over about 0.5 s. The orb never jumps |
+| SIX's personality | Bloom, Halo and Ripple turn toward the pointer (0.35 s lag) and lean in when it comes close; they glance at a field you type into; while idle SIX blinks (a 0.2 s squash) every 4.5–10 s; a poke squashes it; dragged or flung it stretches the way it moves. It hops on Complete (520 ms, landing with a squash), shakes its head on Failed (700 ms), nods when it asks (900 ms) and hops hello when it appears. After 40 s with no input it gets drowsy (dims, breathes slower, looks down) and wakes with a small hop. All off under Reduce motion |
+| Moving SIX | SIX follows the pointer exactly, lifted 4 %; on release it lands on a detent; the greeting and examples slide to close (or open) the space in the middle (520 ms). *Move back to the middle* glides it home (620 ms); hiding it fades and shrinks it (220 ms, ease-in) |
 | Unlock | A ring of accent light spreads from the password field across the screen while the lock lifts away (scales to 104 %, blurs and fades); light then crosses each widget in turn |
 | System update applied | The update screen fades and the same ring spreads from the centre |
 | Dock hover | Icons near the pointer grow up to 1.5× (160 px falloff). Each icon's size rides its own spring (damping ratio 0.87) toward the size the pointer asks for, so the dock flows as the pointer sweeps across and glides back when it leaves; off under Reduce motion. The label rises 5 px into place on the precise spring |
-| Menu / popover | Unfolds out of what opened it, like a blind drawn from its rail: it grows from its anchor's corner (scale 0.96 → 1, 10 px) while a clip opens away from the anchor, on the precise spring (520 ms); its rows follow 18 ms apart. Closing is a quick fade (150–180 ms, ease-in). Six Search, the widget gallery, toasts and context menus open the same way |
+| Menu / popover | Unfolds out of what opened it, like a blind drawn from its rail: it grows from its anchor's corner (scale 0.96 → 1, 10 px) while a clip opens away from the anchor, on the precise spring (520 ms); its rows follow 18 ms apart. Closing is a quick fade (150–180 ms, ease-in). SIX Search, the widget gallery, toasts and context menus open the same way |
 | Toggle | Thumb slides on the precise spring and stretches to 24 px mid-travel, like a drop; tile fill crossfades |
 | Segmented control | One drop of selection flows from the old option to the new: it reaches across both, then lets go of the old one (560 ms) |
 | Slider | The thumb stretches with the speed it is dragged at and relaxes when it stops |
@@ -103,7 +141,7 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 - Nothing interactive waits for an animation. Input is accepted immediately, mid-animation.
 - Interrupted animations retarget from their current position.
 - No more than one thing moves big at a time.
-- Loops (wallpaper, Six idle) pause when the window above them is maximized, on battery saver,
+- Loops (wallpaper, SIX idle) pause when the window above them is maximized, on battery saver,
   and when the screen is idle.
 - No flashes faster than 3 per second, ever (WCAG 2.3.1).
 
@@ -112,31 +150,31 @@ When *Reduce motion* is on (system setting or `prefers-reduced-motion`):
 - Movement and scaling become 120–160 ms **crossfades**; unfolding, folding, light sweeps, the
   unlock ring and focus pulls are skipped.
 - Springs become `--ease-standard`.
-- Wallpaper becomes a still image; Six changes state without a crossfade and draws a static shape;
+- Wallpaper becomes a still image; SIX changes state without a crossfade and draws a static shape;
   home cards jump to place.
 - Progress indicators still move (they carry information) but without decorative easing.
 - Tension keeps its rules (a pulled stack card still lets go only past 150 px) but necks are drawn
-  still or not at all, a snap is instant, and nothing squashes or recoils; Six neither blinks,
+  still or not at all, a snap is instant, and nothing squashes or recoils; SIX neither blinks,
   hops nor follows the pointer.
 
 ## Tension
 
 Where two things belong together, SIX shows the link, and the moment it breaks, as a surface that
-stretches. Six places use it.
+stretches. SIX places use it.
 
 | Where | What happens | Plain alternative |
 |---|---|---|
 | **Home · stacks** | The top card stays joined to its stack by a neck that thins as you pull; the cards behind lean after it on the membrane spring. Past 150 px it lets go and the cards behind recoil once: that release is the moment it leaves the stack. Let go sooner and it springs back, nothing changed | *Unstack*, *Show all*, Alt + arrows |
-| **Six · the menu-bar orb** | When Six opens, snaps or closes a window, or adds or removes a widget, Six's menu-bar orb (or its open panel) drops a black tendril to its title bar and holds on while it moves, so you see what Six is touching. Then it thins in the middle, lets go, and the halves draw back into the orb and into the window. One tendril at a time | The reply names every action |
+| **SIX · the menu-bar orb** | When SIX opens, snaps or closes a window, or adds or removes a widget, SIX's menu-bar orb (or its open panel) drops a black tendril to its title bar and holds on while it moves, so you see what SIX is touching. Then it thins in the middle, lets go, and the halves draw back into the orb and into the window. One tendril at a time | The reply names every action |
 | **Control Center** | Wi-Fi and Bluetooth are both radios, so when both are on a bridge of the same graphite (silver in dark) grows between them and they read as one body. Airplane mode turns both off: the bridge thins, snaps and the tiles recoil apart; turning it off brings back what was on. Pull a slider's thumb off its track and the track bends after it like a membrane; past 100 px it lets go and springs flat. The value only ever follows along the track | The tiles and sliders themselves |
-| **The Six app** | Your message buds off the send button and rises into place (revealed, never scaled). While Six works a drop leaves your message and swells into Six's answer, which hangs from the question by a hairline while it's the latest exchange. Ask again and the old hairline parts in the middle and each half draws back | — |
+| **The SIX app** | Your message buds off the send button and rises into place (revealed, never scaled). While SIX works a drop leaves your message and swells into SIX's answer, which hangs from the question by a hairline while it's the latest exchange. Ask again and the old hairline parts in the middle and each half draws back | — |
 | **Files and the Bin** | A dragged file stays tethered to its row and follows reluctantly until 100 px; let go sooner and it springs back. Past that it's free, and near the dock's Bin the Bin bulges toward it; drop it in and it's swallowed with a gulp (with Undo). *Put back* buds the file out of the Bin and carries it to its folder | Delete, the Move to Bin button, the row's menu |
 | **Menus** | A right-click menu opens 8 px from the pointer and buds out of that point, joined to it until it settles; a submenu buds from its row. Choosing an item draws the menu back into the point it came from | Shift + F10, the keyboard |
 
 **Rules**
 
 1. **Tension means a real relationship.** A neck only joins things that belong together (a card and
-   its stack, Six and what it's changing, an answer and its question). Nothing stretches for decoration.
+   its stack, SIX and what it's changing, an answer and its question). Nothing stretches for decoration.
 2. **Necks thin with distance, then snap.** Thickness × (1 − d / snap) ^ 0.8; at the snap distance
    it lets go. The snap is the commit: before it, letting go cancels.
 3. **Content never stretches.** Text, icons and images stay rigid; only surfaces bend. Buttons lean,

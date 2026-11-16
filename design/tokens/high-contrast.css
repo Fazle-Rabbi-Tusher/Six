@@ -1,0 +1,260 @@
+/*
+ * SIX: High contrast tokens (Settings > Accessibility > High contrast).
+ *
+ * Copied from the product on 2026-11-16: custom properties only. Pure black and white with one
+ * strong accent. Body text is held to 7:1 and large text and glyphs to 4.5:1 on every surface, in
+ * both designs, light and dark. It is set as <html data-hc="on"> and always includes More contrast
+ * (data-contrast="more": solid surfaces, 1.5 px lines). Loads after tokens.css and sculpted.css.
+ */
+/* ── Light ─────────────────────────────────────────────────────────────── */
+:root[data-hc="on"],
+:root[data-hc="on"][data-design="sculpted"][data-sculpted-accent] {
+  color-scheme: light;
+  --c-bg: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #f2f2f2;
+  --c-surface-3: #e0e0e0;
+  --c-line: #000000;
+  --c-line-strong: #000000;
+  --c-text: #000000;
+  --c-text-2: #000000;
+  --c-text-3: #1a1a1a;
+  --c-text-on-accent: #ffffff;
+  --c-accent: #0b2f8a;
+  --c-accent-hover: #061d5e;
+  --c-accent-soft: #dfe7ff;
+  --c-focus: #0b2f8a;
+  --c-info: #004f59;
+  --c-success: #064d2a;
+  --c-warning: #5e3600;
+  --c-danger: #7d150a;
+  --c-info-soft: #d6f1f4;
+  --c-success-soft: #d6f3e3;
+  --c-warning-soft: #fbe9c7;
+  --c-danger-soft: #fbdcd5;
+  --pip-line: #0b2f8a;
+  --glass-fill: #ffffff;
+  --glass-fill-strong: #ffffff;
+  --glass-blur: 0px;
+  --glass-saturate: 1;
+  --scrim: rgba(0, 0, 0, 0.6);
+}
+:root[data-hc="on"][data-design="sculpted"][data-sculpted-accent] {
+  --sc-ground: #ffffff;
+  --sc-surface: #ffffff;
+  --sc-inset: #f2f2f2;
+  --sc-inset-2: #e0e0e0;
+  --sc-field: #ffffff;
+  --sc-bar: #ffffff;
+  --sc-text: #000000;
+  --sc-text-2: #000000;
+  --sc-text-3: #1a1a1a;
+  --sc-line: #000000;
+  --sc-line-strong: #000000;
+  --sc-ctl-a: #ffffff;
+  --sc-ctl-b: #f2f2f2;
+  --sc-on-a: #cfdcff;
+  --sc-on-b: #b4c6ff;
+  --sc-on-text: #000000;
+  --sc-on-accent: #ffffff;
+  --sc-pan-a: #ffffff;
+  --sc-pan-b: #f2f2f2;
+  --sc-trk-a: #d8d8d8;
+  --sc-trk-b: #ececec;
+  --sc-knob-a: #ffffff;
+  --sc-knob-b: #c8c8c8;
+  --sc-switch-a: #0a6b3a;
+  --sc-switch-b: #064d2a;
+  --sc-switch-ink: #064d2a;
+  --sc-accent: #0b2f8a;
+  --sc-signal: #0b2f8a;
+  --sc-soft: #dfe7ff;
+  --sc-ok: #064d2a;
+  --sc-ok-soft: #d6f3e3;
+  --sc-warn: #5e3600;
+  --sc-warn-soft: #fbe9c7;
+  --sc-bad: #7d150a;
+  --sc-bad-soft: #fbdcd5;
+  --sc-info: #004f59;
+  --sc-info-soft: #d6f1f4;
+  --sc-wall-a: #ffffff;
+  --sc-wall-b: #ffffff;
+  --sc-emboss: #f2f2f2;
+  --sc-ink: #000000;
+  --c-bg: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #f2f2f2;
+  --c-surface-3: #e0e0e0;
+  --c-line: #000000;
+  --c-line-strong: #000000;
+  --c-text: #000000;
+  --c-text-2: #000000;
+  --c-text-3: #1a1a1a;
+  --c-text-on-accent: #ffffff;
+  --c-accent: #0b2f8a;
+  --c-accent-hover: #0b2f8a;
+  --c-accent-soft: #dfe7ff;
+  --c-focus: #0b2f8a;
+  --c-info: #004f59;
+  --c-success: #064d2a;
+  --c-warning: #5e3600;
+  --c-danger: #7d150a;
+  --c-info-soft: #d6f1f4;
+  --c-success-soft: #d6f3e3;
+  --c-warning-soft: #fbe9c7;
+  --c-danger-soft: #fbdcd5;
+  --pip-line: #0b2f8a;
+  --glass-fill: #ffffff;
+}
+
+/* ── Dark ──────────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root[data-hc="on"]:not([data-theme="light"]),
+  :root[data-hc="on"][data-design="sculpted"][data-sculpted-accent]:not([data-theme="light"]) {
+    color-scheme: dark;
+    --c-bg: #000000;
+    --c-surface: #000000;
+    --c-surface-2: #121212;
+    --c-surface-3: #222222;
+    --c-line: #ffffff;
+    --c-line-strong: #ffffff;
+    --c-text: #ffffff;
+    --c-text-2: #ffffff;
+    --c-text-3: #ececec;
+    --c-text-on-accent: #000000;
+    --c-accent: #ffe14d;
+    --c-accent-hover: #fff08a;
+    --c-accent-soft: #2a2500;
+    --c-focus: #ffe14d;
+    --c-info: #7ee8f5;
+    --c-success: #86ffb6;
+    --c-warning: #ffd37a;
+    --c-danger: #ff9f90;
+    --c-info-soft: #052b30;
+    --c-success-soft: #07301a;
+    --c-warning-soft: #332500;
+    --c-danger-soft: #3a110b;
+    --pip-line: #ffe14d;
+    --glass-fill: #000000;
+    --glass-fill-strong: #000000;
+    --scrim: rgba(0, 0, 0, 0.75);
+  }
+  :root[data-hc="on"][data-design="sculpted"][data-sculpted-accent]:not([data-theme="light"]) {
+    --sc-ground: #000000;
+    --sc-surface: #000000;
+    --sc-inset: #121212;
+    --sc-inset-2: #222222;
+    --sc-field: #000000;
+    --sc-bar: #000000;
+    --sc-text: #ffffff;
+    --sc-text-2: #ffffff;
+    --sc-text-3: #ececec;
+    --sc-line: #ffffff;
+    --sc-line-strong: #ffffff;
+    --sc-ctl-a: #1a1a1a;
+    --sc-ctl-b: #0d0d0d;
+    --sc-on-a: #ffe14d;
+    --sc-on-b: #e6c800;
+    --sc-on-text: #000000;
+    --sc-on-accent: #000000;
+    --sc-pan-a: #0d0d0d;
+    --sc-pan-b: #000000;
+    --sc-trk-a: #1c1c1c;
+    --sc-trk-b: #2a2a2a;
+    --sc-knob-a: #ffffff;
+    --sc-knob-b: #dddddd;
+    --sc-switch-a: #58e08a;
+    --sc-switch-b: #3fc972;
+    --sc-switch-ink: #003d1a;
+    --sc-accent: #ffe14d;
+    --sc-signal: #ffe14d;
+    --sc-soft: #2a2500;
+    --sc-ok: #86ffb6;
+    --sc-ok-soft: #07301a;
+    --sc-warn: #ffd37a;
+    --sc-warn-soft: #332500;
+    --sc-bad: #ff9f90;
+    --sc-bad-soft: #3a110b;
+    --sc-info: #7ee8f5;
+    --sc-info-soft: #052b30;
+    --sc-wall-a: #000000;
+    --sc-wall-b: #000000;
+    --sc-emboss: #121212;
+    --sc-ink: #ffffff;
+    --c-accent-hover: #ffe14d;
+  }
+}
+:root[data-hc="on"][data-theme="dark"],
+:root[data-hc="on"][data-design="sculpted"][data-sculpted-accent][data-theme="dark"] {
+  color-scheme: dark;
+  --c-bg: #000000;
+  --c-surface: #000000;
+  --c-surface-2: #121212;
+  --c-surface-3: #222222;
+  --c-line: #ffffff;
+  --c-line-strong: #ffffff;
+  --c-text: #ffffff;
+  --c-text-2: #ffffff;
+  --c-text-3: #ececec;
+  --c-text-on-accent: #000000;
+  --c-accent: #ffe14d;
+  --c-accent-hover: #fff08a;
+  --c-accent-soft: #2a2500;
+  --c-focus: #ffe14d;
+  --c-info: #7ee8f5;
+  --c-success: #86ffb6;
+  --c-warning: #ffd37a;
+  --c-danger: #ff9f90;
+  --c-info-soft: #052b30;
+  --c-success-soft: #07301a;
+  --c-warning-soft: #332500;
+  --c-danger-soft: #3a110b;
+  --pip-line: #ffe14d;
+  --glass-fill: #000000;
+  --glass-fill-strong: #000000;
+  --scrim: rgba(0, 0, 0, 0.75);
+}
+:root[data-hc="on"][data-design="sculpted"][data-sculpted-accent][data-theme="dark"] {
+  --sc-ground: #000000;
+  --sc-surface: #000000;
+  --sc-inset: #121212;
+  --sc-inset-2: #222222;
+  --sc-field: #000000;
+  --sc-bar: #000000;
+  --sc-text: #ffffff;
+  --sc-text-2: #ffffff;
+  --sc-text-3: #ececec;
+  --sc-line: #ffffff;
+  --sc-line-strong: #ffffff;
+  --sc-ctl-a: #1a1a1a;
+  --sc-ctl-b: #0d0d0d;
+  --sc-on-a: #ffe14d;
+  --sc-on-b: #e6c800;
+  --sc-on-text: #000000;
+  --sc-on-accent: #000000;
+  --sc-pan-a: #0d0d0d;
+  --sc-pan-b: #000000;
+  --sc-trk-a: #1c1c1c;
+  --sc-trk-b: #2a2a2a;
+  --sc-knob-a: #ffffff;
+  --sc-knob-b: #dddddd;
+  --sc-switch-a: #58e08a;
+  --sc-switch-b: #3fc972;
+  --sc-switch-ink: #003d1a;
+  --sc-accent: #ffe14d;
+  --sc-signal: #ffe14d;
+  --sc-soft: #2a2500;
+  --sc-ok: #86ffb6;
+  --sc-ok-soft: #07301a;
+  --sc-warn: #ffd37a;
+  --sc-warn-soft: #332500;
+  --sc-bad: #ff9f90;
+  --sc-bad-soft: #3a110b;
+  --sc-info: #7ee8f5;
+  --sc-info-soft: #052b30;
+  --sc-wall-a: #000000;
+  --sc-wall-b: #000000;
+  --sc-emboss: #121212;
+  --sc-ink: #ffffff;
+  --c-accent-hover: #ffe14d;
+}

@@ -5,7 +5,18 @@ interactive component: default, hover, pressed, focused (keyboard), disabled, an
 selected, loading, error. Each is also checked in dark, reduced transparency, more contrast and
 touch density.
 
+The looks below are Soft Matter's. In **Sculpted** (the default) the same components are raised
+or recessed instead of satin: buttons are raised pills that sink and travel 1 px when pressed;
+switches are a recessed track with a machined knob, **green when on**; sliders are a recessed
+channel with a fill in the signal colour and an aluminium knob; segmented controls are one raised
+selection in a recessed channel; sidebars are recessed and a chosen row is raised. Sizes, values
+and the one main button rule: [19 · Sculpted](19-sculpted.md).
+
 ## Buttons
+
+Every screen has **one main button**, any number of ordinary ones, and a dangerous one only where
+something is lost ([19](19-sculpted.md#one-main-button)). In Soft Matter: the main button is the
+accent's satin, the ordinary one plain satin, the dangerous one the danger colour.
 
 | Variant | Material | Look | Use |
 |---|---|---|---|
@@ -17,7 +28,7 @@ touch density.
 
 - Heights 28 / 36 / 44 px; horizontal padding 12 / 16 / 20 px; `text-label`; pill radius.
 - Labels are verbs: "Save", "Install", "Delete 3 files". Never "OK" when a verb fits.
-- Loading: label stays, a small Six "thinking" glyph replaces the leading icon; width doesn't change.
+- Loading: label stays, a small SIX "thinking" glyph replaces the leading icon; width doesn't change.
 - Dialog button order: secondary left, **primary right**; Enter = primary, Esc = cancel. The
   destructive button is never the default Enter action.
 - Tension: pressed, a button sinks to 97 %; held and pulled it leans after the pointer, rigidly,
@@ -87,7 +98,7 @@ touch density.
 
 ## Progress
 - Known duration: linear bar, 4 px, accent, with "2 of 5 · 1 min left" text.
-- Unknown < 2 s: nothing (avoid flicker). Unknown > 2 s: Six's "working" state or an inline
+- Unknown < 2 s: nothing (avoid flicker). Unknown > 2 s: SIX's "working" state or an inline
   thinking glyph with a status word ("Indexing…").
 
 ## Tooltips

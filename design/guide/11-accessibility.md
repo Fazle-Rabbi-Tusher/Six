@@ -9,14 +9,19 @@ listed. Accessibility settings are designed states, tested like dark mode.
 |---|---|---|
 | **Reduce transparency** | All glass becomes solid `--c-surface`; blur off | `[data-transparency="reduced"]` |
 | **More contrast** | Secondary text → primary; dividers → strong; glass off; focus ring 3 px | `[data-contrast="more"]` |
-| **Reduce motion** | Movement → crossfades; wallpaper, Six and home cards still | `[data-motion="reduced"]` + `prefers-reduced-motion` |
-| **Text size** | 100–200 % for all text; layouts reflow | root font scale |
+| **Reduce motion** | Movement → crossfades; wallpaper, SIX and home cards still | `[data-motion="reduced"]` + `prefers-reduced-motion` |
+| **Text size** | One text size for SIX's windows and other apps, 80 to 200 %; layouts reflow | root font scale |
 | **Touch density** | Targets 44 px, rows 44 px, title bar 52 px | `[data-density="touch"]` |
-| **High-contrast themes** | Black/white/yellow themes that override every colour token (Windows "Contrast themes") | separate theme files |
-| **Colour filters** | Grayscale, deuteranopia/protanopia/tritanopia filters | compositor |
+| **High contrast** | Pure black and white with one strong accent (deep blue in light, yellow in dark), in both designs; body text 7:1, large text and glyphs 4.5:1; includes More contrast; no texture or wallpaper art behind text. Values in [	okens/high-contrast.css](../tokens/high-contrast.css) | `[data-hc="on"]` |
+| **Colour filters** | Grayscale, deuteranopia/protanopia/tritanopia filters (Settings › Accessibility) | compositor |
 
-All modes are reachable from the Accessibility tile in Quick Settings, from the sign-in screen,
-and from the first-run setup (`Ctrl + Alt + A`).
+Settings › Accessibility holds them all. Control Center has tiles for Touch, More contrast, Reduce
+motion and Reduce transparency (Solid); the sign-in and lock screens have an Accessibility button;
+the installer has "Accessibility and appearance" on its first page. In Sculpted, More contrast and
+Reduce transparency replace every shadow with a 1.5 px line.
+
+Every screen SIX can open is measured in a real browser engine, in both designs, light and dark,
+every accent, More contrast and High contrast, against what is really behind each line, and held to the limits ([04](04-color.md#the-contrast-rule)).
 
 ## Checklist for every screen
 
@@ -32,7 +37,7 @@ and from the first-run setup (`Ctrl + Alt + A`).
       a sticky header or a toast (WCAG 2.4.11).
 - [ ] Pointer targets ≥ 32 px (24 px is the WCAG floor; we exceed it), 44 px in touch mode.
 - [ ] Drag actions have a non-drag alternative (WCAG 2.5.7), e.g. snap via the maximize flyout
-      or `Six + arrows`; reorder via menu "Move left/right".
+      or `Super + arrows`; reorder via menu "Move left/right".
 - [ ] Timeouts (toasts with actions, lock screen) can be extended or turned off.
 - [ ] No content flashes more than 3 times per second.
 
@@ -45,11 +50,11 @@ and from the first-run setup (`Ctrl + Alt + A`).
 **Robust**
 - [ ] Every control exposes role, name, state and value to AT-SPI (Linux) / the shell's
       accessibility tree; tested with the built-in screen reader.
-- [ ] Custom-drawn shell surfaces (menu bar, dock, Six, home cards, Overview) publish an accessibility tree, not a
+- [ ] Custom-drawn shell surfaces (menu bar, the notch, dock, home cards) publish an accessibility tree, not a
       bitmap.
 
 ## Screen reader and magnifier
-- The built-in screen reader announces Six's state changes politely ("Backup finished") and
+- The built-in screen reader announces SIX's state changes politely ("Backup finished") and
   never interrupts typing.
 - Magnifier follows keyboard focus and the text caret, not only the pointer.
 - Dock items announce as "Files, running, 2 windows".

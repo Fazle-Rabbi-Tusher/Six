@@ -1,10 +1,10 @@
 # 18 · Brand: the mark, the wordmark and the boot screen
 
-Source: the *SIX OS Logo* design canvas (directions D, D2 and E). The assets in
+Source: the SIX logo design canvas (directions D, D2 and E). The assets in
 [`brand/`](../brand/) are drawn from it; [`brand/index.html`](../brand/index.html) is the brand
 sheet and [`brand/boot.html`](../brand/boot.html) plays the boot screen.
 
-![Brand sheet](../screens/brand.png)
+![Brand sheet (October 2026; its wordmark still carries the small OS)](../screens/history/brand.png)
 
 ## The mark: Hex Face
 
@@ -23,7 +23,7 @@ back at you.
 | [`six-mark.svg`](../brand/six-mark.svg), [`six-mark-white.svg`](../brand/six-mark-white.svg) | The mark alone, cobalt or white |
 | [`six-app-icon.svg`](../brand/six-app-icon.svg) | App icon: cobalt rounded square (radius 22 % of the side), the mark at 79 % |
 | [`six-app-icon-small.svg`](../brand/six-app-icon-small.svg) | App icon at 32 px and under (favicon, tray, notifications) |
-| [`six-wordmark.svg`](../brand/six-wordmark.svg), [`six-wordmark-white.svg`](../brand/six-wordmark-white.svg) | SIX OS with its cursor, text outlined |
+| [`six-wordmark.svg`](../brand/six-wordmark.svg), [`six-wordmark-white.svg`](../brand/six-wordmark-white.svg) | SIX with its block cursor, text outlined |
 | [`six-lockup.svg`](../brand/six-lockup.svg), [`six-lockup-cobalt.svg`](../brand/six-lockup-cobalt.svg) | Mark and wordmark side by side |
 
 ### Rules
@@ -35,26 +35,26 @@ back at you.
   photo, put the mark on a cobalt tile.
 - **The eyes may blink** (every 4.5–5 s, 6 % of the cycle) where the mark is large and alive: the
   boot screen, About, onboarding. Never in the menu bar, dock or anything a user reads past.
-- **The mark is not the assistant.** Six, the assistant, keeps its own orb (Bloom, Halo, Ripple,
-  Dotted, Ink, Mosaic; see [14](14-home-assistant.md)). The mark stands for SIX, the system: the menu-bar button, the Six Menu
+- **The mark is not the assistant.** SIX, the assistant, keeps its own orb (Bloom, Halo, Ripple,
+  Dotted, Ink, Mosaic; see [14](14-home-assistant.md)). The mark stands for SIX, the system: the menu-bar button, the SIX menu
   app icon, About, the boot screen, the installer, the login screen and documentation.
 
 ## The wordmark
 
-**SIX** in Share Tech Mono, a small **OS** at 36 % of its size sitting on the same baseline, then
-a block cursor (a fifth of the cap height wide, two fifths tall). In the light lockup, SIX is ink
-(`#12141A`) and OS is cobalt; on cobalt, SIX is white and OS is `#C9D3FF`. When the wordmark is
-live (About, the boot screen) the cursor blinks once a second; in print and in static artwork it
-is solid or left out. The SVGs have the text converted to outlines, so they render anywhere
-without the font.
+**SIX** in Share Tech Mono, then a block cursor (a fifth of the cap height wide, two fifths tall).
+Always the full word SIX; never "SIX OS" on anything a person sees (until October 2026 the
+wordmark carried a small OS; it was removed). SIX is ink (`#12141A`) on light grounds and white on
+cobalt or dark. When the wordmark is live the cursor blinks once a second; in print and in static
+artwork it is solid or left out. The SVGs have the text converted to outlines, so they render
+anywhere without the font.
 
 ## Colour
 
 | Token | Value | Use |
 |---|---|---|
-| `--brand` | `#1B3CFF` cobalt | The app icon, the boot screen, the lockup's mark |
+| `--brand` | `#1B3CFF` cobalt | The app icon and the lockup's mark (and the October boot design, below) |
 | `--brand-hi` / `--brand-lo` | `#2B50FF` / `#1230D6` | The app icon's top-to-bottom light |
-| `--brand-ink` | `#C9D3FF` | OS in the wordmark and the status line on cobalt (4.54:1) |
+| `--brand-ink` | `#C9D3FF` | Secondary words on cobalt (4.54:1) |
 | `--brand-night` | `#0A1440` | The ground behind the app icon in marketing artwork |
 
 Cobalt is the brand, not a UI accent: buttons, selection and focus keep following the user's
@@ -78,60 +78,63 @@ with its own near-black ground; the eyes can differ from the band.
 
 ## Type
 
-Terminal type throughout ([03](03-typography.md)): JetBrains Mono for everything you read, Share
-Tech Mono for display sizes and the wordmark, VT323 for the boot screen only.
+The wordmark is Share Tech Mono in both designs. Around it, the interface follows the chosen design
+([03](03-typography.md)): Noto Sans in Sculpted, JetBrains Mono and Share Tech Mono in Soft Matter.
+The system screens before sign-in use Noto Sans.
 
-## The boot screen
+## The system screens, today
 
-![Boot screen](../screens/boot.png)
+These run before and around the desktop. They are drawn by the system's own programs (the boot
+splash, the sign-in and lock screens, the installer), in SIX's colours, and each has one main
+button drawn the way SIX's windows draw it ([19](19-sculpted.md#one-main-button)). Real pictures
+from an installed system are in [`screens/installed/`](../screens/installed/README.md).
 
-On cobalt, in VT323, about six seconds from power-on. Times are seconds from the moment the
-screen appears:
+### Boot
 
-| Time | What happens | Motion |
-|---|---|---|
-| 0.15–0.60 | A black frame fades to cobalt: the panel powering on | ease-out |
-| 0.50–0.95 | The eyes pop open | `cubic-bezier(0.3, 1.6, 0.5, 1)`, an overshoot |
-| 1.0 → | The eyes blink every 4.5 s | squash to 10 % height and back in 8 % of the cycle |
-| 1.30–2.80 | The hex band draws itself around the eyes, from the outer end inward | `cubic-bezier(0.65, 0, 0.35, 1)` on the stroke length |
-| 2.70 → | The terminal cursor appears and blinks once a second | stepped |
-| 2.90–3.52 | S, I, X, then O, S type one letter every 0.12 s | stepped |
-| 3.40 → | SIX glitches for 0.2 s every 2.8 s: a jitter with cyan (`#4DF3FF`) and magenta (`#FF3E9A`) slices | |
-| 3.80–5.50 | The loader runs; the status line types out underneath | |
-| 6.30 | The screen fades to the session in 0.62 s, and the desktop's ripple plays from the centre | ease-in |
+A quiet dark ground, `#111214`, with the white Hex Face (88 px) in the middle and a thin line under
+it (160 × 2 px, `#45474E`). While the machine starts, a short white light (24 px) travels along
+the line: it says "working", never a percentage. Where the system reports real progress the line
+fills in 20 steps from that report. Nothing is held back for an animation: the screen goes as soon
+as the system is ready. Updates, firmware and resets use the same screen with a title ("Installing
+updates", "Keep your computer on") and a real percentage. GRUB stays hidden unless the last start
+failed; its menu uses the same mark and wordmark.
 
-**Loaders** (Settings › About › Startup screen): **Terminal** (the default: `[` 20 cells `]`
-switching on at a slightly uneven pace, like real work), **Scan** (a 280 px line with a sweeping
-segment that then fills), **Counter** (`> 0%` to `> 100%`) and **Hexagons** (six hex outlines
-filling one by one).
+### Disk unlock
 
-**Status line:** *bravo six going dark* at start and restart; *restarting into 1.0.3* (the
-version) when an update is being switched to.
+When the disk is encrypted (the installer's default), the boot screen asks for the passphrase:
+"Unlock this disk" centred above a white field (300 × 40 px) with a padlock beside it; each typed
+character is a dot. The keyboard layout is shown under it.
 
-**Rules:**
-- Any key, click or tap skips it, and a **Skip** button sits top right.
-- **Reduced motion** shows the finished frame (mark drawn, wordmark typed, loader full) for
-  1.4 s, then fades.
-- **It never slows boot down.** On a real machine the loader follows real progress (below); if
-  the system is ready before the band has drawn, the screen fades to the login screen at once.
-- The stage is drawn at 1280 × 720 and scaled to fit the screen, so proportions never change.
+![The disk unlock prompt on an installed system](../screens/installed/disk-unlock.png)
 
-### On the device: a Plymouth theme
+### Sign-in and lock
 
-SIX replaces `fedora-logos` and Fedora's Plymouth theme with its own package (`six-logos`), as
-the trademark rules require ([17](17-fedora.md#building-on-fedora-names-and-branding)). The boot
-screen is a **Plymouth script theme**, `six`:
+A full-screen wallpaper with a large clock at the top (a light serif, the date under it), the
+person's picture and name, the password field with an eye to show what is typed, the main button
+**Sign in** (or **Unlock**) as a full-width pill under the field, and **Switch user** under that.
+Along the foot: Accessibility and the session on the left, Sleep, Restart and Shut down on the
+right, as ordinary pill buttons. The lock screen follows the design the person chose (Sculpted or
+Soft Matter, light or dark) and its palette; the sign-in screen runs before anyone has chosen, so
+it keeps SIX's dark look. Fingerprint and face unlock appear only where the hardware exists, only
+on these two screens, and the password always works.
 
-| Piece | How |
-|---|---|
-| Ground | `Window.SetBackgroundTopColor` / `BottomColor` to cobalt (`0.106, 0.235, 1.0`) |
-| Mark | Plymouth can't stroke paths, so the band ships as a sprite sequence: 46 PNG frames of the draw rendered from `six-mark-white.svg` at 1× and 2× (the 2× set on HiDPI screens). The eyes are separate sprites, scaled for the pop and blink |
-| Wordmark | Per-letter sprites rendered in VT323 (the theme can't rely on font rendering this early), revealed on the same timeline |
-| Loader | `Plymouth.SetBootProgressFunction` drives the cells from **real** boot progress; the timeline above is the shape of a typical boot, not a delay |
-| Disk password | `Plymouth.SetDisplayPasswordFunction`: the mark stays, the loader line becomes `> passphrase: ••••▮` in VT323 |
-| Messages | `Plymouth.SetMessageFunction` replaces the status line with the system's message when there is one (for example, a file-system check) |
-| Shutdown and restart | The same screen; the eyes close at the end, and the status line reads *going dark* |
-| Hand-over | The screen fades to the SIX login screen (GDM), which starts on cobalt with the mark in place, so there is no black flash |
+### The installer
 
-GRUB stays hidden, as Fedora hides it, unless the last boot failed; its menu uses the cobalt
-ground and VT323 too. The installer and the firmware update screen use the brand sheet's lockups.
+Five pages in one frame: **Language**, **Basic settings** (keyboard, region, time zone, optional
+Wi-Fi), **Where SIX goes** (the drive, the method, disk encryption, on by default), **Your account**
+(name, sign-in name, password; this account is the administrator) and **Review and install**, then
+**Installing SIX** and the end page. The frame has SIX's mark and name and "Step n of 5 · Page" at
+the top left, the keyboard layout and **Quit** at the top right, and **Back** and the main button
+(**Next**, **Install SIX**, **Restart**) at the foot. Three button looks only: the main button, the
+ordinary button and the dangerous one. The Installing page lists four stages with Done, Now and
+Waiting, a bar, and in the long stage a line with the minutes passed; it never says done before it
+is. Nothing is written to the drive until **Install SIX** on the review page.
+
+![The installer's review page](../screens/installed/installer-5-review.png)
+
+### The October boot design
+
+The animated cobalt boot screen (the eyes popping open, the band drawing itself, SIX typing out
+in VT323 and a bracketed loader) is in [`brand/boot.html`](../brand/boot.html) and
+[`screens/history/boot.png`](../screens/history/boot.png). It is designed, not built: SIX's boot is
+the quiet dark screen above.

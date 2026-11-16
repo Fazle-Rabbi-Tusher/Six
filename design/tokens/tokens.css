@@ -1,7 +1,7 @@
 /*
- * SIX OS — Design tokens ("Soft Matter" design language)
- * Source of truth for CSS-based shells, web apps and prototypes.
- * tokens.json mirrors these values for native toolkits (Qt/QML, GTK, Flutter…).
+ * SIX — Design tokens: the base set, and the values of the Soft Matter design.
+ * Copied from the product on 2026-11-16. The Sculpted design (the default) is sculpted.css,
+ * which loads after this file; High contrast is high-contrast.css. See README.md here.
  *
  * Theme switching:
  *   - default follows the OS preference (prefers-color-scheme)
@@ -218,7 +218,26 @@
   --liquid-grid: 24px;
 
   --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--c-focus);
+  /* The outline form of the same ring 2 px, off the control; inset in lists and fields. */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --focus-offset-inset: -2px;
   --scrim: rgba(12, 12, 14, 0.4);
+
+  /* Window buttons on hover (guide 06): close red, minimise green, maximise blue, white glyph.
+     The same three in SIX's windows, the KWin frames and the GTK 4 sheets. */
+  --c-close-hover: #c42b1c;
+  --c-min-hover: #1f7a3d;
+  --c-max-hover: #1d5fd0;
+  --c-on-close: #ffffff;
+
+  /* SIX's ink capsule in the menu bar (the orb with what SIX is doing): the same near-black in every look. */
+  --c-ink: #090a0e;
+  --c-ink-on: #f4f5ff;
+  --c-ink-hover: #24252b;
+
+  /* A window's title in its title bar (Sculpted sets its own, sculpted.css section 3). */
+  --text-window-title: var(--text-label);
 }
 
 /* ── Color: dark (system preference, unless forced light) ── */
@@ -322,7 +341,7 @@
   --sat-rim: rgba(16, 18, 22, 0.11); --sat-lip: rgba(255, 255, 255, 0.95); --sat-shade: rgba(16, 18, 22, 0.1); --sat-drop: rgba(16, 18, 22, 0.26);
   --ctl-a: #ffffff; --ctl-b: #e5e7ea; --ctl-rim: rgba(16, 18, 22, 0.15); --ctl-lip: #ffffff; --ctl-shade: rgba(16, 18, 22, 0.13); --ctl-drop: rgba(16, 18, 22, 0.28); --ctl-glint: rgba(255, 255, 255, 0.9);
   --trk-a: #d9dbdf; --trk-b: #e9eaed; --trk-shade: rgba(16, 18, 22, 0.18);
-  --on-a: color-mix(in srgb, var(--c-accent) 78%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 82%, #000); --on-glint: rgba(255, 255, 255, 0.35);
+  --on-a: color-mix(in srgb, var(--c-accent) 92%, #fff); --on-b: color-mix(in srgb, var(--c-accent) 82%, #000); --on-glint: rgba(255, 255, 255, 0.22);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -352,12 +371,6 @@
 :root[data-accent="moss"][data-theme="dark"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
 :root[data-accent="sun"][data-theme="dark"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
 /* follow the system theme too: dark values apply under prefers-color-scheme: dark unless the person chose light */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"])[data-accent="iris"] { --c-accent: #9c8fff; --c-accent-hover: #b0a6ff; --c-accent-soft: #2e2a55; --c-focus: #b0a6ff; --c-text-on-accent: #111214; }
-  :root:not([data-theme="light"])[data-accent="tide"] { --c-accent: #4fd1dc; --c-accent-hover: #7fe0e8; --c-accent-soft: #113a3f; --c-focus: #7fe0e8; --c-text-on-accent: #111214; }
-  :root:not([data-theme="light"])[data-accent="moss"] { --c-accent: #5fd49a; --c-accent-hover: #86e2b4; --c-accent-soft: #123a28; --c-focus: #86e2b4; --c-text-on-accent: #111214; }
-  :root:not([data-theme="light"])[data-accent="sun"] { --c-accent: #f2b95a; --c-accent-hover: #f6cd85; --c-accent-soft: #3d2c0f; --c-focus: #f6cd85; --c-text-on-accent: #111214; }
-}
 
 /* ── Accessibility modes (user settings, not decoration) ── */
 :root[data-transparency="reduced"] {

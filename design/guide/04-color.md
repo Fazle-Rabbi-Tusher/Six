@@ -1,9 +1,56 @@
 # 04 · Color
 
-SIX is **graphite and silver**: neutral greys with no colour cast, and a graphite accent that
-turns silver in the dark. The colour in the system comes from Six (Bloom's ember and violet), from
-the four semantic colours, and from the pastel clay set for tiles and icons. All values live in
-[`tokens/tokens.css`](../tokens/tokens.css). Never use a hex value in a component; use the token.
+SIX has two palettes, one per design, each with a light and a dark finish, and a High contrast
+look on top of both.
+
+- **Sculpted** (the default): Ivory and Graphite with a limited signal accent (Blue by default;
+  Mint, Amber, Lavender). Its palette is in [19 · Sculpted](19-sculpted.md#the-palette) and
+  [`tokens/sculpted.css`](../tokens/sculpted.css).
+- **Soft Matter**: graphite and silver, described in the rest of this chapter, in
+  [`tokens/tokens.css`](../tokens/tokens.css).
+- **High contrast** (Settings › Accessibility): pure black and white with one strong accent, in
+  both designs, below.
+
+Never use a hex value in a component; use the token.
+
+## The contrast rule
+
+Every visible text and glyph is measured against what is really behind it, in a real browser
+engine, on every screen SIX can open, in both designs, light and dark, every accent, with More
+contrast and with High contrast:
+
+| What | Needs |
+|---|---|
+| Body text | 4.5:1 |
+| Large text (24 px, or 18.66 px bold) | 3:1 |
+| Icons and glyphs, control edges | 3:1 |
+| Body text in High contrast | 7:1 |
+| Large text and glyphs in High contrast | 4.5:1 |
+
+The measurement samples the background under each line (the 10th worst point counts), so a
+translucent panel is judged on the real wallpaper or window behind it. Shadows, blur and texture
+are never allowed to carry meaning; More contrast removes them. The last full run measured over
+46,000 lines of text on the filled screens with none below these limits.
+
+## High contrast
+
+| Token | Light | Dark |
+|---|---|---|
+| `--c-bg`, `--c-surface` | `#FFFFFF` | `#000000` |
+| `--c-surface-2` / `-3` | `#F2F2F2` / `#E0E0E0` | `#121212` / `#222222` |
+| `--c-line`, `--c-text`, `--c-text-2` | `#000000` | `#FFFFFF` |
+| `--c-accent`, `--c-focus` | `#0B2F8A` | `#FFE14D` |
+| Info / success / warning / danger | `#004F59` `#064D2A` `#5E3600` `#7D150A` | `#7EE8F5` `#86FFB6` `#FFD37A` `#FF9F90` |
+| Switch on (Sculpted) | `#0A6B3A` → `#064D2A` | `#58E08A` → `#3FC972` |
+
+No texture and no wallpaper art behind text; solid surfaces; 1.5 px lines. Values in
+[`tokens/high-contrast.css`](../tokens/high-contrast.css).
+
+## Soft Matter
+
+Soft Matter is **graphite and silver**: neutral greys with no colour cast, and a graphite accent
+that turns silver in the dark. The colour comes from SIX's orb (Bloom's ember and violet), from
+the four semantic colours, and from the pastel clay set for tiles and icons.
 
 ## Neutrals ("Porcelain" / "Ink")
 
@@ -52,9 +99,10 @@ pairs as Graphite (`check_contrast.py`):
 Cobalt (`#1B3CFF`) belongs to the SIX mark, its app icon and the boot screen, not to the UI.
 Buttons, selection and focus follow the accent above. See [18 · Brand](18-brand.md).
 
-## Six's colour
+## SIX's colour
 
-Six is the one warm thing on a graphite screen. `--pip-line` is Bloom's ember, used for Six's
+SIX, the assistant, is the one warm thing on a graphite screen. `--pip-line` (the prefix is the
+assistant's retired name, kept in the token) is Bloom's ember, used for SIX's
 state label, its progress bars and the menu-bar capsule's progress ring: `#9A3C1C` in light (5.9:1 on the
 background) and `#FFA064` in dark (9.7:1). The orb itself is drawn, not tokenised; see
 [14 · Home](14-home-assistant.md#sixs-looks).
@@ -92,9 +140,12 @@ pastel is always `--c-text` (8:1 or better in both themes).
 
 ## Wallpapers
 
-The default wallpaper is **Matte**: no colour, so the interface and Six stay the focus. Five drawn
-wallpapers are the alternatives. Each is generated live by the home's shader (nothing is a
-picture), moves slowly, and was made after a reference image.
+Today SIX offers two kinds of wallpaper in Settings › Appearance: a set of **picture wallpapers**
+(home uses a light one in light and a dark one in dark, the lock and sign-in screens their own;
+the picture files are not part of this repository), and the **drawn moods** below. **Matte** (no
+colour) is the fallback in both finishes. The five drawn moods are generated live by the home's
+shader (nothing is a picture), move slowly, and were made after a reference image. In Sculpted,
+home's ground is its own tonal surface with SIX embossed in it ([19](19-sculpted.md#wallpaper-and-home)).
 
 | Wallpaper | What it is | Colours |
 |---|---|---|
@@ -105,7 +156,7 @@ picture), moves slowly, and was made after a reference image.
 | **Strata** | Teal paper layers: the field cut into 13 terraces, each shading the one below, its cut edge catching the light, with paper grain; paler to the right | Deep teal `#062023` → mint `#C9EFE9` |
 | **Velvet** | Deep blue soft layers: broad terraces with soft shadows and a velvet grain | Navy `#030722` → sky `#7FB0FF` |
 
-**Readability.** The greeting, Six's label and the examples sit directly on the wallpaper, so a soft
+**Readability.** The greeting, SIX's label and the examples sit directly on the wallpaper, so a soft
 scrim darkens (in dark) or lightens (in light) the wallpaper behind the centre column. In light
 mode the drawn wallpapers are shown as a pale print of themselves (40 % strength), so dark text
 keeps its contrast. Cards and panels sit on their own fill and are unaffected.
@@ -127,6 +178,12 @@ keeps its contrast. Cards and panels sit on their own fill and are unaffected.
 | text on clay pastels | 12.1–14.7:1 | 8.3–10.3:1 | 4.5:1 |
 
 Re-run the check whenever a token changes (a contrast script is a good first CI job).
+
+## Window buttons
+
+The same three hover colours in SIX's own windows, the frames of other apps and GTK sheets, in both
+designs, with a white glyph: close `#C42B1C` (red), minimise `#1F7A3D` (green), maximise `#1D5FD0`
+(blue). At rest the buttons are the design's ordinary control ([06](06-layout.md#window-anatomy)).
 
 ## Rules
 1. One accent per screen. A second bright colour must be semantic.

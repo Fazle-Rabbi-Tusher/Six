@@ -1,148 +1,93 @@
-# SIX OS · Soft Matter design language
+# SIX · the design
 
-The design guide and interactive prototype for **SIX**, a desktop operating system built on
-**Fedora Linux** to replace Windows on everyday PCs. Soft Matter keeps the layout Windows users
-already know and renders it in soft materials: **clay** you press, **plasma glass** that floats,
-**paper** you work on, and **plasma clay**, the liquid surfaces of the home screen. Home is
-**voice first**: you talk to **Six**, the assistant; the written conversation lives in the Six app
-at the top right. A macOS-style menu bar and dock frame it all (a Windows-style taskbar layout is
-one setting away), with Settings, Files, Software and Calendar as the system apps.
+The design of **SIX**, a desktop system built on **Fedora Linux** with a local AI assistant at its
+centre. The layout is the one people already know from the Mac (a menu bar on top, a dock at the
+bottom, window buttons on the right), the keys are the ones they know from Windows, and the
+assistant, also called **SIX**, is part of the desktop rather than an app beside it: you talk to it
+through **the notch** in the middle of the menu bar, or type to it in the SIX app.
 
-![SIX home screen with Six, dark theme](screens/home-dark.png)
+SIX has **two designs**, switched live in Settings › Appearance, each in a light and a dark finish:
 
-## Start here
+- **Sculpted**, the default: ivory and graphite, raised physical controls that sink when pressed,
+  deep recessed channels, a limited signal accent (Blue by default), switches that turn green when
+  on, Noto Sans, and short, firm motion with no bounce.
+- **Soft Matter**, the original: satin controls, clay icons, paper windows, and home cards drawn as
+  shallow water that fuse when they come close; terminal type (JetBrains Mono, Share Tech Mono);
+  springs with a little give, and surfaces that hold on to each other and snap when pulled too far.
 
-| | |
+Both are held to one contrast rule: every word and glyph on every screen is measured against what
+is really behind it, 4.5:1 for text and 3:1 for large text and glyphs, and 7:1 in **High
+contrast**, which both designs also have.
+
+| Sculpted, light (the default) | Sculpted, dark |
 |---|---|
-| **Try it** | Open [`prototype/index.html`](prototype/index.html) in a browser. SIX starts with its boot screen (any key skips it). Home is voice only and clear: Six's orb and your widgets. The assistant is called **Six**. Press the mic in the menu bar, click Six, hold Space or press `Ctrl + Space`; ask "what can you do?" (or right-click home › *What can Six do?*) to bring up the greeting and **Try saying** examples. Six's replies type in like a terminal; the × on a reply puts it away. Drag Six anywhere on home, or right-click it to hide it. There is no notch: while Six works, its menu-bar orb grows into a black capsule that types what it's doing, and with windows open a panel drips down out of the orb when you talk or click the capsule. Right-click anything for its menu, like Windows; right-click a widget to make it **float** over every app; add the **Video** widget and drag its corner to resize it; Settings › Six & voice sets its look: Bloom, Halo, Ripple, Dotted, Ink (which shows the words Six is saying, coming into focus out of blurred ink) or Mosaic (a ball of tiles that each tilt on their own); in previews without a microphone Six hears sample requests. Six watches the pointer, leans in when it's close, blinks, hops when a task completes, shakes its head when one fails, and gets drowsy if left alone. Try the tension studies: pull the top card of a stack (it holds on until 150 px), ask Six to "open files" and watch the menu-bar orb reach for the window, turn on Bluetooth and then Airplane mode in Control Center, pull a slider's thumb off its track, drag a file to the dock's Bin and put it back, and right-click anywhere. Try "delete interview notes" for a review card you can answer by voice. Click the Six icon at the top right for the chat. Open **Settings** (search "dark" or "bangla"), **Files** (walk folders, move something to the Bin and put it back), **Software** and **Calendar** from the dock. Right-click home › **Add widgets…**, drag one widget onto another to stack them, `Ctrl + K` for Six Search, and lock the screen from the Six menu |
-| **Why** | [01 · Research](guide/01-research.md): the usability evidence behind every decision, with sources |
-| **Rules** | [02 · Principles](guide/02-principles.md) |
+| ![Home in Sculpted light](screens/sculpted-light/home.png) | ![Home in Sculpted dark](screens/sculpted-dark/home.png) |
+| **Soft Matter, light** | **Soft Matter, dark** |
+| ![Home in Soft Matter light](screens/softmatter-light/home.png) | ![Home in Soft Matter dark](screens/softmatter-dark/home.png) |
+
+Every screen of today's SIX is in [`screens/`](screens/README.md).
+
+## What is here
+
+| Folder | What it holds |
+|---|---|
+| [`guide/`](#the-guide) | The design guide, chapter by chapter, with the product's real values |
+| [`tokens/`](tokens/README.md) | The design tokens as the product uses them: `tokens.css` (base and Soft Matter), `sculpted.css`, `high-contrast.css` |
+| [`screens/`](screens/README.md) | Pictures of every main screen: Sculpted light, the most important screens in Sculpted dark and Soft Matter light and dark, real pictures from an installed system, and the October pictures in `history/` |
+| [`brand/`](brand/) | The Hex Face mark, the app icon, the SIX wordmark and lockups (SVG, text outlined); the brand sheet and the October boot animation |
+| [`prototype/`](prototype/index.html) | The October 2026 prototype of Soft Matter (see below) |
+| [`concepts/`](concepts/tension.html) | The tension studies (elastic surfaces) that Soft Matter's motion came from |
+| [`skills/`](skills/tension.skill) | The design skill, packaged |
 
 ## The guide
 
 | Chapter | What it covers |
 |---|---|
-| [01 · Research](guide/01-research.md) | Switcher studies, Fitts's law, window management, glass legibility, claymorphism, WCAG 2.2, references (plasma-ui, thinking orbs, 21st.dev, macOS) |
+| [19 · Sculpted](guide/19-sculpted.md) | **Start here.** The two designs side by side; Sculpted's palette, accents, depth, geometry, type, states, the one main button, motion and home |
+| [01 · Research](guide/01-research.md) | The usability evidence behind the decisions, with sources |
 | [02 · Principles](guide/02-principles.md) | Five principles and the "never" list |
-| [03 · Typography](guide/03-typography.md) | Terminal type: JetBrains Mono, Share Tech Mono, VT323 (boot), Noto fallbacks (incl. Bangla), type scale, rules |
-| [04 · Color](guide/04-color.md) | Graphite and silver: neutral greys, the graphite accent (silver in dark) and its options, Six's colour, semantic colours, clay pastels, plasma moods, verified contrast |
-| [05 · Materials](guide/05-materials.md) | Clay, plasma glass, paper, wallpaper, plasma clay (the home's surfaces, drawn as water) and tension, elevation scale |
-| [06 · Layout](guide/06-layout.md) | 4 px grid, control sizes, radii, window anatomy, breakpoints |
-| [07 · Iconography](guide/07-iconography.md) | Phosphor system glyphs, clay app icons, folder, drive and file icons |
-| [08 · Motion](guide/08-motion.md) | The feel (precise, continuous, lit; after the Ferrari Luce interior by LoveFrom), durations, precise, detent, recoil and membrane springs, tension (the six places things hold on to each other, its rules and tokens), choreography for windows, stacks, the dock, menus, voice and unlock, reduced motion |
-| [09 · Shell](guide/09-shell.md) | Menu bar (with the mic and Six), Six in the menu bar (orb, capsule, panel), right-click menus, macOS-style dock, Six Menu, Six Search, windows & Snap Layouts, Control Center, notifications, Six's small orb, Overview, first run |
-| [10 · Components](guide/10-components.md) | Buttons, toggles, inputs, menus, lists, dialogs, toasts… and a checklist for adopting 21st.dev / shadcn components |
-| [11 · Accessibility](guide/11-accessibility.md) | Built-in modes and the per-screen checklist |
-| [12 · Coming from Windows](guide/12-windows-migration.md) | Shortcut parity, Windows apps, how change is introduced, term mapping |
-| [13 · Writing](guide/13-writing.md) | Voice and UI copy patterns |
-| [14 · Home](guide/14-home-assistant.md) | The voice-first home: talking to Six (press to talk or "Hey Six"), captions, review by voice, widgets (gallery and widgets Six makes), stacks, the Six app, failures and recovery, Six's looks (Bloom, the default, a grainy 3D ball of warm colour; Halo, a spinning ring of light caught as a 3D shell; Ripple, a terraced teal pool; the dotted sphere; Ink, blurred words that show what Six is saying; Mosaic, a ball of moving tiles), its states and personality, and moving or hiding Six |
-| [15 · Testing and build order](guide/15-testing-and-build.md) | Who to test with, seventeen tasks, targets, and the order to build SIX in |
-| [16 · System apps](guide/16-system-apps.md) | Six, Settings (every section and page), Files, Software, Calendar, the lock screen, and the navigation rules they share |
-| [17 · SIX on Fedora](guide/17-fedora.md) | The system design: the stack, which Fedora piece runs each feature, image-based updates and rollback, the shell, Six on the device, security defaults, and the rules for building on Fedora |
-| [18 · Brand](guide/18-brand.md) | The Hex Face mark, the app icon, the SIX OS wordmark, cobalt and the seven colour studies, and the boot screen: its timeline, loaders, rules and the Plymouth theme that runs it |
+| [03 · Typography](guide/03-typography.md) | Noto Sans in Sculpted, terminal type in Soft Matter; the shared type scale |
+| [04 · Color](guide/04-color.md) | The contrast rule, High contrast, Soft Matter's colours, the window buttons, wallpapers |
+| [05 · Materials](guide/05-materials.md) | Soft Matter's clay, satin, paper and plasma clay; elevation |
+| [06 · Layout](guide/06-layout.md) | The 4 px grid, control sizes and radii in both designs, window anatomy |
+| [07 · Iconography](guide/07-iconography.md) | System glyphs, app icons, file and place icons |
+| [08 · Motion](guide/08-motion.md) | The two feels, durations, the spring roles, reduced motion, tension |
+| [09 · Shell](guide/09-shell.md) | Menu bar, the notch, the dock, the SIX Menu and system menu, SIX Search, Control Center as a board of tiles, notifications, right-click menus, shortcuts, windows, snapping and workspaces |
+| [10 · Components](guide/10-components.md) | Buttons, switches, inputs, menus, lists, dialogs, toasts |
+| [11 · Accessibility](guide/11-accessibility.md) | The built-in modes and the checklist for every screen |
+| [12 · Coming from Windows](guide/12-windows-migration.md) | Keys, Windows apps, words |
+| [13 · Writing](guide/13-writing.md) | Plain words; the name is SIX |
+| [14 · Home](guide/14-home-assistant.md) | Home, the cards and widgets, the weather in three sizes, how SIX's answers are drawn and tagged, its questions and review cards, its orb looks |
+| [15 · Testing and build order](guide/15-testing-and-build.md) | Usability tests and the order the design was built in (October) |
+| [16 · System apps](guide/16-system-apps.md) | The SIX app, Settings, Files, Software, Calendar, Terminal |
+| [17 · SIX on Fedora](guide/17-fedora.md) | The system design on Fedora |
+| [18 · Brand](guide/18-brand.md) | The mark, the wordmark, colour, and the system screens: boot, disk unlock, sign-in, lock, the installer |
 
-## Concepts
+Where the design shows something SIX does not have yet, the guide says **designed, not built**.
 
-| File | What it is |
-|---|---|
-| [`concepts/tension.html`](concepts/tension.html) | **Tension studies**: live concepts for elastic surfaces in SIX, in graphite and silver satin glass (after the *Tensionmorphism* reference; refractive and 3D, rendered with WebGL): a card stretching out of a stack, Six's menu-bar orb reaching for the window it's moving, Control Center radios that merge, answers growing out of questions, Files and the Bin, menus budding from the click. With rules, tokens and a build order. All six are now built into the prototype (see [08 · Motion › Tension](guide/08-motion.md#tension)) |
+## The prototype
 
-## Brand
+[`prototype/index.html`](prototype/index.html) is the clickable prototype from October 2026, of
+Soft Matter only. Its look and behaviour are the design's; its content (a person, meetings, files,
+a battery level) is sample content, not SIX's. It is kept as it was. These parts of it are **no
+longer how SIX looks**:
 
-| File | What it is |
-|---|---|
-| [`brand/index.html`](brand/index.html) | **Brand sheet**: the Hex Face mark, app icon sizes, lockups, the eight colour studies, rules and type |
-| [`brand/boot.html`](brand/boot.html) | **Boot screen**: the reference animation, with the four loaders and Replay |
-| `brand/*.svg` | The mark, app icons (regular and small), wordmark and lockups, text outlined |
-| `brand/source/` | The originals: the *SIX OS Logo* PDF and the boot-screen mockup (`Boot.dc.html`, a design-tool export; it needs its runtime to play, so use `boot.html`) |
+- There is no Sculpted design in it; Sculpted is SIX's default.
+- The assistant sits as a big orb on home and as an orb at the right of the menu bar that grows
+  into a black capsule. SIX now has **no big orb on home** after setup, and lives in **the notch**
+  in the middle of the menu bar ([09](guide/09-shell.md#the-notch)).
+- Control Center is a set of round buttons; SIX's is a **board of tiles** you can edit.
+- The boot screen is an animated cobalt screen with a typed wordmark; SIX's boot is a quiet dark
+  screen with the white mark ([18](guide/18-brand.md#boot)).
+- The wordmark carries a small "OS"; it is now always the full word **SIX**.
+- It offers a Windows-style taskbar layout; SIX has the menu bar and dock only.
+- The weather, Files, Settings, Software and Calendar screens are earlier versions; see `screens/`.
 
-## Design skill
+## Credits and rights
 
-| File | What it is |
-|---|---|
-| [`../.claude/skills/tension/`](../.claude/skills/tension/SKILL.md) | **Tension**, a Claude skill that carries this design language to any project: satin, holding on and snapping, water, terminal type, the assistant. Claude Code uses it automatically in this repo |
-| [`skills/tension.skill`](skills/tension.skill) | The same skill packaged for Claude apps: open it and choose **Save skill** to use it in every chat |
-
-## Tokens
-
-| File | Use |
-|---|---|
-| [`tokens/tokens.css`](tokens/tokens.css) | **Source of truth.** CSS custom properties for light, dark, the accent options and the accessibility modes |
-| [`tokens/tokens.json`](tokens/tokens.json) | W3C Design Tokens format for native toolkits (Qt/QML, GTK, Flutter) or Style Dictionary |
-| [`tokens/tailwind.preset.js`](tokens/tailwind.preset.js) | Tailwind preset so shadcn/ui and 21st.dev components use SIX tokens |
-| [`tokens/build_tokens.py`](tokens/build_tokens.py) | Regenerates `tokens.json` from `tokens.css` |
-| [`tokens/check_contrast.py`](tokens/check_contrast.py) | Verifies every text/background pair passes WCAG 2.2 in both themes, for every accent option |
-
-```sh
-python3 design/tokens/build_tokens.py     # after editing tokens.css
-python3 design/tokens/check_contrast.py   # fails if any pair drops below its minimum
-```
-
-## Screens
-
-| Talking to Six on home | Six answers in a caption | Review by voice |
-|---|---|---|
-| ![](screens/home-voice.png) | ![](screens/voice-reply.png) | ![](screens/pip-review.png) |
-
-| Six over windows: its menu-bar panel | The Six app | A failure with recovery chips |
-|---|---|---|
-| ![](screens/voice-hud.png) | ![](screens/pip-app.png) | ![](screens/pip-failed.png) |
-
-| Settings › Display | Settings › Six & voice | Control Center |
-|---|---|---|
-| ![](screens/settings.png) | ![](screens/settings-pip.png) | ![](screens/control-center.png) |
-
-| Files › Pictures | Files › Home | Software |
-|---|---|---|
-| ![](screens/files.png) | ![](screens/files-home.png) | ![](screens/software.png) |
-
-| Calendar | Lock screen | Home, light theme |
-|---|---|---|
-| ![](screens/calendar.png) | ![](screens/lock.png) | ![](screens/home-light.png) |
-
-| Widget gallery | Clock and Now playing added | Phone width |
-|---|---|---|
-| ![](screens/widgets.png) | ![](screens/widgets-home.png) | ![](screens/phone-dark.png) |
-
-| Dragging a card onto another | A stack with previews | Stack opened in place |
-|---|---|---|
-| ![](screens/stack-drop.png) | ![](screens/stack.png) | ![](screens/stack-open.png) |
-
-| Six's capsule in the menu bar with its task | Six's panel dripping from the orb while it asks for a review | A floating video widget over Settings |
-|---|---|---|
-| ![](screens/six-capsule.png) | ![](screens/six-panel.png) | ![](screens/widget-floating.png) |
-
-| Right-click on home | Right-click a widget |
-|---|---|
-| ![](screens/menu-desktop.png) | ![](screens/menu-widget.png) |
-
-| The clay app icons |
-|---|
-| ![](screens/dock-icons.png) |
-
-| Design guide app | Six's small orb, every state and variant |
-|---|---|
-| ![](screens/guide-pip.png) | ![](screens/small-orbs.png) |
-
-| Six as Halo on home | Halo in every state | Six as Ripple on home | Ripple in every state |
-|---|---|---|---|
-| ![](screens/home-halo.png) | ![](screens/halo-states.png) | ![](screens/home-ripple.png) | ![](screens/ripple-states.png) |
-
-| Six as Ink, speaking: its words come into focus | Ink in every state | Six as Mosaic on home | Mosaic in every state |
-|---|---|---|---|
-| ![](screens/home-ink.png) | ![](screens/ink-states.png) | ![](screens/home-mosaic.png) | ![](screens/mosaic-states.png) |
-
-| The five drawn wallpapers (Obsidian, Signal, Contour, Strata, Velvet) and their picker in Settings |
-|---|
-| ![](screens/wallpapers.png) |
-
-| Tension: Six's orb reaching for the window it opened | Tension: radios fused, a slider pulled off its track | Tension: the Bin reaching for a file | Six moved out of the middle |
-|---|---|---|---|
-| ![](screens/six-reach.png) | ![](screens/cc-fuse.png) | ![](screens/files-bin.png) | ![](screens/home-pip-moved.png) |
-
-## Credits
-
-Six's orb motion is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by Yogesh
-([github.com/yogesharc/thinking-orbs](https://github.com/yogesharc/thinking-orbs), MIT licence).
-System glyphs are [Phosphor](https://phosphoricons.com) (MIT). SIX is built on Fedora Linux;
-Fedora is a trademark of Red Hat, Inc., and SIX is not affiliated with or endorsed by the Fedora Project.
+The design, the Hex Face mark, the wordmark, the icons and pictures SIX draws itself, and the
+pictures in `screens/` are SIX's own. The fonts are under the SIL Open Font License (Noto Sans,
+JetBrains Mono, Share Tech Mono, VT323). System glyphs are [Phosphor](https://phosphoricons.com)
+(MIT). The orb's dotted look is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by
+Yogesh ([MIT](https://github.com/yogesharc/thinking-orbs)). SIX is built on Fedora Linux; Fedora is
+a trademark of Red Hat, Inc., and SIX is not affiliated with or endorsed by the Fedora Project.

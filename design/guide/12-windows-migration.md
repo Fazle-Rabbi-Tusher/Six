@@ -1,5 +1,11 @@
 # 12 · Coming from Windows
 
+> **Status 2026-11-16.** SIX has the menu bar and dock only: the **Taskbar layout** described below
+> is designed, not built. The Windows keys SIX has today are listed in [09 · Keyboard shortcuts](09-shell.md#keyboard-shortcuts)
+> (the Super key opens the SIX Menu, `Super + E` Files, `Super + I` Settings, `Super + L` lock,
+> `Alt + Tab`, `Super + arrows` to snap, `Super + Shift + S` for a screenshot). Steam and Bottles are
+> offered in Software under "Coming from Windows?".
+
 SIX aims to replace Windows on everyday PCs. Research shows switchers judge an OS by how much of
 their existing habit still works (see [01 · Research](01-research.md#1-familiarity-beats-novelty-for-people-switching-operating-systems)).
 This page lists what stays the same, what changes, and how the change is introduced.
@@ -17,7 +23,7 @@ the same in both layouts.
 
 | Habit | Windows | SIX |
 |---|---|---|
-| Open launcher | Win key / Start button | Six key / Six Menu icon (first in the dock, or bottom-left in the Taskbar layout) |
+| Open launcher | Win key / Start button | SIX key / SIX Menu icon (first in the dock, or bottom-left in the Taskbar layout) |
 | Taskbar | Bottom, apps + tray + clock | Dock (apps) + menu bar (status, clock), or the Taskbar layout |
 | Window controls | Top-right: ─ ▢ ✕ | Top-right: ─ ▢ ✕ |
 | Snap | Win + arrows, drag to edges, Snap Layouts on maximize hover | Identical |
@@ -28,25 +34,25 @@ the same in both layouts.
 | Delete | Del → Recycle Bin; Shift + Del permanently | Del → Bin; Shift + Del permanently (with confirm) |
 | Close / quit | Alt + F4 | Alt + F4 |
 | Switch apps | Alt + Tab | Alt + Tab (glass switcher with live previews) |
-| Show desktop | Win + D, bottom-right corner | Six + D, or Six in the dock / menu bar (shows home) |
-| Lock | Win + L | Six + L |
-| File manager | Win + E | Six + E (Files) |
-| Settings | Win + I | Six + I |
-| Screenshot | Win + Shift + S, PrtScn | Six + Shift + S, PrtScn |
-| Clipboard history | Win + V | Six + V |
-| Emoji | Win + . | Six + . |
+| Show desktop | Win + D, bottom-right corner | SIX + D, or SIX in the dock / menu bar (shows home) |
+| Lock | Win + L | SIX + L |
+| File manager | Win + E | SIX + E (Files) |
+| Settings | Win + I | SIX + I |
+| Screenshot | Win + Shift + S, PrtScn | SIX + Shift + S, PrtScn |
+| Clipboard history | Win + V | SIX + V |
+| Emoji | Win + . | SIX + . |
 | Task Manager | Ctrl + Shift + Esc | Ctrl + Shift + Esc (System Monitor) |
-| Run dialog | Win + R | Six + R opens Six Search in "run" mode |
-| Virtual desktops | Win + Ctrl + ←/→ | Six + Ctrl + ←/→ |
+| Run dialog | Win + R | SIX + R opens SIX Search in "run" mode |
+| Virtual desktops | Win + Ctrl + ←/→ | SIX + Ctrl + ←/→ |
 | Drives | "This PC" with C:, D: | Files › "This PC" lists drives with friendly names and letters as labels |
 
 ## Improved, but discoverable
 
 | New in SIX | How users find it |
 |---|---|
-| **Six Search** (apps, files, settings, actions, answers) | The search icon in the menu bar, the Six Menu, or `Ctrl + K`; in the Taskbar layout, the search field where Windows has it |
+| **SIX Search** (apps, files, settings, actions, answers) | The search icon in the menu bar, the SIX Menu, or `Ctrl + K`; in the Taskbar layout, the search field where Windows has it |
 | **Quick Look** (Space previews a file) | Hint in the Files status bar for the first week |
-| **Six on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask Six anything…" |
+| **SIX on the home screen** (chat + voice assistant) | Home is the first thing you see; the composer says "Ask SIX anything…" |
 | **Undo for file operations** | Every delete/move toast has "Undo" |
 | **Window groups / auto-arrange** | Offered after the user snaps windows three times |
 
@@ -72,7 +78,7 @@ Keep the Windows word where it is the common word.
 
 | Windows | SIX | Note |
 |---|---|---|
-| Start | Six Menu | Six button looks like the Start button's position and role |
+| Start | SIX Menu | SIX button looks like the Start button's position and role |
 | Taskbar | Dock (or Taskbar layout) | Settings search also matches "taskbar" |
 | Recycle Bin | Bin | Search matches "recycle bin", "trash" |
 | File Explorer | Files | Search matches "explorer", "my computer", "this pc" |

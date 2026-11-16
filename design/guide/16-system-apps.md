@@ -1,149 +1,119 @@
 # 16 · System apps
 
-The apps that come with SIX and make it a whole system: **Six**, **Settings**, **Files**,
-**Software**, **Calendar**, plus the **lock screen**. They share one window anatomy (see
-[06 · Layout](06-layout.md#window-anatomy)): a sidebar for places or sections, a toolbar or
-header that says where you are, and content. Every one of them is in the prototype.
+The apps that come with SIX and are drawn by SIX itself, in the chosen design: **the SIX app**,
+**Settings**, **Files**, **Software**, **Calendar** and **Terminal**. They open as windows over
+home, with SIX's frame and the buttons on the right ([06](06-layout.md#window-anatomy)). Other
+apps (the browser, LibreOffice, KDE's apps) are not SIX's, but take SIX's colour schemes for the
+chosen design, finish and accent.
 
-## Shared navigation rules
+Pictures are Sculpted light; [`screens/`](../screens/README.md) has the dark and Soft Matter ones.
+
+## Shared rules
 
 | Rule | Why |
 |---|---|
-| **The sidebar is the map.** Places (Files), sections (Settings), categories (Software) and conversations (Six) are always visible on the left; the current one is highlighted in the accent soft colour | People coming from Windows look for a left navigation pane; nothing important hides behind a hamburger menu |
-| **The header says where you are.** A path bar (Files) or a breadcrumb (Settings › Display) in plain words; every segment is clickable | Answers "where am I?" and gives a one-click way back up |
-| **Back and forward work everywhere.** ‹ › in the toolbar, `Alt + ←/→` from the keyboard | One habit across all apps, as in a browser |
-| **Search is local first.** Each app's search field finds things in that app; a "Search everywhere" link hands off to Six Search | Keeps results relevant without making people learn two searches |
-| **Deep links.** Any part of SIX can open an app at a place: Control Center's ⚙ opens Settings, Six opens *Settings › Display*, the Bin icon opens *Files › Bin* | No hunting for a page that was mentioned |
-| **Empty states explain.** "Documents is empty. Files you save or download land here; deleted files wait in the Bin." | An empty view is a moment to teach, never a blank |
+| **The sidebar is the map.** Places (Files), sections (Settings), categories (Software) and conversations (the SIX app) are always on the left. In Sculpted the sidebar is a recessed channel and the chosen row is raised, its words in the accent | Nothing important hides behind a menu button |
+| **The header says where you are**, in plain words: a path (Files), the page (Settings), the category (Software) | "Where am I?" is always answered |
+| **Back and forward everywhere**: ‹ › in the toolbar, `Alt + ←/→` | One habit across every app |
+| **Deep links.** Any part of SIX can open an app at a place: a Control Center tile opens its Settings page, SIX opens *Settings › Display*, the Bin opens *Files › Bin*, a search result opens the row it found and highlights it | No hunting for a page that was mentioned |
+| **Empty states explain**: "No events on this day. Add one to keep it here and in Today on home." | An empty view teaches |
+| **What is missing says so**: a part the computer does not have reads "Not on this computer"; a part SIX does not have reads "Not built in SIX yet", in words, never a control that does nothing | Nothing fake may look real |
 
-## Six
+## The SIX app
 
-The written side of the assistant (home is the spoken side, see [14 · Home](14-home-assistant.md)).
+The written side of the assistant; home and the notch are the spoken side ([14](14-home-assistant.md)).
 
-![The Six app](../screens/pip-app.png)
-
-| Part | Spec |
+| Part | Today |
 |---|---|
-| Sidebar | **New chat**, then *Today* and *Earlier* conversations. A mic glyph marks conversations that include spoken requests |
-| Header | The conversation's title (its first request) and where answers come from ("Simple commands run on this device. Everything else asks Claude on your account.") |
-| Empty state | Six's orb, "Ask Six anything", one line on what Six can do, and four example requests |
-| Thread | Your messages on the right in accent clay; spoken ones marked *Said aloud*. Six's replies on the left, labelled PIP, with action chips, review cards, previews and recovery chips |
-| Composer | Text field, a dictation mic (speech typed into the field, then sent) and Send, which becomes Stop while Six answers |
+| Sidebar | **New chat**, then the conversations of this session; a note at the foot says how long they are kept and that files are checked again before any change |
+| Header | The conversation's title, and where answers come from ("No AI model · plain commands run on this device" when no model is installed) |
+| Empty state | SIX's orb, **Ask SIX anything**, one line on what SIX can do, and four example requests as buttons |
+| Thread | Your messages and SIX's answers; answers drawn as paragraphs, lists, code and tables, each tagged `local model` or `SIX`; review cards, plans with steps, "Is that right?" and "Check on the web" |
+| Composer | "Message SIX…", a microphone for dictation and Send, which becomes Stop while SIX answers |
 
-**Answers grow out of questions.** Your message buds off the Send button and rises into place.
-While Six works a drop leaves your message and swells into Six's answer, which sits in a soft well
-and hangs from the question by a hairline while it's the latest exchange; ask again and the old
-hairline parts in the middle and draws back. Bubbles are revealed, never scaled, and nothing plays
-while another window covers the conversation.
+![The SIX app](../screens/sculpted-light/six-app.png)
 
 ## Settings
 
-![Settings, Display](../screens/settings.png)
+![Settings](../screens/sculpted-light/settings.png)
 
-**Sections** (sidebar, grouped, each with a coloured tile):
+**Sections**, in the sidebar in four groups, each page with its own coloured tile, and a search
+field on top that looks through every row's title, description and choices (choosing a result
+opens the page, scrolls to the row and highlights it):
 
-| Group | Sections |
+| Group | Pages |
 |---|---|
-| Connect | Wi-Fi · Bluetooth |
-| Device | Display · Sound · Battery & power · Storage |
-| You | Six & voice · Appearance · Home & widgets · Desktop & dock · Notifications & Focus |
-| System | Apps · Privacy & security · Accessibility · Users · Language & region · Keyboard & touchpad · Updates · About |
+| Connect | Accounts & messages · Wi-Fi · Cloud storage · Bluetooth · Phone · Network |
+| Device | Display · Sound · Battery & power · Storage · Printers & scanners · Drives |
+| You | SIX & voice · SIX account · Appearance · Wallpaper · Home & widgets · Desktop & dock · Control Center · Notifications & Focus · Windows & desktop · Terminal · Games |
+| System | Apps · Privacy & security · Accessibility · Users · Language & region · Keyboard & touchpad · Updates · Recovery · About · SIX guide · Date & time · Start-up apps · Drivers & apps · Speed |
 
-**Pages** are columns of rounded groups; each row has a title, an optional plain-language line
-under it, and one control on the right (switch, segmented choice, menu, button or a value). Rows
-that are information only show a value or a status chip (✓ *On*, *Connected*). A row never holds
-two controls.
+**Pages** are columns of rounded groups; each row has a title, an optional plain line under it,
+and one control on the right (a switch, a segmented choice, a menu, a button or a value). A row
+never holds two controls. **The danger button**: a choice that loses something (reset, remove,
+delete) is drawn as the dangerous button, never as the main one, and asks first, saying what will
+be lost. Settings that also live in Control Center change in both.
 
-| Page | What's on it |
-|---|---|
-| Wi-Fi | Switch; networks with their security in words ("Open network · not secure"); ask to join; airplane mode |
-| Bluetooth | Switch; my devices with battery; add a device |
-| Display | Brightness; night light and its schedule; scale; resolution; refresh rate |
-| Sound | Output; volume; input (the mic Six uses); alert sound |
-| Battery & power | Charge and time left; power mode (Saver, Balanced, Performance); battery protection at 80 %; screen off and sleep |
-| Storage | Used of total with a breakdown; free up space (empty the Bin, clear caches) |
-| Six & voice | Listening (*Press to talk* or *Always · "Hey Six"*); Look (*Bloom*, the default, *Halo*, *Ripple* or *Dotted*); shortcuts; speak replies; type replies like a terminal; language; privacy (voice on device, cloud model: ask each time, allow, never; voice history); what Six may change (files always ask first) |
-| Appearance | Theme (Light, Dark, Auto); accent (Graphite, the default, Iris, Tide, Moss, Sun); wallpaper (Matte, Obsidian, Signal, Contour, Strata, Velvet, as thumbnails); plasma clay viscosity, frost, refraction and rim |
-| Home & widgets | Edit widgets; Six on home; *Keep the intro on home* (the greeting and "Try saying" examples, otherwise shown only when you ask Six what it can do); what happens when home is full |
-| Desktop & dock | Layout (*Menu bar + dock* or *Taskbar*, see [12](12-windows-migration.md)); magnification; hot corner |
-| Notifications & Focus | Focus; per-app notifications; previews on the lock screen |
-| Apps | Default apps; running Windows programs (Bottles); app permissions |
-| Privacy & security | Disk encryption, firewall, Secure Boot, system protection (SELinux) as plain status rows; microphone and location access; screen lock |
-| Accessibility | Reduce motion, reduce transparency, more contrast, touch mode; screen reader; captions for Six; sticky keys |
-| Users | Your account and sign-in (password, fingerprint); other users; online accounts |
-| Language & region | Language (English, বাংলা); formats; time zone; keyboard layouts (Bangla Probhat) |
-| Keyboard & touchpad | The shortcut list; tap to click; natural scrolling; gestures |
-| Updates | The next system version, ready to install at restart or tonight; the running version; the previous version kept for rollback; automatic updates; app and firmware updates |
-| About | SIX version, the Fedora Linux base, hardware, and the trademark notice |
+Some pages, briefly: **Appearance** (the design, Sculpted or Soft Matter, each shown as a small live window with a
+button, a switch and a slider; the theme, System / Ivory / Graphite in Sculpted's words; the
+accent; the drawn wallpapers; a link to Wallpaper for pictures), **SIX & voice** (how to talk, the orb's look, spoken replies, the
+notch's switches, the folder SIX may see, "Check how SIX hears you"), **Control Center** (the board as
+a list, Advanced), **Games** (game mode, "Check this computer for games", "Set up Steam", your
+games), **Drivers & apps** (System Check: drivers and apps found from trusted sources, installed on
+approval), **Recovery** (the previous version, restore points of files, reset), **Speed** (what SIX
+does to keep the computer quick, and the switch).
 
-**Search** looks through every row's title, description and choices, so "dark" finds
-*Appearance › Theme* and "bangla" finds *Language & region*. Choosing a result opens the page,
-scrolls to the row and briefly highlights it.
-
-**Settings that also live elsewhere stay in sync**: Wi-Fi, Bluetooth, night light, focus, touch
-mode, brightness, volume, the accessibility switches and the listening mode change in both
-Control Center and Settings, whichever you use.
+![Settings › Appearance](../screens/sculpted-light/settings-appearance.png)
 
 ## Files
 
-![Files, Pictures](../screens/files.png)
+A plain file manager for the person's home folder (it never asks; what the assistant may see is a
+separate grant, in Settings › SIX & voice).
 
-| Part | Spec |
+| Part | Today |
 |---|---|
-| Sidebar | *Favourites* (Home, Desktop, Documents, Downloads, Pictures, Music, Videos), *Locations* (This PC, removable drives with ⏏, Bin with a count), *Tags* (Work, Family, Important) |
-| Toolbar | ‹ › and ↑ (up one folder); the path bar, every segment a button; search in this folder; icons or list; new folder; move to Bin |
-| Icon view | 108 px cells: clay folders with emblems, painted thumbnails for pictures, paper icons with a coloured type band for everything else; names wrap to two lines |
-| List view | Name, modified, size; tabular figures |
-| Status bar | Item count and free space, or what's selected and its size |
-| Keyboard | Arrows move the selection (in icon view, up and down move by a row); Enter opens; Delete moves to the Bin; Backspace or `Alt + ↑` goes up; `Alt + ←/→` back and forward |
+| Sidebar | *Favourites* (Home, Desktop, Documents, Downloads, Pictures, Music, Videos), *Locations* (This computer, drives, the Bin), *Cloud storage* (each account as a folder, with its state, and "Add an account") |
+| Toolbar | Select, ‹ › and ↑, the path, search, icons or list, new folder, move to the Bin; a row of actions for what is selected (Copy, Cut, Paste, Properties, Back up folder…) and search filters |
+| Icon view | Folders with their emblem, file icons with a coloured band for the type; names wrap |
+| Status bar | The item count and free space, or what is selected |
+| Keyboard | Enter opens, F2 renames, Delete moves to the Bin, `Alt + ←/→` back and forward, `Alt + ↑` or Backspace up |
+| Open | Every file opens with the system's app for its kind; when one cannot, SIX says why |
 
-**Files hold on, the Bin reaches out.** Drag a file and it stays tethered to its row, following
-reluctantly, until you've moved it 100 px; let go sooner and it springs back, nothing changed. Past
-that it's free; near the dock's Bin the Bin bulges toward it, and dropped in, it's swallowed with a
-gulp (with **Undo** in the toast). *Put back* buds the file out of the Bin and carries it to its
-folder. Delete, the toolbar's Move to Bin and the row's menu do the same without dragging.
+Every move to the Bin has **Undo**; the Bin remembers where things came from and has **Put back**;
+deleting from it asks first, because it cannot be undone. Files can also edit PDFs (combine, split,
+rotate, delete or move pages, add text or a signature picture), always into a new copy.
 
-**The Bin remembers where things came from.** Each item shows "From Documents"; *Put back*
-returns it there, at its old position. Deleting from the Bin asks first, because it can't be
-undone ("Delete "X" permanently? This can't be undone." · **Delete**). Every move to the Bin has
-**Undo** in the toast.
-
-**Tags** collect files across folders; a tagged file shows its colour dot after the name (never
-colour alone: the tag's name is in the sidebar and the dot's tooltip).
+![Files](../screens/sculpted-light/files.png)
 
 ## Software
 
-![Software](../screens/software.png)
+Apps from Flathub, installed for the person's account. Sidebar: search, **Explore**, Work, Create,
+Develop, **Play**, **Windows apps**, Installed, Updates. Explore opens with "Make yourself at home"
+and a **Coming from Windows?** card (Bottles for Windows programs, Steam with Proton for Windows
+games, "compatibility varies; check each program before relying on it"). Each app is a card: icon,
+name, one plain line, the source and state ("Flathub · Available"), and one button. An install
+shows Flathub's own percentage, in the card and in the notch.
 
-Apps come from Flathub and Fedora as sandboxed Flatpaks (see [17 · SIX on Fedora](17-fedora.md)).
-
-| Part | Spec |
-|---|---|
-| Sidebar | Search; Explore, Work, Create, Develop, Play, **Windows apps**, Installed, Updates (with a count) |
-| Explore | A "Coming from Windows?" banner (Bottles for programs, Steam with Proton for games) and editors' picks |
-| App card | Icon, name, one-line description in plain words, source and size ("Flathub · verified · 612 MB"), and one button: Install, a progress bar with a percentage, then Open |
-| Windows apps | What runs and what doesn't, in plain words: most programs run in a sandboxed Bottle; programs that need kernel drivers (some anti-cheat, some VPNs) won't |
-| Updates | App updates with *Update all*; a link to Settings › Updates for the system itself, which updates as one piece |
-| Remove | Asks first and says what stays ("Its settings stay unless you remove them too") |
+![Software](../screens/sculpted-light/software.png)
 
 ## Calendar
 
-| Part | Spec |
-|---|---|
-| Month view | Weekday header; days with up to two event chips (colour bar plus title) and "+N"; today's date in an accent circle; the selected day outlined |
-| Day panel | The selected day's events with time, title and place; *Add event*; and the hint that Six can add events ("Lunch with Arif tomorrow at one") |
-| Header | Month and year in Share Tech Mono; ‹ Today › |
+The month in a grid (weekday header, the days as recessed cells, today marked in the accent), ‹
+**Today** › at the top, and the chosen day on the right with its events, **Add event** and "Saved
+on this computer". Today's events also show in the Today card on home and in the clock's panel.
+Deleting an event asks first, with the danger button.
+
+![Calendar](../screens/sculpted-light/calendar.png)
+
+## Terminal
+
+SIX's own terminal: tabs (a tab can be torn off into its own window), **Ask SIX** in the toolbar,
+help and settings; a first-use line explains `Ctrl + C` (copies selected text, otherwise stops the
+program) and `Ctrl + V`. The **quick terminal** drops down from the top on `Super + `` ` `` over
+every app. A long command shows as a ring on the dock's Terminal icon and in the notch. Settings ›
+Terminal has the text size and a screen-reader mode. (The picture tool used for this repository
+has no real shell behind it, so Terminal is described here and not shown.)
 
 ## Lock screen
 
-![Lock screen](../screens/lock.png)
-
-Six menu › *Lock Screen*, `Six + L` (`Ctrl + Alt + L` in the prototype), or after the time set in
-Privacy & security.
-
-- The time in Share Tech Mono at 112 px, the date under it, the account picture, name and
-  password field; Enter unlocks. Fingerprint works when it's set up.
-- The desktop is hidden behind a heavy blur and an 86 % scrim: nothing on screen is readable.
-- **Six on the lock screen** answers "Hey Six" only for the time, timers and the weather.
-  Everything else waits until you unlock, and the lock screen says so.
-- Notifications show the app only, unless Settings › Notifications says otherwise.
+See [18 · Brand › Sign-in and lock](18-brand.md#sign-in-and-lock).

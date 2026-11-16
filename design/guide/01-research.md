@@ -1,5 +1,9 @@
 # 01 · Research: what makes a desktop OS easy to use
 
+> **Status 2026-11-16.** The research is from October 2026 and still stands. Two decisions it
+> records have moved since: SIX's layout is the Mac's (menu bar and dock) with Windows keys, and the
+> Windows-style taskbar layout is designed, not built. See [09](09-shell.md) and [12](12-windows-migration.md).
+
 This page summarizes the research behind the SIX design language. Each finding ends with the
 **decision** it led to, so the rest of the guide can be traced back to evidence.
 
@@ -22,7 +26,7 @@ This page summarizes the research behind the SIX design language. Each finding e
 
 **Decision:** SIX keeps the Windows *map*: launcher in the bottom-left, taskbar at the bottom,
 window controls top-right in the order minimize, maximize, close, right-click menus everywhere, and
-the same keyboard shortcuts. Everything new (Six Search, Six on the home screen, Overview) is added on top of that
+the same keyboard shortcuts. Everything new (SIX Search, SIX on the home screen, Overview) is added on top of that
 map and never replaces it. See [12 · Coming from Windows](12-windows-migration.md).
 
 *Update:* by product direction, the default bottom bar is now a macOS-style dock with a menu
@@ -36,7 +40,7 @@ importing from Windows.
 - The same speed makes destructive actions in corners risky.
 
 **Decisions:**
-- The Six logo in the menu bar reaches the **top-left pixel**; menu bar items reach the top edge.
+- The SIX logo in the menu bar reaches the **top-left pixel**; menu bar items reach the top edge.
 - A maximized window's close button extends to the **top-right pixel**.
 - The dock's hit areas extend to the bottom edge even though the dock floats 8 px above it.
 - Hot corners exist but are **off by default** and can never be set to a destructive action.
@@ -95,13 +99,13 @@ removed; the dock and popovers never cover the focused element. See
 
 | Heuristic | Where it shows up in SIX |
 |---|---|
-| Visibility of system status | Six's states, progress in dock icons, clear battery/network glyphs |
+| Visibility of system status | SIX's states, progress in dock icons, clear battery/network glyphs |
 | Match with the real world | Plain names: "Files", "Settings", "Bin" (not "Nautilus", "Trash" vs "Recycle Bin" confusion) |
 | User control & freedom | Undo toasts for delete/move, "Restore" for closed windows, Esc always backs out |
 | Consistency & standards | One menu component, one dialog pattern, Windows shortcuts |
 | Error prevention | Confirm only irreversible actions; everything else is undoable |
 | Recognition over recall | Labels above dock icons on hover, search that shows shortcuts next to results |
-| Flexibility & efficiency | Six Search actions, keyboard-first everything, snap layouts |
+| Flexibility & efficiency | SIX Search actions, keyboard-first everything, snap layouts |
 | Aesthetic & minimalist | Three materials with strict roles, one accent hue |
 | Help users recover from errors | Errors say what happened and the fix, with a button for the fix |
 | Help & documentation | "?" in every Settings page opens the relevant help, offline |
@@ -111,9 +115,9 @@ removed; the dock and popovers never cover the focused element. See
 | Reference | What it is | What SIX borrows | What SIX avoids |
 |---|---|---|---|
 | **plasma-ui** (cruxgarden) | WebGL "liquid" React components inspired by Liquid Glass: surfaces refract what is behind them, fuse when they touch, snap to a 24 px grid, springy motion; materials plasma, crystal, metal, wood, stone, cloud; falls back to a CSS frosted panel without WebGL2 | The **plasma glass** material for floating chrome, the 24 px snap grid for windows/widgets, spring motion, iridescent rim, a CSS fallback path | GPU-heavy effects on every surface; fusing/stretching on functional UI (kept for the wallpaper and widgets only) |
-| **thinking orbs** | Animated status orbs for AI agents: distinct states (idle, thinking, working…) instead of a spinner | **Six's states**: one presence for the assistant and long-running tasks, with states that differ in shape and motion, not just colour | Many variants; Six never replaces a progress bar where a percentage is known |
+| **thinking orbs** | Animated status orbs for AI agents: distinct states (idle, thinking, working…) instead of a spinner | **SIX's states**: one presence for the assistant and long-running tasks, with states that differ in shape and motion, not just colour | Many variants; SIX never replaces a progress bar where a percentage is known |
 | **21st.dev** | Community registry of React + Tailwind (shadcn-style) components | Fast prototyping: pull a component, re-skin it with `tailwind.preset.js` | Shipping a component that fails the checklist in [10 · Components](10-components.md#adopting-community-components) |
-| **macOS** | Coherent materials, Spotlight, Quick Look, consistent menus | Six Search (Spotlight), space-bar preview, one menu style, attention to typography | Global top menu bar, window controls on the left, Cmd-based shortcuts |
+| **macOS** | Coherent materials, Spotlight, Quick Look, consistent menus | SIX Search (Spotlight), space-bar preview, one menu style, attention to typography | Global top menu bar, window controls on the left, Cmd-based shortcuts |
 | **Claymorphism** | Soft 3D shapes: filled pastel, coloured drop shadow, inner highlight and shade | The **clay** material for buttons, toggles, tiles and app icons | Clay on large surfaces (windows, documents), pastel-on-pastel low contrast |
 | **Windows 10/11** | The layout most PC users already know | Taskbar position, Start, Snap Layouts, shortcuts, right-click, title-bar controls | Two settings apps, inconsistent dialogs, ads and upsells in system UI |
 

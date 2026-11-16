@@ -1,11 +1,15 @@
 # 05 · Materials and elevation
 
+> **Status 2026-11-16.** This chapter is **Soft Matter's** materials (clay, satin, paper, plasma
+> clay). Sculpted, the default design, is one material: raised and recessed surfaces with no glass
+> and no plasma; see [19 · Sculpted](19-sculpted.md#depth). "Quick Settings" below is Control Center.
+
 Soft Matter has three core materials and one hybrid, plasma clay, reserved for the home screen.
 Pick by **role**, never by taste.
 
 ```
            ┌─────────────────── Satin ────────────────────┐   floats above, temporary
-           │  menu bar · dock · menus · Six Search        │
+           │  menu bar · dock · menus · SIX Search        │
            └──────────────────────────────────────────────┘
    ┌───────────── Paper (window) ─────────────┐               where work happens
    │  text, lists, documents, forms           │
@@ -40,7 +44,7 @@ A filled, rounded object that looks soft and slightly inflated. Built from three
 |---|---|---|
 | clay-1 | `--clay-1` | Buttons, segmented controls, toggles' thumb, chips |
 | clay-2 | `--clay-2` | Quick-setting tiles, cards that are clickable, app-grid icons |
-| clay-3 | `--clay-3` | Six Menu tiles, onboarding hero objects, the voice button |
+| clay-3 | `--clay-3` | SIX Menu tiles, onboarding hero objects, the voice button |
 | pressed | `--clay-pressed` | Pressed / toggled-on state (the object pushes *in*) |
 
 **Rules**
@@ -53,14 +57,14 @@ A filled, rounded object that looks soft and slightly inflated. Built from three
 
 ## 2. Satin: things that float, and every control
 
-Less glass. Menus, Control Center, the Six Menu, Search, toasts, the menu bar and the dock, and
+Less glass. Menus, Control Center, the SIX Menu, Search, toasts, the menu bar and the dock, and
 every control (buttons, switches, sliders, segmented controls, Control Center's round buttons) are
 **satin**: the same stuff as the home cards and the tension studies. It is mostly opaque (94–95 %),
 so you see colour and light rather than what's behind it, with a bevel: a 1 px rim, a bright lip
 along the top, a soft shade inside the bottom edge, a glint where the key light catches it, and a
 soft drop shadow. Graphite in light, silver in dark; anything that is **on** takes the accent.
 
-![Control Center in satin: round buttons, the radios fused, pill sliders](../screens/cc-fuse.png)
+![Control Center in satin: round buttons, the radios fused, pill sliders](../screens/history/cc-fuse.png)
 
 | Part | Panels (`.glass`) | Controls |
 |---|---|---|
@@ -106,10 +110,10 @@ to the 24 px grid). Functional UI never stretches or wobbles.
 Water, not glass. The home's cards are drawn as clear, shallow water standing on the wallpaper:
 you see the floor through them, bent at the edge and wavering a little in the middle, light
 caught in caustics underneath, a thin meniscus line inside the edge and a bright lip on the side
-facing the light. Used **only** on the home screen and desktop widgets: home cards, Six's
+facing the light. Used **only** on the home screen and desktop widgets: home cards, SIX's
 conversation thread and composer. Never inside windows, menus or dialogs.
 
-![Plasma clay on the home screen](../screens/home-dark.png)
+![Plasma clay on the home screen](../screens/history/home-dark.png)
 
 **How it is built.** One full-screen GPU pass (a fragment shader) draws the wallpaper and every
 plasma clay surface together:
@@ -151,11 +155,11 @@ that and it springs back into the stack with nothing changed. A click is never a
 
 **Moods** set the wallpaper behind the surfaces. **Matte** is the default: matte black in dark
 mode and white fading to soft gray in light mode, with a faint grain and no colour, so content and
-Six carry the colour. **Obsidian**, **Signal**, **Contour**, **Strata** and **Velvet** are the drawn
+SIX carry the colour. **Obsidian**, **Signal**, **Contour**, **Strata** and **Velvet** are the drawn
 alternatives. The default rim is **Soft**, a neutral highlight; the
 iridescent rim is an option. Users pick the wallpaper (from
 thumbnails), viscosity, frost, refraction and rim in Settings › Appearance; the wallpaper is also
-in the home's right-click menu and Six can switch it ("switch to the strata wallpaper").
+in the home's right-click menu and SIX can switch it ("switch to the strata wallpaper").
 
 **Rules**
 - Text sits on the fill, never on raw refraction: the fill floor above keeps body text above
@@ -170,14 +174,14 @@ in the home's right-click menu and Six can switch it ("switch to the strata wall
 | z | Surface | Material | Shadow |
 |---|---|---|---|
 | 0 | Wallpaper | Plasma wallpaper | none |
-| 1 | Home cards, Six's conversation, desktop widgets | Plasma clay | drawn by the shader |
+| 1 | Home cards, SIX's conversation, desktop widgets | Plasma clay | drawn by the shader |
 | 2 | Inactive windows | Paper | `--shadow-2` |
 | 3 | Active window | Paper | `--shadow-3` |
 | 4 | Menu bar, dock | Glass | `--shadow-3` |
-| 5 | Menus, popovers, Six Menu, Quick Settings | Glass | `--shadow-3` |
+| 5 | Menus, popovers, SIX Menu, Quick Settings | Glass | `--shadow-3` |
 | 6 | Notifications / toasts | Glass (strong) | `--shadow-3` |
 | 7 | Dialogs (modal) | Paper over `--scrim` | `--shadow-4` |
-| 8 | Six Search, Overview, lock screen | Glass + iridescent rim / full-screen | `--shadow-4` |
+| 8 | SIX Search, Overview, lock screen | Glass + iridescent rim / full-screen | `--shadow-4` |
 
 The active window must be distinguishable from inactive ones **without colour**: larger shadow
 plus full-strength title text (inactive titles use `--c-text-3`).

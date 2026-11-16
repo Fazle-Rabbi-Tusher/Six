@@ -1,21 +1,83 @@
-# 14 · Home: Six, voice and widgets
+# 14 · Home: SIX, voice and widgets
 
-> **Naming.** The assistant is called **Six** (it was *Pip* in earlier drafts). In writing, the
-> operating system is **SIX** and the assistant is **Six**; the wake word is "Hey Six".
+## Today (2026-11-16)
 
-The SIX home screen is **voice first**. When no window is open you see Six's orb and a few plasma
+This section is how home and the assistant are in SIX today. The rest of the chapter is the design
+as written in October; where the two differ, this section is right, and the differences are listed
+at its end.
+
+**Names.** The system and the assistant are both **SIX**, always in capitals ("Six" in earlier
+drafts, "Pip" before that). The wake word is "Hey SIX". The design's orb looks keep their names.
+
+**Home is the desktop.** It runs full screen under every window: the greeting when SIX has
+something to say, a caption of what SIX heard and answered, and cards at the sides. **There is no
+big orb on home** once setup is done (it appears only in the first-run questions), and no text box.
+You talk through the notch in the menu bar ([09](09-shell.md#the-notch)), the microphone in the bar,
+`Ctrl + Space`, or "Hey SIX" when it is switched on; you type in the **SIX app** ("Type instead" in
+the notch, or the SIX icon in the dock).
+
+![Home in Sculpted light](../screens/sculpted-light/home.png)
+
+**Cards.** In Sculpted they are raised tiles (`--sc-raise`, `--radius-lg`) on the tonal ground
+with SIX embossed in it; in Soft Matter they are plasma water that fuses when two come close
+(below). The first set: Pick up where you left off (files opened through SIX), Today (the
+calendar), Current task, This device (battery, storage, memory, the AI model). More come from the
+widget gallery ("Add widgets…" or Edit widgets…): clocks, timers, notes, weather, a video, web
+cards and widgets SIX makes on request. A card can float above every window, be stacked with others,
+or be moved with the keyboard (`Alt + arrows`). A card's content is drawn once and only moved:
+nothing reloads when a card moves.
+
+**Weather** comes in three sizes from one reading (Open-Meteo, no account). **Small:** SIX's own
+picture of the sky, the temperature, the condition and the place. **Medium:** also the time at the
+place, a sunrise · length of day · sunset pill, "Rain today", feels like, humidity and wind with
+its direction. **Large:** also a forecast strip with a Day / Week switch: hours as round chips,
+days as tall pills with the high and the low, the current hour and today in the dark window with
+the signal colour as a thin inner light. The temperature is in large thin figures. SIX draws its
+13 weather pictures itself in the surface's own material; colour only where it means something
+(the sun's warmth, rain drops in the signal colour, lightning). Rain and cloud move for 12 s when
+the card appears or the pointer comes to it, and only with motion allowed. "Size › Small / Medium /
+Large" is in the card's right-click menu.
+
+**How answers are drawn.** In the caption, the notch's card and the SIX app, an answer is drawn as
+reading matter: paragraphs, lists, code blocks and tables, not one run of text. Each answer is
+tagged with where its words come from: **`local model`** for words the model on this computer
+wrote, **`SIX`** for what SIX's own code did or computed (sums, conversions, the time, file
+actions). The tag is always shown and never only a colour. A request with several steps shows
+**one plan**: the steps, each with its state, and **Do all** when it needs a yes. Under an answer
+SIX can offer **Check on the web**, which reads chosen pages and lists them as sources.
+
+**Questions SIX asks.** When SIX is unsure what it heard it asks **"Is that right?"** with the
+words it doubts marked, and Yes / No (a spoken "yes" answers it too). After a lost first word it
+asks "Did you mean: …?". A change to a file is always a **review card** that names the file and
+shows the file, the sheet and every changed cell (now, and what it would become; for a rename or a
+move, the name now and after), with **Approve change** as the main button and **Don't change**
+beside it; nothing changes until it is approved, and a model never approves anything.
+
+![SIX asking "Is that right?"](../screens/sculpted-light/is-that-right.png)
+
+**The orb.** Its looks (Settings › SIX & voice): **Bloom** (the default), **Halo**, **Ripple**,
+**Dotted** (what a computer with no graphics card gets), **Ink** and **Mosaic**, described below.
+What SIX is doing is always also written.
+
+**Different from the October text below:** the big orb on home and moving it are gone after setup;
+the orb at the top right of the menu bar is now the notch in its middle; replies are labelled with
+the tags above, not "PIP"; the dock's "SIX" icon opens the SIX app; the taskbar layout is designed,
+not built.
+
+## The October design
+The SIX home screen is **voice first**. When no window is open you see SIX's orb and a few plasma
 clay widgets with what matters right now, and nothing else: no greeting, no examples, no buttons. There is no text box on home:
-you talk to Six. Press the mic in the menu bar (or hold Space, or say "Hey Six" if you turned that
-on), say what you need, and Six answers aloud and in a caption under the orb. The written
-conversation lives in the **Six app**, opened from the Six icon at the top right, so typing is
-always one click away and every spoken request is kept there as history. The menu bar, dock, Six
+you talk to SIX. Press the mic in the menu bar (or hold Space, or say "Hey SIX" if you turned that
+on), say what you need, and SIX answers aloud and in a caption under the orb. The written
+conversation lives in the **SIX app**, opened from the SIX icon at the top right, so typing is
+always one click away and every spoken request is kept there as history. The menu bar, dock, SIX
 Menu and windows work exactly as before (see [12 · Coming from Windows](12-windows-migration.md)).
 
-![Home screen, dark theme, matte background](../screens/home-dark.png)
+![Home screen, dark theme, matte background](../screens/history/home-dark.png)
 
-Six's character (personality, tone of voice and the full globe, tower and cube state sheet) is
+SIX's character (personality, tone of voice and the full globe, tower and cube state sheet) is
 designed on the [SIX assistant character canvas](https://claude.ai/artifact/BsUEj7UkGWeqPuPLwRTF6F).
-This chapter covers how Six works inside the OS.
+This chapter covers how SIX works inside the OS.
 
 ## Anatomy
 
@@ -24,7 +86,7 @@ This chapter covers how Six works inside the OS.
 │  ⁘ Home                                   🔍  🎤  wifi ▭64%  ⚙  ◎  Tue 10:42 │
 │ ╭ Pick up where you left off ╮                         ╭ Current task ─────╮ │
 │ │ Quarterly report.xlsx      │            ◎            │ Slides from notes │ │
-│ │ SIX shell spec v3.pdf      │      (Six: press to     │ ███████░░  Stop   │ │
+│ │ SIX shell spec v3.pdf      │      (SIX: press to     │ ███████░░  Stop   │ │
 │ ├ Today ─────────────────────┤         talk)           ├ This device ──────┤ │
 │ │ 10:00 Design review        │    SIX · LISTENING      │ Battery 64 %      │ │
 │ ╰────────────────────────────╯  (state only while busy)╰───────────────────╯ │
@@ -41,14 +103,14 @@ This chapter covers how Six works inside the OS.
 
 | Part | Spec |
 |---|---|
-| **Six** | 330 px orb in the middle of home, drawn as Bloom by default (see [Six's looks](#sixs-looks)). It is a button: click it to talk. A status label in mono caps appears below it only while Six is busy: the state, or what Six is actually doing ("SIX · SEARCHING DOCUMENTS", "SIX · WAITING FOR YOUR REVIEW"). At rest there is no label |
-| **The intro** | Not on screen by default. Ask Six "what can you do?" (or "help"), or right-click home or Six and pick *What can Six do?*, and it pops up under the orb: the greeting typed in like a terminal line (`text-headline`, "Good evening, Nadia."), one line saying how to talk ("Press the mic in the menu bar, or hold Space, and talk.", or with Hey Six on, "Say "Hey Six", then what you need."), the **Try saying** examples and the hint line, each fading in 120 ms after the last. It goes when you close it (× at the end of the hint line, or `Esc`) or start talking. *Settings › Home & widgets › Keep the intro on home* keeps it on screen |
-| **Moving Six** | Six starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move Six back to the middle* or *Hide Six from home*; `Alt + arrows` moves it from the keyboard. Hidden, Six still listens through the menu bar mic; *Settings › Home & widgets › Six on home* brings it back. Its place is remembered |
-| **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what Six heard ("Open Files and Terminal side by side"), then Six's reply in Share Tech Mono, **typed in like terminal output**: a `>` prompt mark, the words arriving a few at a time behind a block cursor that blinks out 1.6 s after the last word. A streamed reply keeps typing toward the longer text instead of starting over. Review cards, previews and recovery chips appear inside it. A round × in its corner puts it away at once (speech stops; an open review is cancelled); otherwise it fades 9 s after the reply (longer when there are chips). *Settings › Six & voice › Type replies like a terminal* off shows the whole reply at once, as does Reduce motion |
+| **SIX** | 330 px orb in the middle of home, drawn as Bloom by default (see [SIX's looks](#sixs-looks)). It is a button: click it to talk. A status label in mono caps appears below it only while SIX is busy: the state, or what SIX is actually doing ("SIX · SEARCHING DOCUMENTS", "SIX · WAITING FOR YOUR REVIEW"). At rest there is no label |
+| **The intro** | Not on screen by default. Ask SIX "what can you do?" (or "help"), or right-click home or SIX and pick *What can SIX do?*, and it pops up under the orb: the greeting typed in like a terminal line (`text-headline`, "Good evening, Nadia."), one line saying how to talk ("Press the mic in the menu bar, or hold Space, and talk.", or with Hey SIX on, "Say "Hey SIX", then what you need."), the **Try saying** examples and the hint line, each fading in 120 ms after the last. It goes when you close it (× at the end of the hint line, or `Esc`) or start talking. *Settings › Home & widgets › Keep the intro on home* keeps it on screen |
+| **Moving SIX** | SIX starts in the middle, but it's yours to place: drag it anywhere on home and it stays there (a little smaller, 190 px, like something set down), clear of the menu bar and dock; the greeting and examples close up the space it left. Right-click it for *Move SIX back to the middle* or *Hide SIX from home*; `Alt + arrows` moves it from the keyboard. Hidden, SIX still listens through the menu bar mic; *Settings › Home & widgets › SIX on home* brings it back. Its place is remembered |
+| **Caption** | A plasma clay capsule that appears while you talk: a live waveform, what SIX heard ("Open Files and Terminal side by side"), then SIX's reply in Share Tech Mono, **typed in like terminal output**: a `>` prompt mark, the words arriving a few at a time behind a block cursor that blinks out 1.6 s after the last word. A streamed reply keeps typing toward the longer text instead of starting over. Review cards, previews and recovery chips appear inside it. A round × in its corner puts it away at once (speech stops; an open review is cancelled); otherwise it fades 9 s after the reply (longer when there are chips). *Settings › SIX & voice › Type replies like a terminal* off shows the whole reply at once, as does Reduce motion |
 | **Try saying** | Part of the intro. Up to four example requests as chips. Clicking one plays it as if you had said it, which is also how the prototype is tested without a microphone |
-| **Hint line** | Part of the intro. The listening mode with its shortcut, **Type instead** (opens the Six app) and × to close the intro |
+| **Hint line** | Part of the intro. The listening mode with its shortcut, **Type instead** (opens the SIX app) and × to close the intro |
 | **Widgets** | 284 px plasma clay cards in two columns (see Widgets below). Cards in a column sit 12 px apart, so they fuse. Draggable; drop snaps to the 24 px grid; double-click a moved card to send it back. Drop one card on another to stack them |
-| **Below 1100 px** | Everything stacks in one scrolling column: Six, caption, examples, then widgets in a grid |
+| **Below 1100 px** | Everything stacks in one scrolling column: SIX, caption, examples, then widgets in a grid |
 
 ## Stacking cards
 
@@ -74,9 +136,9 @@ the stack one grid step at a time.
 
 Home cards are widgets. Out of the box SIX shows four (*Pick up where you left off*, *Today*,
 *Current task*, *This device*); the person adds more from the **widget gallery**, or describes
-one and **Six makes it**.
+one and **SIX makes it**.
 
-![The widget gallery](../screens/widgets.png)
+![The widget gallery](../screens/history/widgets.png)
 
 ### What the research says
 
@@ -99,7 +161,7 @@ Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interfa
 |---|---|---|
 | Pick up where you left off | Last files and apps | Opens the item |
 | Today | Next meetings | — |
-| Current task | What Six is working on, then its output | Stop, Open, Show in Files |
+| Current task | What SIX is working on, then its output | Stop, Open, Show in Files |
 | This device | Battery, storage, updates | — |
 | Clock | The time here, in the display face, plus two cities | — |
 | Weather | Now, feels-like, the next five hours | — |
@@ -117,8 +179,8 @@ Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interfa
 |---|---|
 | Right-click home | *Add widgets…* opens the gallery. There is no Add widgets button on home: home stays clear |
 | Right-click a widget | *Edit widgets…*, *Float on top of everything*, *Size* (video), *Remove "Clock"* (see [09 · Right-click menus](09-shell.md#right-click-menus)) |
-| Six menu, Six Search | *Edit widgets…*, *Add widgets* |
-| Ask Six | "Add a clock widget", "remove the music widget", "edit widgets" |
+| SIX menu, SIX Search | *Edit widgets…*, *Add widgets* |
+| Ask SIX | "Add a clock widget", "remove the music widget", "edit widgets" |
 
 - A new widget goes to the column with more room, slides in with a small pop, and a toast offers
   **Undo**. Removing works the same way; nothing is ever deleted, the gallery adds it back as it was.
@@ -137,18 +199,18 @@ work, a note while you browse, a video while you write. Drag it anywhere (it kee
 menu bar); `Alt + arrows` move it from the keyboard. Right-click → **Stop floating** sends it back
 to its column on home. Its clock, music or video keeps running throughout.
 
-![A video widget floating over Settings](../screens/widget-floating.png)
+![A video widget floating over Settings](../screens/history/widget-floating.png)
 
-### Widgets Six makes
+### Widgets SIX makes
 
-Describe any widget, in the gallery's *Describe any widget* field or straight to Six ("make a
-widget that counts down to my exam on 14 December"). Six designs it, shows a **preview card** in
+Describe any widget, in the gallery's *Describe any widget* field or straight to SIX ("make a
+widget that counts down to my exam on 14 December"). SIX designs it, shows a **preview card** in
 the conversation (the real widget, drawn small) with **Add to home** and **Cancel**, and adds it
-to the column with more room. Made widgets appear in the gallery under *Made by Six*.
+to the column with more room. Made widgets appear in the gallery under *Made by SIX*.
 
-![Six previews a widget before adding it, in the Six app](../screens/pip-app.png)
+![SIX previews a widget before adding it, in the SIX app](../screens/history/pip-app.png)
 
-**Made widgets are data, not code.** Six writes a small spec and SIX draws it with its own
+**Made widgets are data, not code.** SIX writes a small spec and SIX draws it with its own
 components, so every made widget looks native, follows the theme, contrast and motion settings,
 and can't run anything or reach the network.
 
@@ -172,50 +234,50 @@ and can't run anything or reach the network.
 Rules:
 - A spec has a title of 32 characters at most, one icon from a fixed set, and one to four blocks.
   Anything else is dropped before drawing.
-- **No made-up live data.** On the device, Six makes countdowns, checklists, counters, world clocks,
-  notes and app shortcuts. Prices, scores, news or weather need a connected source; without one Six
+- **No made-up live data.** On the device, SIX makes countdowns, checklists, counters, world clocks,
+  notes and app shortcuts. Prices, scores, news or weather need a connected source; without one SIX
   says so ("That needs live data I can't fetch here, and I won't make a widget that shows made-up
   numbers") and suggests a widget it can make.
 - Requests the device can't handle go to the cloud model only with the same consent as any other
   question, and the reply is marked *Answered by Claude, in the cloud*.
 
-## Conversation: the Six app
+## Conversation: the SIX app
 
-The **Six app** is where the conversation is written down. Open it from the Six icon at the top
-right of the menu bar, the Six icon in the dock, **Type instead** on home, or Six Search. It has
+The **SIX app** is where the conversation is written down. Open it from the SIX icon at the top
+right of the menu bar, the SIX icon in the dock, **Type instead** on home, or SIX Search. It has
 a sidebar of conversations (today's at the top, earlier ones below, each with a mic glyph if it
 was spoken), the thread, and a composer with a dictation mic. Spoken requests land in the same
-thread, marked *Said aloud*, so nothing said to Six is lost or hidden.
+thread, marked *Said aloud*, so nothing said to SIX is lost or hidden.
 
-![The Six app](../screens/pip-app.png)
+![The SIX app](../screens/history/pip-app.png)
 
 
 - **Local first.** Plain commands ("open files", "turn on night light", "switch to the obsidian wallpaper",
   "put Terminal on the right") are understood on the device, instantly, with no network. They are
   marked *Handled on this device*.
 - **Where the answer came from is always shown.** Each reply ends with a small note: *Handled on
-  this device* or *Answered by Claude, in the cloud*. While Six works, the status label says which
+  this device* or *Answered by Claude, in the cloud*. While SIX works, the status label says which
   one it is asking ("PIP · ASKING CLAUDE").
 - **Everything else** goes to the language model. On-device by default where hardware allows; a
-  cloud model only after the person agrees, said in Six's words: "This needs the cloud model.
+  cloud model only after the person agrees, said in SIX's words: "This needs the cloud model.
   Nothing leaves until you say so."
-- **Six can act.** It can open, close and snap windows, change settings and switch wallpapers. Every
+- **SIX can act.** It can open, close and snap windows, change settings and switch wallpapers. Every
   action shows as a chip under the reply (✓ *Snapped Files left*); failed actions show a Sun chip
-  with the reason. Six never claims an action it didn't take.
+  with the reason. SIX never claims an action it didn't take.
 - **Changes to files ask first, with a review card.** Anything that edits, moves or deletes the
-  person's files puts Six in its *Asking* state and shows a review card in the reply (below). Six
+  person's files puts SIX in its *Asking* state and shows a review card in the reply (below). SIX
   does nothing until the person answers.
 - **Failures name the reason and the next step.** "I couldn't find an app called "Photoshop" on
   this PC. Nothing was opened." is followed by recovery chips (*Search for "Photoshop"*, *Show all
   apps*). Never a bare "Something went wrong", never a dead end.
-- **Stop is always there.** In the Six app, Send turns into Stop while Six answers; by voice, say "stop" or press the mic; the current task card has Stop
+- **Stop is always there.** In the SIX app, Send turns into Stop while SIX answers; by voice, say "stop" or press the mic; the current task card has Stop
   too, and stopping says what did and didn't happen ("Stopped. 1 action had already run and stays
   as it is.", "Stopped at 64 %. The outline was kept in Documents; no slides were made.").
-- **Waiting and retrying are said, not hidden.** If the cloud model asks Six to slow down, the orb
+- **Waiting and retrying are said, not hidden.** If the cloud model asks SIX to slow down, the orb
   shows *Waiting* and the reply says when to try again, with an *Ask again* chip. A dropped
   connection is retried once, quietly, in the *Retrying* state; a second failure is reported.
 
-![Six asks for review before moving a file to the Bin](../screens/pip-review.png)
+![SIX asks for review before moving a file to the Bin](../screens/history/pip-review.png)
 
 ### The review card
 
@@ -227,10 +289,10 @@ thread, marked *Said aloud*, so nothing said to Six is lost or hidden.
 | Buttons | The action named by its verb (*Move to Bin*, Ember for destructive actions) and *Cancel*. Never *OK* / *Yes* |
 | After | The card dims and its buttons disable; the reply says what happened, the action shows as a chip, and a toast offers **Undo** |
 
-Cancel is never a failure: Six says "Cancelled. Nothing was changed." and the orb shows
+Cancel is never a failure: SIX says "Cancelled. Nothing was changed." and the orb shows
 *Cancelled* for a moment before returning to *Ready*.
 
-![A failure with recovery chips](../screens/pip-failed.png)
+![A failure with recovery chips](../screens/history/pip-failed.png)
 
 ## Voice
 
@@ -239,35 +301,35 @@ visible.
 
 | Way to talk | How |
 |---|---|
-| **Press to talk** (default) | The mic button in the menu bar, clicking Six on home, `Six + Space` (`Ctrl + Space` in the prototype), or holding Space on home and letting go when you're done |
-| **Always listening for "Hey Six"** | Turned on in Control Center (*Listen for "Hey Six"*) or Settings › Six & voice. The wake word is detected on the device; nothing is processed or kept until it is heard. "Hey Six, turn on night light" works in one breath; "Hey Six" alone starts listening |
+| **Press to talk** (default) | The mic button in the menu bar, clicking SIX on home, `SIX + Space` (`Ctrl + Space` in the prototype), or holding Space on home and letting go when you're done |
+| **Always listening for "Hey SIX"** | Turned on in Control Center (*Listen for "Hey SIX"*) or Settings › SIX & voice. The wake word is detected on the device; nothing is processed or kept until it is heard. "Hey SIX, turn on night light" works in one breath; "Hey SIX" alone starts listening |
 
 | Step | What the person sees and hears |
 |---|---|
-| Listening | Six ripples (*Listening*); the menu-bar mic turns into an amber pill; the caption shows a live waveform and "Listening…" |
+| Listening | SIX ripples (*Listening*); the menu-bar mic turns into an amber pill; the caption shows a live waveform and "Listening…" |
 | Hearing | The transcript forms in the caption as you speak, so a misheard word is visible before anything runs |
-| Working | The caption keeps what Six heard; the orb and status label show what Six is doing ("PIP · ARRANGING WINDOWS") |
-| Answer | The reply appears under what you said, in Share Tech Mono, and is spoken aloud (Settings › Six & voice › *Speak replies*) |
-| Review | Changes to files show the review card inside the caption with "Say "yes" or "no"". Six waits; you can answer by voice or with the buttons |
-| With windows open | Six talks from the **menu bar**: its orb grows into a capsule and a panel drips down out of it with what you said, Six's reply (typed in like terminal output) and any review card (see [09 · Six in the menu bar](09-shell.md#six-in-the-menu-bar)) |
+| Working | The caption keeps what SIX heard; the orb and status label show what SIX is doing ("PIP · ARRANGING WINDOWS") |
+| Answer | The reply appears under what you said, in Share Tech Mono, and is spoken aloud (Settings › SIX & voice › *Speak replies*) |
+| Review | Changes to files show the review card inside the caption with "Say "yes" or "no"". SIX waits; you can answer by voice or with the buttons |
+| With windows open | SIX talks from the **menu bar**: its orb grows into a capsule and a panel drips down out of it with what you said, SIX's reply (typed in like terminal output) and any review card (see [09 · SIX in the menu bar](09-shell.md#six-in-the-menu-bar)) |
 
 Rules:
-- **The mic has two visible states, never a hidden one.** Amber pill = Six is hearing you now. A
-  small green dot on the mic = Six is only listening for "Hey Six", on this device.
-- Every spoken reply is also written, in the caption and in the Six app. Voice never carries
+- **The mic has two visible states, never a hidden one.** Amber pill = SIX is hearing you now. A
+  small green dot on the mic = SIX is only listening for "Hey SIX", on this device.
+- Every spoken reply is also written, in the caption and in the SIX app. Voice never carries
   information the screen doesn't.
-- Everything voice does can be typed in the Six app, and everything typed can be said.
+- Everything voice does can be typed in the SIX app, and everything typed can be said.
 - A new request closes an open review as *Cancelled*, so nothing waits half-answered.
 - Captions follow the text size setting.
 
 > In the prototype, voice uses the browser's speech recognition where it can (for example opening
 > the file locally in Chrome). Where it can't, which includes most embedded previews, the hint
-> line says *demo voice* and Six "hears" sample requests; the **Try saying** chips play exact
+> line says *demo voice* and SIX "hears" sample requests; the **Try saying** chips play exact
 > phrases. Spoken replies use the browser's speech engine.
 
-## Six's states
+## SIX's states
 
-Six is one design at every size: a sphere of points of light (see the small orb in
+SIX is one design at every size: a sphere of points of light (see the small orb in
 [09](09-shell.md#sixs-small-orb)). On home it is rendered realistically: about 1,100 points with
 perspective, depth of field (back points soft and blurred, front points sharp), a key light from
 the top left, a glass edge that catches light, a faint core glow, a specular highlight and a soft
@@ -287,7 +349,7 @@ Listening, Speaking, Complete, Failed, Cancelled and Resting are SIX's own.
 | Searching | A lens hops across the face, magnifying what it passes | Looking through files | PIP · SEARCHING DOCUMENTS |
 | Working | A ring of light runs down the sphere; the sphere fills with light as the task progresses, with a thin progress ring | Acting, or a long task runs | PIP · ARRANGING WINDOWS |
 | Asking | A lighthouse beam turns | Waiting for the person's review | PIP · WAITING FOR YOUR REVIEW |
-| Waiting | A comet circles | A service made Six wait | PIP · RATE LIMITED · TRY IN A MINUTE |
+| Waiting | A comet circles | A service made SIX wait | PIP · RATE LIMITED · TRY IN A MINUTE |
 | Retrying | Turns, brakes, springs back, goes again | Trying a failed step once more | PIP · CONNECTION DROPPED · TRYING AGAIN |
 | Compacting | A line sweeps across, packing the points | Making room in a long conversation | PIP · MAKING ROOM · OLDER MESSAGES |
 | Complete | Glows green once | Just finished | PIP · COMPLETE |
@@ -298,27 +360,27 @@ Listening, Speaking, Complete, Failed, Cancelled and Resting are SIX's own.
 Outcome states (Complete, Failed, Cancelled, Waiting) settle back to Ready on their own after 1.4
 to 9 s; the reply in the thread keeps the record.
 
-Six's personality and voice still come from the character canvas; its earlier globe-of-rings
+SIX's personality and voice still come from the character canvas; its earlier globe-of-rings
 look is replaced by the dotted orb in the OS.
 
-## Six's looks
+## SIX's looks
 
-*Settings › Six & voice › Look: Bloom / Halo / Ripple / Dotted / Ink / Mosaic* sets Six everywhere at once (home,
+*Settings › SIX & voice › Look: Bloom / Halo / Ripple / Dotted / Ink / Mosaic* sets SIX everywhere at once (home,
 the menu bar, the dock, the menu-bar capsule, the task card). **Bloom** is the default. On a graphite and
-silver screen Six is the one thing with colour, so it can be found at a glance and has a character
-of its own. On home Six is 330 px (230 px when moved out of the middle, 240 px on a phone).
+silver screen SIX is the one thing with colour, so it can be found at a glance and has a character
+of its own. On home SIX is 330 px (230 px when moved out of the middle, 240 px on a phone).
 
 ### Bloom (the default)
 
 A soft ball of warm colour: orange and red flowing over violet, a pink haze lighting the air
 around it, and a fine film grain, so it reads as a material rather than a gradient.
 
-![Home with Six as Bloom](../screens/home-dark.png)
+![Home with SIX as Bloom](../screens/history/home-dark.png)
 
 | Part | How it's drawn |
 |---|---|
 | Colour | Slow, domain-warped noise on the surface of a turning ball: warm low on the left, cooling to violet up and to the right; the flow never repeats |
-| Form | Shaded as a matte ball (velvet, not gloss): lit from the side Six is looking at, the far side sinking into violet, a pink rim where the light wraps round, and a soft sheen |
+| Form | Shaded as a matte ball (velvet, not gloss): lit from the side SIX is looking at, the far side sinking into violet, a pink rim where the light wraps round, and a soft sheen |
 | Haze | The ball's colour lighting the air around it: pink above, amber below. Reduced at small sizes so the shape stays crisp |
 | Grain | Animated film grain over the ball and its haze (lighter below 30 px) |
 | Rendering | One fragment shader on a shared WebGL canvas draws all three looks and copies into each orb; gradients without WebGL |
@@ -333,25 +395,25 @@ the near one. The exposure always catches at least half a turn, so its outline i
 It has no backing: on a dark page it is light, and on a light page it is drawn as blue ink, so it
 sits on the page with nothing behind it.
 
-![Home with Six as Halo](../screens/home-halo.png)
+![Home with SIX as Halo](../screens/history/home-halo.png)
 
 ### Ripple
 
 A terraced pool seen from above, from the teal rings it is modelled on: eight steps of colour
 falling from pale sky blue at the rim through aqua to a near-black centre. Each step's lip catches the light on the
 side facing it and shades the step below, the outer rings thin out to nothing, and the deeper rings
-shift further than the outer ones as Six looks around, so it reads in depth. The rings flow slowly
+shift further than the outer ones as SIX looks around, so it reads in depth. The rings flow slowly
 outward, like ripples.
 
-![Home with Six as Ripple](../screens/home-ripple.png)
+![Home with SIX as Ripple](../screens/history/home-ripple.png)
 
-### Ink: the look that shows what Six is saying
+### Ink: the look that shows what SIX is saying
 
 A paragraph out of focus, after a blurred-text poster: six rows of soft ink blots, wider than tall,
 overlapping their neighbours, about one in four paler as if further out of focus. Every blot drifts
 sideways on its own slow sine and breathes in width, so the cloud is never still.
 
-**It shows Six's words.** When Six speaks, each word of the reply comes into focus in turn, about
+**It shows SIX's words.** When SIX speaks, each word of the reply comes into focus in turn, about
 three words a second, where a blot dissolves to make room for it. Words land in reading order
 (top row to bottom, left to right, three blots on for each word, so the few words in focus at once
 never share a blot), sharpen in 200 ms and blur back out over 420 ms as later words arrive, so
@@ -374,7 +436,7 @@ blots and white words on dark.
 In the menu bar and the dock (under 60 px) Ink is three rows of blots in the orb's own colour, with
 no words.
 
-![Home with Six as Ink, speaking](../screens/home-ink.png)
+![Home with SIX as Ink, speaking](../screens/history/home-ink.png)
 
 ### Mosaic
 
@@ -396,7 +458,7 @@ to nothing. The ball turns slowly and leans toward the pointer.
 | Complete, Failed | A green flash once; a red cast while failed |
 | Resting, Cancelled | Dim, the wave almost still |
 
-![Home with Six as Mosaic](../screens/home-mosaic.png)
+![Home with SIX as Mosaic](../screens/history/home-mosaic.png)
 
 ### What each state does
 
@@ -421,19 +483,19 @@ about half a second.
 
 ### Personality
 
-- **Six looks at you.** The light on Bloom, the tilt of Halo and the depth of Ripple turn toward
-  the pointer; bring it close and Six leans in, looks harder and brightens a little.
-- **Six watches you type.** Start typing in a field and it glances at what you're writing.
-- **Six blinks.** While idle, Six squashes for a moment every few seconds and springs back.
-- **Six reacts.** It hops when a task completes (and lands with a squash), shakes its head when
+- **SIX looks at you.** The light on Bloom, the tilt of Halo and the depth of Ripple turn toward
+  the pointer; bring it close and SIX leans in, looks harder and brightens a little.
+- **SIX watches you type.** Start typing in a field and it glances at what you're writing.
+- **SIX blinks.** While idle, SIX squashes for a moment every few seconds and springs back.
+- **SIX reacts.** It hops when a task completes (and lands with a squash), shakes its head when
   something fails, nods when it asks you something, and says hello with a hop when it appears.
-- **Six is water.** Poke it and it squashes; drag it across home (or fling it) and it stretches
+- **SIX is water.** Poke it and it squashes; drag it across home (or fling it) and it stretches
   the way it moves and settles.
-- **Six gets drowsy.** Left alone for 40 seconds it dims, breathes slower and looks down; move the
+- **SIX gets drowsy.** Left alone for 40 seconds it dims, breathes slower and looks down; move the
   mouse or press a key and it wakes with a little hop.
 
-All of these are off under Reduce motion, where Six is drawn still on a fixed frame and changes
-state at once. None of them carries information on its own: the state label under Six and the
+All of these are off under Reduce motion, where SIX is drawn still on a fixed frame and changes
+state at once. None of them carries information on its own: the state label under SIX and the
 reply always say what happened.
 
 ## The current task card
@@ -449,19 +511,19 @@ reader hears "Designing 12 slides" once, not every percent.
 
 ## The small orb
 
-Outside home, Six is drawn as a dotted sphere (menu bar 21 px, dock 40 px, task cards 40 px,
-message labels 16 px). Its states and rules are in [09 · Shell → Six's small orb](09-shell.md#sixs-small-orb).
-The task card uses the *Background tasks* variant; every other small orb follows Six's state.
+Outside home, SIX is drawn as a dotted sphere (menu bar 21 px, dock 40 px, task cards 40 px,
+message labels 16 px). Its states and rules are in [09 · Shell → SIX's small orb](09-shell.md#sixs-small-orb).
+The task card uses the *Background tasks* variant; every other small orb follows SIX's state.
 
 ## Accessibility
 
-- Six on home is a button whose label carries its state, its current activity and what pressing it
-  does ("Six, ready. Press to talk"); changes are announced politely through a live region
-  ("Six · searching Documents"). Six's replies in the caption are a polite live region too.
+- SIX on home is a button whose label carries its state, its current activity and what pressing it
+  does ("SIX, ready. Press to talk"); changes are announced politely through a live region
+  ("SIX · searching Documents"). SIX's replies in the caption are a polite live region too.
 - Review cards are a labelled group with real buttons; focus is not moved to them, so typing is
   never interrupted.
-- The Six app's thread is a `log` region; new replies are announced without stealing focus.
-- Under Reduce motion Six stops turning and switches states with a crossfade; cards stop springing
+- The SIX app's thread is a `log` region; new replies are announced without stealing focus.
+- Under Reduce motion SIX stops turning and switches states with a crossfade; cards stop springing
   and jump to place; the wallpaper freezes.
 - Under Reduce transparency or More contrast the plasma clay surfaces become solid.
 - Cards can be moved with the keyboard: focus a card, then `Alt + arrow keys` moves it one grid

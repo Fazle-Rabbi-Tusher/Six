@@ -1,10 +1,31 @@
 # 03 · Typography
 
-## Typefaces
+SIX's two designs set type differently ([19](19-sculpted.md)). **Sculpted, the default**, uses
+**Noto Sans** for the interface and keeps JetBrains Mono for short labels, values, the clock and
+technical detail. **Soft Matter** is set entirely in terminal type, as below. The sizes of the scale
+are shared; Sculpted changes the faces and the weights of the larger sizes.
+
+| Token | Soft Matter | Sculpted |
+|---|---|---|
+| `--font-ui` | JetBrains Mono (Noto fallbacks) | Noto Sans, Noto Sans Bengali, Arabic, Devanagari, CJK |
+| `--font-display` | Share Tech Mono | Noto Sans |
+| `--tracking-ui` | -0.02em | 0 |
+| `--text-display` | 400 56/60 | 700 48/50 |
+| `--text-headline` | 400 40/46 | 700 40/46 |
+| `--text-title-lg` | 400 28/34 | 600 28/34 |
+| `--text-overline` | 600 11/16, caps | JetBrains Mono 500 11/16 |
+| `--text-hero` (lock clock) | 400 96/96 | 300 96/96 |
+| A window's title | `--text-label` | 600 14/20 |
+| The menu-bar clock | JetBrains Mono | JetBrains Mono 500 12 px |
+
+Everything else in the scale (body 14/20, body-sm 13/18, label 13/16, caption 12/16, title 20/28,
+title-sm 16/22) is the same size in both. All faces are under the SIL Open Font License.
+
+## Typefaces in Soft Matter: terminal type
 
 SIX is set in **terminal type**: every face is monospaced, the way a shell prompt is. It matches
 the SIX mark (a hex band drawn like a line of code) and the boot screen, and it makes numbers,
-paths and Six's status lines line up without special handling. All faces are open-licensed (SIL
+paths and SIX's status lines line up without special handling. All faces are open-licensed (SIL
 Open Font License), so SIX can ship, embed and modify them.
 
 | Role | Face | Why |

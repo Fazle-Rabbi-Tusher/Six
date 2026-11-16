@@ -1,14 +1,17 @@
 # 07 · Iconography
 
+> **Status 2026-11-16.** Icons are the same in both designs. In Sculpted's dock each app icon sits
+> on its own raised tile (36 px icon, radius 28 %, on a 52 px tile); see [09](09-shell.md#dock).
+
 ## Three icon families
 
 | Family | Style | Sizes | Where |
 |---|---|---|---|
 | **System glyphs** | [Phosphor](https://phosphoricons.com) *Regular* (MIT), drawn on a 256-unit grid; *Fill* weight for selected states | 16 / 20 / 24 px | Menu bar, menus, toolbars, settings rows |
-| **App icons** | Clay illustrations on a squircle: a soft gradient tile with one object modelled in two or three tones, a contact shadow and a top gloss | 22 (title bar), 26 (lists), 34 (widgets), 48 (dock), 52 (Six Menu), 72 (About), 256 px | Dock, Six Menu, Six Search, title bars, Settings › About |
-| **Place icons** | Clay folders with an embossed emblem, drives and file sheets | 28 (lists), 64 (icon view) | Files, open and save dialogs, Six Search |
+| **App icons** | Clay illustrations on a squircle: a soft gradient tile with one object modelled in two or three tones, a contact shadow and a top gloss | 22 (title bar), 26 (lists), 34 (widgets), 48 (dock), 52 (SIX Menu), 72 (About), 256 px | Dock, SIX Menu, SIX Search, title bars, Settings › About |
+| **Place icons** | Clay folders with an embossed emblem, drives and file sheets | 28 (lists), 64 (icon view) | Files, open and save dialogs, SIX Search |
 
-![The dock with the clay app icons](../screens/dock-icons.png)
+![The dock with the clay app icons](../screens/history/dock-icons.png)
 
 Phosphor was chosen over Lucide, Tabler and Remix because it has one consistent drawing style in
 six weights (thin to fill, plus duotone), 1,500+ icons that cover OS needs (devices, files,
@@ -38,7 +41,7 @@ plain SVG paths, so the shell embeds only the ones it uses.
 
 | App | Tile | Object |
 |---|---|---|
-| Six Menu (SIX) | Cobalt | The Hex Face mark in white, a pearl-to-blue band ([18](18-brand.md)) |
+| SIX Menu (SIX) | Cobalt | The Hex Face mark in white, a pearl-to-blue band ([18](18-brand.md)) |
 | Files | Paper white | A blue folder with a sheet inside |
 | Browser | Teal to blue | A globe with a coral orbit and a small moon |
 | Mail | Sky to blue | An envelope with a coral seal |
@@ -49,13 +52,13 @@ plain SVG paths, so the shell embeds only the ones it uses.
 | Software | Mint to green | A shopping bag with a download arrow |
 | Settings | Silver | A steel gear |
 | Design guide | Lilac to violet | A palette with four paints |
-| Six | Near-black | Six's live dotted orb, the only animated icon |
+| SIX | Near-black | SIX's live dotted orb, the only animated icon |
 | Bin | Glass | A silver bin |
 
 - Third-party and Windows apps keep their own icon, placed on a neutral squircle so the row stays
   consistent. Software shows apps that have no icon as their initial on a tile in their colour.
 - Settings sections use small 24 px tiles in a section colour with a white Phosphor glyph, like
-  the sections of a system settings app (Wi-Fi blue, Display orange, Sound red, Six violet…). Each
+  the sections of a system settings app (Wi-Fi blue, Display orange, Sound red, SIX violet…). Each
   colour keeps 3:1 against the white glyph.
 
 ## Place icons
@@ -72,7 +75,7 @@ plain SVG paths, so the shell embeds only the ones it uses.
   symbols.
 - The battery is drawn, not an icon: an outline whose fill matches the charge, followed by the
   percentage in tabular figures.
-- Control Center is a two-toggle glyph; Six is the small orb, with a progress ring while a task
+- Control Center is a two-toggle glyph; SIX is the small orb, with a progress ring while a task
   runs.
 - While the microphone is on, a mic glyph on an amber pill appears left of Control Center. It is
   never folded into another icon.
