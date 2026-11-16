@@ -19,7 +19,9 @@ colour schemes for light, dark and each accent. A person who picks a design keep
 Both designs share one set of role names (`--c-text`, `--c-surface`, `--radius-md`, `--dur-base` …).
 Sculpted sets those names to its own values, so a screen is written once and drawn in either design.
 
-"Buttons should feel like buttons."
+"Buttons should feel like buttons." Sculpted began as an October 2026 design exploration, kept in
+[`tactile/`](../tactile/README.md); this chapter is how it is in SIX today, and where the two differ,
+this chapter is right.
 
 ## The palette
 
@@ -159,14 +161,17 @@ in [08](08-motion.md).
 
 ## Wallpaper and home
 
-An abstract tonal ground (a soft radial gradient from `--sc-wall-a` to `--sc-wall-b`) with a large
+With the Matte wallpaper chosen, an abstract tonal ground (a soft radial gradient from `--sc-wall-a` to `--sc-wall-b`) with a large
 "SIX" embossed into it in heavy Noto Sans (140 to 440 px, scaled to the screen), drawn with a light
 and a dark text shadow so it reads as pressed into the surface. Strong contrast is kept for
 content. Home's cards are raised tiles instead of water. More contrast and High contrast remove the
 embossed word.
 
-![Home in Sculpted, Ivory](../screens/sculpted-light/home.png)
-![Home in Sculpted, Graphite](../screens/sculpted-dark/home.png)
+![Home in Sculpted, Ivory, with Matte chosen](../screens/sculpted-light/home-matte.png)
+![Home in Sculpted, Graphite, with Matte chosen](../screens/sculpted-dark/home-matte.png)
+
+By default home shows a picture wallpaper instead (Paper Tide in light, Ion Drift in dark;
+[`wallpapers/`](../wallpapers/README.md)); the cards stay raised tiles on it.
 
 ## What does not change between designs
 

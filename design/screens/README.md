@@ -5,8 +5,11 @@ Pictures of SIX as it is on 16 November 2026, at 1280 × 800.
 **How they were made.** The pictures in the four design folders are drawn by SIX's real interface
 (the same built page that runs on an installed system), in a browser, with a **stand-in for the
 computer underneath**: the battery, Wi-Fi networks, files and apps in them are test values, and
-some say so ("stand-in", "Preview fixture"). Home's wallpaper is set to Matte, SIX's own drawn
-ground. The browser ran without a graphics card, so Soft Matter's home cards show their plain
+some say so ("stand-in", "Preview fixture"). Home has its default picture wallpaper (Paper Tide in
+light, Ion Drift in dark; the files are in [`../wallpapers/`](../wallpapers/README.md)); in the other
+pictures over home the wallpaper is set to Matte, SIX's own drawn ground, and `home-matte.png` shows
+home that way. **The weather pictures use invented town names** (Quillbrook, Velmora Bay, Tarnwick
+Heights) and test readings, not real places or live weather. The browser ran without a graphics card, so Soft Matter's home cards show their plain
 fallback surface, not the water drawn by the shader, and the drawn wallpapers are still. The pictures in [`installed/`](installed/README.md) are real, from an installed system.
 Nothing here is a mock-up.
 
@@ -25,8 +28,10 @@ Nothing here is a mock-up.
 
 | | |
 |---|---|
-| ![](sculpted-light/home.png) **home.png** Home: the menu bar with the notch in its middle, the cards, SIX embossed in the ground, the dock | ![](sculpted-light/six-menu.png) **six-menu.png** The SIX Menu from the dock: search, pinned apps, the granted folder, the person and power |
+| ![](sculpted-light/home.png) **home.png** Home as a new person sees it: the default wallpaper, the menu bar with the notch in its middle, the cards, the dock | ![](sculpted-light/six-menu.png) **six-menu.png** The SIX Menu from the dock: search, pinned apps, the granted folder, the person and power |
 | ![](sculpted-light/system-menu.png) **system-menu.png** The system menu from the SIX logo, with its keys | ![](sculpted-light/six-search.png) **six-search.png** SIX Search: every result says what Enter will do |
+| ![](sculpted-light/home-matte.png) **home-matte.png** Home with Matte chosen: in Sculpted, SIX embossed in the tonal ground | ![](sculpted-light/settings-wallpaper.png) **settings-wallpaper.png** Settings › Wallpaper: the preview, Use for, Image fit (the list of wallpapers below needs the real computer) |
+| ![](sculpted-light/weather-day.png) **weather-day.png** The weather widget in its three sizes: Large with the Day strip, Medium, Small | ![](sculpted-light/weather-week.png) **weather-week.png** The same, Large with the Week strip |
 | ![](sculpted-light/control-center.png) **control-center.png** Control Center as a board of tiles; live things are dark windows | ![](sculpted-light/control-center-edit.png) **control-center-edit.png** Control Center in edit mode |
 | ![](sculpted-light/clock-panel.png) **clock-panel.png** The calendar and notifications from the clock | ![](sculpted-light/context-menu.png) **context-menu.png** The right-click menu on home |
 | ![](sculpted-light/power.png) **power.png** Shutting down: one main button, an ordinary one | ![](sculpted-light/widget-gallery.png) **widget-gallery.png** The widget gallery |
@@ -62,7 +67,7 @@ Nothing here is a mock-up.
 
 ## The main screens in every look
 
-Same names in each folder: `home`, `six-menu`, `system-menu`, `six-search`, `control-center`,
+Same names in each folder: `home`, `home-matte`, `weather`, `six-menu`, `system-menu`, `six-search`, `control-center`,
 `notch-open`, `six-app`, `files`, `settings`, `settings-appearance`, `software`, `calendar`. In the
 Soft Matter pictures of Settings › Appearance the "In use" mark stays on Sculpted: the picture tool
 switched the look directly, not through that setting.
@@ -70,6 +75,7 @@ switched the look directly, not through that setting.
 | Sculpted dark | Soft Matter light | Soft Matter dark |
 |---|---|---|
 | ![](sculpted-dark/home.png) | ![](softmatter-light/home.png) | ![](softmatter-dark/home.png) |
+| ![](sculpted-dark/weather.png) | ![](softmatter-light/weather.png) | ![](softmatter-dark/weather.png) |
 | ![](sculpted-dark/control-center.png) | ![](softmatter-light/control-center.png) | ![](softmatter-dark/control-center.png) |
 | ![](sculpted-dark/six-menu.png) | ![](softmatter-light/six-menu.png) | ![](softmatter-dark/six-menu.png) |
 | ![](sculpted-dark/files.png) | ![](softmatter-light/files.png) | ![](softmatter-dark/files.png) |
@@ -86,6 +92,6 @@ switched the look directly, not through that setting.
 ## Not pictured
 
 Terminal (the picture tool has no shell behind it; see [16](../guide/16-system-apps.md#terminal)),
-the lock and sign-in screens and the boot screen as running (see [18](../guide/18-brand.md#the-system-screens-today)),
-Settings › Wallpaper (it shows the picture wallpapers, which are not in this repository), and the
-weather widget (its test readings are for real towns; see [14](../guide/14-home-assistant.md)).
+the lock screen and the boot screen as running (see [18](../guide/18-brand.md#the-system-screens-today);
+the sign-in screen is in [`installed/`](installed/README.md)), and the installed desktop (its dock
+carried another company's logo).

@@ -35,6 +35,8 @@ Every screen of today's SIX is in [`screens/`](screens/README.md).
 | [`tokens/`](tokens/README.md) | The design tokens as the product uses them: `tokens.css` (base and Soft Matter), `sculpted.css`, `high-contrast.css` |
 | [`screens/`](screens/README.md) | Pictures of every main screen: Sculpted light, the most important screens in Sculpted dark and Soft Matter light and dark, real pictures from an installed system, and the October pictures in `history/` |
 | [`brand/`](brand/) | The Hex Face mark, the app icon, the SIX wordmark and lockups (SVG, text outlined); the brand sheet and the October boot animation |
+| [`wallpapers/`](wallpapers/README.md) | Six of the seven picture wallpapers SIX has, original files |
+| [`tactile/`](tactile/README.md) | The October 2026 design exploration Sculpted came from (a 16-page guide) |
 | [`prototype/`](prototype/index.html) | The October 2026 prototype of Soft Matter (see below) |
 | [`concepts/`](concepts/tension.html) | The tension studies (elastic surfaces) that Soft Matter's motion came from |
 | [`skills/`](skills/tension.skill) | The design skill, packaged |
@@ -86,7 +88,8 @@ longer how SIX looks**:
 ## Credits and rights
 
 The design, the Hex Face mark, the wordmark, the icons and pictures SIX draws itself, and the
-pictures in `screens/` are SIX's own. The fonts are under the SIL Open Font License (Noto Sans,
+pictures in `screens/` are SIX's own. The seven picture wallpapers in `wallpapers/` are generated
+artwork made for SIX, and `tactile/` is the design exploration made for SIX that Sculpted came from. The fonts are under the SIL Open Font License (Noto Sans,
 JetBrains Mono, Share Tech Mono, VT323). System glyphs are [Phosphor](https://phosphoricons.com)
 (MIT). The orb's dotted look is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by
 Yogesh ([MIT](https://github.com/yogesharc/thinking-orbs)). SIX is built on Fedora Linux; Fedora is

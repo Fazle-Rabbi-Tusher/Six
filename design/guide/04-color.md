@@ -142,7 +142,7 @@ pastel is always `--c-text` (8:1 or better in both themes).
 
 Today SIX offers two kinds of wallpaper in Settings › Appearance: a set of **picture wallpapers**
 (home uses a light one in light and a dark one in dark, the lock and sign-in screens their own;
-the picture files are not part of this repository), and the **drawn moods** below. **Matte** (no
+the files are in [`wallpapers/`](../wallpapers/README.md)), and the **drawn moods** below. **Matte** (no
 colour) is the fallback in both finishes. The five drawn moods are generated live by the home's
 shader (nothing is a picture), move slowly, and were made after a reference image. In Sculpted,
 home's ground is its own tonal surface with SIX embossed in it ([19](19-sculpted.md#wallpaper-and-home)).

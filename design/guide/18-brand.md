@@ -118,6 +118,8 @@ Soft Matter, light or dark) and its palette; the sign-in screen runs before anyo
 it keeps SIX's dark look. Fingerprint and face unlock appear only where the hardware exists, only
 on these two screens, and the password always works.
 
+![The sign-in screen on an installed system](../screens/installed/sign-in.png)
+
 ### The installer
 
 Five pages in one frame: **Language**, **Basic settings** (keyboard, region, time zone, optional

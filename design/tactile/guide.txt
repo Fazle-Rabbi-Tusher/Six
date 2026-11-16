@@ -1,0 +1,585 @@
+SIX         OS / SCULPTED EDITION
+
+
+
+
+CONCEPT / 01
+
+
+
+
+You should feel every detail.
+A complete visual direction for SIX OS, drawn from your two reference images.
+
+
+
+
+Quiet surfaces.
+                                                                                                                                       MAKE IT YOURS
+                                                                                A space that feels yours.
+Physical controls.                                                                                                                     Brightness                             72%
+                                                                                Familiar, quiet, and carefully shaped
+Intelligence within reach.                                                      around your day.
+
+
+                                                                                    Get started                                        Focus mode
+
+Ivory surfaces, deep recessed channels and sculpted
+edges follow your first reference. Graphite instrument
+panels and machined aluminium controls follow your
+second.
+
+
+                                                                                Files                        Browser                      Notes             Settings
+                                                                                SIX APPLICATION              SIX APPLICATION              SIX APPLICATION   SIX APPLICATION
+
+
+
+
+IVORY / GRAPHITE / MACHINED ALUMINIUM
+                                                                          A coherent system. From first boot to the smallest switch.
+
+DESIGN LANGUAGE: SCULPTED
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                     SPEC 01
+SIX           OS / SCULPTED EDITION
+
+
+
+
+01 / THE DESKTOP
+
+
+
+
+A calm place to begin.
+The shell gives work the largest area and keeps global controls in predictable places.
+
+
+
+
+   SIX                                                                                                                   FRI 23 OCT   10:36         01   The top bar
+                                                                                                                                                         A quiet 36px native bar: workspace, clock,
+                                                                                                                                                         network, battery and profile.
+                                                                                                               QUICK CONTROLS
+                   Files                                                                               - + x
+
+
+
+
+                                                                            SIX
+   Files                                                                                                                                            02   The workspace
+                  PLACES                                                                                        Wi-Fi                 Bluetooth          Use an abstract tonal wallpaper. Reserve
+                                        A place for everything.                                                                                          strong contrast for the content in front of it.
+                   Home
+                                        Your files, just where you left them.
+   Settings
+
+                   Documents
+                                                                                                               Brightness                     72%   03   The dock
+                   Downloads                                                                                                                             Centred favourites and running indicators. AI
+   Apps                                      Projects                           Documents   Pictures                                                     lives in the dock and opens as a separate
+                   Pictures
+                                             12 items                           12 items    12 items
+                                                                                                                                                         tool.
+                                                                                                               Volume                         48%
+                   Trash
+                                        RECENT FILES
+                                                                                                                                                    04   Quick controls
+                                             Design notes                                                                                                A compact panel for Wi-Fi, Bluetooth,
+                                             Workspace exploration                                             Focus mode
+                                                                                                                                                         brightness, sound, Focus and power.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                                 SPEC 02
+SIX         OS / SCULPTED EDITION
+
+
+
+
+02 / ACTIONS & STATES
+
+
+
+
+Buttons should feel like buttons.
+A clear hierarchy: one dominant action, supporting actions in the same material, and plain text for low-priority choices.
+
+
+
+
+     ACTION FAMILY                                                                                        NATIVE SIZING
+
+
+
+     One surface. Clear priorities.                                                                       Default target                44 x 44px minimum design target
+
+                                                                                                          Button height                 44px default / 36px dense + hit area
+
+         Continue                             Secondary                    Quiet action                   Padding                       16px horizontal / 10-12px vertical
+
+                                                                                                          Corner radius                 12px controls / 999px pill actions
+
+                                                                                                          Icon size                     18-20px within 44px target
+          Delete                              Unavailable                    +
+
+
+
+THE STATE GRAMMAR
+
+
+
+
+   Default                                   Hover                            Pressed                   Selected                          Disabled                             Focus
+   Raised surface + fine edge                Lighter edge; no large glow      Inset depth; 1px travel   Position + shape/check marker     Muted; no activation                 2px ring + 3px offset
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                                        SPEC 03
+SIX         OS / SCULPTED EDITION
+
+
+
+
+03 / INPUT & SELECTION
+
+
+
+
+Every adjustment feels deliberate.
+Recessed wells group input. Labels remain visible. Values are understandable without colour alone.
+
+
+
+
+     SLIDERS                                                                                         SWITCHES, CHECKBOXES & SEGMENTS
+
+
+
+     Output volume                                                             64%
+                                                                                                     Notifications
+
+
+                                                                                                     Nearby sharing
+     Display brightness                                                        82%
+
+
+                                                                                                        Compact                        Default                      Comfortable
+
+
+
+
+     TEXT, SEARCH & VALIDATION                                                                       PRECISION & KEYBOARD
+
+
+     Workspace name                                                                                  Arrow keys adjust sliders by one unit; Home and End reach the limits. Space
+                                                                                                     toggles switches and checkboxes. Radio buttons support one choice per group.
+         Personal workspace
+
+
+     Folder name                                                                                     Show units next to every value. Associate error messages with the affected input and
+                                        Project/2026 - remove / to continue
+                                                                                                     keep the typed value after failure.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                          SPEC 04
+SIX           OS / SCULPTED EDITION
+
+
+
+
+04 / WINDOWS & FILES
+
+
+
+
+Your work stays in view.
+Neutral content surfaces, compact chrome and a consistent relationship between navigation and content.
+
+
+
+
+   SIX                                                                                                  FRI 23 OCT   10:36
+                                                                                                                                     01   Window anatomy
+                                                                                                                                          24px corners, 44px title bar, persistent app title and
+                                                                                                                                          right-aligned controls. The native hit area stays generous.
+                                                                                                     QUICK CONTROLS
+                   Files                                                                     - + x
+                                                                                                                                          Window management
+
+
+
+
+                                                               SIX
+   Files                                                                                                                             02
+
+                  PLACES                                                                              Wi-Fi              Bluetooth        Support 50/50 snapping, a 2x2 grid and keyboard movement
+                                        A place for everything.                                                                           between workspaces. Restore keeps the previous bounds.
+                   Home
+                                        Your files, just where you left them.
+   Settings
+
+                   Documents
+                                                                                                     Brightness              72%     03   File organisation
+                   Downloads                                                                                                              Places on the left; breadcrumbs, search and view controls above
+   Apps                                      Projects                 Documents   Pictures                                                content. Offer grid and list views.
+                   Pictures
+                                             12 items                 12 items    12 items
+
+                                                                                                     Volume                  48%
+                   Trash
+                                                                                                                                     04   Safety & recovery
+                                        RECENT FILES
+
+                                                                                                                                          Use Trash for recoverable deletion. Confirm permanent deletion.
+                                             Design notes                                                                                 Offer Undo after a move or rename.
+                                             Workspace exploration                                   Focus mode
+
+
+
+
+PREVIEW: draggable, minimise, close, maximise and restore.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                                         SPEC 05
+SIX          OS / SCULPTED EDITION
+
+
+
+
+05 / SIX INTELLIGENCE
+
+
+
+
+Useful, visible, under your control.
+AI is a tool in the workspace. Show its scope, data destination and proposed action before execution.
+
+
+
+
+                                                                                01   Start with context
+     SIX INTELLIGENCE
+                                                                                     Offer selected text, current window or a chosen folder as explicit context chips. Do not infer unrestricted
+                                                                                     disk access.
+
+
+         *                                                                      02   Make the mode legible
+                                                                                     Local mode: on-device label. Cloud mode: provider, connection and data-sending indicator. Never claim
+                                                                                     local execution if remote.
+     What is on your mind?
+     Find a file. Make a plan. Clear some space.
+                                                                                03   Review actions before changes
+                                                                                     Summarise file moves, commands and outgoing data. Let the user inspect and approve the specific
+                                                                                     proposed action.
+        Organise my workspace                                >
+
+                                                                                04   Handle failure calmly
+        Explain this design                                  >                       Explain offline state, model unavailable and permission denied. Preserve the prompt and offer a useful
+                                                                                     next step.
+
+
+
+         Ask SIX anything...                                >
+
+
+     ON-DEVICE / ASK BEFORE CLOUD
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                               SPEC 06
+SIX         OS / SCULPTED EDITION
+
+
+
+
+06 / SETTINGS & NOTIFICATIONS
+
+
+
+
+Control without clutter.
+Task groups are easy to scan. Quiet notifications inform without becoming the centre of attention.
+
+
+
+
+      SETTINGS / PERSONALISATION
+                                                                                                            Notification centre
+      Your system, your way.
+                                                                                                                    You are all up to date
+                                                                                                              +
+      Accent colour                                                                                                 System update check completed.
+
+      Blue, mint, amber or lavender                                                                                 SIX / TODAY
+
+
+
+
+      Appearance                                                                                                    A little more room to think
+                                                                                     Dark       Light         +
+      Dark, light, or follow system schedule                                                                        Focus mode is ready when you are.
+
+                                                                                                                    SIX / TODAY
+
+
+
+      Reduce motion
+      Remove non-essential movement
+
+
+
+      System sounds                                                                                     Settings groups: Network, Appearance, Sound, Display, Power, Apps,
+      Soft event feedback with a mute option                                                            Accounts, Privacy, Accessibility, Updates and About.
+
+
+                                                                                                        Notifications: group by app, show time, expose actions on focus, and
+                                                                                                        include Clear all and Do not disturb.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                             SPEC 07
+SIX         OS / SCULPTED EDITION
+
+
+
+
+07 / FIRST BOOT, LOCK & SIGN IN
+
+
+
+
+A considered first hello.
+From setup to returning each day, the interface should feel reassuring, direct and easy to recover.
+
+
+
+
+     SIX                                                                                              WELCOME TO SIX
+
+
+
+                             FRIDAY, 23 OCTOBER
+
+
+                                                                                                      Make yourself at home.
+
+                           10:36
+                                                                                                      Choose language, keyboard and time zone. Connect to a network when ready.
+
+
+
+
+                                                                                                      1 Language & keyboard
+
+                                                                                                      2 Network & privacy
+                                                  S
+                                                                                                      3 Account & recovery
+
+                                                                                                      4 Appearance & finish
+                             Password                            >                                                                                                Continue
+
+
+
+
+Lock: time and date, account identity, password or supported authentication, network            Setup: permit offline completion where feasible. Explain encryption and recovery
+and power. Hide message contents until authenticated.                                           choices. Keep cloud AI opt-in, with data destination visible.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                   SPEC 08
+SIX          OS / SCULPTED EDITION
+
+
+
+
+08 / COLOUR, TYPE & MATERIAL
+
+
+
+
+Light catches every edge.
+Ivory and graphite share sculpted edges, recessed channels and neutral control faces. Blue is a limited signal accent.
+
+
+
+
+   Ivory
+   #E7E6E2
+                                             Surface
+                                             #E4E3DF
+                                                                       Inset
+                                                                       #D8D7D3                                Aa
+                                                                                                               Native UI sans + monospace detail
+                                                                                                               Linux target: a tested native sans font such as Noto Sans. Use the
+                                                                                                               platform UI font elsewhere. Monospace is for short labels, values and
+                                                                                                               technical detail.
+   Signal blue                               Graphite                  Aluminium
+   #087BDC                                   #202729                   #C4CDCA
+
+                                                                                                               Display                                        48 / 1.05
+
+                                                                                                               Window title                                   28 / 1.20
+SEMANTIC COLOUR
+                                                                                                               Body                                           14 / 1.50
+
+                                                                                                               Label                                          11 / 1.40
+   Success / #A9D7B4                         Caution / #F6C47C         Error / #F2A99B
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                    SPEC 09
+SIX           OS / SCULPTED EDITION
+
+
+
+
+09 / GEOMETRY, MOTION & ACCESS
+
+
+
+
+Depth should help, never hide.
+These are design targets to verify in the native implementation, rather than a claim of completed accessibility certification.
+
+
+
+
+     GEOMETRY                                                                                             MOTION
+
+
+
+                                                                                                          Controls                           120ms ease-out
+
+          8                           12                20                  PILL                          Panels & menus                     180ms ease-out
+
+                                                                                                          Windows                            240ms ease-out
+
+                                                                                                          Reduced motion                     No scale, travel or spring effects
+     4 / 8 / 12 / 16 / 24 / 32 / 48px spacing
+
+
+
+
+01    Readable surfaces                                                                              03    More than a colour
+      Target at least 4.5:1 body text and 3:1 large text. Check interactive boundaries separately,         Pair selected states with a check, border, position or label. Errors name the problem and
+      including light mode and each accent.                                                                include a useful recovery path.
+
+
+02    Keyboard and scaling                                                                           04    Comfort in daily use
+      Visible 2px focus ring. Logical tab order. Trapped modal focus and return focus. Verify 200%         44px design targets, no required hover-only action, predictable dismissal and no essential
+      text scaling, high contrast and screen readers.                                                      animation. Make shadows and texture optional.
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                                   SPEC 10
+SIX          OS / SCULPTED EDITION
+
+
+
+
+10 / POWER, UPDATES & RECOVERY
+
+
+
+
+Keep the difficult moments clear.
+System events use the same material and language as everyday actions. State the effect and preserve the user’s work.
+
+
+
+
+     POWER                                                              UPDATES                                                           ERROR & RECOVERY
+
+
+
+
+     Ready for a break?                                                 An update is ready.                                               Could not connect.
+     Sleep, Restart and Shut down remain separate                       Show download size, restart requirement and                       Explain the network problem in plain language.
+     actions. Before closing an app, handle unsaved                     timing. Offer restart now or a scheduled time.                    Keep the current task and provide a focused
+     changes.                                                                                                                             retry.
+
+
+
+
+         Sleep                                                             Schedule restart                                                 Try again
+
+
+
+
+FIRST-CLASS SYSTEM STATES
+
+
+
+Working                                        Offline                                             Permission denied                                    Empty
+Specific progress + cancellation where safe    A visible state + the next useful action            Explain access scope + request again                 Name what belongs here + one next step
+
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                               SPEC 11
+SIX         OS / SCULPTED EDITION
+
+
+
+
+11 / HANDOFF
+
+
+
+
+One concept. A practical path forward.
+Build the shell in layers. Keep a shared token source so screens and controls stay consistent.
+
+
+
+
+     DELIVERED IN THE INTERACTIVE PREVIEW                                                                   DESIGN SPECIFICATION FOR NATIVE BUILD
+
+
+
+     + Desktop, dock and app launcher with search                                                           1. Shared tokens -> toolkit theme -> shell components
+
+     + Draggable windows; minimise, maximise and close
+                                                                                                            2. Implement desktop + panels before app integration
+
+     + Files layout, folder selection and demo creation
+                                                                                                            3. Next: native files, settings, notifications and search
+     + Quick controls, sliders and Focus toggle
+                                                                                                            4. Then: permission broker and AI provider abstraction
+     + Ivory / graphite finish and four accent choices
+
+                                                                                                            5. Finally: setup, update, power and recovery services
+     + AI conversation layout with scripted responses
+
+
+     + Notes saved locally in the browser
+
+
+     + Lock, notifications, permissions and state examples
+
+
+
+
+Scope: a browser-based design concept, not an installable operating system. Native services, authentication, real AI, window snapping, updates and hardware control are design proposals, not connected
+features.
+
+
+
+SIX OS / DESIGN EXPLORATION / OCTOBER 2026                                                                                                                                                 SPEC 12
+

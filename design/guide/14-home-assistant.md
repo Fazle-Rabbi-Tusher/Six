@@ -18,8 +18,11 @@ the notch, or the SIX icon in the dock).
 
 ![Home in Sculpted light](../screens/sculpted-light/home.png)
 
-**Cards.** In Sculpted they are raised tiles (`--sc-raise`, `--radius-lg`) on the tonal ground
-with SIX embossed in it; in Soft Matter they are plasma water that fuses when two come close
+**Wallpaper.** A new person sees a picture wallpaper on home: Paper Tide in light, Ion Drift in dark
+([`wallpapers/`](../wallpapers/README.md)).
+
+**Cards.** In Sculpted they are raised tiles (`--sc-raise`, `--radius-lg`) on the wallpaper, or on
+the tonal ground with SIX embossed in it when Matte is chosen; in Soft Matter they are plasma water that fuses when two come close
 (below). The first set: Pick up where you left off (files opened through SIX), Today (the
 calendar), Current task, This device (battery, storage, memory, the AI model). More come from the
 widget gallery ("Add widgets…" or Edit widgets…): clocks, timers, notes, weather, a video, web
@@ -37,6 +40,9 @@ the signal colour as a thin inner light. The temperature is in large thin figure
 (the sun's warmth, rain drops in the signal colour, lightning). Rain and cloud move for 12 s when
 the card appears or the pointer comes to it, and only with motion allowed. "Size › Small / Medium /
 Large" is in the card's right-click menu.
+
+![The weather widget in its three sizes, Large with the Day strip (invented town names, test readings)](../screens/sculpted-light/weather-day.png)
+![Large with the Week strip](../screens/sculpted-light/weather-week.png)
 
 **How answers are drawn.** In the caption, the notch's card and the SIX app, an answer is drawn as
 reading matter: paragraphs, lists, code blocks and tables, not one run of text. Each answer is
