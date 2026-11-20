@@ -86,8 +86,12 @@ The system screens before sign-in use Noto Sans.
 
 These run before and around the desktop. They are drawn by the system's own programs (the boot
 splash, the sign-in and lock screens, the installer), in SIX's colours, and each has one main
-button drawn the way SIX's windows draw it ([19](19-sculpted.md#one-main-button)). Real pictures
-from an installed system are in [`screens/installed/`](../screens/installed/README.md).
+button drawn the way SIX's windows draw it ([19](19-sculpted.md#one-main-button)). They follow
+the same writing and alignment rules as the desktop ([13](13-writing.md#how-much-to-say),
+[06](06-layout.md#alignment)): fewer words, one text edge, one centre, whole pixels. Pictures of
+them drawn by SIX's real sign-in, lock and installer code at the desk are in
+[`screens/system/`](../screens/system/README.md); the real disk unlock prompt from an installed
+system is in [`screens/installed/`](../screens/installed/README.md).
 
 ### Boot
 
@@ -112,13 +116,19 @@ character is a dot. The keyboard layout is shown under it.
 A full-screen wallpaper with a large clock at the top (a light serif, the date under it), the
 person's picture and name, the password field with an eye to show what is typed, the main button
 **Sign in** (or **Unlock**) as a full-width pill under the field, and **Switch user** under that.
-Along the foot: Accessibility and the session on the left, Sleep, Restart and Shut down on the
-right, as ordinary pill buttons. The lock screen follows the design the person chose (Sculpted or
-Soft Matter, light or dark) and its palette; the sign-in screen runs before anyone has chosen, so
-it keeps SIX's dark look. Fingerprint and face unlock appear only where the hardware exists, only
-on these two screens, and the password always works.
+Clock, date, picture, name, field and buttons share one centre line. Every button is 44 px tall,
+Sign in included. Several accounts sit centred in one row of 144 px tiles. Along the foot, on a
+24 px edge: Accessibility and the session on the left, Sleep, Restart and Shut down on the right,
+as ordinary pill buttons. The lock screen follows the design the person chose (Sculpted or Soft
+Matter, light or dark) and its palette; the sign-in screen runs before anyone has chosen, so it
+keeps SIX's dark look. Fingerprint and face unlock appear only where the hardware exists, only on
+these two screens, and the password always works. Every message fits in two lines: "Sign-in did
+not work. Try again.", "Still signed in? Leave the password empty, press Sign in, then touch the
+fingerprint reader.", "Face not recognised. Type your password.", "Unlocking is taking too long.
+Try again, or press Ctrl + Alt + F3 to sign in."
 
-![The sign-in screen on an installed system](../screens/installed/sign-in.png)
+![The sign-in screen, drawn by SIX's sign-in code](../screens/system/sign-in.png)
+![The lock screen in Sculpted light](../screens/system/lock-sculpted-light.png)
 
 ### The installer
 
@@ -130,9 +140,14 @@ the top left, the keyboard layout and **Quit** at the top right, and **Back** an
 (**Next**, **Install SIX**, **Restart**) at the foot. Three button looks only: the main button, the
 ordinary button and the dangerous one. The Installing page lists four stages with Done, Now and
 Waiting, a bar, and in the long stage a line with the minutes passed; it never says done before it
-is. Nothing is written to the drive until **Install SIX** on the review page.
+is. Nothing is written to the drive until **Install SIX** on the review page, whose notice says it
+in three short sentences: "Nothing has been written yet. Pressing Install SIX erases what is listed
+below. This cannot be undone." Every page's text starts on one 24 px edge, and the help for disk
+encryption is a few short sentences (when the passphrase is typed, the recovery key, that losing
+both means nobody can recover the files, and that the account password is separate). Refusals name
+the pages by the titles their headers show ("Go back to Your account.").
 
-![The installer's review page](../screens/installed/installer-5-review.png)
+![The installer's review page, drawn by SIX's installer code](../screens/system/installer-review.png)
 
 ### The October boot design
 

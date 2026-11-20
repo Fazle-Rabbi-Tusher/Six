@@ -93,7 +93,8 @@ Native toolkits use the spring parameters in `tokens.json`: **precise** (177 / 2
 |---|---|
 | Start and restart | (October design, not built: SIX's boot is a quiet dark screen, [18](18-brand.md#boot).) The mark's eyes pop open, its hex band draws around them, SIX types out and glitches once, a terminal loader fills, then the screen fades to the desktop and the ripple plays from the centre (about 6 s; any key skips; timeline in [18](18-brand.md#the-boot-screen)) |
 | Open app | The window grows out of its dock icon: it starts at the icon's size and place, fades up over the first 30 %, and settles on the precise spring (600 ms). The icon lifts once, 12 px, no second bounce |
-| Minimise | The window folds back into its dock icon (460 ms, ease-in-out) |
+| Minimise | Any window, SIX's or another app's, goes into its own app's icon on the dock, centre to centre along a curve (sideways first, then down), and fades as it lands; the icon gives a 3 px catch. 336 ms (168 ms for a full-screen window); reopening walks the same curve backwards. Scale (SIX's own) or Lamp, in Settings › Desktop & dock; with Reduce motion a 120 ms fade ([09](09-shell.md#windows-snapping-and-workspaces)) |
+| The drop under the bar | The ground grows down from the bar's edge and the words fade in: the recoil spring (340 ms) in Soft Matter, 180 ms with no bounce in Sculpted; it glides along the bar from item to item; it goes in 200 / 140 ms. Transform and opacity only ([09](09-shell.md#the-drop)) |
 | Close | A short fade to 97 % (200 ms, ease-in). Leaving is quicker than arriving |
 | Maximise / snap | The frame moves on the precise spring; content re-lays out once at the end |
 | Stack: drop a card | The card lands on a detent (lifts 6 px, scales 1.035, settles), light crosses it, and the previews slide out from under it one after another (50 ms apart) |

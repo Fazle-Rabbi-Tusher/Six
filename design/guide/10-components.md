@@ -95,6 +95,14 @@ accent's satin, the ordinary one plain satin, the dangerous one the danger colou
 ## Toasts
 - Glass strong, bottom-centre above the dock, 6 s, one action max ("Undo", "Open").
 - Message in past tense: "Moved 3 files to Bin", not "Files will be moved".
+- In Files, Software and the SIX app a notice takes its own strip under the app, so it never lies
+  on the app's own content or its message box.
+
+## Folds ("Details")
+- What a person may want but does not need for the next action sits behind a closed line that
+  opens in place, usually named **Details** ([13](13-writing.md#how-much-to-say)).
+- Every fold in SIX draws the same chevron before its label, turning as it opens; never the
+  browser's own triangle. A closed fold's words are not on the screen.
 
 ## Progress
 - Known duration: linear bar, 4 px, accent, with "2 of 5 · 1 min left" text.

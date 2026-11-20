@@ -1,7 +1,8 @@
 # Design tokens
 
-SIX's design tokens, as the product uses them on 2026-11-16. Tokens only: CSS custom properties,
-no component styles.
+SIX's design tokens, as the product uses them on 2026-11-21 (no token has changed since
+2026-11-16: the polish round moved screens onto these tokens rather than adding new ones). Tokens
+only: CSS custom properties, no component styles.
 
 | File | What it holds | Switched on by |
 |---|---|---|

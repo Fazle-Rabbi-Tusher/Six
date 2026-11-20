@@ -65,10 +65,46 @@ Touch mode is switched on in Control Center (the Touch tile) or Settings › Acc
   On hover close turns red `#C42B1C`, minimise green `#1F7A3D`, maximise blue `#1D5FD0`, each
   with a white glyph. Each has at least a 32 px hit area and a visible focus ring.
 - Corners: 16 px (Soft Matter), 24 px (Sculpted); the title is Noto Sans 600 14/20 in Sculpted.
-- The whole title bar is a drag handle; double-click maximizes (Windows behaviour).
-- Sidebar: 240 px default, 200–320 px resizable, collapses to an icon rail below 720 px window width.
+- The whole title bar is a drag handle; double-click maximizes (Windows behaviour). The title starts
+  20 px from the window's left edge, the same edge as the side list's text below it. The line under
+  the title bar is drawn outside its 44 px, so every window button sits on whole pixels.
+- Sidebar: 240 px by default, its text on the same 20 px edge as the title. In a window 620 px wide
+  or less it becomes a 56 px rail of icons, each with its name as hover text (Files takes the rail
+  from 820 px, so its toolbar keeps its room).
+- The resize mark sits 8 px inside the window's corner, clear of the rounded curve.
 - Minimum window size: 360 × 240 px.
 - Default new-window size: 60 % of the work area, centred, cascading 24 px for each additional window.
+
+## Alignment
+A screen is drawn on lines, like a vector drawing: things that belong together share an edge or a
+centre exactly, and nothing sits a pixel or two beside a line.
+
+- **One text edge in a column.** Every line of text in a column starts on the same x: the page's
+  title, group labels, the names in rows, second lines, notes. Cards hang outside that edge by their
+  padding. A control that starts a line (a button, a field, a tick box) starts on the text edge with
+  its box.
+- **One right edge.** The controls that end rows (switches, menus, buttons, values) end on one x.
+  Values in a column are right-aligned to it, in tabular figures.
+- **One centre line in a row.** The icon, the name, the value and the control of a one-line row
+  share a centre to the pixel. In a two-line row the name and its second line are one block centred
+  on the row, and the icon and the control centre on the row.
+- **Cards on a page share one width and both edges.** A narrower, inset card is not a thing.
+- **The same kind is the same size.** Rows of one list have one height (two-line rows one taller
+  height); menus and fields in one column have one width; tiles in a grid have one size, and a
+  tile's label is one line (a shorter word, never a wrapped one); icons in one group are one size.
+- **Tick boxes and radio buttons:** the box starts on the text edge, the label 12 px (`--space-4`)
+  after it on every screen, a second line under the label.
+- **Whole pixels.** At 100 % scale every box's place and size are whole pixels and a 1 px stroke
+  sits on the pixel grid, so nothing is softened by half a pixel.
+- **Spacing only from the scale** (the 4 px grid above): equal gaps between siblings, equal padding
+  on opposite sides.
+- **Centred means centred:** a glyph in a round button and a title in a sheet sit on their box's
+  centre to half a pixel.
+- **A near-miss is the fault.** Two edges 1 to 6 px apart are made one. An offset that is meant is
+  a step of the spacing scale and at least 8 px.
+
+Measured, not judged: every screen of SIX is measured against these rules, and a new near-miss is
+fixed, never allowed.
 
 ## Breakpoints inside windows
 Apps respond to **window width**, not screen width:
@@ -78,6 +114,9 @@ Apps respond to **window width**, not screen width:
 | < 560 px | Single column; sidebar becomes a back-stack; toolbar actions move to an overflow menu |
 | 560–959 px | Icon-rail sidebar + content |
 | ≥ 960 px | Full sidebar + content (+ optional detail pane ≥ 1280 px) |
+
+This table is the design. SIX's own apps today switch once, at 620 px (820 px for Files), from the
+full side list to the rail of icons described above.
 
 ## Screen layout
 

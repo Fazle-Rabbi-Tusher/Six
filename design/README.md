@@ -17,7 +17,10 @@ SIX has **two designs**, switched live in Settings › Appearance, each in a lig
 
 Both are held to one contrast rule: every word and glyph on every screen is measured against what
 is really behind it, 4.5:1 for text and 3:1 for large text and glyphs, and 7:1 in **High
-contrast**, which both designs also have.
+contrast**, which both designs also have. And both are held to two more since November 2026:
+**say less** (a row is a name and at most one short line; what is not needed for the next action is
+one step away) and **sit on the lines** (one text edge, one right edge, one centre, whole pixels),
+measured on every screen ([13](guide/13-writing.md#how-much-to-say), [06](guide/06-layout.md#alignment)).
 
 | Sculpted, light (the default) | Sculpted, dark |
 |---|---|
@@ -33,7 +36,7 @@ Every screen of today's SIX is in [`screens/`](screens/README.md).
 |---|---|
 | [`guide/`](#the-guide) | The design guide, chapter by chapter, with the product's real values |
 | [`tokens/`](tokens/README.md) | The design tokens as the product uses them: `tokens.css` (base and Soft Matter), `sculpted.css`, `high-contrast.css` |
-| [`screens/`](screens/README.md) | Pictures of every main screen: Sculpted light, the most important screens in Sculpted dark and Soft Matter light and dark, real pictures from an installed system, and the October pictures in `history/` |
+| [`screens/`](screens/README.md) | Pictures of every main screen: Sculpted light, the most important screens in Sculpted dark, Soft Matter light and dark and High contrast; the sign-in, lock and installer screens drawn by their real code; the real disk unlock prompt; and the October pictures in `history/` |
 | [`brand/`](brand/) | The Hex Face mark, the app icon, the SIX wordmark and lockups (SVG, text outlined); the brand sheet and the October boot animation |
 | [`wallpapers/`](wallpapers/README.md) | Six of the seven picture wallpapers SIX has, original files |
 | [`tactile/`](tactile/README.md) | The October 2026 design exploration Sculpted came from (a 16-page guide) |
@@ -51,17 +54,17 @@ Every screen of today's SIX is in [`screens/`](screens/README.md).
 | [03 · Typography](guide/03-typography.md) | Noto Sans in Sculpted, terminal type in Soft Matter; the shared type scale |
 | [04 · Color](guide/04-color.md) | The contrast rule, High contrast, Soft Matter's colours, the window buttons, wallpapers |
 | [05 · Materials](guide/05-materials.md) | Soft Matter's clay, satin, paper and plasma clay; elevation |
-| [06 · Layout](guide/06-layout.md) | The 4 px grid, control sizes and radii in both designs, window anatomy |
+| [06 · Layout](guide/06-layout.md) | The 4 px grid, control sizes and radii in both designs, window anatomy, **alignment** |
 | [07 · Iconography](guide/07-iconography.md) | System glyphs, app icons, file and place icons |
 | [08 · Motion](guide/08-motion.md) | The two feels, durations, the spring roles, reduced motion, tension |
-| [09 · Shell](guide/09-shell.md) | Menu bar, the notch, the dock, the SIX Menu and system menu, SIX Search, Control Center as a board of tiles, notifications, right-click menus, shortcuts, windows, snapping and workspaces |
+| [09 · Shell](guide/09-shell.md) | Menu bar, **the drop** under its right side, the notch, the dock, the SIX Menu and system menu, SIX Search and the Run box, Control Center as a board of tiles, notifications, right-click menus, shortcuts, the second-screen chooser, the wireless display sheet, windows going into the dock, snapping and workspaces |
 | [10 · Components](guide/10-components.md) | Buttons, switches, inputs, menus, lists, dialogs, toasts |
 | [11 · Accessibility](guide/11-accessibility.md) | The built-in modes and the checklist for every screen |
 | [12 · Coming from Windows](guide/12-windows-migration.md) | Keys, Windows apps, words |
-| [13 · Writing](guide/13-writing.md) | Plain words; the name is SIX |
+| [13 · Writing](guide/13-writing.md) | Plain words; **how much to say**; the name is SIX |
 | [14 · Home](guide/14-home-assistant.md) | Home, the cards and widgets, the weather in three sizes, how SIX's answers are drawn and tagged, its questions and review cards, its orb looks |
 | [15 · Testing and build order](guide/15-testing-and-build.md) | Usability tests and the order the design was built in (October) |
-| [16 · System apps](guide/16-system-apps.md) | The SIX app, Settings, Files, Software, Calendar, Terminal |
+| [16 · System apps](guide/16-system-apps.md) | The SIX app, Settings (rows, Display with two screens), Files (cloud storage and kept folders), Software (the catalogue, an app's page, logos and the letter tile, the ArtCraft section, installer files), Calendar, Terminal |
 | [17 · SIX on Fedora](guide/17-fedora.md) | The system design on Fedora |
 | [18 · Brand](guide/18-brand.md) | The mark, the wordmark, colour, and the system screens: boot, disk unlock, sign-in, lock, the installer |
 
@@ -88,7 +91,7 @@ longer how SIX looks**:
 ## Credits and rights
 
 The design, the Hex Face mark, the wordmark, the icons and pictures SIX draws itself, and the
-pictures in `screens/` are SIX's own. The seven picture wallpapers in `wallpapers/` are generated
+pictures in `screens/` are SIX's own. The six picture wallpapers in `wallpapers/` are generated
 artwork made for SIX, and `tactile/` is the design exploration made for SIX that Sculpted came from. The fonts are under the SIL Open Font License (Noto Sans,
 JetBrains Mono, Share Tech Mono, VT323). System glyphs are [Phosphor](https://phosphoricons.com)
 (MIT). The orb's dotted look is ported from [Thinking Orbs](https://www.thinkingorbs.com/) by

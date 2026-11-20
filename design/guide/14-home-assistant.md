@@ -144,7 +144,10 @@ Home cards are widgets. Out of the box SIX shows four (*Pick up where you left o
 *Current task*, *This device*); the person adds more from the **widget gallery**, or describes
 one and **SIX makes it**.
 
-![The widget gallery](../screens/history/widgets.png)
+![The widget gallery](../screens/sculpted-light/widget-gallery.png)
+
+In the gallery each tile is the widget's name alone; what it shows is the tile's hover text. There
+is one field, "Describe any widget".
 
 ### What the research says
 
@@ -165,7 +168,7 @@ Sources: [Apple HIG · Widgets](https://developer.apple.com/design/human-interfa
 
 | Widget | Shows | Does in place |
 |---|---|---|
-| Pick up where you left off | Last files and apps | Opens the item |
+| Pick up where you left off | Last files and apps; each recent file is one row, its name and its size ("Missing" when the file is gone or its drive is away, with the reason as hover text) | Opens the item; a remove mark at the row's end on hover and focus, and in the row's right-click menu |
 | Today | Next meetings | — |
 | Current task | What SIX is working on, then its output | Stop, Open, Show in Files |
 | This device | Battery, storage, updates | — |
