@@ -67,7 +67,10 @@ accent; the drawn wallpapers; a link to Wallpaper for pictures), **SIX & voice**
 notch's switches, the folder SIX may see, "Check how SIX hears you"), **Control Center** (the board as
 a list, Advanced), **Games** (game mode, "Check this computer for games", "Set up Steam", your
 games), **Drivers & apps** (System Check: drivers and apps found from trusted sources, installed on
-approval), **Recovery** (the previous version, restore points of files, reset), **Speed** (what SIX
+approval), **Updates** (the version by SIX's own number, "SIX 0.8.1"; a check and a download that
+never restart the computer by themselves; "What's new", the notes of the version that is ready and
+of the one running), **Recovery** (the previous version, restore points of files, reset), **About**
+(the device, SIX's version, the base system's own number one press away), **Speed** (what SIX
 does to keep the computer quick, and the switch), **Keyboard & touchpad** (the shortcut list,
 above in [09](09-shell.md#keyboard-shortcuts), and "Which key is this?"), **Desktop & dock** (the
 dock, and "Minimise windows with: Scale / Lamp"), **SIX account** (sign in with a one-time link
